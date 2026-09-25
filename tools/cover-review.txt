@@ -1,15 +1,4 @@
 # cover-review.txt (part=all)
 # CHECK — совпадение с несколькими кандидатами (проверить вручную)
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
-MISS call-of-duty-mobile — «Call of Duty: Mobile» (part-h): кандидаты нет
-MISS castlevania-symphony-of-the-night — «Castlevania: Symphony of the Night» (part-i): кандидаты нет
-MISS football-manager-2024 — «Football Manager 2024» (part-c): кандидаты Football Manager 2024 In-game Editor (2473420)
-MISS free-fire — «Free Fire» (part-h): кандидаты Aliens: Fireteam Elite - Frontier Freelancer Pack (1643354)
-MISS gran-turismo-7 — «Gran Turismo 7» (part-c): кандидаты нет
-MISS mobile-legends-bang-bang — «Mobile Legends: Bang Bang» (part-h): кандидаты нет
-MISS monopoly-go — «Monopoly GO!» (part-i): кандидаты нет
 MISS multiversus — «MultiVersus» (part-i): кандидаты нет
-MISS project-sekai-colorful-stage — «Project Sekai: Colorful Stage!» (part-i): кандидаты нет
-MISS pubg-mobile — «PUBG Mobile» (part-i): кандидаты нет
-MISS roblox — «Roblox» (part-c): кандидаты нет
-MISS whiteout-survival — «Whiteout Survival» (part-h): кандидаты нет
