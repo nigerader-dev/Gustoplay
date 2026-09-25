@@ -12,6 +12,7 @@ import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, 
 import { initAnalytics, track, trackPageview } from './analytics.js';
 
 import { byId } from './catalog/index.js';
+import { hydrateSteamCovers } from './steam-covers.js';
 
 import * as home from './views/home.js';
 import * as quiz from './views/quiz.js';
@@ -233,6 +234,8 @@ function render(scroll = true) {
   // и в PATH-режиме не работали вовсе.
   const page = `${header(ctx)}<main id="main" class="main">${html}</main>${footer()}${consentBanner()}`;
   app.innerHTML = PATH_MODE ? page.replace(/href="#\/([^"]*)"/g, (_, rest) => `href="${link(rest)}"`) : page;
+  // Official Steam art is hydrated after first paint; generated SVG remains instant/offline fallback.
+  hydrateSteamCovers(app);
   setHead(titleText, description);
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
   injectJsonLd(ctx, view);
