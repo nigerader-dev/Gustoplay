@@ -21,6 +21,11 @@ const SORTS = {
   title: (a, b) => a.t.localeCompare(b.t, getLang()),
 };
 
+/** Открыта ли шторка фильтров на мобиле (переживает перерендеры при выборе фильтров) */
+let filtersOpen = false;
+export const isFiltersOpen = () => filtersOpen;
+export const setFiltersOpen = (value) => { filtersOpen = Boolean(value); };
+
 /** Парсим фильтры из query-строки (все значения — простые списки через запятую) */
 export function parseFilters(query = {}, preset = {}) {
   const list = (value) => (value ? String(value).split(',').filter(Boolean) : []);
@@ -113,6 +118,18 @@ export function render(ctx) {
     ...(filters.coopLocal ? [{ label: tl(MODES, 'coopLocal'), kind: 'coopLocal', id: 1 }] : []),
   ];
 
+  const activeFilterCount = filters.modes.length + filters.platforms.length + filters.genres.length
+    + filters.tags.length + filters.moods.length + (filters.players ? 1 : 0)
+    + (filters.price !== 'any' ? 1 : 0) + (filters.time !== 'any' ? 1 : 0) + (filters.coopLocal ? 1 : 0);
+
+  // чипы пресетных разделов (/genre/rpg и т.п.) снять нельзя — рисуем их без крестика,
+  // иначе крестик обещает то, чего не делает
+  const presetKey = { mode: 'modes', platform: 'platforms', genre: 'genres', tag: 'tags', mood: 'moods' };
+  const isPresetChip = (c) => (ctx.preset?.[presetKey[c.kind]] || []).some((x) => String(x) === String(c.id));
+  const chipHtml = (c) => (isPresetChip(c)
+    ? `<span class="chip chip-active">${esc(c.label)}</span>`
+    : `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${esc(c.label)} ✕</button>`);
+
   return `
   <section class="section catalog">
     <header class="section-head">
@@ -120,8 +137,11 @@ export function render(ctx) {
       <p>${esc(subtitle)}</p>
     </header>
 
+    <button type="button" class="btn btn-outline filters-toggle" data-action="filters-toggle" aria-expanded="${filtersOpen}" aria-controls="catalog-filters">🔍 ${esc(t('catalog.filters'))}${activeFilterCount ? ` <span class="filters-count">${activeFilterCount}</span>` : ''}</button>
+
     <div class="catalog-layout">
-      <aside class="filters" id="catalog-filters">
+      <aside class="filters${filtersOpen ? ' open' : ''}" id="catalog-filters">
+        <div class="filters-head"><span>${esc(t('catalog.filters'))}</span><button type="button" data-action="filters-toggle" aria-label="${esc(t('common.close'))}">✕</button></div>
         <div class="filter-search">
           <input type="search" class="input" id="catalog-q" placeholder="${esc(t('catalog.search'))}" value="${esc(filters.q)}">
         </div>
@@ -150,17 +170,18 @@ export function render(ctx) {
 
         <div class="filter-group">
           <div class="filter-title">${esc(t('catalog.sort'))}</div>
-          <select class="input" id="catalog-sort">
+          <select class="input" id="catalog-sort" aria-label="${esc(t('catalog.sort'))}">
             ${Object.keys(SORTS).map((id) => `<option value="${id}" ${filters.sort === id ? 'selected' : ''}>${esc(t(`catalog.sort.${id}`))}</option>`).join('')}
           </select>
         </div>
         <button type="button" class="btn btn-ghost" data-action="f-reset">${esc(t('catalog.reset'))}</button>
+        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-toggle">${esc(t('catalog.show', { n: found.length }))}</button></div>
       </aside>
 
       <div class="catalog-main">
         <div class="catalog-topbar">
           <strong id="catalog-found">${esc(t('catalog.found', { n: found.length }))}</strong>
-          ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map((c) => `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${esc(c.label)} ✕</button>`).join('')}</div>` : ''}
+          ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map(chipHtml).join('')}</div>` : ''}
         </div>
 
         ${found.length

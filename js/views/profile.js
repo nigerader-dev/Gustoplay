@@ -14,7 +14,7 @@ export function render() {
   const totalMarks = Object.keys(profile.marks || {}).length;
 
   if (!totalMarks && !profile.meta?.completedAt) {
-    return `<section class="section">${emptyState(t('profile.title'), t('profile.empty'),
+    return `<section class="section"><h1>${esc(t('profile.title'))}</h1>${emptyState(t('profile.title'), t('profile.empty'),
       `<a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('home.cta.start'))}</a>`)}</section>`;
   }
 

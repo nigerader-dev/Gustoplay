@@ -214,6 +214,8 @@ export const STRINGS = {
     'catalog.time': 'Длительность',
     'catalog.tags': 'Особенности',
     'catalog.showMore': 'Показать ещё {n}',
+    'catalog.filters': 'Фильтры',
+    'catalog.show': 'Показать {n}',
 
     'party.title': 'Во что поиграть вместе',
     'party.subtitle': 'Укажите, сколько вас и на чём играете — покажем игры, которые действительно рассчитаны на вашу компанию.',
@@ -268,6 +270,7 @@ export const STRINGS = {
     'common.lang': 'Язык',
     'common.copy': 'Копировать',
     'common.close': 'Закрыть',
+    'common.menu': 'Меню',
     'common.share': 'Скопировать ссылку',
     'common.copied': 'Скопировано',
     'common.notFound': 'Страница не найдена',
@@ -484,6 +487,8 @@ export const STRINGS = {
     'catalog.time': 'Length',
     'catalog.tags': 'Features',
     'catalog.showMore': 'Show {n} more',
+    'catalog.filters': 'Filters',
+    'catalog.show': 'Show {n}',
 
     'party.title': 'What to play together',
     'party.subtitle': 'Tell us how many of you there are and what you play on — we show games built for your group.',
@@ -538,6 +543,7 @@ export const STRINGS = {
     'common.lang': 'Language',
     'common.copy': 'Copy',
     'common.close': 'Close',
+    'common.menu': 'Menu',
     'common.share': 'Copy link',
     'common.copied': 'Copied',
     'common.notFound': 'Page not found',

@@ -22,7 +22,7 @@ export function render() {
   trackImpressions(result.list.map((x) => x.game.slug));
 
   if (!result.list.length) {
-    return `<section class="section">${emptyState(t('results.empty'), t('home.cta.start'), `<a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('quiz.restart'))}</a>`)}</section>`;
+    return `<section class="section"><h1>${esc(t('results.title'))}</h1>${emptyState(t('results.empty'), t('home.cta.start'), `<a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('quiz.restart'))}</a>`)}</section>`;
   }
 
   const filtersBar = `

@@ -11,7 +11,7 @@ export function render(ctx) {
   const game = byId(ctx.params.slug);
   if (!game) {
     return `<section class="section"><div class="empty"><div class="empty-icon">🎮</div>
-      <h3>${esc(t('common.notFound'))}</h3><p>${esc(t('common.notFound.text'))}</p>
+      <h1>${esc(t('common.notFound'))}</h1><p>${esc(t('common.notFound.text'))}</p>
       <a class="btn btn-primary" href="#/catalog" data-action="nav">${esc(t('catalog.title'))}</a></div></section>`;
   }
 

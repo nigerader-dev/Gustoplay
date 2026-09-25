@@ -96,7 +96,8 @@ function header(ctx) {
         <span class="logo-mark">🎮</span>
         <span class="logo-text">${t('site.name')}<small>${t('site.tagline')}</small></span>
       </a>
-      <nav class="nav" aria-label="main">
+      <nav class="nav" id="main-nav" aria-label="main">
+        <button type="button" class="nav-close" data-action="menu-close" aria-label="${t('common.close')}">✕</button>
         ${navItem('#/quiz', '🎯 ' + t('nav.quiz'), 'quiz', ctx)}
         ${navItem('#/catalog', '🗂️ ' + t('nav.catalog'), 'catalog', ctx)}
         ${navItem('#/party', '👫 ' + t('nav.party'), 'party', ctx)}
@@ -107,9 +108,11 @@ function header(ctx) {
       <div class="header-tools">
         <button type="button" class="icon-btn" data-action="lang-toggle" title="${t('common.lang')}">${lang.toUpperCase()}</button>
         <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">🌗</button>
+        <button type="button" class="icon-btn burger" data-action="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="${t('common.menu')}"><span></span><span></span><span></span></button>
       </div>
     </div>
-  </header>`;
+  </header>
+  <button type="button" class="nav-overlay" data-action="menu-close" aria-label="${t('common.close')}" tabindex="-1"></button>`;
 }
 
 function footer() {
@@ -197,6 +200,13 @@ function render(scroll = true) {
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
   currentCtx = ctx;
   resetAdCounter();
+  // мобильные панели не переживают смену страницы (шторка фильтров живёт
+  // только на страницах каталога, где её состояние хранит модуль catalog)
+  document.body.classList.remove('menu-open');
+  if (!['catalog', 'mode', 'genre', 'tag', 'mood', 'platform'].includes(ctx.name)) {
+    catalog.setFiltersOpen(false);
+    document.body.classList.remove('filters-open');
+  }
 
   const view = ctx.route?.view;
   let html = '';
@@ -205,7 +215,7 @@ function render(scroll = true) {
 
   if (!view) {
     html = `<section class="section"><div class="empty"><div class="empty-icon">🧭</div>
-      <h3>${t('common.notFound')}</h3><p>${t('common.notFound.text')}</p>
+      <h1>${t('common.notFound')}</h1><p>${t('common.notFound.text')}</p>
       <div class="panel-actions"><a class="btn btn-primary" href="#/quiz" data-action="nav">${t('home.cta.start')}</a>
       <a class="btn btn-ghost" href="#/catalog" data-action="nav">${t('nav.catalog')}</a></div></div></section>`;
   } else {
@@ -318,6 +328,15 @@ window.addEventListener('gf:marks-changed', () => {
  * Глобальные действия (делегирование событий)
  * ------------------------------------------------------------------ */
 
+/** Закрыть мобильное меню (панель, оверлей, блокировка скролла) */
+function closeMenu(restoreFocus = false) {
+  document.getElementById('main-nav')?.classList.remove('open');
+  document.querySelector('.nav-overlay')?.classList.remove('show');
+  document.body.classList.remove('menu-open');
+  document.querySelector('.burger')?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) document.querySelector('.burger')?.focus();
+}
+
 document.addEventListener('click', (event) => {
   const target = event.target.closest('[data-action]');
   if (!target) return;
@@ -367,6 +386,28 @@ document.addEventListener('click', (event) => {
       if (!confirm(t('profile.reset.confirm'))) return;
       resetProfile();
       navigate('quiz');
+      break;
+    }
+    case 'menu-toggle': {
+      const panel = document.getElementById('main-nav');
+      const willOpen = !panel?.classList.contains('open');
+      panel?.classList.toggle('open', willOpen);
+      document.querySelector('.nav-overlay')?.classList.toggle('show', willOpen);
+      document.body.classList.toggle('menu-open', willOpen);
+      target.setAttribute('aria-expanded', String(willOpen));
+      if (willOpen) panel?.querySelector('.nav-link')?.focus();
+      break;
+    }
+    case 'menu-close': {
+      closeMenu(true);
+      break;
+    }
+    case 'filters-toggle': {
+      const willOpen = !catalog.isFiltersOpen();
+      catalog.setFiltersOpen(willOpen);
+      document.getElementById('catalog-filters')?.classList.toggle('open', willOpen);
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', String(willOpen));
+      document.body.classList.toggle('filters-open', willOpen);
       break;
     }
     case 'theme-toggle': {
@@ -441,6 +482,15 @@ document.addEventListener('keydown', (event) => {
     event.preventDefault();
     navigate('catalog');
     setTimeout(() => document.getElementById('catalog-q')?.focus(), 160);
+  }
+  if (event.key === 'Escape') {
+    if (document.querySelector('.nav.open')) closeMenu(true);
+    else if (document.getElementById('catalog-filters')?.classList.contains('open')) {
+      catalog.setFiltersOpen(false);
+      document.body.classList.remove('filters-open');
+      render(false);
+      document.querySelector('.filters-toggle')?.focus();
+    }
   }
 });
 

@@ -455,6 +455,56 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
   check('подбор для компании возвращает игры', party.length > 0
     && party.every((g) => g.players[1] >= 4), `${party.length} шт.`);
   check('похожие игры находятся', eng.similarTo('balatro', 6).length === 6);
+  const modeW = eng.computeWeights({ answers: { modes: ['coop'] }, marks: {} });
+  check('режимы квиза усиливают режимы каталога (coop → coopOnline/coopLocal)',
+    (modeW.mode.coopOnline || 0) > 0 && (modeW.mode.coopLocal || 0) > 0);
+  const compW = eng.computeWeights({ answers: { company: 'kids' }, marks: {} });
+  check('сигналы компании ложатся на существующие теги',
+    (compW.tag.splitscreen || 0) > 0 && !('coopLocal' in compW.tag));
+}
+
+/* ============================ 13. Мобильный UI ============================ */
+console.log('\n13. Мобильный UI: бургер-меню и шторка фильтров');
+{
+  await navigate('catalog');
+  check('бургер-кнопка и панель в шапке', count('.burger') === 1 && count('#main-nav') === 1
+    && count('.nav-overlay') === 1);
+  click('[data-action="menu-toggle"]');
+  await wait(20);
+  check('меню открывается: панель, оверлей, aria, блокировка скролла',
+    count('.nav.open') === 1 && count('.nav-overlay.show') === 1
+    && window.document.querySelector('.burger')?.getAttribute('aria-expanded') === 'true'
+    && window.document.body.classList.contains('menu-open'));
+  check('фокус уходит в открытое меню', window.document.activeElement?.classList.contains('nav-link'));
+  window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  await wait(20);
+  check('Esc закрывает меню и возвращает фокус на бургер',
+    count('.nav.open') === 0 && window.document.activeElement?.classList.contains('burger'));
+
+  check('кнопка фильтров есть', count('.filters-toggle') === 1);
+  click('.filters-toggle');
+  await wait(20);
+  check('шторка открывается', count('#catalog-filters.open') === 1
+    && window.document.body.classList.contains('filters-open'));
+  click('[data-action="f-mode"][data-id="coopLocal"]');
+  await wait(40);
+  check('шторка переживает выбор фильтра', count('#catalog-filters.open') === 1);
+  check('бейдж считает активные фильтры',
+    window.document.querySelector('.filters-count')?.textContent === '1');
+  check('кнопка «Показать N» в шторке',
+    /Показать|Show/.test(window.document.querySelector('.filters-foot .btn')?.textContent || ''));
+  window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+  await wait(30);
+  check('Esc закрывает шторку', count('#catalog-filters.open') === 0
+    && !window.document.body.classList.contains('filters-open'));
+  click('.filters-toggle');
+  await wait(20);
+  await navigate('quiz');
+  check('уход со страницы сбрасывает шторку', !window.document.body.classList.contains('filters-open'));
+
+  await navigate('genre/rpg');
+  check('пресетный чип без крестика (снять его нельзя)',
+    count('[data-action="f-remove"]') === 0 && count('.chip-active') >= 1);
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
