@@ -19,7 +19,7 @@ const branch = process.env.GITHUB_REF_NAME || 'arena/01a0d952-gustoplay';
 try {
   git(['config', 'user.name', 'gustoplay-bot']);
   git(['config', 'user.email', 'gustoplay-bot@users.noreply.github.com']);
-  const targets = ['js/catalog/steam-covers.js', 'tools/cover-review.log'].filter(existsSync);
+  const targets = ['js/catalog/steam-covers.js', 'tools/cover-review.txt'].filter(existsSync);
   notice(`файлы: ${targets.join(', ') || 'нет — резолвер ничего не записал'}`);
   if (targets.length) git(['add', '--', ...targets]);
   notice(`статус: ${git(['status', '--porcelain']).split('\n').filter(Boolean).slice(0, 4).join(' | ') || 'чисто'}`);

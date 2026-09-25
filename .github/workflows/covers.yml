@@ -72,7 +72,7 @@ jobs:
       # вкатывается коммитом снаружи через tools/collect-cover-data.mjs.
       - name: Доставка данных через аннотации
         if: always()
-        run: node tools/emit-cover-data.mjs tools/cover-review.log
+        run: node tools/emit-cover-data.mjs tools/cover-review.txt
 
       - name: Отчёт по сомнительным совпадениям
         if: always()
@@ -80,7 +80,7 @@ jobs:
           {
             echo "### Обложки: отчёт резолвера"
             echo '```'
-            cat tools/cover-review.log 2>/dev/null || echo "(лога нет)"
+            cat tools/cover-review.txt 2>/dev/null || echo "(лога нет)"
             echo '```'
             echo "Сопоставлено: $(grep -c 'steamId' js/catalog/steam-covers.js || true) записей"
           } >> "$GITHUB_STEP_SUMMARY"
@@ -91,6 +91,6 @@ jobs:
         with:
           name: cover-review
           path: |
-            tools/cover-review.log
+            tools/cover-review.txt
             js/catalog/steam-covers.js
           if-no-files-found: ignore

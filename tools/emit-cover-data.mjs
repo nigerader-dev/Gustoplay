@@ -5,7 +5,7 @@
  * чтение): аннотации читаются через API чек-рана, и маппинг вкатывается коммитом
  * снаружи (см. tools/collect-cover-data.mjs).
  *
- *   node tools/emit-cover-data.mjs [tools/cover-review.log]
+ *   node tools/emit-cover-data.mjs [tools/cover-review.txt]
  *
  * Формат строк-аннотаций:
  *   covers-b64 [i/n]: <база64-кусок JSON всего STEAM_COVERS>
