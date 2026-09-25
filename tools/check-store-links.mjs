@@ -85,14 +85,54 @@ async function getJson(url, attempt = 0) {
 }
 
 /** Страница игры в Steam по appid: существует ли и то ли это название */
+/**
+ * Страница игры в Steam: HTTP-статус + название из <title>.
+ * Нужна как вторая проверка после API: под нагрузкой Steam отвечает
+ * `{"appid":{"success":false}}` с кодом 200 (это троттлинг, а не отсутствие игры),
+ * и тогда «мёртвым» appid считать нельзя, пока не спросили саму страницу.
+ */
+async function steamPage(appid) {
+  let res;
+  try {
+    res = await fetch(`https://store.steampowered.com/app/${appid}/?l=english&cc=US`, {
+      headers: { 'User-Agent': 'GustoPlay-link-check/1.0 (+https://gustoplay.ru)', 'Accept-Language': 'en-US,en;q=0.8' },
+      signal: AbortSignal.timeout(25000),
+      redirect: 'follow',
+    });
+  } catch (e) {
+    return { status: String(e?.cause?.code || e?.name || 'network'), unchecked: true };
+  }
+  if (res.status === 404) return { status: 404, found: false, unchecked: false };
+  if (!res.ok) return { status: res.status, unchecked: THROTTLED.has(res.status) };
+  const html = await res.text();
+  // у несуществующего appid Steam отдаёт страницу «Site Error» с кодом 200 —
+  // это именно мёртвая ссылка, а не «не смогли проверить»
+  if (/<title>\s*Site Error\s*<\/title>/i.test(html)) return { status: 404, found: false, unchecked: false };
+  const m = /<title>([\s\S]*?) on Steam<\/title>/i.exec(html)
+    || /<meta property="og:title" content="([^"]+)"/i.exec(html);
+  if (!m) return { status: 200, unchecked: true };   // страница открылась, название не разобрали
+  const name = m[1]
+    .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    // у скидочных страниц title начинается со «Save 30% on …» — это не часть названия
+    .replace(/^Save\s+\d+%\s+on\s+/i, '')
+    .trim();
+  return { status: 200, found: true, name };
+}
+
+/** Проверка appid: сначала API, при «успех: false» — переспрашиваем саму страницу игры */
 async function steamApp(appid) {
   const { ok, data, status, throttled } = await getJson(
     `https://store.steampowered.com/api/appdetails?appids=${appid}&filters=basic&l=english`,
   );
-  if (!ok) return { status, found: false, unchecked: Boolean(throttled) };
-  const entry = data?.[String(appid)];
-  if (!entry?.success || !entry.data?.name) return { status: 200, found: false, unchecked: false };
-  return { status: 200, found: true, name: entry.data.name };
+  if (ok) {
+    const entry = data?.[String(appid)];
+    if (entry?.success && entry.data?.name) return { status: 200, found: true, name: entry.data.name };
+  }
+  if (!ok && !throttled) return { status, found: false, unchecked: false };   // 404 от API — игры нет
+  const page = await steamPage(appid);
+  if (page.found) return { ...page, viaPage: true };
+  if (page.unchecked) return { status: page.status ?? status, found: false, unchecked: true };
+  return { status: page.status === 404 ? 404 : (status ?? page.status), found: false, unchecked: false };
 }
 
 /** Поиск страницы игры в Steam по названию */
