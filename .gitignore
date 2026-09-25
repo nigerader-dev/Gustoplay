@@ -1,0 +1,20 @@
+# Личные ключи и локальные данные — только на своей машине.
+.dev.vars
+.wrangler/
+# Локальная база данных предпросмотра (tools/local-api-server.mjs)
+.data/
+
+# Сборка и зависимости
+node_modules/
+build/
+dist/
+coverage/
+
+# Локальные бэкапы и распакованные снимки (tools/backup.mjs) — не в git, но на диске
+backups/
+restore/
+
+.DS_Store
+*.log
+.env*
+!.env.example

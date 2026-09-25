@@ -1,0 +1,120 @@
+name: GustoPlay — GitHub Pages
+
+# Публикация статического сайта на GitHub Pages: тесты → сборка с адресом зеркала →
+# verify → deploy. Адрес считается из имени репозитория (https://<owner>.github.io/<repo>).
+# Чтобы сделать canonical на боевой домен (gustoplay.ru), замените один echo в шаге
+# «Адрес зеркала»: site="https://gustoplay.ru" — и уберите --trailing-slash из сборки.
+#
+# Один раз может потребоваться включить Pages: Settings → Pages → Source: GitHub Actions
+# (шаг «Включить GitHub Pages» пробует сделать это автоматически).
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Сборка и проверка
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Каталог — корректность записей
+        run: npm run check
+
+      - name: Каталог — аудит полноты
+        run: npm run audit
+
+      - name: Интерфейс (jsdom)
+        run: npm test
+
+      - name: API аккаунтов (реальная база SQLite)
+        run: npm run test:api
+
+      - name: Сквозной сценарий сайт → API → база
+        run: npm run test:e2e
+
+      - name: Адрес зеркала
+        run: |
+          owner="${GITHUB_REPOSITORY%%/*}"
+          name="${GITHUB_REPOSITORY#*/}"
+          if [ "$name" = "$owner.github.io" ]; then site="https://$owner.github.io"; else site="https://$owner.github.io/$name"; fi
+          echo "SITE_URL=$site" >> "$GITHUB_ENV"
+          echo "Адрес сайта: $site"
+
+      - name: Включить GitHub Pages (если ещё не включены)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/pages" >/dev/null 2>&1; then
+            echo "Pages уже включены"
+          elif gh api --method POST "repos/$GITHUB_REPOSITORY/pages" -f build_type=workflow >/dev/null 2>&1; then
+            echo "Pages включены автоматически"
+          else
+            echo "::warning::Не удалось включить Pages автоматически — включите вручную: Settings → Pages → Source: GitHub Actions"
+          fi
+
+      # Метаданные Pages (base_url и т.п.) + повторная попытка включить Pages;
+      # выходы не обязательны, поэтому сбой не роняет сборку.
+      - name: Метаданные GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+        continue-on-error: true
+
+      - name: Сборка сайта для GitHub Pages
+        run: node tools/build-static.mjs --site-url="$SITE_URL" --trailing-slash
+
+      - name: Проверка собранного сайта
+        run: npm run verify:build
+
+      - name: Маркер .nojekyll
+        run: touch dist/.nojekyll
+
+      - name: Загрузка артефакта Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Публикация
+    needs: build
+    if: github.event_name == 'workflow_dispatch' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Окружение github-pages создаётся автоматически и по умолчанию пускает только
+    # защищённые ветки (master). Чтобы деплоить из другой ветки (например, проверить
+    # публикацию до мержа), добавьте её: Settings → Environments → github-pages →
+    # Deployment branches → «Selected branches» → Add branch (master оставьте в списке).
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Публикация на GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

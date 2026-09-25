@@ -1,0 +1,53 @@
+name: GustoPlay — тесты
+
+# Прогоняем все проверки при каждом изменении сайта.
+# Секреты не нужны: тесты работают на локальной базе SQLite и в jsdom.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Тесты и сборка
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      - name: Каталог — корректность записей
+        run: npm run check
+
+      - name: Каталог — аудит полноты
+        run: npm run audit
+
+      - name: Интерфейс (jsdom)
+        run: npm test
+
+      - name: API аккаунтов (реальная база SQLite)
+        run: npm run test:api
+
+      - name: Сквозной сценарий сайт → API → база
+        run: npm run test:e2e
+
+      - name: Сборка сайта
+        run: npm run build
+
+      - name: Проверка собранного сайта
+        run: npm run verify:build
+
+      - name: Отчёт о размере сборки
+        run: |
+          echo "Страниц: $(find dist -name '*.html' | wc -l)"
+          echo "Размер: $(du -sh dist | cut -f1)"

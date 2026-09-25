@@ -1,0 +1,24 @@
+# Секреты API GustoPlay (Cloudflare Worker).
+#
+# Как пользоваться:
+#   1) скопируйте файл:      cp worker/.dev.vars.example worker/.dev.vars
+#   2) впишите значения;
+#   3) локальная проверка:   npx wrangler dev                (в папке worker/)
+#   4) публикация секретов:  npm run deploy                  (загрузит их автоматически)
+#
+# ВАЖНО: worker/.dev.vars не попадает в git (см. .gitignore) — это личные ключи.
+
+# Cloudflare Turnstile — защита форм от ботов. Создать: dash.cloudflare.com → Turnstile.
+# Публичную часть (site key) впишите в js/config.js → AUTH.turnstileSiteKey.
+TURNSTILE_SECRET = ""
+
+# Google OAuth Client ID — вход через Google. Инструкция: docs/ACCOUNTS.md
+# Должен совпадать с js/config.js → AUTH.googleClientId.
+GOOGLE_CLIENT_ID = ""
+
+# Resend — письма со ссылкой сброса пароля (бесплатно 3000 писем/месяц).
+# Создать: resend.com → API Keys. Без ключа вход работает, письма — нет.
+RESEND_API_KEY = ""
+
+# Отправитель писем. Домен должен быть подтверждён в Resend (DNS-записи).
+MAIL_FROM = "GustoPlay <no-reply@gustoplay.ru>"

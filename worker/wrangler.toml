@@ -1,0 +1,37 @@
+# GustoPlay API — конфигурация Cloudflare Worker.
+# Подробная инструкция по развёртыванию: worker/README.md
+
+name = "gustoplay-api"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Переменные окружения. Секреты (TURNSTILE_SECRET) — только через `wrangler secret put`.
+[vars]
+ALLOWED_ORIGINS = "https://gustoplay.ru,https://www.gustoplay.ru"
+MIN_PASSWORD_LENGTH = "10"
+
+# Адрес сайта — нужен для ссылки сброса пароля в письме
+SITE_URL = "https://gustoplay.ru"
+
+# true — при отсутствии настроенной почты API вернёт ссылку сброса в ответе
+# (только для проверки владельцем сайта, на боевом домене держите false)
+ALLOW_RESET_DEBUG = "false"
+
+# База данных: npx wrangler d1 create gustoplay
+[[d1_databases]]
+binding = "DB"
+database_name = "gustoplay"
+database_id = "ЗАМЕНИТЕ_НА_ВАШ_ID"
+
+# Ежедневная уборка просроченных сессий и счётчиков
+[triggers]
+crons = ["17 3 * * *"]
+
+# Секреты (только через `npx wrangler secret put ИМЯ`):
+#   TURNSTILE_SECRET  — секретный ключ Turnstile
+#   GOOGLE_CLIENT_ID  — OAuth Client ID из Google Cloud
+#   RESEND_API_KEY    — ключ Resend для писем сброса пароля (необязательно)
+#   MAIL_FROM         — адрес отправителя, например "GustoPlay <no-reply@gustoplay.ru>"
+
+[observability]
+enabled = true
