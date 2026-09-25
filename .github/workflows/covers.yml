@@ -1,0 +1,57 @@
+name: GustoPlay — обложки
+
+# Резолвит официальные арты каталога через Steam Store API (в песочнице разработки
+# нет доступа к Steam, поэтому шаг вынесен в Actions) и коммитит результат в ветку.
+# Ручные сопоставления для игр вне Steam — tools/steam-overrides.json.
+#
+# Запуск: Actions → «GustoPlay — обложки» → Run workflow → part (a..i или all).
+# Каждый запуск — один батч (один коммит), как и договорённость по батчам каталога.
+
+on:
+  workflow_dispatch:
+    inputs:
+      part:
+        description: 'Батч каталога: a..i или all'
+        required: false
+        default: 'all'
+
+permissions:
+  contents: write
+
+jobs:
+  resolve:
+    name: Резолвинг обложек (part ${{ inputs.part }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Резолвинг официальных артов
+        run: node tools/resolve-steam-covers.mjs --part=${{ inputs.part }}
+
+      - name: Коммит результата
+        run: |
+          git config user.name "gustoplay-bot"
+          git config user.email "gustoplay-bot@users.noreply.github.com"
+          git add js/catalog/steam-covers.js tools/cover-review.log
+          if git diff --cached --quiet; then
+            echo "Изменений нет — все обложки батча уже резолвлены."
+          else
+            git commit -m "chore(covers): официальные арты — батч part-${{ inputs.part }}"
+            git pull --rebase origin "${GITHUB_REF_NAME}" || true
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Отчёт по сомнительным совпадениям
+        if: always()
+        run: |
+          echo "### Обложки: отчёт резолвера" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat tools/cover-review.log >> "$GITHUB_STEP_SUMMARY" || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
