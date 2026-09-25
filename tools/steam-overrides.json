@@ -1,3 +1,8 @@
 {
-  "__comment": "Ручные сопоставления обложек: игры с нестандартными названиями в каталоге и игры вне Steam. Значения сливаются в js/catalog/steam-covers.js резолвером. Поля: steamId/cover — Steam; cover+url+src — официальный арт вне Steam (из пресс-китов/сайтов издателей, никогда не из поиска картинок)."
+  "__comment": "Ручные сопоставления обложек. Резолвер сливает их в js/catalog/steam-covers.js. Формат: для Steam — {steamId, cover, src:'steam'}; для игр вне Steam — {cover, url, src:'official'|'gog'|'epic'}. Каждый AppID проверен через Steam Store API (см. git-историю), обложки вне Steam берутся только из официальных источников.",
+
+  "silent-hill-2-2024": { "steamId": 2124490, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2124490/library_600x900_2x.jpg", "src": "steam" },
+  "god-of-war-2018": { "steamId": 1593500, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1593500/library_600x900_2x.jpg", "src": "steam" },
+  "dead-space-2023": { "steamId": 1693980, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1693980/library_600x900_2x.jpg", "src": "steam" },
+  "uncharted-4-a-thiefs-end": { "steamId": 1659420, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1659420/library_600x900_2x.jpg", "src": "steam" }
 }
