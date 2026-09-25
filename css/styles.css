@@ -719,7 +719,13 @@ select.input { cursor: pointer; }
 
 /* ------------------------------- компания / профиль ----------------------- */
 
-.party-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 18px; margin: 18px 0; }
+.party-form {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 18px; margin: 18px 0;
+  /* Панель с одним переключателем («Только бесплатные») растягивалась до высоты
+     самой высокой панели и выглядела пустой. Теперь каждая панель по своему размеру. */
+  align-items: start;
+}
 .party-form .filter-group { background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius); padding: 16px; margin: 0; }
 .answers { display: grid; gap: 12px; }
 .answer-row { display: grid; gap: 6px; }
