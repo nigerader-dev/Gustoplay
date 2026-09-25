@@ -5,11 +5,16 @@
  * Запуск: npm run check:covers (нужен доступ к интернету; в песочнице без сети
  * проверку гоняет GitHub Actions — .github/workflows/ci.yml).
  *
- * Отчёт различает три ситуации, чтобы их не приходилось угадывать по логу:
+ * Отчёт различает ситуации, чтобы их не приходилось угадывать по логу:
  *   • URL отвечает            — всё хорошо;
  *   • HTTP 404/410 и прочие   — битая ссылка, лечится записью в tools/steam-overrides.json;
  *   • сетевые отказы (fetch failed, таймаут) — похоже, нет доступа к CDN.
  * Если не ответил НИ ОДИН URL, честно пишем про сеть, а не «437 обложек битые».
+ *
+ * Отдельно и без сети проверяется главное требование каталога — «ноль заглушек»:
+ * cover обязан быть ссылкой на официальный арт магазина, а не data:-URI, не локальный
+ * SVG-генератор и не файл из /covers. Такая проверка работает и в офлайне, поэтому
+ * её результат не зависит от доступности CDN.
  */
 import { GAMES } from '../js/catalog/index.js';
 
@@ -41,8 +46,23 @@ async function isAlive(url) {
   return probeOnce(url);
 }
 
+/**
+ * Заглушка вместо официального арта: сгенерированный SVG (js/cover.js), инлайн data:-URI
+ * или локальная картинка из /covers. Официальный арт — всегда абсолютная https-ссылка
+ * на CDN магазина (Steam, GOG, Epic, Nintendo, Google Play, сайт издателя).
+ */
+const isStub = (url) => {
+  const value = String(url || '').trim();
+  if (!value) return true;
+  if (/^data:/i.test(value)) return true;
+  if (/\.svg(\?|#|$)/i.test(value)) return true;
+  if (/^(?:\.\.?\/|\/)?covers\//i.test(value)) return true;
+  return !/^https:\/\//i.test(value);
+};
+
 const missing = GAMES.filter((g) => !g.cover);
-const queue = GAMES.filter((g) => g.cover);
+const stubs = GAMES.filter((g) => g.cover && isStub(g.cover));
+const queue = GAMES.filter((g) => g.cover && !isStub(g.cover));
 const total = queue.length;
 const broken = [];
 let alive = 0;
@@ -73,6 +93,13 @@ if (missing.length) {
   console.error('Запустите: npm run covers:resolve (или GitHub Actions → Covers)');
 }
 
+if (stubs.length) {
+  console.error(`\n❌ Заглушки вместо официального арта (${stubs.length}):`);
+  stubs.forEach((g) => console.error(`  • ${g.slug} (${g.t}): ${String(g.cover).slice(0, 90)}`));
+  console.error('У каждой игры должен быть официальный арт магазина (Steam/GOG/Epic/Nintendo/Google Play/сайт издателя).');
+  console.error('Добавьте AppID в tools/steam-overrides.json и запустите npm run covers:resolve.');
+}
+
 if (broken.length) {
   console.error(`\n❌ Не отвечают (${broken.length}): ${alive} ок, ${dead.length} битых ссылок, ${network.length} сетевых отказов`);
   broken.forEach((b) => console.error(`  • ${b.slug} (${b.title}): ${b.problem} — ${b.url}`));
@@ -83,15 +110,16 @@ if (broken.length) {
 
 // Особый случай: сеть до CDN закрыта целиком. Это не «437 битых обложек», и без
 // пояснения такой лог легко принять за проблему каталога.
-const offline = alive === 0 && total > 0;
+const offline = alive === 0 && total > 0 && !missing.length && !stubs.length;
 if (offline) {
   console.error('\n⚠️  Ни один URL не ответил — похоже, нет доступа к CDN обложек (Steam/Google Play).');
   console.error('   Локально без интернета это ожидаемо: проверку гоняет CI — шаг «Обложки» в .github/workflows/ci.yml.');
   console.error('   Каталог при этом не считается битым — проверку нужно повторить там, где сеть есть.');
 }
 
-const ok = !missing.length && !broken.length;
+const ok = !missing.length && !stubs.length && !broken.length;
 console.log(ok
-  ? `\n✅ Все ${GAMES.length} обложек на месте и отвечают.`
-  : `\n❌ Обложек в порядке: ${GAMES.length - missing.length - broken.length}/${GAMES.length}.`);
+  ? `\n✅ Все ${GAMES.length} обложек на месте, это официальные арты, и все URL отвечают.`
+  : `\n❌ Обложек в порядке: ${GAMES.length - missing.length - stubs.length - broken.length}/${GAMES.length}`
+    + ` (без обложки: ${missing.length}, заглушек: ${stubs.length}, недоступных: ${broken.length}).`);
 process.exit(ok ? 0 : 1);

@@ -13,6 +13,7 @@
     "build:fast": "node tools/build-static.mjs --no-prerender",
     "deploy": "node tools/deploy-cloudflare.mjs",
     "deploy:check": "node tools/deploy-cloudflare.mjs --check",
+    "deploy:purge": "node tools/deploy-cloudflare.mjs --purge",
     "test": "node tools/smoke-test.mjs",
     "test:functional": "node tools/test-functional.mjs",
     "test:a11y": "node tools/check-a11y.mjs",

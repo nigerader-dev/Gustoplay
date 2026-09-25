@@ -59,7 +59,8 @@ npm run test:all     # всё вместе
 npm run build        # сборка dist/: 625 страниц, sitemap, ads.txt, заголовки
 npm run verify:build # проверка собранного сайта: метаданные, ссылки, CSP, PWA
 npm run deploy:check # что готово к публикации, чего не хватает
-npm run deploy       # публикация в Cloudflare: база, API, домен, сайт
+npm run deploy       # публикация в Cloudflare: база, API, домен, сайт (+ очистка кэша)
+npm run deploy:purge # только очистка edge-кэша: домен показывает старый релиз
 npm run preview      # локальный просмотр собранного dist/
 ```
 

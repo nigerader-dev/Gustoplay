@@ -660,6 +660,57 @@ console.log('\n14. Битый профиль (строки вместо масс
   store.resetProfile();
 }
 
+/* ============ 15. Эмодзи в интерфейсе: только иконки из icons.js ============ */
+console.log('\n15. Иконки вместо эмодзи в интерфейсе');
+{
+  // Пиктографические эмодзи в тексте интерфейса запрещены: иконки — только контурные SVG
+  // из js/icons.js. Типографика (©, ®, ™, стрелки, средняя точка) под правило не попадает:
+  // это знаки оформления, а не эмодзи, и они используются в подвале и текстах.
+  const TYPO = new Set(['©', '®', '™']);
+  const EMOJI = /\p{Extended_Pictographic}/u;
+  const firstEmoji = (text) => [...text].find((ch) => EMOJI.test(ch) && !TYPO.has(ch)) || null;
+  const found = [];
+  const scan = (where, value) => {
+    if (typeof value !== 'string') return;
+    const ch = firstEmoji(value);
+    if (ch) found.push(`${where}: «${value.slice(0, 60)}» (${ch})`);
+  };
+
+  // 1) строки интерфейса в обоих языках
+  for (const [lang, dict] of Object.entries(i18n.STRINGS)) {
+    for (const [key, value] of Object.entries(dict)) scan(`i18n.${lang}.${key}`, value);
+  }
+  // 2) контент каталога, который видит пользователь
+  for (const g of GAMES) {
+    scan(`catalog.${g.slug}.desc`, g.desc?.ru);
+    scan(`catalog.${g.slug}.desc`, g.desc?.en);
+    scan(`catalog.${g.slug}.about`, g.about?.ru);
+    scan(`catalog.${g.slug}.about`, g.about?.en);
+    for (const f of g.feats?.ru || []) scan(`catalog.${g.slug}.feats`, f);
+    for (const f of g.feats?.en || []) scan(`catalog.${g.slug}.feats`, f);
+  }
+  check('в строках i18n и контенте каталога нет эмодзи', found.length === 0,
+    found.slice(0, 3).join(' | ') || `${Object.keys(i18n.STRINGS).length} языка, ${GAMES.length} игр`);
+
+  // 3) отрисованные страницы: эмодзи не должны появляться и после подстановок
+  const emojiInPage = [];
+  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms']) {
+    await navigate(route);
+    const text = window.document.body.textContent || '';
+    const ch = firstEmoji(text);
+    if (ch) emojiInPage.push(`${route || 'home'} → «${text.slice(0, 40).trim()}…» (${ch})`);
+  }
+  check('на отрисованных страницах нет эмодзи', emojiInPage.length === 0,
+    emojiInPage.slice(0, 2).join(' | ') || '8 маршрутов');
+
+  // 4) иконки в разметке — это SVG из icons.js, а не текстовые символы
+  await navigate('home');
+  const icons = [...window.document.querySelectorAll('svg.icon')];
+  check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
+  check('у SVG-иконок нет текстовых эмодзи внутри',
+    icons.every((svg) => !firstEmoji(svg.textContent || '')));
+}
+
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
 if (failures.length) {
   console.log(failures.map((f) => ` - ${f}`).join('\n'));
