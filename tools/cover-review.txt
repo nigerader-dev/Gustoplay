@@ -1,25 +1,15 @@
 # cover-review.txt (part=all)
 # CHECK — совпадение с несколькими кандидатами (проверить вручную)
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
-MISS arknights — «Arknights» (part-d): кандидаты Arknights: Endfield (4732690) | POPUCOM X ARKNIGHTS Collab Outfit Pack (3929360)
-MISS brawl-stars — «Brawl Stars» (part-c): кандидаты нет
 MISS call-of-duty-mobile — «Call of Duty: Mobile» (part-h): кандидаты нет
 MISS castlevania-symphony-of-the-night — «Castlevania: Symphony of the Night» (part-i): кандидаты нет
-MISS clash-of-clans — «Clash of Clans» (part-d): кандидаты нет
-MISS clash-royale — «Clash Royale» (part-h): кандидаты нет
 MISS football-manager-2024 — «Football Manager 2024» (part-c): кандидаты Football Manager 2024 In-game Editor (2473420)
 MISS free-fire — «Free Fire» (part-h): кандидаты Aliens: Fireteam Elite - Frontier Freelancer Pack (1643354)
 MISS gran-turismo-7 — «Gran Turismo 7» (part-c): кандидаты нет
-MISS minecraft — «Minecraft» (part-a): кандидаты Minecraft Dungeons II (1912410) | Minecraft Dungeons (1672970) | Minecraft Legends (1928870)
 MISS mobile-legends-bang-bang — «Mobile Legends: Bang Bang» (part-h): кандидаты нет
 MISS monopoly-go — «Monopoly GO!» (part-i): кандидаты нет
 MISS multiversus — «MultiVersus» (part-i): кандидаты нет
-MISS pok-mon-tcg-pocket — «Pokémon TCG Pocket» (part-h): кандидаты нет
 MISS project-sekai-colorful-stage — «Project Sekai: Colorful Stage!» (part-i): кандидаты нет
 MISS pubg-mobile — «PUBG Mobile» (part-i): кандидаты нет
 MISS roblox — «Roblox» (part-c): кандидаты нет
-MISS starcraft-ii — «StarCraft II» (part-g): кандидаты нет
-MISS valorant — «Valorant» (part-a): кандидаты нет
-MISS warcraft-iii-reforged — «Warcraft III: Reforged» (part-i): кандидаты нет
 MISS whiteout-survival — «Whiteout Survival» (part-h): кандидаты нет
-MISS world-of-warcraft — «World of Warcraft» (part-a): кандидаты нет
