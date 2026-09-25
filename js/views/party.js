@@ -48,7 +48,7 @@ export function render(ctx) {
     </header>
     ${form}
     <div class="notice">${icon('target')} ${esc(tp('party.result', games.length, { n: players, m: games.length }))}
-      ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
+      ${localCoop ? `<span class="dot-sep">•</span> ${esc(tp('party.coopLine', localCoop, { n: localCoop }))}` : ''}
     </div>
     ${games.length
       ? cardsGrid(games, { marks: getProfile().marks })

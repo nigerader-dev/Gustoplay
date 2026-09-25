@@ -92,6 +92,56 @@ for (const file of files) {
   }
 }
 
+/* ------------------------ ключи словаря --------------------------- */
+
+// Ключ интерфейса, которого нет в переводе, показывается пользователю как «game.storeBattleNet».
+// Такое ловится только на живом сайте — поэтому проверяем ключи статически.
+const referenced = new Set();
+const jsFiles = [];
+const walkJs = (dir) => {
+  for (const name of readdirSync(resolve(root, dir))) {
+    const full = resolve(root, dir, name);
+    if (statSync(full).isDirectory()) walkJs(`${dir}/${name}`);
+    else if (/\.js$/.test(name)) jsFiles.push(full);
+  }
+};
+for (const dir of ['js']) walkJs(dir);
+for (const file of jsFiles) {
+  // комментарии выкидываем: в них встречаются примеры вызова t('…') и попадают в проверку
+  const src = readFileSync(file, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/^\s*\/\/.*$/gm, ' ');
+  for (const m of src.matchAll(/\b(?:t|tp)\(\s*'([\w.]+)'/g)) referenced.add(m[1]);
+}
+
+// множественные формы: ru .one/.few/.many против en .one/.other
+const pluralBase = (key) => key.replace(/\.(one|few|many|other)$/, '');
+const byLang = {};
+for (const [lang, table] of Object.entries(STRINGS)) {
+  byLang[lang] = new Map();
+  for (const key of Object.keys(table)) {
+    const base = pluralBase(key);
+    if (!byLang[lang].has(base)) byLang[lang].set(base, new Set());
+    byLang[lang].get(base).add(key);
+  }
+}
+
+const keyProblems = [];
+for (const key of referenced) {
+  for (const lang of Object.keys(byLang)) {
+    if (!byLang[lang].has(pluralBase(key))) keyProblems.push([`i18n/${lang}`, key, 'ключ используется в коде, но не объявлен']);
+  }
+}
+for (const lang of Object.keys(byLang)) {
+  const other = Object.keys(byLang).find((l) => l !== lang);
+  if (!other) continue;
+  for (const base of byLang[lang].keys()) {
+    if (!byLang[other].has(base)) keyProblems.push([`i18n/${other}`, base, `есть в ${lang}, нет в ${other}`]);
+  }
+}
+console.log(`Ключей интерфейса: ${referenced.size} используемых, ${byLang.ru?.size || 0} в ru, ${byLang.en?.size || 0} в en`
+  + (keyProblems.length ? ` — проблем: ${keyProblems.length}\n` : ' ✅\n'));
+
 /* --------------------------- правила ---------------------------- */
 
 /** Названия игр из каталога: в них «повтор слова» — часть названия, а не ошибка */
@@ -99,6 +149,8 @@ const GAME_TITLES = GAMES.map((g) => g.t);
 
 const problems = [];
 const report = (kind, where, text, detail) => problems.push({ kind, where, text, detail });
+
+for (const [where, key, detail] of keyProblems) report('нет перевода', where, key, detail);
 
 const RULES = [
   {
@@ -233,7 +285,7 @@ const RU_STEMS = [
 const RU_SKIP = new Set([
   'gustoplay', 'steam', 'nintendo', 'playstation', 'xbox', 'epic', 'google', 'play',
   'battle', 'net', 'supercell', 'riot', 'blizzard', 'coop', 'кооп', 'pvp', 'pve', 'rpg',
-  'mmo', 'fps', 'pc', 'ios', 'android', 'json', 'html', 'css', 'smm', 'бренд',
+  'mmo', 'fps', 'pc', 'ios', 'android', 'json', 'html', 'css', 'smm', 'бренд', 'eshop',
   // слова, которых нет в словаре, но они верны в игровом контексте
   'геймплей', 'геймплейный', 'геймплейная', 'геймплеем', 'рандомайзер', 'роуглайт',
   'роуглайк', 'спидран', 'спидраннер', 'спидранер', 'платформер', 'платформере',
@@ -252,6 +304,7 @@ const EN_SKIP = new Set([
   'shinobi', 'noir', 'gothic', 'esport', 'crossplay', 'crossplatform', 'artbook', 'newgame',
   'lore', 'lorebook', 'storydriven', 'endless', 'coop',
   'hitbox', 'hitboxes', 'checkbox', 'dropdown', 'changelog', 'email', 'screenshot', 'screenshots',
+  'eshop', 'co-op',
 ]);
 
 const wordStats = { ru: new Map(), en: new Map() };

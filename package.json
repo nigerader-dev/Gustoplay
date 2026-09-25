@@ -29,6 +29,7 @@
     "check:covers": "node tools/check-covers.mjs",
     "check:text": "node tools/check-text.mjs",
     "check:stores": "node tools/check-store-links.mjs",
+    "stores:pull": "node tools/pull-store-links.mjs",
     "check:stores:candidates": "node tools/check-store-links.mjs --candidates=tools/store-candidates.json --suggest",
     "clean": "node tools/clean-catalog.mjs",
     "audit": "node tools/audit-catalog.mjs",

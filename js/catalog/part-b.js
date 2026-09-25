@@ -366,7 +366,7 @@ export const PART_B = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'cheap', pv: 800,
     len: [10, 500], dif: 3, pace: 2, rat: 92, mood: ['think', 'progress', 'relax'],
     desc: { ru: 'Покер плюс джокеры: одна партия — минута, но остановиться невозможно.', en: 'Poker plus jokers: one run takes a minute, but stopping is impossible.' },
-    about: {"ru":"Покерный рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.","en":"A poker roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions."},
+    about: {"ru":"Рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.","en":"A roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions."},
     feats: {"ru":["«Ещё один забег» в чистом виде","Простые правила с бездонной глубиной сборок","Лучшая игра года по мнению десятков изданий"],"en":["“One more run” in its purest form","Simple rules, bottomless build depth","Named game of the year by dozens of outlets"]},
   },
   {

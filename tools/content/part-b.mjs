@@ -446,8 +446,8 @@ export default [
   {
     slug: 'balatro', title: 'Balatro',
     about: {
-      ru: 'Покерный рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.',
-      en: 'A poker roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions.',
+      ru: 'Рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.',
+      en: 'A roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions.',
     },
     feats: {
       ru: ['«Ещё один забег» в чистом виде', 'Простые правила с бездонной глубиной сборок', 'Лучшая игра года по мнению десятков изданий'],
