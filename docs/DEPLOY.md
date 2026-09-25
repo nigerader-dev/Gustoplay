@@ -14,7 +14,7 @@ npm run deploy           # развернуть: база, API, домен, са
 
 | Что | Где взять | Зачем |
 |---|---|---|
-| `CLOUDFLARE_API_TOKEN` | панель Cloudflare → My Profile → API Tokens → Create Token → шаблон **Edit Cloudflare Workers** + права `Account → D1 → Edit`, `Account → Cloudflare Pages → Edit`, `Zone → DNS → Edit` | публикация API и сайта |
+| `CLOUDFLARE_API_TOKEN` | панель Cloudflare → My Profile → API Tokens → Create Token → шаблон **Edit Cloudflare Workers** + права `Account → D1 → Edit`, `Account → Cloudflare Pages → Edit`, `Zone → DNS → Edit`, `Zone → Cache Purge` | публикация API и сайта |
 | `CLOUDFLARE_ACCOUNT_ID` | панель Cloudflare, правый сайдбар | привязка к аккаунту |
 | Домен (по желанию) | регистратор → перенести NS на Cloudflare | адрес `gustoplay.ru` вместо `gustoplay.pages.dev` |
 | `GOOGLE_CLIENT_ID` (по желанию) | Google Cloud → Credentials → OAuth Client ID (Web), Authorized JavaScript origins = адрес сайта | кнопка «Войти через Google» |
