@@ -74,6 +74,23 @@ jobs:
         if: always()
         run: node tools/emit-cover-data.mjs tools/cover-review.txt
 
+      - name: Проверка обложек (каждая игра с артом, все URL отвечают)
+        id: check
+        continue-on-error: true
+        run: |
+          set +e
+          npm run check:covers > /tmp/check-covers.log 2>&1
+          code=$?
+          echo "::notice::check:covers exit=${code}"
+          tail -40 /tmp/check-covers.log
+          {
+            echo ""
+            echo "### check:covers (exit=${code})"
+            echo '```'
+            tail -30 /tmp/check-covers.log
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Отчёт по сомнительным совпадениям
         if: always()
         run: |

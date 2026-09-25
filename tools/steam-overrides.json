@@ -1,8 +1,309 @@
 {
   "__comment": "Ручные сопоставления обложек. Резолвер сливает их в js/catalog/steam-covers.js. Формат: для Steam — {steamId, cover, src:'steam'}; для игр вне Steam — {cover, url, src:'official'|'gog'|'epic'}. Каждый AppID проверен через Steam Store API (см. git-историю), обложки вне Steam берутся только из официальных источников.",
-
-  "silent-hill-2-2024": { "steamId": 2124490, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2124490/library_600x900_2x.jpg", "src": "steam" },
-  "god-of-war-2018": { "steamId": 1593500, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1593500/library_600x900_2x.jpg", "src": "steam" },
-  "dead-space-2023": { "steamId": 1693980, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1693980/library_600x900_2x.jpg", "src": "steam" },
-  "uncharted-4-a-thiefs-end": { "steamId": 1659420, "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1659420/library_600x900_2x.jpg", "src": "steam" }
+  "age-of-empires-ii-the-age-of-kings": {
+    "steamId": 221380,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/221380/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "age-of-empires-iv": {
+    "steamId": 1466860,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1466860/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "alan-wake-2": {
+    "cover": "https://cdn2.unrealengine.com/egs-alanwake2-remedyentertainment-s2-1200x1600-0ebb9a566b72.jpg",
+    "src": "epic"
+  },
+  "alan-wake-remastered": {
+    "cover": "https://cdn2.unrealengine.com/en-remedy-deer-s2-1200x1600-1200x1600-af2af3a517c5.png",
+    "src": "epic"
+  },
+  "animal-crossing-new-horizons": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000027619/9989957eae3a6b545194c42fec2071675c34aadacd65e6b33fdfe7b3b6a86c3a",
+    "src": "nintendo"
+  },
+  "asphalt-legends-unite": {
+    "steamId": 1815780,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1815780/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "beyond-good-evil": {
+    "steamId": 2556990,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2556990/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "black-desert-online": {
+    "steamId": 582660,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/582660/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "bloodborne": {
+    "cover": "https://image.api.playstation.com/vulcan/img/rnd/202010/2614/O2Z66UWrZH8zcejxopwWxhGu.png",
+    "src": "playstation"
+  },
+  "case-of-the-golden-idol": {
+    "steamId": 1677770,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1677770/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "command-conquer-red-alert-2": {
+    "steamId": 2229850,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2229850/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "control": {
+    "steamId": 870780,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/870780/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "dead-space-2023": {
+    "steamId": 1693980,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1693980/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "death-stranding": {
+    "steamId": 1850570,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1850570/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "diablo-ii-resurrected": {
+    "steamId": 2536520,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2536520/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "disco-elysium": {
+    "steamId": 632470,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/632470/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "divinity-original-sin-2": {
+    "steamId": 435150,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/435150/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "doom-2016": {
+    "steamId": 379720,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/379720/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "dragon-age-origins": {
+    "steamId": 47810,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/47810/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "dragon-quest-xi-s": {
+    "steamId": 1295510,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1295510/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "dying-light-2-stay-human": {
+    "steamId": 534380,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/534380/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "fall-guys": {
+    "steamId": 1097150,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1097150/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "final-fantasy-xiv": {
+    "steamId": 39210,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/39210/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "fire-emblem-three-houses": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000007606/c499fdc86779ca95e61daed1f94288a245d196360d278138e56d44097d1a3878",
+    "src": "nintendo"
+  },
+  "fortnite": {
+    "cover": "https://cdn2.unrealengine.com/en-fn-og-42-10-c1sx-egs-launcher-blade-1200x1600-1200x1600-6e74a083a5cd.jpg",
+    "src": "epic"
+  },
+  "genshin-impact": {
+    "cover": "https://cdn2.unrealengine.com/egs-genshinimpact-cognospherepteltd-s2-1200x1600-f33338ee244c.jpg",
+    "src": "epic"
+  },
+  "ghost-of-tsushima": {
+    "steamId": 2215430,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2215430/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "god-of-war-2018": {
+    "steamId": 1593500,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1593500/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "grand-theft-auto-v": {
+    "steamId": 3240220,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/3240220/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "honkai-star-rail": {
+    "cover": "https://cdn2.unrealengine.com/2-6-1200x1600-en-1200x1600-f43aa119f1b3.jpg",
+    "src": "epic"
+  },
+  "horizon-forbidden-west": {
+    "steamId": 2420110,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2420110/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "hot-wheels-unleashed-2": {
+    "steamId": 2051120,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2051120/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "league-of-legends": {
+    "cover": "https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ahri_0.jpg",
+    "src": "riot"
+  },
+  "mario-kart-8-deluxe": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000000153/de697f487a36d802dd9a5ff0341f717c8486221f2f1219b675af37aca63bc453",
+    "src": "nintendo"
+  },
+  "metroid-dread": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000042924/4f2c683f0196210ec212a2ab8bf6952223c0b88e827b820953407a2ba61c9cb2",
+    "src": "nintendo"
+  },
+  "microsoft-flight-simulator": {
+    "steamId": 1250410,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1250410/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "nioh-2": {
+    "steamId": 1325200,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1325200/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "northgard": {
+    "steamId": 466560,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/466560/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "overwatch-2": {
+    "steamId": 2357570,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2357570/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "pathfinder-wrath-of-the-righteous": {
+    "steamId": 1184370,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1184370/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "resident-evil-2-remake": {
+    "steamId": 883710,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/883710/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "resident-evil-4-remake": {
+    "steamId": 2050650,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2050650/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "rocket-league": {
+    "steamId": 252950,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/252950/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sea-of-stars": {
+    "steamId": 1244090,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1244090/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sea-of-thieves": {
+    "steamId": 1172620,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1172620/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sekiro-shadows-die-twice": {
+    "steamId": 814380,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/814380/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "silent-hill-2-2024": {
+    "steamId": 2124490,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2124490/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "spiritfarer": {
+    "steamId": 972660,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/972660/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "splinter-cell-chaos-theory": {
+    "steamId": 13570,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/13570/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "star-wars-battlefront-ii-2005": {
+    "steamId": 6060,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/6060/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "stronghold-crusader": {
+    "steamId": 40970,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/40970/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "super-mario-party-jamboree": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000084608/ba0572bf9d840b03bf9958809943fb3c76c3adfd6d8f2704b0f1b766f8aa4027",
+    "src": "nintendo"
+  },
+  "super-smash-bros-ultimate": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000012332/ac4d1fc9824876ce756406f0525d50c57ded4b2a666f6dfe40a6ac5c3563fad9",
+    "src": "nintendo"
+  },
+  "surviving-mars": {
+    "steamId": 3215050,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/3215050/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "the-elder-scrolls-iv-oblivion": {
+    "steamId": 2623190,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2623190/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "the-elder-scrolls-v-skyrim": {
+    "steamId": 489830,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/489830/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "the-witcher-3-wild-hunt": {
+    "steamId": 292030,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/292030/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "tony-hawks-pro-skater-1-2": {
+    "steamId": 2395210,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2395210/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "trackmania-nations": {
+    "steamId": 11020,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/11020/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "uncharted-4-a-thiefs-end": {
+    "steamId": 1659420,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1659420/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "va-11-hall-a": {
+    "steamId": 447530,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/447530/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "va-11-hall-a-second-round": {
+    "steamId": 914210,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/914210/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "warhammer-end-times-vermintide-2": {
+    "steamId": 552500,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/552500/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "xenoblade-chronicles-3": {
+    "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000053336/e933b48650b33b355e9cf2583da5c94b77180e40fb02d050041083dd62f4df39",
+    "src": "nintendo"
+  }
 }
