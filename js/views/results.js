@@ -2,7 +2,7 @@
 import { recommend, tasteSummary } from '../engine.js';
 import { icon } from '../icons.js';
 import { GENRES, TAGS } from '../taxonomy.js';
-import { t, tl } from '../i18n.js';
+import { t, tl, tp } from '../i18n.js';
 import { getProfile, setMeta, trackImpressions, resetProfile } from '../store.js';
 import { navigate } from '../nav.js';
 import { FEATURES } from '../config.js';
@@ -29,8 +29,8 @@ export function render() {
   const filtersBar = `
     <div class="results-bar">
       <div class="results-count">
-        <strong>${esc(t('results.pool'))}: ${result.poolSize}</strong>
-        <span>${esc(t('results.subtitle', { n: result.poolSize }))}</span>
+        <strong>${esc(tp('results.pool', result.poolSize))}</strong>
+        <span>${esc(t('results.subtitle'))}</span>
         ${result.confidence >= 25 ? `<span class="results-confidence" title="${esc(t('results.confidence.hint'))}">${esc(t('results.confidence', { n: result.confidence }))}</span>` : ''}
       </div>
       <div class="results-actions">
@@ -49,7 +49,7 @@ export function render() {
         <span class="taste-label">${esc(t('profile.topTags'))}</span>
         <div class="chips-cloud small">
           ${summary.topTags.slice(0, 6).map((id) => `<a class="chip" href="#/tag/${id}" data-action="nav">${esc(tl(TAGS, id))}</a>`).join('')}
-          ${summary.topGenres.slice(0, 3).map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${GENRES[id]?.icon || ''} ${esc(tl(GENRES, id))}</a>`).join('')}
+          ${summary.topGenres.slice(0, 3).map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</a>`).join('')}
         </div>
       </div>
       ${summary.negativeTags.length ? `<div>
@@ -92,4 +92,4 @@ export function showMore(n = FEATURES.pageSize) {
 export function reset() { limit = FEATURES.pageSize; }
 
 export const title = () => `${t('results.title')} — ${t('site.name')}`;
-export const description = () => t('results.subtitle', { n: '190+' });
+export const description = () => t('results.subtitle');

@@ -2,7 +2,7 @@
 import { QUESTIONS, visibleQuestions, progress, SEED_LIMIT } from '../quiz.js';
 import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, PLATFORMS } from '../taxonomy.js';
-import { t, tl } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { GAMES } from '../catalog/index.js';
 import { hardFilter } from '../engine.js';
 import { getProfile, setAnswers, markGame } from '../store.js';
@@ -222,14 +222,15 @@ function poolCounter() {
   const enough = count >= 12;
   return `<div class="quiz-pool ${enough ? '' : 'warn'}">
     <span class="quiz-pool-dot"></span>
-    ${esc(t('quiz.pool', { n: count }))}
+    ${esc(tp('quiz.pool', count))}
   </div>`;
 }
 
 function optionHtml(q, opt, value) {
   const on = toArray(value).some((v) => String(v) === String(opt.id));
   const iconHtml = opt.icon ? `<span class=\"opt-icon\">${icon(opt.icon)}</span>` : '';
-  const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : '';
+  const dictHint = opt.dict && DICTS[opt.dict][opt.id]?.hint ? DICTS[opt.dict][opt.id].hint[getLang()] : null;
+  const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : dictHint ? `<small class="opt-hint">${esc(dictHint)}</small>` : '';
   return `<button type="button" class="opt ${on ? 'on' : ''}" data-action="quiz-option" data-q="${q.id}" data-id="${esc(String(opt.id))}" aria-pressed="${on}">
     ${iconHtml}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
   </button>`;

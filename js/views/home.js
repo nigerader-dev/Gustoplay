@@ -2,7 +2,7 @@
 import { GAMES, STATS } from '../catalog/index.js';
 import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, MODES, PLATFORMS } from '../taxonomy.js';
-import { t, tl, getLang } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { adSlot, houseAd, cardsGrid, sectionTitle, esc } from './components.js';
 import { markedGames } from '../store.js';
 
@@ -45,10 +45,10 @@ export function render() {
       </div>
       ${continueBlock}
       <div class="hero-stats">
-        <div><strong>${STATS.total}</strong><span>${esc(t('home.stats.games'))}</span></div>
+        <div><strong>${STATS.total}</strong><span>${esc(tp('home.stats.games', STATS.total))}</span></div>
         <div><strong>${STATS.coop}</strong><span>${esc(t('home.stats.coop'))}</span></div>
         <div><strong>${STATS.pvp}</strong><span>${esc(t('home.stats.pvp'))}</span></div>
-        <div><strong>${Object.keys(TAGS).length}</strong><span>${esc(t('home.stats.filters'))}</span></div>
+        <div><strong>${Object.keys(TAGS).length}</strong><span>${esc(tp('home.stats.filters', Object.keys(TAGS).length))}</span></div>
       </div>
     </div>
     <div class="hero-art" aria-hidden="true">

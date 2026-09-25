@@ -81,12 +81,12 @@ await new Promise((r) => setTimeout(r, 20));
 check('выбор настроений подсвечен', count('.opt.on') === 2);
 window.document.querySelector('[data-action="quiz-next"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 await new Promise((r) => setTimeout(r, 20));
-check('перешли к вопросу о компании', text().includes('С кем играем'));
+check('перешли к вопросу о режимах', text().includes('Как будете играть'));
 
 console.log('\n2b. Ветвление квиза и живой счётчик');
 check('есть живой счётчик пула', count('.quiz-pool') === 1 && /\d/.test(window.document.querySelector('.quiz-pool')?.textContent || ''));
 // выбираем кооп и 4 игрока, затем проверяем, что появился вопрос «с кем играете»
-const coopBtn = [...window.document.querySelectorAll('.opt')].find((b) => b.textContent.includes('кооп'));
+const coopBtn = window.document.querySelector('[data-action="quiz-option"][data-id="coop"]');
 if (coopBtn) coopBtn.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 window.document.querySelector('[data-action="quiz-next"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 await new Promise((r) => setTimeout(r, 20));

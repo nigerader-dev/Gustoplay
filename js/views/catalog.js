@@ -2,7 +2,7 @@
  *  поэтому любую выборку можно скопировать ссылкой, а поисковики видят её как отдельную страницу. */
 import { GAMES } from '../catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS, PRICE } from '../taxonomy.js';
-import { t, tl, getLang } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { adSlot, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionList, platformOptionList, modeOptionList, tagOptions } from './components.js';
 import { getProfile } from '../store.js';
 import { icon } from '../icons.js';
@@ -103,8 +103,8 @@ export function render(ctx) {
   const presetTitle = ctx.preset?.heading;
   const heading = presetTitle || t('catalog.title');
   const subtitle = presetTitle
-    ? t('catalog.subtitle', { n: found.length })
-    : t('catalog.subtitle', { n: GAMES.length });
+    ? tp('catalog.subtitle', found.length)
+    : tp('catalog.subtitle', GAMES.length);
 
   // Все непустые фильтры собираем в ссылку-«поделиться»
   const activeChips = [
@@ -137,7 +137,7 @@ export function render(ctx) {
   return `
   <section class="section catalog">
     <header class="section-head">
-      <h1>${esc(heading)}</h1>
+      <h1>${ctx.preset?.icon ? `${icon(ctx.preset.icon)} ` : ''}${esc(heading)}</h1>
       <p>${esc(subtitle)}</p>
     </header>
 
@@ -179,12 +179,12 @@ export function render(ctx) {
           </select>
         </div>
         <button type="button" class="btn btn-ghost" data-action="f-reset">${esc(t('catalog.reset'))}</button>
-        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-apply">${esc(t('catalog.show', { n: found.length }))}</button></div>
+        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-apply">${esc(tp('catalog.show', found.length))}</button></div>
       </aside>
 
       <div class="catalog-main">
         <div class="catalog-topbar">
-          <strong id="catalog-found">${esc(t('catalog.found', { n: found.length }))}</strong>
+          <strong id="catalog-found">${esc(tp('catalog.found', found.length))}</strong>
           ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map(chipHtml).join('')}</div>` : ''}
         </div>
 
@@ -192,7 +192,7 @@ export function render(ctx) {
           ? `<div class="grid" id="catalog-grid">${shown.map((g) => gameCard(g, { mark: getProfile().marks?.[g.slug]?.status || null })).join('')}</div>`
           : emptyState(t('results.empty'), t('catalog.reset'), `<button type="button" class="btn btn-primary" data-action="f-reset">${esc(t('catalog.reset'))}</button>`)}
 
-        ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(t('catalog.showMore', { n: more }))}</button></div>` : ''}
+        ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(tp('catalog.showMore', more))}</button></div>` : ''}
         ${adSlot('catalog-inline')}
       </div>
     </div>
@@ -263,4 +263,4 @@ export function removeFilter(kind, id, current) {
 }
 
 export const title = (ctx) => `${ctx?.preset?.heading || t('catalog.title')} — ${t('site.name')}`;
-export const description = (ctx) => `${ctx?.preset?.heading || t('catalog.title')}. ${t('catalog.subtitle', { n: GAMES.length })}`;
+export const description = (ctx) => `${ctx?.preset?.heading || t('catalog.title')}. ${tp('catalog.subtitle', GAMES.length)}`;

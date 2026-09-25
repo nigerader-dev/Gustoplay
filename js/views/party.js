@@ -2,7 +2,7 @@
 import { recommendForParty } from '../engine.js';
 import { icon } from '../icons.js';
 import { MODES, PLATFORMS } from '../taxonomy.js';
-import { t, tl, getLang } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { getProfile } from '../store.js';
 import { cardsGrid, esc, emptyState, filterGroup } from './components.js';
 import { currentPath, navigate } from '../nav.js';
@@ -47,7 +47,7 @@ export function render(ctx) {
       <p>${esc(t('party.subtitle'))}</p>
     </header>
     ${form}
-    <div class="notice">${icon('target')} ${esc(t('party.result', { n: players, m: games.length }))}
+    <div class="notice">${icon('target')} ${esc(tp('party.result', games.length, { n: players, m: games.length }))}
       ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
     </div>
     ${games.length

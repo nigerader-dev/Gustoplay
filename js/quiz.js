@@ -41,32 +41,32 @@ export const PRIORITY_LIMIT = 2;
 
 /** Варианты для «с кем чаще играете» — влияют на мягкие веса движка */
 export const COMPANY_OPTIONS = [
-  { id: 'friends', icon: 'users', labelKey: 'opt.companyFriends' },
-  { id: 'partner', icon: 'heart', labelKey: 'opt.companyPartner' },
-  { id: 'kids', icon: 'shapes', labelKey: 'opt.companyKids' },
-  { id: 'randoms', icon: 'headphones', labelKey: 'opt.companyRandoms' },
+  { id: 'friends', icon: 'users', labelKey: 'opt.companyFriends', hintKey: 'opt.companyFriends.hint' },
+  { id: 'partner', icon: 'heart', labelKey: 'opt.companyPartner', hintKey: 'opt.companyPartner.hint' },
+  { id: 'kids', icon: 'shapes', labelKey: 'opt.companyKids', hintKey: 'opt.companyKids.hint' },
+  { id: 'randoms', icon: 'headphones', labelKey: 'opt.companyRandoms', hintKey: 'opt.companyRandoms.hint' },
 ];
 
 /** Длина одной игровой сессии */
 export const SESSION_OPTIONS = [
-  { id: 'quick', icon: 'bolt', labelKey: 'opt.sessionQuick' },
-  { id: 'medium', icon: 'clock', labelKey: 'opt.sessionMedium' },
-  { id: 'evening', icon: 'moon', labelKey: 'opt.sessionEvening' },
+  { id: 'quick', icon: 'bolt', labelKey: 'opt.sessionQuick', hintKey: 'opt.sessionQuick.hint' },
+  { id: 'medium', icon: 'clock', labelKey: 'opt.sessionMedium', hintKey: 'opt.sessionMedium.hint' },
+  { id: 'evening', icon: 'moon', labelKey: 'opt.sessionEvening', hintKey: 'opt.sessionEvening.hint' },
 ];
 
 /** Что важнее всего — до двух вариантов */
 export const PRIORITY_OPTIONS = [
-  { id: 'story', icon: 'book', labelKey: 'opt.priorityStory' },
-  { id: 'mechanics', icon: 'sliders', labelKey: 'opt.priorityMechanics' },
-  { id: 'freedom', icon: 'compass', labelKey: 'opt.priorityFreedom' },
-  { id: 'competition', icon: 'trophy', labelKey: 'opt.priorityCompetition' },
+  { id: 'story', icon: 'book', labelKey: 'opt.priorityStory', hintKey: 'opt.priorityStory.hint' },
+  { id: 'mechanics', icon: 'sliders', labelKey: 'opt.priorityMechanics', hintKey: 'opt.priorityMechanics.hint' },
+  { id: 'freedom', icon: 'compass', labelKey: 'opt.priorityFreedom', hintKey: 'opt.priorityFreedom.hint' },
+  { id: 'competition', icon: 'trophy', labelKey: 'opt.priorityCompetition', hintKey: 'opt.priorityCompetition.hint' },
 ];
 
 /** Насколько свежая игра нужна */
 export const NOVELTY_OPTIONS = [
-  { id: 'new', icon: 'sparkles', labelKey: 'opt.noveltyNew' },
-  { id: 'indie', icon: 'gem', labelKey: 'opt.noveltyIndie' },
-  { id: 'classic', icon: 'rewind', labelKey: 'opt.noveltyClassic' },
+  { id: 'new', icon: 'sparkles', labelKey: 'opt.noveltyNew', hintKey: 'opt.noveltyNew.hint' },
+  { id: 'indie', icon: 'gem', labelKey: 'opt.noveltyIndie', hintKey: 'opt.noveltyIndie.hint' },
+  { id: 'classic', icon: 'rewind', labelKey: 'opt.noveltyClassic', hintKey: 'opt.noveltyClassic.hint' },
   { id: 'any', icon: 'dice', labelKey: 'opt.noveltyAny' },
 ];
 
@@ -88,10 +88,10 @@ export const QUESTIONS = [
     min: 0,
     max: 4,
     options: () => [
-      { id: 'solo', icon: 'user', labelKey: 'opt.solo' },
-      { id: 'coop', icon: 'users', labelKey: 'opt.coop' },
-      { id: 'pvp', icon: 'clash', labelKey: 'opt.pvp' },
-      { id: 'mmo', icon: 'infinity', labelKey: 'opt.mmo' },
+      { id: 'solo', icon: 'user', labelKey: 'opt.solo', hintKey: 'opt.solo.hint' },
+      { id: 'coop', icon: 'users', labelKey: 'opt.coop', hintKey: 'opt.coop.hint' },
+      { id: 'pvp', icon: 'clash', labelKey: 'opt.pvp', hintKey: 'opt.pvp.hint' },
+      { id: 'mmo', icon: 'infinity', labelKey: 'opt.mmo', hintKey: 'opt.mmo.hint' },
     ],
   },
   {
@@ -133,10 +133,10 @@ export const QUESTIONS = [
     icon: 'clock',
     type: 'single',
     options: () => [
-      { id: 'tiny', icon: 'bolt', labelKey: 'opt.timeTiny' },
-      { id: 'short', icon: 'sun', labelKey: 'opt.timeShort' },
-      { id: 'medium', icon: 'calendar', labelKey: 'opt.timeMedium' },
-      { id: 'long', icon: 'mountain', labelKey: 'opt.timeLong' },
+      { id: 'tiny', icon: 'bolt', labelKey: 'opt.timeTiny', hintKey: 'opt.timeTiny.hint' },
+      { id: 'short', icon: 'sun', labelKey: 'opt.timeShort', hintKey: 'opt.timeShort.hint' },
+      { id: 'medium', icon: 'calendar', labelKey: 'opt.timeMedium', hintKey: 'opt.timeMedium.hint' },
+      { id: 'long', icon: 'mountain', labelKey: 'opt.timeLong', hintKey: 'opt.timeLong.hint' },
       { id: 'any', icon: 'dice', labelKey: 'opt.timeAny' },
     ],
   },
@@ -158,11 +158,11 @@ export const QUESTIONS = [
     min: 0,
     max: 4,
     options: () => [
-      { id: 'easy', icon: 'leaf', labelKey: 'opt.diffEasy' },
-      { id: 'normal', icon: 'scale', labelKey: 'opt.diffNormal' },
-      { id: 'hard', icon: 'fire', labelKey: 'opt.diffHard' },
-      { id: 'souls', icon: 'skull', labelKey: 'opt.diffSouls' },
-      { id: 'chill', icon: 'snowflake', labelKey: 'opt.diffChill' },
+      { id: 'easy', icon: 'leaf', labelKey: 'opt.diffEasy', hintKey: 'opt.diffEasy.hint' },
+      { id: 'normal', icon: 'scale', labelKey: 'opt.diffNormal', hintKey: 'opt.diffNormal.hint' },
+      { id: 'hard', icon: 'fire', labelKey: 'opt.diffHard', hintKey: 'opt.diffHard.hint' },
+      { id: 'souls', icon: 'skull', labelKey: 'opt.diffSouls', hintKey: 'opt.diffSouls.hint' },
+      { id: 'chill', icon: 'snowflake', labelKey: 'opt.diffChill', hintKey: 'opt.diffChill.hint' },
     ],
   },
   {
@@ -206,9 +206,9 @@ export const QUESTIONS = [
     type: 'single',
     options: () => [
       { id: 'any', icon: 'tag', labelKey: 'opt.priceAny' },
-      { id: 'free', icon: 'gift', labelKey: 'opt.priceFree' },
-      { id: 'upto1000', icon: 'coin', labelKey: 'opt.price1000' },
-      { id: 'upto2500', icon: 'coins', labelKey: 'opt.price2500' },
+      { id: 'free', icon: 'gift', labelKey: 'opt.priceFree', hintKey: 'opt.priceFree.hint' },
+      { id: 'upto1000', icon: 'coin', labelKey: 'opt.price1000', hintKey: 'opt.price1000.hint' },
+      { id: 'upto2500', icon: 'coins', labelKey: 'opt.price2500', hintKey: 'opt.price2500.hint' },
     ],
   },
   {

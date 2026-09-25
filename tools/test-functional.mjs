@@ -303,7 +303,7 @@ store.markGame('balatro', 'liked');
 await navigate('profile');
 const chips = [...window.document.querySelectorAll('.answer-row .chip')].map((c) => c.textContent);
 check('ответы квиза показаны понятными подписями, а не id',
-  chips.some((c) => c.includes('кооп')) && !chips.includes('coop'), chips.join(' | '));
+  chips.some((c) => c.includes('Вместе с друзьями')) && !chips.includes('coop'), chips.join(' | '));
 const exported = store.exportProfile();
 check('экспорт — валидный JSON с отметками',
   JSON.parse(exported).marks?.balatro?.status === 'liked');
@@ -468,6 +468,54 @@ console.log('\n11. i18n: все ключи из кода есть в ru и en');
     }
   }
   check('движок ссылается только на существующие id', badRef.length === 0, badRef.slice(0, 8).join(', '));
+  // tp(): все плюральные ключи из кода имеют one/few/many (ru) и one/other (en)
+  const tpKeys = new Set();
+  for (const f of files) {
+    if (f.endsWith('i18n.js')) continue;
+    const src = readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/(?<![\w$])tp\(\s*['"]([^'"]+)['"]/g)) tpKeys.add(m[1]);
+  }
+  const badTp = [];
+  for (const k of tpKeys) {
+    for (const form of ['one', 'few', 'many']) if (!i18n.STRINGS.ru[`${k}.${form}`]) badTp.push(`ru:${k}.${form}`);
+    for (const form of ['one', 'other']) if (!i18n.STRINGS.en[`${k}.${form}`]) badTp.push(`en:${k}.${form}`);
+  }
+  check('плюральные ключи tp() покрыты формами', badTp.length === 0,
+    `${tpKeys.size} ключей${badTp.length ? `, нет: ${badTp.slice(0, 5).join(', ')}` : ''}`);
+  // tp(): русские формы реально различаются (1 игра / 3 игры / 11 игр)
+  i18n.setLang('ru');
+  const ruForms = [i18n.tp('catalog.found', 1), i18n.tp('catalog.found', 3), i18n.tp('catalog.found', 11)];
+  check('ru-плюралы различают one/few/many',
+    /1 игра(?!й)/.test(ruForms[0]) && /3 игры/.test(ruForms[1]) && /11 игр/.test(ruForms[2]), ruForms.join(' | '));
+  i18n.setLang('en');
+  check('en-плюралы различают one/other',
+    i18n.tp('catalog.found', 1) === '1 game found' && i18n.tp('catalog.found', 5) === '5 games found');
+  i18n.setLang('ru');
+  // hintKey квиза покрыты словарями
+  const hintKeys = new Set();
+  for (const f of files) {
+    if (f.endsWith('i18n.js')) continue;
+    const src = readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/hintKey:\s*['"]([^'"]+)['"]/g)) hintKeys.add(m[1]);
+  }
+  const missingHint = [...hintKeys].filter((k) => !i18n.STRINGS.ru[k] || !i18n.STRINGS.en[k]);
+  check('подсказки опций квиза покрыты словарями', missingHint.length === 0,
+    `${hintKeys.size} ключей${missingHint.length ? `, нет: ${missingHint.slice(0, 5).join(', ')}` : ''}`);
+  // у каждого настроения есть подсказка на обоих языках
+  const noMoodHint = Object.entries(taxonomy.MOODS).filter(([, v]) => !v.hint?.ru || !v.hint?.en).map(([id]) => id);
+  check('у всех настроений есть подсказки', noMoodHint.length === 0, noMoodHint.join(', '));
+  // старые бесплюральные ключи удалены — никто не должен их использовать
+  const stale = ['quiz.pool', 'catalog.subtitle', 'catalog.found', 'catalog.showMore', 'catalog.show',
+    'results.pool', 'party.result', 'home.stats.games', 'home.stats.filters'];
+  const staleUsed = [];
+  for (const f of files) {
+    if (f.endsWith('i18n.js')) continue;
+    const src = readFileSync(f, 'utf8');
+    for (const k of stale) if (src.includes(`t('${k}'`) || src.includes(`t("${k}"`)) staleUsed.push(`${k} в ${f.split('/').pop()}`);
+  }
+  const staleLeft = stale.filter((k) => i18n.STRINGS.ru[k] || i18n.STRINGS.en[k]);
+  check('старые бесплюральные ключи не используются', staleUsed.length === 0 && staleLeft.length === 0,
+    [...staleUsed, ...staleLeft.map((k) => `остался: ${k}`)].slice(0, 5).join(', '));
 }
 
 /* ============================ 12. Движок: свойства ============================ */

@@ -1,5 +1,5 @@
 /** «Как это работает» + политика конфиденциальности (нужна для модерации рекламных сетей). */
-import { t, getLang } from '../i18n.js';
+import { t, tp, getLang } from '../i18n.js';
 import { icon } from '../icons.js';
 import { GAMES, STATS } from '../catalog/index.js';
 import { esc, adSlot, houseAd, cardsGrid } from './components.js';
@@ -60,7 +60,7 @@ export function render(ctx) {
   <section class="section about">
     <header class="section-head">
       <h1>${esc(t('about.title'))}</h1>
-      <p>${esc(t('site.tagline'))} · ${STATS.total} ${esc(t('home.stats.games'))}</p>
+      <p>${esc(t('site.tagline'))} · ${STATS.total} ${esc(tp('home.stats.games', STATS.total))}</p>
     </header>
 
     <div class="cols-2">
