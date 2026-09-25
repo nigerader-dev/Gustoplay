@@ -5,12 +5,13 @@ import { GENRES, TAGS, MODES, MOODS, PLATFORMS, PRICE } from '../taxonomy.js';
 import { t, tl, getLang } from '../i18n.js';
 import { adSlot, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionList, platformOptionList, modeOptionList, tagOptions } from './components.js';
 import { getProfile } from '../store.js';
+import { icon } from '../icons.js';
 import { FEATURES } from '../config.js';
 import { currentPath, navigate } from '../nav.js';
 
 const POPULAR_TAGS = [
   'coopfocused', 'splitscreen', 'storyrich', 'openworld', 'difficult', 'cozy', 'short',
-  'long', 'replayable', 'lowsysreq', 'steamdeck', 'mods', 'crafting', 'dark', 'cozy',
+  'long', 'replayable', 'lowsysreq', 'steamdeck', 'mods', 'crafting', 'dark',
 ].filter((id) => TAGS[id]);
 
 const SORTS = {
@@ -107,8 +108,8 @@ export function render(ctx) {
 
   // Все непустые фильтры собираем в ссылку-«поделиться»
   const activeChips = [
-    ...filters.modes.map((id) => ({ label: `${MODES[id].icon} ${tl(MODES, id)}`, kind: 'mode', id })),
-    ...filters.platforms.map((id) => ({ label: `${PLATFORMS[id].icon} ${tl(PLATFORMS, id)}`, kind: 'platform', id })),
+    ...filters.modes.map((id) => ({ icn: MODES[id].icon, label: tl(MODES, id), kind: 'mode', id })),
+    ...filters.platforms.map((id) => ({ icn: PLATFORMS[id].icon, label: tl(PLATFORMS, id), kind: 'platform', id })),
     ...filters.genres.map((id) => ({ label: tl(GENRES, id), kind: 'genre', id })),
     ...filters.tags.map((id) => ({ label: tl(TAGS, id), kind: 'tag', id })),
     ...filters.moods.map((id) => ({ label: tl(MOODS, id), kind: 'mood', id })),
@@ -126,9 +127,12 @@ export function render(ctx) {
   // иначе крестик обещает то, чего не делает
   const presetKey = { mode: 'modes', platform: 'platforms', genre: 'genres', tag: 'tags', mood: 'moods' };
   const isPresetChip = (c) => (ctx.preset?.[presetKey[c.kind]] || []).some((x) => String(x) === String(c.id));
-  const chipHtml = (c) => (isPresetChip(c)
-    ? `<span class="chip chip-active">${esc(c.label)}</span>`
-    : `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${esc(c.label)} ✕</button>`);
+  const chipHtml = (c) => {
+    const icn = c.icn ? `${icon(c.icn)} ` : '';
+    return isPresetChip(c)
+      ? `<span class="chip chip-active">${icn}${esc(c.label)}</span>`
+    : `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${icn}${esc(c.label)} <span aria-hidden=\"true\">×</span></button>`;
+  };
 
   return `
   <section class="section catalog">
@@ -137,35 +141,35 @@ export function render(ctx) {
       <p>${esc(subtitle)}</p>
     </header>
 
-    <button type="button" class="btn btn-outline filters-toggle" data-action="filters-toggle" aria-expanded="${filtersOpen}" aria-controls="catalog-filters">🔍 ${esc(t('catalog.filters'))}${activeFilterCount ? ` <span class="filters-count">${activeFilterCount}</span>` : ''}</button>
+    <button type="button" class="btn btn-outline filters-toggle" data-action="filters-toggle" aria-expanded="${filtersOpen}" aria-controls="catalog-filters">${icon('search')} ${esc(t('catalog.filters'))}${activeFilterCount ? ` <span class="filters-count">${activeFilterCount}</span>` : ''}</button>
 
     <div class="catalog-layout">
       <aside class="filters${filtersOpen ? ' open' : ''}" id="catalog-filters">
-        <div class="filters-head"><span>${esc(t('catalog.filters'))}</span><button type="button" data-action="filters-toggle" aria-label="${esc(t('common.close'))}">✕</button></div>
+        <div class="filters-head"><span>${esc(t('catalog.filters'))}</span><button type="button" data-action="filters-toggle" aria-label="${esc(t('common.close'))}">${icon('x')}</button></div>
         <div class="filter-search">
           <input type="search" class="input" id="catalog-q" placeholder="${esc(t('catalog.search'))}" value="${esc(filters.q)}">
         </div>
 
         ${filterGroup(t('catalog.mode'), modeOptionList(), filters.modes, { action: 'f-mode' })}
         ${filterGroup(t('catalog.players'), [
-          { id: 2, label: '2+', icon: '👫' }, { id: 4, label: '4+', icon: '👨‍👩‍👧' }, { id: 8, label: '8+', icon: '🎉' },
+          { id: 2, label: '2+', icon: 'users' }, { id: 4, label: '4+', icon: 'usersPlus' }, { id: 8, label: '8+', icon: 'crowd' },
         ], filters.players ? [filters.players] : [], { action: 'f-players' })}
         ${filterGroup(t('catalog.platform'), platformOptionList(), filters.platforms, { action: 'f-platform' })}
         ${filterGroup(t('catalog.genre'), genreOptionList(), filters.genres, { action: 'f-genre' })}
         ${filterGroup(t('catalog.price'), [
-          { id: 'free', label: tl(PRICE, 'free'), icon: '🆓' },
-          { id: 'upto1000', label: tl(PRICE, 'cheap'), icon: '🪙' },
-          { id: 'upto2500', label: tl(PRICE, 'mid'), icon: '💵' },
+          { id: 'free', label: tl(PRICE, 'free'), icon: 'gift' },
+          { id: 'upto1000', label: tl(PRICE, 'cheap'), icon: 'coin' },
+          { id: 'upto2500', label: tl(PRICE, 'mid'), icon: 'coins' },
         ], filters.price !== 'any' ? [filters.price] : [], { action: 'f-price' })}
         ${filterGroup(t('catalog.time'), [
-          { id: 'tiny', label: '≤ 8 ч', icon: '⚡' },
-          { id: 'short', label: '≤ 20 ч', icon: '🌤️' },
-          { id: 'medium', label: '20–60 ч', icon: '🗓️' },
-          { id: 'long', label: '60+ ч', icon: '🏔️' },
+          { id: 'tiny', label: '≤ 8 ч', icon: 'bolt' },
+          { id: 'short', label: '≤ 20 ч', icon: 'sun' },
+          { id: 'medium', label: '20–60 ч', icon: 'calendar' },
+          { id: 'long', label: '60+ ч', icon: 'mountain' },
         ], filters.time !== 'any' ? [filters.time] : [], { action: 'f-time' })}
         ${filterGroup(t('catalog.tags'), tagOptions(POPULAR_TAGS), filters.tags, { action: 'f-tag' })}
         ${filterGroup(t('catalog.localCoop'), [
-          { id: 1, label: tl(MODES, 'coopLocal'), icon: '🛋️' },
+          { id: 1, label: tl(MODES, 'coopLocal'), icon: 'users' },
         ], filters.coopLocal ? [1] : [], { action: 'f-cooplocal' })}
 
         <div class="filter-group">

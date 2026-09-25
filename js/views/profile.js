@@ -1,5 +1,6 @@
 /** «Мой вкус»: что мы поняли о ваших предпочтениях и откуда (полностью прозрачно). */
 import { tasteSummary } from '../engine.js';
+import { icon } from '../icons.js';
 import { TAGS, GENRES, MOODS, MODES, PLATFORMS } from '../taxonomy.js';
 import { t, tl } from '../i18n.js';
 import { getProfile, exportProfile, importProfile, resetProfile, markGame, markedGames } from '../store.js';
@@ -43,12 +44,12 @@ export function render() {
     .map((m) => {
       const game = byId(m.slug);
       if (!game) return '';
-      const icons = { liked: '❤️', disliked: '👎', played: '🎮', wishlist: '🔖' };
+      const icons = { liked: 'heart', disliked: 'minusCircle', played: 'controller', wishlist: 'bookmark' };
       return `<div class="mark-row">
         <span class="mark-row-cover">${coverImage(game, 'mark-img')}</span>
         <a class="mark-row-title" href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a>
-        <span class="mark-row-status">${icons[m.status]} ${esc(t(`mark.${m.status}`))}</span>
-        <button type="button" class="btn btn-ghost btn-sm" data-action="mark-remove" data-slug="${game.slug}">✕</button>
+        <span class="mark-row-status">${icon(icons[m.status])} ${esc(t(`mark.${m.status}`))}</span>
+        <button type="button" class="btn btn-ghost btn-sm" data-action="mark-remove" data-slug="${game.slug}" aria-label="${t('common.remove')}">${icon('x')}</button>
       </div>`;
     }).join('');
 
@@ -73,8 +74,8 @@ export function render() {
         <h3>${esc(t('profile.answers'))}</h3>
         <div class="answers">${answerRows || `<p class="muted">${esc(t('quiz.intro'))}</p>`}</div>
         <div class="panel-actions">
-          <a class="btn btn-outline" href="#/quiz" data-action="nav">✏️ ${esc(t('profile.restartQuiz'))}</a>
-          <a class="btn btn-primary" href="#/results" data-action="nav">🎯 ${esc(t('results.title'))}</a>
+          <a class="btn btn-outline" href="#/quiz" data-action="nav">${icon('edit')} ${esc(t('profile.restartQuiz'))}</a>
+          <a class="btn btn-primary" href="#/results" data-action="nav">${icon('target')} ${esc(t('results.title'))}</a>
         </div>
       </div>
     </div>
@@ -88,9 +89,9 @@ export function render() {
       <h3>${esc(t('about.privacy.title'))}</h3>
       <p class="muted">${esc(t('about.privacy.text'))}</p>
       <div class="panel-actions">
-        <button type="button" class="btn btn-ghost" data-action="profile-export">⬇️ ${esc(t('profile.export'))}</button>
-        <button type="button" class="btn btn-ghost" data-action="profile-import">⬆️ ${esc(t('profile.import'))}</button>
-        <button type="button" class="btn btn-ghost btn-danger" data-action="profile-reset">🗑 ${esc(t('profile.reset'))}</button>
+        <button type="button" class="btn btn-ghost" data-action="profile-export">${icon('download')} ${esc(t('profile.export'))}</button>
+        <button type="button" class="btn btn-ghost" data-action="profile-import">${icon('upload')} ${esc(t('profile.import'))}</button>
+        <button type="button" class="btn btn-ghost btn-danger" data-action="profile-reset">${icon('trash')} ${esc(t('profile.reset'))}</button>
       </div>
     </div>
   </section>`;

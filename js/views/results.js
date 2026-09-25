@@ -1,5 +1,6 @@
 /** Страница результатов: персональная выдача с объяснениями и пересчётом на ходу. */
 import { recommend, tasteSummary } from '../engine.js';
+import { icon } from '../icons.js';
 import { GENRES, TAGS } from '../taxonomy.js';
 import { t, tl } from '../i18n.js';
 import { getProfile, setMeta, trackImpressions, resetProfile } from '../store.js';
@@ -37,8 +38,8 @@ export function render() {
           <input type="checkbox" data-action="toggle-played" ${preset.includePlayed ? 'checked' : ''}>
           <span>${esc(t('results.showPlayed'))}</span>
         </label>
-        ${FEATURES.reshuffle ? `<button type="button" class="btn btn-outline" data-action="reshuffle">🔄 ${esc(t('results.reshuffle'))}</button>` : ''}
-        <a class="btn btn-ghost" href="#/quiz" data-action="nav">✏️ ${esc(t('quiz.restart'))}</a>
+        ${FEATURES.reshuffle ? `<button type="button" class="btn btn-outline" data-action="reshuffle">${icon('refresh')} ${esc(t('results.reshuffle'))}</button>` : ''}
+        <a class="btn btn-ghost" href="#/quiz" data-action="nav">${icon('edit')} ${esc(t('quiz.restart'))}</a>
       </div>
     </div>`;
 
@@ -69,7 +70,7 @@ export function render() {
       <p>${answered ? esc(t('quiz.intro')) : esc(t('home.hero.lead'))}</p>
     </header>
 
-    ${result.relaxed ? `<div class="notice">⚠️ ${esc(t('results.relaxed'))}</div>` : ''}
+    ${result.relaxed ? `<div class="notice">${icon('alert')} ${esc(t('results.relaxed'))}</div>` : ''}
     ${tasteBlock}
     ${filtersBar}
     ${adSlot('results-inline')}

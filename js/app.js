@@ -4,6 +4,7 @@
  * это важно и для Core Web Vitals (влияет на SEO и доход с рекламы).
  */
 import { setLang, getLang, t, tl } from './i18n.js';
+import { icon } from './icons.js';
 import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, SITE } from './config.js';
@@ -93,21 +94,21 @@ function header(ctx) {
   <header class="header">
     <div class="header-inner">
       <a class="logo" href="#/" data-action="nav" aria-label="${t('site.name')}">
-        <span class="logo-mark">🎮</span>
+        <span class="logo-mark">${icon('controller')}</span>
         <span class="logo-text">${t('site.name')}<small>${t('site.tagline')}</small></span>
       </a>
       <nav class="nav" id="main-nav" aria-label="main">
-        <button type="button" class="nav-close" data-action="menu-close" aria-label="${t('common.close')}">✕</button>
-        ${navItem('#/quiz', '🎯 ' + t('nav.quiz'), 'quiz', ctx)}
-        ${navItem('#/catalog', '🗂️ ' + t('nav.catalog'), 'catalog', ctx)}
-        ${navItem('#/party', '👫 ' + t('nav.party'), 'party', ctx)}
-        ${navItem('#/profile', '⭐ ' + t('nav.profile'), 'profile', ctx)}
-        ${navItem('#/account', (isLoggedIn() ? '👤 ' : '🔐 ') + t('nav.account'), 'account', ctx)}
+        <button type="button" class="nav-close" data-action="menu-close" aria-label="${t('common.close')}">${icon('x')}</button>
+        ${navItem('#/quiz', icon('compass') + ' ' + t('nav.quiz'), 'quiz', ctx)}
+        ${navItem('#/catalog', icon('grid') + ' ' + t('nav.catalog'), 'catalog', ctx)}
+        ${navItem('#/party', icon('users') + ' ' + t('nav.party'), 'party', ctx)}
+        ${navItem('#/profile', icon('heart') + ' ' + t('nav.profile'), 'profile', ctx)}
+        ${navItem('#/account', (isLoggedIn() ? icon('user') : icon('lock')) + ' ' + t('nav.account'), 'account', ctx)}
         ${navItem('#/about', t('nav.about'), 'about', ctx, ' nav-link-soft')}
       </nav>
       <div class="header-tools">
         <button type="button" class="icon-btn" data-action="lang-toggle" title="${t('common.lang')}">${lang.toUpperCase()}</button>
-        <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">🌗</button>
+        <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
         <button type="button" class="icon-btn burger" data-action="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="${t('common.menu')}"><span></span><span></span><span></span></button>
       </div>
     </div>
@@ -123,7 +124,7 @@ function footer() {
     <div class="footer-inner">
       <div class="footer-col">
         <div class="logo">
-          <span class="logo-mark">🎮</span><span class="logo-text">${t('site.name')}</span>
+          <span class="logo-mark">${icon('controller')}</span><span class="logo-text">${t('site.name')}</span>
         </div>
         <p class="muted">${t('common.footer.note')}</p>
       </div>
@@ -158,7 +159,7 @@ function consentBanner() {
   return `
   <div class="consent" id="consent">
     <div>
-      <strong>🍪 ${t('about.ads.title')}</strong>
+      <strong>${icon('cookie')} ${t('about.ads.title')}</strong>
       <p>${t('consent.text')}</p>
     </div>
     <div class="consent-actions">
@@ -213,7 +214,7 @@ function render(scroll = true) {
   let description = t('site.description');
 
   if (!view) {
-    html = `<section class="section"><div class="empty"><div class="empty-icon">🧭</div>
+    html = `<section class="section"><div class="empty"><div class="empty-icon">${icon('compass')}</div>
       <h1>${t('common.notFound')}</h1><p>${t('common.notFound.text')}</p>
       <div class="panel-actions"><a class="btn btn-primary" href="#/quiz" data-action="nav">${t('home.cta.start')}</a>
       <a class="btn btn-ghost" href="#/catalog" data-action="nav">${t('nav.catalog')}</a></div></div></section>`;
@@ -312,7 +313,7 @@ window.addEventListener('gf:marks-changed', () => {
   const node = document.createElement('button');
   node.type = 'button';
   node.className = 'refresh-pill';
-  node.innerHTML = `🔄 ${t('results.recount')}`;
+  node.innerHTML = `${icon('refresh')} ${t('results.recount')}`;
   node.addEventListener('click', () => {
     node.remove();
     refreshPill = null;

@@ -1,5 +1,6 @@
 /** Аккаунт: регистрация, вход (в том числе через Google), синхронизация вкуса, сессии, удаление. */
 import { t, getLang } from '../i18n.js';
+import { icon } from '../icons.js';
 import { AUTH, SECURITY, SITE } from '../config.js';
 import { esc, emptyState } from './components.js';
 import { getProfile, replaceProfile } from '../store.js';
@@ -231,7 +232,7 @@ function authBlock(user, L) {
       <p class="muted">${esc(user?.email || '')} · ${user?.provider === 'google' ? 'Google' : 'e-mail'}</p>
       <div class="panel-actions">
         <button type="button" class="btn btn-outline" data-action="auth-logout">${esc(L.logout)}</button>
-        <button type="button" class="btn btn-ghost btn-danger" data-action="auth-delete">🗑 ${esc(L.deleteAccount)}</button>
+        <button type="button" class="btn btn-ghost btn-danger" data-action="auth-delete">${icon('trash')} ${esc(L.deleteAccount)}</button>
       </div>
     </div>
 
@@ -243,8 +244,8 @@ function authBlock(user, L) {
         wishlist: countMarks('wishlist'), disliked: countMarks('disliked'),
       }))} · ${marks}</p>
       <div class="panel-actions">
-        <button type="button" class="btn btn-outline" data-action="sync-pull" ${state.busy ? 'disabled' : ''}>⬇️ ${esc(L.pull)}</button>
-        <button type="button" class="btn btn-primary" data-action="sync-push" ${state.busy ? 'disabled' : ''}>⬆️ ${esc(L.push)}</button>
+        <button type="button" class="btn btn-outline" data-action="sync-pull" ${state.busy ? 'disabled' : ''}>${icon('download')} ${esc(L.pull)}</button>
+        <button type="button" class="btn btn-primary" data-action="sync-push" ${state.busy ? 'disabled' : ''}>${icon('upload')} ${esc(L.push)}</button>
       </div>
     </div>
 

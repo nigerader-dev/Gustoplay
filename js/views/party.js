@@ -1,5 +1,6 @@
 /** «Во что поиграть вместе»: подбор под конкретную компанию и платформы. */
 import { recommendForParty } from '../engine.js';
+import { icon } from '../icons.js';
 import { MODES, PLATFORMS } from '../taxonomy.js';
 import { t, tl, getLang } from '../i18n.js';
 import { getProfile } from '../store.js';
@@ -7,10 +8,10 @@ import { cardsGrid, esc, emptyState, filterGroup } from './components.js';
 import { currentPath, navigate } from '../nav.js';
 
 const PLAYER_PRESETS = [
-  { id: 2, label: '2', icon: '👫' },
-  { id: 3, label: '3', icon: '🧑‍🤝‍🧑' },
-  { id: 4, label: '4', icon: '👨‍👩‍👧' },
-  { id: 5, label: '5+', icon: '🎉' },
+  { id: 2, label: '2' },
+  { id: 3, label: '3' },
+  { id: 4, label: '4' },
+  { id: 5, label: '5+' },
 ];
 
 export function render(ctx) {
@@ -34,7 +35,7 @@ export function render(ctx) {
     <div class="party-form">
       ${filterGroup(t('party.players'), PLAYER_PRESETS, [players], { action: 'p-players' })}
       ${filterGroup(t('party.platforms'), Object.keys(PLATFORMS).map((id) => ({ id, label: tl(PLATFORMS, id), icon: PLATFORMS[id].icon })), platforms, { action: 'p-platform' })}
-      ${filterGroup(' ', [{ id: 1, label: t('party.freeOnly'), icon: '🆓' }], freeOnly ? [1] : [], { action: 'p-free' })}
+      ${filterGroup(' ', [{ id: 1, label: t('party.freeOnly'), icon: 'gift' }], freeOnly ? [1] : [], { action: 'p-free' })}
     </div>`;
 
   const localCoop = games.filter((g) => g.modes.includes('coopLocal')).length;
@@ -46,7 +47,7 @@ export function render(ctx) {
       <p>${esc(t('party.subtitle'))}</p>
     </header>
     ${form}
-    <div class="notice">🎯 ${esc(t('party.result', { n: players, m: games.length }))}
+    <div class="notice">${icon('target')} ${esc(t('party.result', { n: players, m: games.length }))}
       ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
     </div>
     ${games.length

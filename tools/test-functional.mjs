@@ -425,6 +425,32 @@ console.log('\n11. i18n: все ключи из кода есть в ru и en');
     }
   }
   check('таксономия: у всех записей есть ru и en', badDict.length === 0, badDict.slice(0, 5).join(', '));
+  // все имена иконок резолвятся в SVG-набор (динамика + статика по коду видов)
+  const { ICONS } = await import('../js/icons.js');
+  const usedIcons = new Set();
+  for (const dict of [taxonomy.GENRES, taxonomy.MOODS, taxonomy.PLATFORMS, taxonomy.MODES]) {
+    for (const v of Object.values(dict)) if (v.icon) usedIcons.add(v.icon);
+  }
+  for (const q of quizDef.QUESTIONS) {
+    if (q.icon) usedIcons.add(q.icon);
+    if (q.options) for (const o of q.options()) if (o.icon) usedIcons.add(o.icon);
+  }
+  for (const f of files) {
+    if (f.endsWith('icons.js')) continue;
+    const src = readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/icon\('([^']+)'\)/g)) usedIcons.add(m[1]);
+    for (const m of src.matchAll(/icon: '([^']+)'/g)) usedIcons.add(m[1]);
+    for (const m of src.matchAll(/\['about\.[\w]+', '([a-zA-Z]+)'\]/g)) usedIcons.add(m[1]);
+    for (const m of src.matchAll(/(?:liked|disliked|played|wishlist): '([^']+)'/g)) usedIcons.add(m[1]);
+  }
+  const badIcons = [...usedIcons].filter((n) => !ICONS[n]);
+  check('все иконки есть в SVG-наборе', badIcons.length === 0,
+    `${usedIcons.size} имён${badIcons.length ? `, нет: ${badIcons.join(', ')}` : ''}`);
+  const homeSrc = readFileSync(resolve(root, 'js/views/home.js'), 'utf8');
+  check('массивы иконок главной на месте',
+    homeSrc.includes("icon(['edit', 'target', 'star'][n - 1])")
+    && homeSrc.includes("[['pool', 'grid'], ['explain', 'search'], ['party', 'users'], ['privacy', 'lock']]")
+    && homeSrc.includes("'controller', 'gamepad', 'dice', 'gem'"));
   // ссылки квиза на таксономию валидны
   const badRef = [
     ...quizDef.VIBE_TAGS.filter((id) => !taxonomy.TAGS[id]).map((id) => `VIBE:${id}`),

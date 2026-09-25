@@ -1,5 +1,6 @@
 /** «Как это работает» + политика конфиденциальности (нужна для модерации рекламных сетей). */
 import { t, getLang } from '../i18n.js';
+import { icon } from '../icons.js';
 import { GAMES, STATS } from '../catalog/index.js';
 import { esc, adSlot, houseAd, cardsGrid } from './components.js';
 import { GENRES, TAGS, MOODS } from '../taxonomy.js';
@@ -49,10 +50,10 @@ export function render(ctx) {
 
   const lang = getLang();
   const blocks = [
-    ['about.logic', '🧠'],
-    ['about.privacy', '🔒'],
-    ['about.ads', '📣'],
-    ['about.data', '🗂️'],
+    ['about.logic', 'bulb'],
+    ['about.privacy', 'lock'],
+    ['about.ads', 'tag'],
+    ['about.data', 'grid'],
   ];
 
   return `
@@ -63,8 +64,8 @@ export function render(ctx) {
     </header>
 
     <div class="cols-2">
-      ${blocks.map(([key, icon]) => `<div class="col">
-        <div class="col-icon">${icon}</div>
+      ${blocks.map(([key, iconName]) => `<div class="col">
+        <div class="col-icon">${icon(iconName)}</div>
         <h3>${esc(t(`${key}.title`))}</h3>
         <p>${esc(t(`${key}.text`))}</p>
       </div>`).join('')}

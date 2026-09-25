@@ -1,5 +1,6 @@
 /** Квиз: пошаговые вопросы с выбором ответа, ветвлением, живым счётчиком пула и мгновенным сохранением. */
 import { QUESTIONS, visibleQuestions, progress, SEED_LIMIT } from '../quiz.js';
+import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, PLATFORMS } from '../taxonomy.js';
 import { t, tl } from '../i18n.js';
 import { GAMES } from '../catalog/index.js';
@@ -144,7 +145,7 @@ function renderStep(root, scroll = true) {
   body.innerHTML = `
     <div class="quiz-card" data-q="${q.id}">
       <div class="quiz-q-head">
-        <span class="quiz-icon">${q.icon || '❓'}</span>
+        <span class="quiz-icon">${icon(q.icon || 'help')}</span>
         <div>
           <h2>${esc(t(`${q.key}.title`))}</h2>
           <p>${esc(t(`${q.key}.text`))}</p>
@@ -227,10 +228,10 @@ function poolCounter() {
 
 function optionHtml(q, opt, value) {
   const on = toArray(value).some((v) => String(v) === String(opt.id));
-  const icon = opt.icon ? `<span class="opt-icon">${opt.icon}</span>` : '';
+  const iconHtml = opt.icon ? `<span class=\"opt-icon\">${icon(opt.icon)}</span>` : '';
   const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : '';
   return `<button type="button" class="opt ${on ? 'on' : ''}" data-action="quiz-option" data-q="${q.id}" data-id="${esc(String(opt.id))}" aria-pressed="${on}">
-    ${icon}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
+    ${iconHtml}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
   </button>`;
 }
 

@@ -1,5 +1,6 @@
 /** Страница игры: полная карточка, объяснение «почему вам подходит» и похожие игры. */
 import { byId } from '../catalog/index.js';
+import { icon } from '../icons.js';
 import { GENRES, TAGS, MODES, PLATFORMS, PRICE, MOODS } from '../taxonomy.js';
 import { t, tl, getLang } from '../i18n.js';
 import { similarTo, computeWeights, scoreGame } from '../engine.js';
@@ -10,7 +11,7 @@ import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButto
 export function render(ctx) {
   const game = byId(ctx.params.slug);
   if (!game) {
-    return `<section class="section"><div class="empty"><div class="empty-icon">🎮</div>
+    return `<section class="section"><div class="empty"><div class="empty-icon">${icon('compass')}</div>
       <h1>${esc(t('common.notFound'))}</h1><p>${esc(t('common.notFound.text'))}</p>
       <a class="btn btn-primary" href="#/catalog" data-action="nav">${esc(t('catalog.title'))}</a></div></section>`;
   }
@@ -58,7 +59,7 @@ export function render(ctx) {
         </div>
         <p class="game-desc">${esc(game.desc?.[lang] || '')}</p>
 
-        <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${MODES[m].icon} ${esc(tl(MODES, m))}</span>`).join('')}</div>
+        <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
 
         ${whyAll.length ? `<div class="why-box">
           <strong>${esc(t('results.why'))}</strong>
@@ -81,11 +82,11 @@ export function render(ctx) {
       </div>
       <div class="detail-card">
         <h3>${esc(t('game.modes'))} · ${esc(t('game.platforms'))}</h3>
-        <div class="badges">${game.platforms.map((p) => `<span class="badge">${PLATFORMS[p].icon} ${esc(tl(PLATFORMS, p))}</span>`).join('')}</div>
+        <div class="badges">${game.platforms.map((p) => `<span class="badge">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</span>`).join('')}</div>
       </div>
       <div class="detail-card">
         <h3>${esc(t('game.genres'))}</h3>
-        <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${GENRES[id].icon} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
+        <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id].icon)} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
       </div>
       <div class="detail-card">
         <h3>${esc(t('game.tags'))}</h3>
