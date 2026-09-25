@@ -103,6 +103,21 @@ check('заголовки с overflow-wrap', flat.some((e) => e.selectors.includ
 check('viewport в index.html', htmlText.includes('width=device-width'));
 check('нет width: 100vw (ломает мобилы со скроллбаром)', !/width:\s*100vw/.test(cssText));
 
+/* ---------- 5б. Найденные в визуальном QA дефекты не вернулись ---------- */
+console.log('\n5б. Регрессии из офлайн-скриншотов');
+check('шторка ждёт открытия только в обрезанной шапке (body:not(.menu-open) .header)',
+  flat.some((e) => e.selectors.some((s) => s.includes('body:not(.menu-open) .header'))
+    && hasDecl(e, 'overflow-x', (v) => v === 'clip')));
+check('шторка выше баннера согласия (body.menu-open поднимает .header)',
+  flat.some((e) => e.selectors.some((s) => s.includes('body.menu-open .header')) && hasDecl(e, 'z-index')));
+check('панель меню имеет явную высоту экрана, а не bottom: 0',
+  flat.some((e) => inMedia(e, '900') && e.selectors.includes('.nav')
+    && (hasDecl(e, 'height', (v) => /100d?vh/.test(v)) || hasDecl(e, 'height', (v) => /100dvh/.test(v))))
+  && !flat.some((e) => inMedia(e, '900') && e.selectors.includes('.nav') && hasDecl(e, 'bottom', (v) => v === '0')));
+check('баннер согласия не полагается на transform для центрирования',
+  flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'margin-inline', (v) => v === 'auto'))
+  && !flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'transform', (v) => v.includes('translateX'))));
+
 /* ---------- 6. Мобильные правила ---------- */
 console.log('\n6. Ключевые мобильные правила');
 check('hero-art НЕ прячется на мобиле', !flat.some((e) => e.selectors.includes('.hero-art') && hasDecl(e, 'display', (v) => v === 'none')));

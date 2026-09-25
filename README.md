@@ -52,6 +52,7 @@ npm run test:functional # поведение: 86 проверок всех сц�
 npm run test:a11y    # доступность: h1, подписи, aria, контрасты (16 проверок)
 npm run test:css     # адаптив: брейкпоинты, тач-цели, переполнение (38 проверок)
 npm run test:visual  # скриншоты в Chrome + замеры (пропуск без браузера)
+                     # нет браузера и не скачать Chrome? node tools/chromium-offline.mjs --run
 npm run test:api     # API аккаунтов на реальной базе SQLite (55 проверок)
 npm run test:e2e     # сквозной сценарий: сайт → /api → воркер → база (20 проверок)
 npm run test:all     # всё вместе

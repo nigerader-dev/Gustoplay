@@ -8,6 +8,7 @@
  *   gf.seen.v1     — какие игры уже показывались (для «обновить подбор»)
  */
 import { emptyProfile } from './engine.js';
+import { normalizeAnswers } from './quiz.js';
 
 const PROFILE_KEY = 'gf.profile.v1';
 const CONSENT_KEY = 'gf.consent.v1';
@@ -19,10 +20,26 @@ const safeParse = (raw, fallback) => {
   try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; }
 };
 
+/**
+ * Любой внешний профиль (localStorage, файл импорта, аккаунт) → форма текущей версии.
+ * Ответы нормализуем: в старом профиле мульти-ответ (modes, genres, mood…) мог оказаться
+ * скаляром, и тогда страницы «Результаты» и «Мой вкус» падали с TypeError.
+ */
+function mergeProfile(next = {}) {
+  const base = emptyProfile();
+  return {
+    ...base,
+    ...next,
+    answers: normalizeAnswers({ ...base.answers, ...(next.answers || {}) }),
+    marks: next.marks || {},
+    impressions: normalizeImpressions(next.impressions),
+  };
+}
+
 function read() {
   if (cache) return cache;
   const stored = safeParse(globalThis.localStorage?.getItem(PROFILE_KEY), null);
-  cache = stored ? { ...emptyProfile(), ...stored, answers: { ...emptyProfile().answers, ...stored.answers } } : emptyProfile();
+  cache = stored ? mergeProfile(stored) : emptyProfile();
   return cache;
 }
 
@@ -57,14 +74,7 @@ function scheduleSync(profile) {
 
 /** Полностью заменяет профиль (используется при загрузке с сервера или импорте) */
 export function replaceProfile(next) {
-  const base = emptyProfile();
-  write({
-    ...base,
-    ...next,
-    answers: { ...base.answers, ...(next.answers || {}) },
-    marks: next.marks || {},
-    impressions: normalizeImpressions(next.impressions),
-  }, { skipSync: true });
+  write(mergeProfile(next), { skipSync: true });
   return cache;
 }
 
@@ -88,7 +98,11 @@ export function updateProfile(patch) {
 
 export function setAnswers(patch) {
   const p = read();
-  write({ ...p, answers: { ...p.answers, ...patch }, meta: { ...p.meta, completedAt: Date.now(), syncAt: new Date().toISOString() } });
+  write({
+    ...p,
+    answers: normalizeAnswers({ ...p.answers, ...patch }),
+    meta: { ...p.meta, completedAt: Date.now(), syncAt: new Date().toISOString() },
+  });
   return read();
 }
 
@@ -148,14 +162,7 @@ export function exportProfile() {
 export function importProfile(json) {
   const parsed = safeParse(json, null);
   if (!parsed || typeof parsed !== 'object') return false;
-  const base = emptyProfile();
-  write({
-    ...base,
-    ...parsed,
-    answers: { ...base.answers, ...(parsed.answers || {}) },
-    marks: parsed.marks || {},
-    impressions: normalizeImpressions(parsed.impressions),
-  });
+  write(mergeProfile(parsed));
   return true;
 }
 

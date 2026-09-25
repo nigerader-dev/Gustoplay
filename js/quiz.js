@@ -113,7 +113,7 @@ export const QUESTIONS = [
     icon: 'heart',
     type: 'single',
     // спрашиваем только у тех, кто собирается играть с кем-то
-    visible: (a) => (a.modes || []).some((m) => m === 'coop' || m === 'pvp' || m === 'mmo') || (a.players || 1) > 1,
+    visible: (a) => answerList(a.modes).some((m) => m === 'coop' || m === 'pvp' || m === 'mmo') || (a.players || 1) > 1,
     // от каких ответов зависит видимость — нужно прогрессу, чтобы знаменатель не прыгал
     dependsOn: ['modes', 'players'],
     options: () => COMPANY_OPTIONS,
@@ -244,6 +244,26 @@ export const hasValue = (value) => (Array.isArray(value)
   : value !== null && value !== undefined && value !== '');
 
 /**
+ * Мульти-ответ всегда должен быть массивом. Приходит он не только из квиза, но и из
+ * localStorage, импорта JSON и аккаунта — там мог оказаться скаляр (старая версия сайта,
+ * правка руками, чужой экспорт). Скаляр превращаем в массив из одного элемента,
+ * чтобы один битый ответ не ронял рендер страницы целиком.
+ */
+export const answerList = (value) => (Array.isArray(value) ? value
+  : value === null || value === undefined || value === '' ? [] : [value]);
+
+/** Ключи вопросов с множественным выбором — по ним нормализуется профиль */
+export const MULTI_KEYS = QUESTIONS.filter((q) => q.type === 'multi').map((q) => q.id);
+
+/** Профиль из внешнего источника → ответы известной формы (мульти-ответы — массивы) */
+export function normalizeAnswers(answers) {
+  if (!answers || typeof answers !== 'object') return {};
+  const out = { ...answers };
+  for (const key of MULTI_KEYS) if (key in out) out[key] = answerList(out[key]);
+  return out;
+}
+
+/**
  * Прогресс прохождения квиза: отвеченные / все вопросы, которые человеку предстоит увидеть.
  * Условные вопросы, которые уже точно не покажутся (например, «сессия» при времени «до 8 часов»),
  * из знаменателя исключаются; те, чья судьба ещё не решена, — остаются. Поэтому прогресс
@@ -273,27 +293,28 @@ export function applyAnswer(answers, questionId, value) {
  * возвращает структуру [{ key, dict, ids, raw }], которую легко отрендерить и локализовать.
  */
 export function summarize(answers) {
+  const a = normalizeAnswers(answers);
   const rows = [];
   const row = (key, ids, dict, raw) => {
-    const list = (ids || []).filter((x) => x !== null && x !== undefined && x !== '');
+    const list = answerList(ids).filter((x) => x !== null && x !== undefined && x !== '');
     if (list.length) rows.push({ key, ids: list, dict, raw });
   };
-  row('q.mood', answers.mood, 'MOODS');
+  row('q.mood', a.mood, 'MOODS');
   // ответы modes — это id квиза (solo/coop/pvp/mmo), а не id таксономии MODES:
   // подписи берём из ANSWER_LABELS, иначе в профиле показываются сырые id
-  row('q.modes', answers.modes, null);
-  row('q.players', answers.players ? [answers.players] : [], null);
-  row('q.platforms', answers.platforms, 'PLATFORMS');
-  row('q.time', answers.time && answers.time !== 'any' ? [answers.time] : [], null);
-  row('q.difficulty', answers.difficulty, null);
-  row('q.genres', answers.genres, 'GENRES');
-  row('q.vibes', answers.vibes, 'TAGS');
-  row('q.company', answers.company ? [answers.company] : [], null);
-  row('q.session', answers.session ? [answers.session] : [], null);
-  row('q.priority', answers.priority, null);
-  row('q.novelty', answers.novelty && answers.novelty !== 'any' ? [answers.novelty] : [], null);
-  row('q.price', answers.price && answers.price !== 'any' ? [answers.price] : [], null);
-  row('q.avoid', answers.avoid, null);
+  row('q.modes', a.modes, null);
+  row('q.players', a.players ? [a.players] : [], null);
+  row('q.platforms', a.platforms, 'PLATFORMS');
+  row('q.time', a.time && a.time !== 'any' ? [a.time] : [], null);
+  row('q.difficulty', a.difficulty, null);
+  row('q.genres', a.genres, 'GENRES');
+  row('q.vibes', a.vibes, 'TAGS');
+  row('q.company', a.company ? [a.company] : [], null);
+  row('q.session', a.session ? [a.session] : [], null);
+  row('q.priority', a.priority, null);
+  row('q.novelty', a.novelty && a.novelty !== 'any' ? [a.novelty] : [], null);
+  row('q.price', a.price && a.price !== 'any' ? [a.price] : [], null);
+  row('q.avoid', a.avoid, null);
   return rows;
 }
 

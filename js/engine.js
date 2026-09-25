@@ -19,7 +19,7 @@
  */
 import { GAMES, byId } from './catalog/index.js';
 import { MODES, GENRES, TAGS, MOODS, PLATFORMS, PRICE } from './taxonomy.js';
-import { AVOID_OPTIONS } from './quiz.js';
+import { AVOID_OPTIONS, normalizeAnswers } from './quiz.js';
 
 /* ------------------------------------------------------------------ *
  * Справочники требований
@@ -158,7 +158,9 @@ const seriesOf = (game) => String(game.t || '').toLowerCase().split(/[:\u2013-]/
  */
 export function computeWeights(profile) {
   const tag = {}, genre = {}, mood = {}, mode = {};
-  const a = profile.answers || {};
+  // профиль может прийти из localStorage/импорта: мульти-ответы приводим к массивам,
+  // иначе строковый modes ('coop') уронит и .some(), и for..of с битым значением
+  const a = normalizeAnswers(profile?.answers);
 
   // 1. Квиз: настроения и жанры — сильные сигналы, вайбы — средние
   for (const m of a.mood || []) add(mood, m, 3);
@@ -242,7 +244,7 @@ const NEIGHBOURS = (() => {
  * ------------------------------------------------------------------ */
 
 export function hardFilter(game, profile) {
-  const a = profile.answers || {};
+  const a = normalizeAnswers(profile?.answers);
   const need = a.modes || [];
 
   // режимы: solo / coop / pvp / mmo — игра должна поддерживать хотя бы одну группу
@@ -329,7 +331,7 @@ function likedNeighbours(profile, limit = 4) {
  * reasons используется для блока «почему подходит» на карточке.
  */
 export function scoreGame(game, profile, weights, context = {}) {
-  const a = profile.answers || {};
+  const a = normalizeAnswers(profile?.answers);
   const reasons = [];
   let score = 0;
 

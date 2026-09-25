@@ -132,7 +132,17 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html {
+  scroll-behavior: smooth; -webkit-text-size-adjust: 100%;
+  /* Мобильная шторка-навигация ждёт открытия за правым краем экрана
+     (transform: translateX(105%)) — её габарит попадал в прокручиваемую область
+     документа и давал горизонтальный скролл ~330px на каждой странице.
+     clip обрезает вылет, не создавая скролл-контейнер, поэтому sticky-шапка цела. */
+  overflow-x: hidden; /* фолбэк для движков без clip */
+}
+@supports (overflow-x: clip) {
+  html { overflow-x: clip; }
+}
 
 body {
   margin: 0;
@@ -766,7 +776,9 @@ select.input { cursor: pointer; }
 /* ------------------------------- согласие --------------------------------- */
 
 .consent {
-  position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+  /* центрирование — через поля, а не transform: анимация view-in перезаписывает
+     transform и раньше сдвигала баннер вправо за край экрана */
+  position: fixed; left: 0; right: 0; bottom: 18px; margin-inline: auto;
   width: min(920px, calc(100% - 32px)); z-index: 60;
   display: flex; gap: 18px; align-items: center; justify-content: space-between; flex-wrap: wrap;
   background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius-xl);
@@ -826,7 +838,11 @@ select.input { cursor: pointer; }
   /* бургер вместо десктопной навигации */
   .burger { display: inline-flex; }
   .nav {
-    position: fixed; top: 0; right: 0; bottom: 0; z-index: 90;
+    position: fixed; top: 0; right: 0; z-index: 90;
+    /* Высоту задаём явно: содержащий блок для position: fixed здесь — .header
+       (его создаёт backdrop-filter), поэтому bottom: 0 растягивал панель
+       только до высоты шапки (~68px) вместо всего экрана. */
+    height: 100vh; height: 100dvh;
     width: min(320px, 88vw); margin: 0; padding: 20px 20px 28px;
     flex-direction: column; align-items: stretch; gap: 6px; flex-wrap: nowrap;
     background: var(--bg-elevated); border-left: 1px solid var(--surface-border);
@@ -835,7 +851,19 @@ select.input { cursor: pointer; }
     transition: transform .25s ease, visibility .25s ease;
   }
   .nav.open { transform: none; visibility: visible; }
+  /* Пока меню закрыто, шторка ждёт открытия за правым краем экрана. Её содержащий
+     блок — .header (его создаёт backdrop-filter), поэтому обрезаем вылет именно там:
+     иначе габарит панели попадает в прокручиваемую область документа и страница
+     «съезжает» вбок. С открытым меню (body.menu-open) обрезки нет — панель видна целиком. */
+  body:not(.menu-open) .header { overflow-x: clip; }
+  /* Шторка и оверлей живут внутри .header, поэтому его z-index (40) ниже баннера
+     согласия (60) — без подъёма меню рисовалось под ним. Поднимаем шапку целиком,
+     пока меню открыто. */
+  body.menu-open .header { z-index: 95; }
   .nav-link { padding: 12px 16px; font-size: 1rem; border-radius: var(--radius); }
+  /* планшет — это тоже касание: компактные кнопки (36px) доводим до 44px,
+     иначе, например, «Убрать» в «Моём вкусе» на 768px меньше тач-цели */
+  .btn-sm { min-height: 44px; padding: 10px 14px; }
   .nav-close {
     display: inline-flex; align-items: center; justify-content: center;
     width: 44px; height: 44px; margin-left: auto; margin-bottom: 8px;

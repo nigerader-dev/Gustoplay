@@ -47,6 +47,7 @@ const quizDef = await import('../js/quiz.js');
 const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
+const { GAMES } = await import('../js/catalog/index.js');
 await import('../js/app.js');
 
 async function navigate(route) {
@@ -605,6 +606,58 @@ console.log('\n13. Мобильный UI: бургер-меню и панель 
   await navigate('genre/rpg');
   check('пресетный чип без крестика (снять его нельзя)',
     count('[data-action="f-remove"]') === 0 && count('.chip-active') >= 1);
+}
+
+/* ============ 14. Устойчивость: профиль из localStorage со скалярами ============ */
+console.log('\n14. Битый профиль (строки вместо массивов) не роняет страницы');
+{
+  const legacy = {
+    answers: { modes: 'coop', mood: 'relax', platforms: 'pc', genres: ['rpg'], avoid: 'endless', difficulty: 'easy' },
+    marks: {}, impressions: {},
+  };
+
+  const list = quizDef.answerList('coop');
+  check('answerList превращает скаляр в массив', Array.isArray(list) && list[0] === 'coop');
+  check('answerList оставляет пустоту пустой',
+    quizDef.answerList(undefined).length === 0 && quizDef.answerList(null).length === 0 && quizDef.answerList('').length === 0);
+  check('MULTI_KEYS покрывает все мульти-вопросы квиза',
+    quizDef.MULTI_KEYS.length === quizDef.QUESTIONS.filter((q) => q.type === 'multi').length
+    && quizDef.MULTI_KEYS.includes('modes') && quizDef.MULTI_KEYS.includes('genres'));
+  const normalized = quizDef.normalizeAnswers(legacy.answers);
+  check('normalizeAnswers приводит все мульти-ответы к массивам',
+    Array.isArray(normalized.modes) && Array.isArray(normalized.mood) && Array.isArray(normalized.avoid)
+    && Array.isArray(normalized.platforms) && Array.isArray(normalized.difficulty),
+    JSON.stringify(normalized.modes));
+
+  const r = eng.recommend(legacy, { limit: 12, seed: 3 });
+  check('движок считает подбор по такому профилю', Array.isArray(r.list) && r.list.length > 0, `пул: ${r.poolSize}`);
+  check('жёсткие фильтры не падают на строках', eng.hardFilter(GAMES[0], legacy) === true || eng.hardFilter(GAMES[0], legacy) === false);
+  check('строковые ответы всё ещё фильтруют (coop отсекает соло-игры)',
+    eng.hardFilter(GAMES.find((g) => g.modes.includes('solo') && !g.modes.some((m) => m.startsWith('coop'))), legacy) === false);
+  check('веса считаются по строкам', Object.keys(eng.computeWeights(legacy).mood).length > 0);
+  check('«Мой вкус» рисует строковые ответы', quizDef.summarize(legacy.answers).length >= 4);
+  check('ветвление квиза терпит строковый modes',
+    quizDef.visibleQuestions({ modes: 'coop', players: 2 }).some((q) => q.id === 'company'));
+
+  // тот же путь, которым профиль попадает из localStorage: свежий модуль store
+  const raw = JSON.stringify(legacy);
+  window.localStorage.setItem('gf.profile.v1', raw);
+  const fresh = await import('../js/store.js?legacy=1');
+  check('store нормализует профиль, прочитанный из localStorage',
+    Array.isArray(fresh.getProfile().answers.modes) && fresh.getProfile().answers.modes[0] === 'coop');
+
+  // и рендер страниц: раньше здесь был белый экран с TypeError
+  // (для страницы «Мой вкус» нужен пройденный квиз: иначе она честно показывает пустое состояние)
+  store.replaceProfile({ ...legacy, meta: { completedAt: 1 } });
+  await navigate('results');
+  check('страница «Результаты» открывается с битым профилем',
+    count('#app .header') === 1 && count('.game-card') > 0, `карточек: ${count('.game-card')}`);
+  await navigate('profile');
+  check('страница «Мой вкус» открывается с битым профилем',
+    count('#app .header') === 1 && text().includes('Вместе с друзьями'), '');
+  await navigate('quiz');
+  check('квиз открывается с битым профилем', count('.quiz-card') === 1 && count('.opt') > 0);
+  store.resetProfile();
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
