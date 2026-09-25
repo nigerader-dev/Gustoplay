@@ -126,6 +126,24 @@ check('навигация квиза sticky до 640px', flat.some((e) => inMedi
 check('карточки компактные на телефоне', flat.some((e) => inMedia(e, '640') && e.selectors.some((s) => s.includes('.card-chips'))));
 check('кнопки переносят текст на телефоне', flat.some((e) => inMedia(e, '640') && e.selectors.includes('.btn') && hasDecl(e, 'white-space', (v) => v === 'normal')));
 
+/* ---------- 6б. Отметки игр: наведение не двигает раскладку ---------- */
+console.log('\n6б. Кнопки отметок (регресс: мерцание и прыжки под курсором)');
+// Причина прошлого бага: `.mark span` показывался на hover (display:none → inline),
+// кнопка раздувалась и выдавливала соседей — под курсором начинался цикл mouseover/mouseout.
+const markHover = flat.filter((e) => e.selectors.some((sel) => /\.mark[^,]*:hover/.test(sel)));
+const layoutProps = /^(display|width|height|min-width|min-height|max-width|max-height|padding|margin|font-size|gap|flex|position|transform)$/;
+const growing = markHover.filter((e) => e.declarations.some((d) => layoutProps.test(d.property)));
+check('у .mark:hover нет правил, меняющих раскладку', growing.length === 0,
+  growing.map((e) => `${e.selectors.join(',')} → ${e.declarations.map((d) => d.property).join('/')}`).join('; ') || `${markHover.length} правил(а) наведения`);
+const markSpan = flat.filter((e) => e.selectors.some((sel) => sel.trim() === '.mark > span' || sel.trim() === '.mark span'));
+check('подпись отметки всегда скрыта визуально (текст для скринридера)',
+  markSpan.some((e) => hasDecl(e, 'position', (v) => v === 'absolute') || hasDecl(e, 'width', (v) => v === '1px')
+    || e.declarations.some((d) => d.property === 'clip-path')),
+  markSpan.map((e) => e.selectors.join(',')).join(' '));
+check('нет правила, показывающего подпись отметки на hover',
+  !flat.some((e) => e.selectors.some((sel) => /mark.*:hover.*span|mark.*span.*:hover/.test(sel))
+    && e.declarations.some((d) => d.property === 'display' && d.value === 'inline')));
+
 /* ---------- 7. Фолбэки современных функций ---------- */
 console.log('\n7. Фолбэки color-mix / backdrop-filter');
 const colorMixRules = flat.filter((e) => e.declarations.some((d) => d.value.includes('color-mix')));

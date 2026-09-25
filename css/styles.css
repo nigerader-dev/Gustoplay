@@ -467,6 +467,10 @@ button, input, select { font: inherit; color: inherit; }
 .card-sub { color: var(--text-muted); font-size: .82rem; overflow-wrap: break-word; }
 .card-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .card-desc { color: var(--text-soft); font-size: .9rem; margin: 0; }
+/* Длинные слова и аббревиатуры («Пирамидоголовый», «PVP-ориентированная») шире
+   узкой карточки на телефоне: без переноса они вылезали за край и обрезались
+   (проверка test:visual ловила обрезанный текст на 360px) */
+.card-title, .card-desc, .why li, .game-title { overflow-wrap: break-word; }
 .card-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; font-size: .86rem; }
 .len { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; }
 .why-title { font-size: .78rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); font-weight: 700; }
@@ -505,7 +509,12 @@ span.chip-active { cursor: default; }
 /* ------------------------------- отметки игр ------------------------------ */
 
 .marks { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; }
-.marks-label { font-size: .78rem; color: var(--text-muted); font-weight: 650; text-transform: uppercase; letter-spacing: .05em; }
+/* Подпись занимает свою строку: иначе на узких карточках она выдавливает кнопки
+   на вторую строку и блок «отметить» становится двухэтажным */
+.marks-label {
+  flex: 0 0 100%; font-size: .78rem; color: var(--text-muted); font-weight: 650;
+  text-transform: uppercase; letter-spacing: .05em;
+}
 .mark {
   display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 10px 13px; border-radius: var(--radius-full);
   border: 1px solid var(--surface-border); background: var(--bg-elevated); cursor: pointer;
@@ -514,13 +523,28 @@ span.chip-active { cursor: default; }
     background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
   min-height: 44px; min-width: 44px;
 }
-.mark:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+/* Наведение меняет только цвет: любой сдвиг (даже на 1px) у края кнопки выводит
+   курсор за её пределы и запускает тот же цикл «навёл — сдвинулась — потерял»
+   (см. docs/FIX-PLAN.md, п. 1). Габариты кнопки при наведении не меняются. */
+.mark:hover { border-color: var(--accent); color: var(--accent); }
 .mark.on { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
-.mark span { display: none; }
-.mark.on span, .mark:hover span { display: inline; }
+/* Подпись кнопки: текст всегда в дереве доступности (скринридер читает «Понравилось»),
+   визуально показывается всплывающей подсказкой и в раскладке не участвует.
+   Раньше подпись включалась прямо в потоке (display: none → inline) по наведению:
+   кнопка росла с 44 до 167px, соседние сдвигались и переносились на другую строку,
+   курсор терял кнопку — и кнопки «сходили с ума», мерцая (см. docs/FIX-PLAN.md, п. 1).
+   Активная отметка теперь тоже не меняет размер: состояние видно по заливке.
+   Полный текст с пояснением показывается нативным title (не обрезается границами карточки). */
+.mark > span {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
 /* на тачскринах hover нет — подписи отметок показываем всегда, иначе это ребус */
 @media (hover: none) {
-  .mark span { display: inline; }
+  .mark > span {
+    position: static; width: auto; height: auto; margin: 0; padding: 0;
+    overflow: visible; clip-path: none; white-space: normal;
+  }
 }
 
 /* ------------------------------- быстрый старт ---------------------------- */
@@ -843,7 +867,9 @@ select.input { cursor: pointer; }
        (его создаёт backdrop-filter), поэтому bottom: 0 растягивал панель
        только до высоты шапки (~68px) вместо всего экрана. */
     height: 100vh; height: 100dvh;
-    width: min(320px, 88vw); margin: 0; padding: 20px 20px 28px;
+    /* 80vw, а не 88vw: на телефоне 360px панель закрывала почти весь экран
+       (видно было 43px страницы) — теперь всегда остаётся заметная полоса контента */
+    width: min(320px, 80vw); margin: 0; padding: 20px 20px 28px;
     flex-direction: column; align-items: stretch; gap: 6px; flex-wrap: nowrap;
     background: var(--bg-elevated); border-left: 1px solid var(--surface-border);
     box-shadow: var(--shadow-lg); overflow-y: auto;
@@ -940,8 +966,13 @@ select.input { cursor: pointer; }
   }
   .why li:nth-child(n+3) { display: none; }
   .marks-label { display: none; }
-  .mark span { display: none; }
-  .mark.on span { display: inline; }
+  /* В узких карточках подписи не помещаются — оставляем иконки.
+     Активная отметка выделяется заливкой и размер кнопки не меняет:
+     раньше она растягивалась и сдвигала соседние кнопки. */
+  .mark > span {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+  }
 
   /* квиз: одна колонка, навигация всегда под рукой */
   .quiz-options { grid-template-columns: 1fr; }

@@ -208,6 +208,7 @@ export const STRINGS = {
     'mark.played.tip': 'Убрать из выдачи',
     'mark.liked.tip': 'Похожие игры поднимутся выше',
     'mark.disliked.tip': 'Похожие игры опустятся ниже',
+    'mark.wishlist.tip': 'Добавить в список «хочу сыграть»',
 
     'game.modes': 'Режимы',
     'game.players': 'Игроков',
@@ -226,7 +227,6 @@ export const STRINGS = {
     'game.similar': 'Похожие игры',
     'game.openStore': 'Где купить и почём',
     'game.steam': 'Открыть в Steam',
-    'game.instant': 'Цены в Instant Gaming',
     'game.official': 'Официальный сайт',
     'game.features': 'За что её любят',
     'game.back': 'Назад к списку',
@@ -286,7 +286,7 @@ export const STRINGS = {
     'profile.import': 'Загрузить копию',
     'profile.reset': 'Удалить мои данные',
     'profile.reset.confirm': 'Удалить ответы, отметки и все данные? Это нельзя отменить.',
-    'profile.stats': '{liked} понравилось · {played} пройдено · {wishlist} в вишлисте · {disliked} не зашло',
+    'profile.stats': '{liked} понравилось · {played} пройдено · {wishlist} хочу сыграть · {disliked} не зашло',
     'profile.importPrompt': 'Вставьте сюда ранее скопированные данные:',
     'profile.restartQuiz': 'Изменить ответы',
 
@@ -528,6 +528,7 @@ export const STRINGS = {
     'mark.played.tip': 'Hide it from results',
     'mark.liked.tip': 'Similar games will move up',
     'mark.disliked.tip': 'Similar games will move down',
+    'mark.wishlist.tip': 'Add to your wishlist',
 
     'game.modes': 'Modes',
     'game.players': 'Players',
@@ -546,7 +547,6 @@ export const STRINGS = {
     'game.similar': 'Similar games',
     'game.openStore': 'Where to buy',
     'game.steam': 'Open in Steam',
-    'game.instant': 'Prices at Instant Gaming',
     'game.official': 'Official website',
     'game.features': 'Why players love it',
     'game.back': 'Back to list',

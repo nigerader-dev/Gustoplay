@@ -137,12 +137,15 @@ export function markButtons(slug, status = null) {
     { id: 'played', icon: 'controller', label: t('mark.played'), tip: t('mark.played.tip') },
     { id: 'liked', icon: 'heart', label: t('mark.liked'), tip: t('mark.liked.tip') },
     { id: 'disliked', icon: 'minusCircle', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
-    { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: '' },
+    { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: t('mark.wishlist.tip') },
   ];
+  // title — нативная подсказка: не влияет на раскладку (кнопки не «скачут» под курсором)
+  // и не обрезается границами карточки. Текст внутри <span> даёт кнопке доступное имя.
   return `<div class="marks" data-slug="${slug}">
     <span class="marks-label">${esc(t('results.mark'))}:</span>
     ${items.map((i) => `<button type="button" class="mark ${status === i.id ? 'on' : ''}"
-      data-action="mark" data-slug="${slug}" data-status="${i.id}" title="${esc(i.tip || i.label)}"
+      data-action="mark" data-slug="${slug}" data-status="${i.id}"
+      title="${esc(i.tip ? `${i.label} — ${i.tip}` : i.label)}"
       aria-pressed="${status === i.id}">${icon(i.icon)} <span>${esc(i.label)}</span></button>`).join('')}
   </div>`;
 }
@@ -246,15 +249,22 @@ export const sectionTitle = (title, subtitle = '') => `
     ${subtitle ? `<p>${esc(subtitle)}</p>` : ''}
   </header>`;
 
+/**
+ * Где купить. Только конкретные страницы: страница игры в Steam (если она есть)
+ * и официальный магазин/сайт издателя. Поисковых ссылок-заглушек и сторонних
+ * перепродавцов здесь нет — если конкретной страницы нет, кнопка не показывается.
+ */
 export const storeLinks = (game) => {
-  const steam = `${game.links.steam}${SITE.affiliates.steam}`;
-  const ig = `${game.links.instantGaming}${SITE.affiliates.instantGaming}`;
-  const official = game.links.official
-    ? `<a class="btn btn-ghost" href="${esc(game.links.official)}" target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t('game.official'))}</a>`
-    : '';
-  return `<div class="stores">
-    <a class="btn btn-ghost" href="${steam}" target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>
-    ${official}
-    <a class="btn btn-ghost" href="${ig}" target="_blank" rel="noopener nofollow">${icon('tag')} ${esc(t('game.instant'))}</a>
-  </div>`;
+  const buttons = [];
+  // game.links.steam === null у игр без страницы в Steam (Nintendo, мобильные, Battle.net):
+  // раньше в этом случае подставлялся поиск по названию — вместо него официальный магазин
+  if (game.links.steam) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.steam)}${SITE.affiliates.steam}"
+      target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>`);
+  }
+  if (game.links.official) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.official)}"
+      target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t(game.links.officialLabel || 'game.official'))}</a>`);
+  }
+  return buttons.length ? `<div class="stores">${buttons.join('')}</div>` : '';
 };
