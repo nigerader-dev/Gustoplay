@@ -217,6 +217,11 @@
     "cover": "https://play-lh.googleusercontent.com/AUGFPG5XqzHukTUDH2mcdOTpEwlDmZ5hUuWPXwu9IcvcyaBTwhV2WJeKKFAj_UA2m05ZxPgJuhrllXIqlW0i=s512-rw",
     "src": "google-play"
   },
+  "multiversus": {
+    "steamId": 1818750,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1818750/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "nioh-2": {
     "steamId": 1325200,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1325200/library_600x900_2x.jpg",
