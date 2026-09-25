@@ -24,6 +24,8 @@
     "test:all": "npm run check && npm run audit && npm test && npm run test:functional && npm run test:a11y && npm run test:css && npm run test:visual && npm run test:api && npm run test:e2e && npm run test:reload",
     "verify:build": "node tools/verify-build.mjs",
     "check": "node tools/check-catalog.mjs",
+    "covers:resolve": "node tools/resolve-steam-covers.mjs",
+    "check:covers": "node tools/check-covers.mjs",
     "clean": "node tools/clean-catalog.mjs",
     "audit": "node tools/audit-catalog.mjs",
     "backup": "node tools/backup.mjs backup",

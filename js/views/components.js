@@ -79,7 +79,7 @@ export function coverImage(game, cls = 'cover-img') {
   const generated = coverDataUri(game);
   // По умолчанию рисуем собственную обложку. Если владелец сайта положил официальные арты
   // в /covers (FEATURES.realCovers = true), показываем их, а сгенерированную используем как запас.
-  const src = FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated;
+  const src = game.cover || (FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated);
   return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" width="480" height="640"
     onerror="this.onerror=null;this.src=this.dataset.fallback">`;
 }
