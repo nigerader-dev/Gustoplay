@@ -1,4 +1,4 @@
 # cover-review.txt (part=all)
 # CHECK — совпадение с несколькими кандидатами (проверить вручную)
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
-MISS multiversus — «MultiVersus» (part-i): кандидаты нет
+

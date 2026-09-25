@@ -244,6 +244,7 @@ export const STEAM_COVERS = {
   "monument-valley-2": {"steamId":1927740,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1927740/library_600x900_2x.jpg","src":"steam"},
   "mortal-kombat-11": {"steamId":976310,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/976310/library_600x900_2x.jpg","src":"steam"},
   "moving-out-2": {"steamId":1641700,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1641700/library_600x900_2x.jpg","src":"steam"},
+  "multiversus": {"steamId":1818750,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1818750/library_600x900_2x.jpg","src":"steam"},
   "muse-dash": {"steamId":774171,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/774171/library_600x900_2x.jpg","src":"steam"},
   "my-time-at-sandrock": {"steamId":1084600,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1084600/library_600x900_2x.jpg","src":"steam"},
   "necesse": {"steamId":1169040,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1169040/library_600x900_2x.jpg","src":"steam"},
