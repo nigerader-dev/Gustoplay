@@ -6,6 +6,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1200,
     len: [40, 400], dif: 3, pace: 4, rat: 93, mood: ['laugh', 'adrenaline', 'progress'], coopQ: 10, gp: 1,
     desc: { ru: 'Четвёрка космических гномов бурит астероиды, отбивается от жуков и держится вместе — идеальный кооп без токсичности.', en: 'Four space dwarves mine asteroids and hold the line against bugs in the friendliest co-op shooter around.' },
+    about: {"ru":"Кооперативный шутер про отряд космических гномов на службе горнодобывающей корпорации. Команда из четырёх классов спускается в процедурные пещеры, добывает минералы и отбивается от роев жуков. У каждого класса свой инструмент: бур, платформа, турель или фонарь — без слаженной работы миссию не закрыть.","en":"A co-op shooter about a squad of space dwarves mining for a faceless corporation. Four class-based dwarves descend into procedural caves, mine objectives and fight off bug swarms. Every class brings a unique traversal or support tool, so missions only work as teamwork."},
+    feats: {"ru":["Четыре класса завязаны друг на друга: бурить, светить, строить и прикрывать нужно сообща","Процедурные пещеры — каждая вылазка не похожа на предыдущую","Одна из самых дружелюбных кооп-коммьюнити: новичков здесь встречают салютом «Rock and Stone!»"],"en":["Four classes built around each other: dig, light, build and cover together","Procedural caves make every drop different","One of the friendliest co-op communities around — newcomers get a “Rock and Stone!” salute"]},
   },
   {
     t: 'Helldivers 2', y: 2024, dev: 'Arrowhead', gr: ['shooter', 'action'],
@@ -13,6 +15,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps'], pr: 'mid', pv: 2490,
     len: [50, 600], dif: 4, pace: 5, rat: 89, mood: ['adrenaline', 'laugh'], coopQ: 10,
     desc: { ru: 'Управляемая демократия, орбитальные удары и постоянные жертвы союзников — кооп, где хаос и есть веселье.', en: 'Managed democracy, orbital strikes and constant friendly fire: co-op where the chaos is the point.' },
+    about: {"ru":"Сатирический кооперативный шутер от третьего лица: отряды адских десантников несут «управляемую демократию» на планеты, кишевшие жуками и роботами. Главное оружие против своих же — орбитальные удары, которые так же легко обрушить на товарищей, как и на врагов.","en":"A satirical third-person co-op shooter: squads of Hell divers bring “managed democracy” to bug- and bot-infested planets. Orbital strikes are your biggest asset — and just as likely to flatten your squadmates as the enemy."},
+    feats: {"ru":["Френдли-файр включён всегда — хаос и есть веселье","Общая война всего комьюнити: игроки вместе двигают фронт галактической кампании","Зрелищные орбитальные удары и десант в капсулах с орбиты"],"en":["Friendly fire is always on — the chaos is the point","A shared galaxy-wide war the whole community fights together","Spectacular orbital strikes and dramatic pod drops from orbit"]},
   },
   {
     t: 'Left 4 Dead 2', y: 2009, dev: 'Valve', gr: ['shooter', 'survival', 'horror'],
@@ -20,6 +24,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline'], pl: [1, 4], pf: ['pc', 'xbox'], pr: 'cheap', pv: 600,
     len: [15, 300], dif: 3, pace: 5, rat: 92, mood: ['adrenaline', 'laugh'], coopQ: 10,
     desc: { ru: 'Классика зомби-коопа: ИИ-режиссёр подкидывает паники, а четверо выживших держатся спина к спине.', en: 'The zombie co-op classic: an AI director throws panics at four survivors who must stay back to back.' },
+    about: {"ru":"Классика зомби-кооператива от Valve: четверо выживших прорываются через кампании на юге США, отбиваясь от орд заражённых. ИИ-режиссёр следит за действиями команды и подстраивает количество врагов, предметы и особые заражённые под её состояние.","en":"Valve’s zombie co-op classic: four survivors push through Southern US campaigns against hordes of infected. The AI Director watches how the team is doing and adapts enemy spawns, items and special infected on the fly."},
+    feats: {"ru":["ИИ-режиссёр делает каждый забег непохожим на предыдущий","Особые заражённые наказывают за разобщённость — держитесь вместе","Огромная база модов в мастерской Steam: карты, оружие, модели"],"en":["The AI Director keeps every run different","Special infected punish anyone who strays from the group","A huge Steam Workshop scene: custom campaigns, weapons, models"]},
   },
   {
     t: 'Warhammer: End Times – Vermintide 2', y: 2018, dev: 'Fatshark', gr: ['action', 'rpg'],
@@ -27,6 +33,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1200,
     len: [30, 300], dif: 4, pace: 5, rat: 85, mood: ['adrenaline', 'progress'], coopQ: 10,
     desc: { ru: 'Первое лицо, ближний бой и крысиные орды: четверо против тысяч, и один опоздавший означает вайп.', en: 'First-person melee against rat hordes: four players versus thousands, and one straggler means a wipe.' },
+    about: {"ru":"Кооперативный экшен от первого лица во вселенной Warhammer: пять героев против тысяч крысолюдей-скавенов и воинов Хаоса. Ближний бой построен на ощущении веса оружия: у каждого из пятнадцати героев свой арсенал и боевой стиль.","en":"A first-person co-op action game set in the Warhammer world: five heroes cut through thousands of skaven ratmen and Chaos warriors. Melee combat is built around weapon weight and feel, with fifteen heroes each carrying their own arsenal."},
+    feats: {"ru":["Мясной ближний бой с ощущением тяжести каждого удара","Пятнадцать героев и системы подвигов — есть что открывать неделями","Командная зависимость: один отставший — и отряд падает"],"en":["Visceral melee where every swing has weight","Fifteen heroes plus feat progression for weeks of unlocks","Real team dependency: one straggler can wipe the group"]},
   },
   {
     t: 'Warhammer 40,000: Darktide', y: 2022, dev: 'Fatshark', gr: ['shooter', 'action'],
@@ -34,6 +42,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'xbox'], pr: 'mid', pv: 2490,
     len: [30, 300], dif: 4, pace: 5, rat: 76, mood: ['adrenaline', 'progress'], coopQ: 9,
     desc: { ru: 'Мрачный улей-город, тяжёлый отряд и постоянное давление хаоса — кооп для тех, кто любит страдать красиво.', en: 'A grim hive city, a heavy squad and constant pressure: co-op for those who suffer beautifully.' },
+    about: {"ru":"Кооперативный шутер от создателей Vermintide 2, перенёсший формулу в мрачный улей-город Тертиум. Четверо отверженных выполняют задания Инквизиции, прорубаясь через культы и заражённых чумой толпы. Огнестрел сочетается с тяжёлым ближним боем.","en":"A co-op shooter from the makers of Vermintide 2, moving the formula to the grim hive city of Tertium. Four outcasts run errands for the Inquisition, carving through cultists and plague-ridden hordes with a mix of gunplay and heavy melee."},
+    feats: {"ru":["Атмосфера Вархаммера 40 000 без скидок: мрачно, пафосно, детально","Постоянное давление толпы — передышек почти не бывает","Сборка и улучшение собственного оружия"],"en":["Uncompromising Warhammer 40,000 atmosphere: grim, grand, detailed","Relentless crowd pressure with almost no breathing room","Weapon crafting and upgrades for long-term progression"]},
   },
   {
     t: 'Payday 2', y: 2013, dev: 'Overkill', gr: ['shooter', 'stealth'],
@@ -41,6 +51,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'cheap', pv: 300,
     len: [30, 600], dif: 4, pace: 4, rat: 85, mood: ['adrenaline', 'progress'], coopQ: 9,
     desc: { ru: 'Тихий налёт на банк за 40 секунд или кровавый беспредел — вся соль в командной координации.', en: 'A silent bank heist in 40 seconds or total bloodshed: it all comes down to team coordination.' },
+    about: {"ru":"Кооперативный шутер про ограбления: от тихого взлома сейфа за сорок секунд до штурма с десятками полицейских. Каждый контракт можно пройти стелсом или в лоб, а роли в банде — от танка до техника с турелью — определяют, кто что несёт и умеет.","en":"A co-op heist shooter: from a silent forty-second safe crack to a loud assault with dozens of cops pouring in. Every contract can be played stealth or loud, and crew roles decide who carries what and which tools the team gets."},
+    feats: {"ru":["Две радикально разные манеры прохождения: стелс и громкое ограбление","Сотни контрактов и огромное древо навыков","Игра живёт и обновляется уже больше десяти лет"],"en":["Two radically different playstyles: stealth or loud","Hundreds of contracts and a massive skill tree","A live game with more than a decade of updates"]},
   },
   {
     t: 'Borderlands 3', y: 2019, dev: 'Gearbox', gr: ['shooter', 'rpg'],
@@ -48,6 +60,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 2490,
     len: [30, 150], dif: 2, pace: 4, rat: 80, mood: ['laugh', 'progress', 'adrenaline'], coopQ: 8,
     desc: { ru: 'Миллиард стволов, тупые шутки и кооп на четверых — как лут-шутер и должен работать.', en: 'A billion guns, dumb jokes and four-player co-op: exactly how a looter-shooter should feel.' },
+    about: {"ru":"Лутер-шутер с фирменным безумным юмором: четыре искателя Хранилищ на нескольких планетах, миллиарды стволов и бесконечный поток добычи. Кооператив до четырёх игроков поддерживает раздельный экран и общий прогресс.","en":"A looter-shooter with the series’ signature madcap humour: four Vault Hunters, multiple planets, a billion guns and a constant flood of loot. Four-player co-op supports split screen and shared progression."},
+    feats: {"ru":["Миллиарды комбинаций оружия — каждый ствол со своим характером","Четыре героя с совершенно разными экшен-навыками","Кооп на диване: раздельный экран на консолях"],"en":["Billions of gun combinations, each with its own personality","Four heroes with wildly different action skills","Couch co-op with split screen on consoles"]},
   },
   {
     t: 'Monster Hunter: World', y: 2018, dev: 'Capcom', gr: ['action', 'rpg'],
@@ -55,6 +69,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 2490,
     len: [60, 600], dif: 4, pace: 3, rat: 89, mood: ['progress', 'adrenaline', 'escape'], coopQ: 9,
     desc: { ru: 'Охота на 30-метровых драконов вчетвером: готовиться, ловить момент, разделывать трофей.', en: 'Hunting 100-foot dragons with three friends: prepare, strike and carve the trophy.' },
+    about: {"ru":"Охота на гигантских монстров в живых экосистемах: выследить, изучить повадки, победить и пустить трофеи на новую броню и оружие. Цикл «охота → крафт → охота на более крупную добычу» затягивает на сотни часов, а в кооперативе на четырёх охотников веселье только растёт.","en":"Hunt giant monsters in living ecosystems: track them, learn their behaviour, slay them and turn the carcass into better armour and weapons. The hunt–craft–hunt-bigger loop eats hundreds of hours, and four-player co-op only makes it better."},
+    feats: {"ru":["Четырнадцать типов оружия — у каждого свой геймплей","Монстры с проработанными повадками и слабостями","Кооперативные охоты до четырёх человек"],"en":["Fourteen weapon types, each playing like a different game","Monsters with deep behaviour patterns and weaknesses","Co-operative hunts for up to four players"]},
   },
   {
     t: 'It Takes Two', y: 2021, dev: 'Hazelight', gr: ['platformer', 'adventure', 'puzzle'],
@@ -62,6 +78,8 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal'], pl: [2, 2], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1990,
     len: [12, 18], dif: 2, pace: 3, rat: 89, mood: ['laugh', 'story'], coopQ: 10, gp: 1,
     desc: { ru: 'Лучшая игра строго для двоих: каждые полчаса новая механика, а другу хватит одной копии.', en: 'The definitive two-player game: a new mechanic every half hour, and a friend needs only one copy.' },
+    about: {"ru":"Приключенческий кооператив строго на двоих: рассорившаяся пара превращается в кукол и чинит отношения, проходя причудливые испытания. Каждый уровень игры придуман заново — механики не повторяются, а всё действие построено на взаимодействии двух игроков.","en":"A strict two-player co-op adventure: a feuding couple is turned into dolls and must repair their relationship through fantastical trials. Every level reinvents its mechanics, and everything is built around the two players working together."},
+    feats: {"ru":["Игра года 2021 по версии The Game Awards","Механики уровней не повторяются до самого финала","Друг без копии может присоединиться бесплатно через Friend’s Pass"],"en":["The Game Awards 2021 Game of the Year","Level mechanics never repeat all the way to the finale","A friend can join free with the Friend’s Pass"]},
   },
   {
     t: 'Split Fiction', y: 2025, dev: 'Hazelight', gr: ['action', 'adventure', 'platformer'],
@@ -69,6 +87,8 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal'], pl: [2, 2], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [14, 20], dif: 3, pace: 4, rat: 90, mood: ['laugh', 'adrenaline', 'story'], coopQ: 10,
     desc: { ru: 'Две писательницы застревают в своих же мирах — sci-fi и фэнтези переключаются каждые десять минут.', en: 'Two writers trapped in their own worlds, flipping between sci-fi and fantasy every ten minutes.' },
+    about: {"ru":"Кооперативное приключение от создателей It Takes Two: две писательницы — фантастка и фэнтезистка — застревают внутри собственных историй и сбегают из них, чередуя научную фантастику и фэнтези. Игра строго для двоих, с постоянным обменом способностями.","en":"A co-op adventure from the creators of It Takes Two: two writers — one sci-fi, one fantasy — get trapped inside their own stories and escape by leaping between genres. Strictly two players, with constant ability-swapping."},
+    feats: {"ru":["Новая игра студии Hazelight после It Takes Two и A Way Out","Два переплетающихся жанра: фантастика и фэнтези","Кооп строится на взаимодействии, а не на одинаковых действиях"],"en":["The next game from Hazelight after It Takes Two and A Way Out","Two interwoven genres: sci-fi and fantasy","Co-op built on interaction, not mirrored actions"]},
   },
   {
     t: 'A Way Out', y: 2018, dev: 'Hazelight', gr: ['action', 'adventure'],
@@ -76,6 +96,8 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal'], pl: [2, 2], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1200,
     len: [6, 8], dif: 2, pace: 3, rat: 79, mood: ['story', 'adrenaline'], coopQ: 9,
     desc: { ru: 'Побег из тюрьмы на двоих: половина игры — диалоги и доверие, вторая — погони и перестрелки.', en: 'A two-player prison break: half dialogue and trust, half chases and shootouts.' },
+    about: {"ru":"Кинематографичный кооператив про побег из тюрьмы: двое заключённых, Винсент и Лео, действуют только сообща — пока один отвлекает, второй крадёт инструмент. Весь сюжет разбит на сцены, где роли игроков постоянно меняются.","en":"A cinematic co-op prison-break story: two inmates, Vincent and Leo, can only succeed together — one distracts while the other steals the tool. The whole plot is built from scenes where the players’ roles keep swapping."},
+    feats: {"ru":["Ранняя работа Hazelight — студии It Takes Two","Сюжет, который невозможно пройти в одиночку","Второй игрок подключается бесплатно по приглашению"],"en":["An early Hazelight title — the studio behind It Takes Two","A story that literally cannot be played alone","The second player joins free via invite"]},
   },
   {
     t: 'Overcooked! 2', y: 2018, dev: 'Ghost Town Games', gr: ['party', 'action'],
@@ -83,6 +105,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpLocal'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'cheap', pv: 900,
     len: [8, 60], dif: 3, pace: 5, rat: 84, mood: ['laugh', 'adrenaline'], coopQ: 10,
     desc: { ru: 'Кухня на двух плавучих платформах и друг, который опять уронил суп, — тест ваших отношений.', en: 'A kitchen split across two rafts and a friend who dropped the soup again: a relationship stress test.' },
+    about: {"ru":"Аркадный кулинарный хаос на четверых: команда готовит заказы на кухнях, которые разъезжаются, горят и летают. Каждая карта — новая ловушка, а главный навык здесь — договариваться, кто режет, кто жарит и кто моет посуду.","en":"Four-player culinary arcade chaos: a team rushes orders across kitchens that split apart, catch fire and even fly. Every level adds a new hazard, and the real skill is deciding who chops, who cooks and who washes up."},
+    feats: {"ru":["Мгновенно понятные правила, но настоящая проверка коммуникации","Сотни уровней и онлайн-кооператив","Идеальная «игра на вечер» для компании любого опыта"],"en":["Instantly clear rules that become a real communication test","Hundreds of levels plus online co-op","A perfect one-night party game for mixed-skill groups"]},
   },
   {
     t: 'PlateUp!', y: 2022, dev: 'It\'s Happening', gr: ['simulator', 'roguelike', 'party'],
@@ -90,6 +114,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 4], pf: ['pc', 'switch', 'ps', 'xbox'], pr: 'cheap', pv: 800,
     len: [10, 100], dif: 3, pace: 5, rat: 85, mood: ['laugh', 'progress'], coopQ: 9,
     desc: { ru: 'Рогалик-ресторан: 15 дней, растущее меню и автоматизация, которую вы строите вместе.', en: 'A roguelike restaurant: 15 days, a growing menu and automation you build together.' },
+    about: {"ru":"Рогалайк про ресторан: компания готовит блюда, обслуживает гостей и обставляет кухню техникой, а между сменами прокачивает заведение по случайным апгрейдам. Каждый заход уникален — от меню до планировки зала.","en":"A restaurant roguelite: a crew cooks dishes, serves guests and rigs the kitchen with gadgets, choosing random upgrades between shifts. Every run is different, from the menu to the dining-room layout."},
+    feats: {"ru":["Смесь Overcooked и рогалайка: каждая смена не похожа на прошлую","Автоматизация кухни — от блендеров до конвейеров","Кооператив до четырёх человек"],"en":["Overcooked meets roguelite: no two shifts alike","Kitchen automation, from blenders to conveyor belts","Co-op for up to four players"]},
   },
   {
     t: 'Cuphead', y: 2017, dev: 'Studio MDHR', gr: ['platformer', 'action'],
@@ -97,6 +123,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 2], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'cheap', pv: 900,
     len: [12, 40], dif: 5, pace: 5, rat: 88, mood: ['adrenaline'], coopQ: 8,
     desc: { ru: 'Мультфильм 1930-х и адские боссы: вдвоём тяжелее, но смешнее и обиднее.', en: 'A 1930s cartoon with hellish bosses: harder with two players, but funnier and more painful.' },
+    about: {"ru":"Платформер-«беги и стреляй», нарисованный и анимированный вручную в стиле мультфильмов 1930-х. Почти вся игра — зрелищные боссфайты с выверенными паттернами атак, где смерть всегда честная и заслуженная.","en":"A run-and-gun platformer hand-drawn and animated like a 1930s cartoon. Almost the entire game is spectacular boss fights with precise attack patterns, where every death feels fair and earned."},
+    feats: {"ru":["Уникальная рисованная анимация с джазовым саундтреком","Боссфайты, отточенные до миллисекунд","Кооператив на двоих на одном экране"],"en":["One-of-a-kind hand-drawn animation with a jazz soundtrack","Boss fights tuned to the millisecond","Two-player local co-op on one screen"]},
   },
   {
     t: 'Human: Fall Flat', y: 2016, dev: 'No Brakes Games', gr: ['platformer', 'puzzle'],
@@ -104,6 +132,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 8], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'cheap', pv: 700,
     len: [5, 40], dif: 1, pace: 2, rat: 79, mood: ['laugh'], coopQ: 9,
     desc: { ru: 'Тряпичные человечки, неуправляемые конечности и постоянные падения в пропасть — смех гарантирован.', en: 'Ragdoll bodies, uncontrollable limbs and constant falling: guaranteed laughter.' },
+    about: {"ru":"Физическая головоломка про пластилинового человечка Боба, который карабкается, цепляется и падает сквозь сюрреалистичные сны. Управление нарочно неуклюжее — из-за этого даже простые задачи превращаются в комедию, особенно в компании.","en":"A physics puzzler starring Bob, a wobbly dough figurine who climbs, grabs and flops through surreal dreams. The deliberately clumsy controls turn even simple tasks into comedy, especially with friends."},
+    feats: {"ru":["Физика как источник шуток: каждое движение потенциально смешное","Открытые уровни-головоломки с кучей способов решения","Кооператив до восьми игроков"],"en":["Physics as a comedy engine: every movement can go hilariously wrong","Open puzzle levels with many valid solutions","Co-op for up to eight players"]},
   },
   {
     t: 'Gang Beasts', y: 2017, dev: 'Boneloaf', gr: ['party', 'fighting'],
@@ -111,6 +141,8 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal', 'pvpLocal', 'pvpOnline'], pl: [2, 8], pf: ['pc', 'ps', 'xbox'], pr: 'cheap', pv: 700,
     len: [3, 50], dif: 1, pace: 3, rat: 70, mood: ['laugh'], coopQ: 9,
     desc: { ru: 'Безрукий мордобой на вечер: физика безумная, победа нелепая, крик в комнате — обязательный.', en: 'Armless brawling for an evening: insane physics, ridiculous wins and mandatory yelling.' },
+    about: {"ru":"Физическая потасовка желейных человечков на опасных аренах: крыши грузовиков, стройки, крутящиеся механизмы. Задача проста — выкинуть остальных за борт, удержавшись самому; управляются бойцы нарочно неповоротливо.","en":"A physics brawler of jelly characters on hazardous arenas: truck rooftops, construction sites, spinning machinery. The goal is simple — throw everyone else off while staying on — and the fighters are deliberately unwieldy."},
+    feats: {"ru":["Правила объясняются за десять секунд","Каждый раунд — новый повод посмеяться","Лольный мультиплеер на одном экране и онлайн"],"en":["Rules explained in ten seconds","Every round is a new reason to laugh","Couch multiplayer and online matches"]},
   },
   {
     t: 'Pummel Party', y: 2018, dev: 'Rebuilt Games', gr: ['party'],
@@ -118,6 +150,8 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal', 'pvpLocal'], pl: [2, 8], pf: ['pc'], pr: 'cheap', pv: 600,
     len: [3, 100], dif: 2, pace: 3, rat: 79, mood: ['laugh'], coopQ: 9,
     desc: { ru: 'Марио Парти для взрослых: настольная гонка, мини-игры и подставы, за которые потом извиняются.', en: 'Mario Party for adults: a board race, minigames and betrayals you apologize for later.' },
+    about: {"ru":"Виртуальная версия настольной вечеринки: до восьми игроков ходят по полю и сражаются в коротких мини-играх — от танковых боёв до королевской битвы. Итоги раундов решают, кто доберётся до финиша первым.","en":"A virtual board-game party: up to eight players move around a board and battle in short minigames, from tank fights to a battle royale. Round results decide who reaches the finish first."},
+    feats: {"ru":["Формат «настолки» без подготовки: открыл и играешь","Десятки разножанровых мини-игр","До восьми игроков онлайн или за одним ПК"],"en":["Board-party format with zero setup: open and play","Dozens of minigames across genres","Up to eight players online or on one PC"]},
   },
   {
     t: 'Ultimate Chicken Horse', y: 2016, dev: 'Clever Endeavour', gr: ['platformer', 'party'],
@@ -125,6 +159,8 @@ export const PART_A = [
     md: ['coopLocal', 'coopOnline', 'pvpLocal', 'pvpOnline'], pl: [2, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'cheap', pv: 500,
     len: [2, 60], dif: 2, pace: 3, rat: 87, mood: ['laugh'], coopQ: 9,
     desc: { ru: 'Сами строите уровень и сами по нему бежите: главное — сделать так, чтобы друг не добежал.', en: 'You build the level, then race it — the goal is making sure your friend cannot finish.' },
+    about: {"ru":"Платформер с подвохом: перед каждым забегом игроки вместе строят уровень из ловушек и платформ, а потом пытаются пройти его первыми. Ставить ловушки нужно так, чтобы соперники погибли, а ты — нет.","en":"A platformer with a twist: before every race the players build the level together from traps and platforms, then try to be first through it. Traps must kill your rivals but not you."},
+    feats: {"ru":["Уровень рождается прямо в партии: каждый раунд другой","Простая идея с глубоким соревновательным слоем","Локальный мультиплеер до четырёх игроков"],"en":["The level is born during the match: every round is different","A simple idea with a deep competitive layer","Local multiplayer for up to four players"]},
   },
   {
     t: 'Keep Talking and Nobody Explodes', y: 2015, dev: 'Steel Crate Games', gr: ['puzzle', 'party'],
@@ -132,6 +168,8 @@ export const PART_A = [
     md: ['coopLocal', 'coopOnline'], pl: [2, 6], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'cheap', pv: 500,
     len: [2, 30], dif: 4, pace: 5, rat: 85, mood: ['laugh', 'adrenaline'], coopQ: 10,
     desc: { ru: 'Один разминирует бомбу, остальные читают инструкцию вслух — чистая коммуникация под давлением.', en: 'One player defuses, the others read the manual out loud: pure communication under pressure.' },
+    about: {"ru":"Асимметричная головоломка на общение: один игрок видит бомбу, остальные — инструкцию по её обезвреживанию, которой у сапёра нет. Обезвредить модули можно только словами — описывая, диктуя и уточняя.","en":"An asymmetric communication puzzle: one player sees a bomb, the others hold the defusal manual that the defuser never gets. Modules can only be solved with words — describing, dictating and clarifying."},
+    feats: {"ru":["Игра-тренажёр точной коммуникации","Инструкцию можно распечатать или читать с любого устройства","Отлично работает в офисе, на вечеринке и в видеозвонке"],"en":["A precision-communication workout disguised as a game","The manual can be printed or read from any device","Works brilliantly at offices, parties and video calls"]},
   },
   {
     t: 'Valheim', y: 2021, dev: 'Iron Gate', gr: ['survival', 'sandbox', 'rpg'],
@@ -139,6 +177,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 10], pf: ['pc', 'xbox'], pr: 'mid', pv: 1200,
     len: [60, 400], dif: 3, pace: 2, rat: 90, mood: ['create', 'escape', 'progress'], coopQ: 10, gp: 1,
     desc: { ru: 'Викинги строят деревню, плывут за железом и умирают от деревьев — кооп-выживание с лучшей атмосферой.', en: 'Vikings build a village, sail for iron and die to trees: co-op survival with the best atmosphere.' },
+    about: {"ru":"Выживание в мире скандинавских мифов: викинги строят длинные дома, выходят в море на драккарах и убивают божественных боссов, чтобы заслужить место в Вальхалле. Строительство, крафт и исследование рассчитаны на компанию до десяти игроков.","en":"Survival in a Norse-mythology purgatory: vikings raise longhouses, sail longships and slay divine bosses to earn their place in Valhalla. Building, crafting and exploration are designed for crews of up to ten."},
+    feats: {"ru":["Одна из самых продаваемых игр раннего доступа в истории","Свободное строительство с физикой и системой опор","Эпичные боссы, к которым нужно готовиться всем хутором"],"en":["One of the best-selling early-access games ever","Free-form building with structural physics","Epic bosses that take a whole homestead to prepare for"]},
   },
   {
     t: 'Palworld', y: 2024, dev: 'Pocketpair', gr: ['survival', 'sandbox', 'rpg'],
@@ -146,6 +186,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 32], pf: ['pc', 'xbox'], pr: 'mid', pv: 1200,
     len: [40, 400], dif: 2, pace: 3, rat: 86, mood: ['create', 'progress', 'laugh'], coopQ: 9, gp: 1,
     desc: { ru: 'Покемоны с автоматами, фабрика палов и кооп-сессии на неделю — странно, но затягивает.', en: 'Pokemon with guns, a pal factory and week-long co-op sessions: bizarre but addictive.' },
+    about: {"ru":"Выживание с коллекцией существ: «палов» ловят, приручают и ставят на работу — они строят базу, носят ресурсы и сражаются рядом с хозяином. Мир открытый, с крафтом, боссами и кооперативом до четырёх игроков.","en":"Open-world survival with creature collecting: “Pals” are caught, tamed and put to work — building bases, hauling resources and fighting alongside their owner. The world is open, with crafting, bosses and co-op for four."},
+    feats: {"ru":["Существа — и питомцы, и рабочая сила, и оружие","База живёт и работает, пока вы в рейде","Феномен 2024 года: миллионы игроков в первые недели"],"en":["Creatures are pets, workforce and weapons all at once","Your base keeps working while you are out raiding","The 2024 phenomenon: millions of players in its first weeks"]},
   },
   {
     t: 'Minecraft', y: 2011, dev: 'Mojang', gr: ['sandbox', 'survival'],
@@ -153,6 +195,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline'], pl: [1, 100], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'mid', pv: 1900,
     len: [30, 2000], dif: 1, pace: 2, rat: 90, mood: ['create', 'relax', 'escape'], coopQ: 10,
     desc: { ru: 'Универсальный конструктор миров: от уютной фермы вдвоём до огромного сервера с мини-играми.', en: 'The universal world-builder: from a cozy two-player farm to a huge minigame server.' },
+    about: {"ru":"Песочница, в которой мир собран из блоков и целиком подчиняется игроку: копать, строить, разводить фермы, спускаться в пещеры и побеждать дракона Края. Творческий режим — про стройку без границ, выживание — про прогресс и опасности.","en":"The block-built sandbox that bends entirely to the player: dig, build, farm, spelunk and take down the Ender Dragon. Creative mode is limitless building; survival is about progression and danger."},
+    feats: {"ru":["Самая продаваемая игра в истории","Бесконечная свобода творчества из простых блоков","Моды, серверы и редстоун-механизмы — глубина на годы"],"en":["The best-selling video game of all time","Limitless creative freedom from simple blocks","Mods, servers and redstone engineering: depth for years"]},
   },
   {
     t: 'Terraria', y: 2011, dev: 'Re-Logic', gr: ['sandbox', 'rpg', 'platformer'],
@@ -160,6 +204,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 8], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'cheap', pv: 500,
     len: [60, 500], dif: 3, pace: 3, rat: 95, mood: ['create', 'progress', 'escape'], coopQ: 10,
     desc: { ru: '2D-песочница с сотнями предметов, боссами и метроидванией — на восьмерых превращается в отдельную жизнь.', en: 'A 2D sandbox with hundreds of items, bosses and metroidvania progression: with eight players it becomes a second life.' },
+    about: {"ru":"Двумерная песочница-приключение: копайте, стройте и сражайтесь с десятками боссов в мире, который генерируется заново для каждой партии. Огромное древо крафта — от медного меча до пулемётов и магических посохов.","en":"A 2D sandbox-adventure: dig, build and battle dozens of bosses in a freshly generated world. The crafting tree is enormous — from copper swords to machine guns and magic staves."},
+    feats: {"ru":["Более десяти лет бесплатных обновлений с новым контентом","Сотни предметов и десятки боссов","Кооператив и совместные стройки до восьми игроков"],"en":["Over a decade of free content updates","Hundreds of items and dozens of bosses","Co-op and shared builds for up to eight players"]},
   },
   {
     t: "Don't Starve Together", y: 2016, dev: 'Klei', gr: ['survival', 'sandbox'],
@@ -174,6 +220,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 4], pf: ['pc'], pr: 'mid', pv: 1100,
     len: [20, 1000], dif: 5, pace: 2, rat: 87, mood: ['tense', 'progress', 'escape'], coopQ: 9,
     desc: { ru: 'Симулятор зомби-апокалипсиса с безумной детализацией: смерть постоянна, а навыки — только ваши.', en: 'A zombie apocalypse sim with insane detail: death is permanent and skills only live in your head.' },
+    about: {"ru":"Глубокий симулятор выживания в зомби-апокалипсисе: персонаж умирает навсегда, а до смерти его могут погубить голод, скука, простуда или одна царапина. Игроки обустраивают убежище, чинят машины и держат оборону — поодиночке или на общем сервере.","en":"A deep zombie-apocalypse survival sim: characters die permanently, and hunger, boredom, a cold or a single scratch can finish them off. Players fortify shelters, fix cars and hold the line — alone or on shared servers."},
+    feats: {"ru":["Беспощадный реализм: каждая мелочь пытается вас убить","Историю каждой смерти хочется рассказать друзьям","Огромная база модов и мультиплеер"],"en":["Ruthless realism: every little thing is trying to kill you","Every death makes a story worth telling","A huge modding scene and multiplayer servers"]},
   },
   {
     t: '7 Days to Die', y: 2024, dev: 'The Fun Pimps', gr: ['survival', 'sandbox', 'horror'],
@@ -181,6 +229,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline'], pl: [1, 8], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1500,
     len: [40, 500], dif: 4, pace: 3, rat: 78, mood: ['create', 'tense', 'progress'], coopQ: 9,
     desc: { ru: 'Раз в семь дней — орда, значит крепость строим по-настоящему: вечный цикл «дожить до кровавой луны».', en: 'A horde every seven days means building a real fortress: survive until the blood moon, repeat.' },
+    about: {"ru":"Выживание в открытом мире после апокалипсиса, где каждые семь суток на базу обрушивается орда зомби. Между волнами игроки добывают ресурсы, строят укрепления и ловушки, а в промежутках исследуют города и шахты.","en":"Open-world post-apocalyptic survival where every seventh day a zombie horde descends on your base. Between waves you scavenge, build fortifications and traps, and explore ruined towns and mines."},
+    feats: {"ru":["Цикл «семь дней» держит в постоянном напряжении","Полностью разрушаемые постройки и ландшафт","Кооператив и выделенные серверы"],"en":["The seven-day cycle keeps the pressure constant","Fully destructible buildings and terrain","Co-op play and dedicated servers"]},
   },
   {
     t: 'Grounded', y: 2022, dev: 'Obsidian', gr: ['survival', 'adventure', 'rpg'],
@@ -188,6 +238,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'xbox', 'ps', 'switch'], pr: 'mid', pv: 1990,
     len: [30, 120], dif: 3, pace: 3, rat: 82, mood: ['create', 'escape', 'laugh'], coopQ: 9, gp: 1,
     desc: { ru: 'Уменьшенные до размера муравья дети выживают в своём же саду: паук — босс, роса — источник воды.', en: 'Kids shrunk to ant size survive in their own backyard: a spider is a boss, dew is your water source.' },
+    about: {"ru":"Выживание в масштабе муравья: усаженные подростки исследуют двор собственного дома, где паук — босс уровня, а лужа — море. Игроки строят базу из травинок, приручают жуков и выясняют, кто и зачем их уменьшил.","en":"Survival at ant scale: shrunk teenagers explore their own backyard, where a spider is a level boss and a puddle is an ocean. Players build bases from grass blades, tame bugs and unravel who shrank them and why."},
+    feats: {"ru":["Необычный сеттинг: обычный двор как огромный мир","Кооператив до четырёх человек с общим прогрессом","Дружелюбный тон и режим без пауков для арахнофобов"],"en":["A unique premise: an ordinary backyard as a vast world","Four-player co-op with shared progression","A friendly tone and an arachnophobia-friendly spider mode"]},
   },
   {
     t: 'Raft', y: 2022, dev: 'Redbeet Interactive', gr: ['survival', 'adventure', 'sandbox'],
@@ -195,6 +247,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'mid', pv: 1100,
     len: [25, 120], dif: 2, pace: 2, rat: 84, mood: ['relax', 'create', 'escape'], coopQ: 9,
     desc: { ru: 'Плот, океан и акула: спокойное выживание вдвоём-вчетвером, где даже рыбалка приносит прогресс.', en: 'A raft, an ocean and a shark: relaxed co-op survival where even fishing moves you forward.' },
+    about: {"ru":"Выживание посреди океана на крошечном плоту: крюком вылавливаете мусор из воды, расширяете судно, опресняете воду и отбиваетесь от акулы. Постепенно плот превращается в плавучий дом, а сюжет ведёт к затонувшим городам.","en":"Ocean survival on a tiny raft: hook floating junk out of the water, expand your vessel, purify water and fend off the shark. Bit by bit the raft becomes a floating home while the story leads you to sunken cities."},
+    feats: {"ru":["Уютное выживание без жестокости и давления","Плот растёт от досочки до двухпалубного корабля","Кооператив до восьми игроков на одном плоту"],"en":["Cosy survival without cruelty or pressure","Your raft grows from a plank to a two-deck ship","Co-op for up to eight players on one raft"]},
   },
   {
     t: 'The Forest', y: 2018, dev: 'Endnight', gr: ['survival', 'horror', 'action'],
@@ -202,6 +256,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 8], pf: ['pc', 'ps'], pr: 'mid', pv: 1200,
     len: [20, 100], dif: 3, pace: 3, rat: 84, mood: ['scare', 'create', 'tense'], coopQ: 9,
     desc: { ru: 'Выживание после крушения, канибалы-мутанты и бункеры: страшно в одиночку, очень смешно вчетвером.', en: 'Survival after a plane crash, cannibal mutants and bunkers: terrifying alone, hilarious with four.' },
+    about: {"ru":"Хоррор-выживание после авиакатастрофы на полуострове, населённом каннибалами. Днём игроки строят лагерь и исследуют пещеры, ночью — обороняются. У игры есть сюжет о поиске пропавшего сына, и у него есть финал.","en":"Horror survival after a plane crash on a peninsula of cannibals. By day you build camp and explore caves; by night you defend it. There is a story about a missing son, and it actually has an ending."},
+    feats: {"ru":["По-настоящему жуткие пещеры и ночные атаки","Свободное строительство базы из брёвен и камней","Кооператив до восьми человек и сюжет на двоих"],"en":["Genuinely creepy caves and night raids","Free-form base building from logs and stone","Co-op for up to eight and a two-player story"]},
   },
   {
     t: 'Sea of Thieves', y: 2018, dev: 'Rare', gr: ['adventure', 'action', 'sandbox'],
@@ -209,6 +265,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 2490,
     len: [30, 1000], dif: 3, pace: 3, rat: 82, mood: ['laugh', 'escape', 'adrenaline'], coopQ: 10, gp: 1,
     desc: { ru: 'Пиратская песочница, где истории создают сами игроки: сегодня кракен, завтра обмен сундуками с врагом.', en: 'A pirate sandbox where players make their own stories: a kraken today, a chest trade with an enemy tomorrow.' },
+    about: {"ru":"Пиратская песочница в общем онлайн-мире: команда поднимает паруса, ищет сокровища по картам, сражается с мегалодонами и другими кораблями. Каждую роль на судне — штурвал, пушки, паруса, музыка — исполняют сами игроки.","en":"A pirate sandbox in a shared online world: a crew hoists the sails, hunts treasure with maps, and battles megalodons and rival ships. Every onboard role — helm, cannons, sails, music — is played by the players themselves."},
+    feats: {"ru":["Корабль — командный механизм: рулить в одиночку невозможно","Живой мир с другими экипажами — от торговли до абордажа","Игра-сервис с годами сезонов и событий"],"en":["The ship is a team machine: no one sails it alone","A living world of other crews, from trading to boarding","A live-service game with years of seasons and events"]},
   },
   {
     t: 'Phasmophobia', y: 2020, dev: 'Kinetic Games', gr: ['horror', 'mystery'],
@@ -216,6 +274,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1100,
     len: [10, 200], dif: 3, pace: 3, rat: 85, mood: ['scare', 'laugh'], coopQ: 10,
     desc: { ru: 'Четверо охотников за призраками, микрофон включён, и что-то отвечает — самый страшный кооп на рынке.', en: 'Four ghost hunters with mics on, and something answers back: the scariest co-op out there.' },
+    about: {"ru":"Кооперативный хоррор про бригаду охотников за привидениями: команда заходит в дом с паранормальной активностью, собирает улики приборами и определяет тип призрака. Ошибётся в отчёте — и охота пойдёт не по плану.","en":"A co-op horror about a ghost-hunting crew: the team enters a haunted house, gathers evidence with instruments and identifies the ghost type. Get the report wrong and the hunt will go sideways."},
+    feats: {"ru":["Голосовой чат — часть механики: призрак слышит игроков","Каждый тип призрака распознаётся по своему набору улик","Напряжённая атмосфера даже без скримеров"],"en":["Voice chat is a mechanic: the ghost can hear you","Each ghost type is identified by its own evidence set","Tension that works even without jump scares"]},
   },
   {
     t: 'Lethal Company', y: 2023, dev: 'Zeekerss', gr: ['horror', 'survival'],
@@ -223,6 +283,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'cheap', pv: 400,
     len: [5, 200], dif: 4, pace: 3, rat: 88, mood: ['laugh', 'scare'], coopQ: 10,
     desc: { ru: 'Сбор металлолома на проклятых планетах: крик в микрофон — это 50% геймплея.', en: 'Scrap collecting on cursed moons where screaming into your mic is 50% of the gameplay.' },
+    about: {"ru":"Кооперативный хоррор-рогалайк о сборщиках металлолома на заброшенных лунах: команда выносит хлам с предприятий, набитых монстрами, и сдаёт его Компании ради плана. Голосовой чат с затуханием по дистанции превращает каждую вылазку в триллер.","en":"A co-op horror roguelike about scrap collectors on abandoned moons: the crew hauls junk out of monster-infested facilities to meet the Company’s quota. Proximity voice chat turns every expedition into a thriller."},
+    feats: {"ru":["Смешно и страшно одновременно — фирменный тон игры","Голос рядом/далеко создаёт ситуации, которые невозможно срежиссировать","Каждая вылазка короткая, но незабываемая"],"en":["Funny and terrifying at once — the game’s signature tone","Proximity voice creates moments no one could script","Every expedition is short but unforgettable"]},
   },
   {
     t: 'Dead by Daylight', y: 2016, dev: 'Behaviour', gr: ['horror', 'action'],
@@ -230,6 +292,8 @@ export const PART_A = [
     md: ['coopOnline', 'pvpOnline'], pl: [1, 5], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'mid', pv: 1200,
     len: [20, 1000], dif: 3, pace: 4, rat: 72, mood: ['tense', 'adrenaline', 'scare'], coopQ: 7,
     desc: { ru: 'Асимметричный хоррор: один маньяк против четырёх выживших, и выжить можно только вместе.', en: 'Asymmetric horror: one killer versus four survivors, and you only survive together.' },
+    about: {"ru":"Асимметричный мультиплеер «один против четырёх»: Маньяк охотится на выживших, которые чинят генераторы и пытаются сбежать. Роли и персонажи взяты из классики хоррора — от Майкла Майерса до созданий из фильмов и игр.","en":"Asymmetric 4v1 multiplayer: the Killer hunts survivors who repair generators and try to escape. Killers and survivors are drawn from horror classics — from Michael Myers to creatures from films and games."},
+    feats: {"ru":["Легендарные злодеи хоррора в одной игре","Каждый матч — новая погоня с непредсказуемым финалом","Постоянные коллаборации и обновления годами"],"en":["Legendary horror villains under one roof","Every match is a fresh chase with an unpredictable ending","Years of collaborations and updates"]},
   },
   {
     t: 'Destiny 2', y: 2017, dev: 'Bungie', gr: ['shooter', 'rpg', 'mmo'],
@@ -237,6 +301,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'pvpOnline', 'mmo'], pl: [1, 6], pf: ['pc', 'ps', 'xbox'], pr: 'free', pv: 0,
     len: [50, 1000], dif: 4, pace: 4, rat: 78, mood: ['progress', 'adrenaline', 'escape'], coopQ: 9,
     desc: { ru: 'Рейды на шесть человек и лут-спираль на сотни часов: лучший gunplay в жанре, но нужен отряд.', en: 'Six-player raids and a hundred-hour loot loop: the best gunplay in the genre, but you need a fireteam.' },
+    about: {"ru":"Сетевой шутер от создателей Halo: стражи защищают последнюю цитадель человечества, зачищая планеты, налёты и рейды. Быстрый «ощущаемый» ганплей сочетается с лутом и сезонным контентом, а рейды требуют слаженной команды из шести.","en":"An online shooter from the creators of Halo: Guardians defend humanity’s last city by clearing planets, strikes and raids. Fast, tactile gunplay meets loot and seasonal content, and raids demand a coordinated six-player team."},
+    feats: {"ru":["Один из лучших геймплеев стрельбы в жанре","Рейды и подземелья — эндгейм для настоящей команды","Бесплатный вход: попробовать можно без покупки"],"en":["Some of the best-feeling shooting in the genre","Raids and dungeons as true team endgame","Free-to-start: you can try it without paying"]},
   },
   {
     t: 'Warframe', y: 2013, dev: 'Digital Extremes', gr: ['shooter', 'action', 'mmo'],
@@ -244,6 +310,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'mmo', 'pvpOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'free', pv: 0,
     len: [50, 3000], dif: 3, pace: 5, rat: 86, mood: ['progress', 'adrenaline', 'escape'], coopQ: 8,
     desc: { ru: 'Космические ниндзя с бесплатной прокачкой на тысячи часов — глубина билдов и лучший паркур-шутинг.', en: 'Space ninjas with thousands of hours of free progression: deep builds and the best parkour shooting.' },
+    about: {"ru":"Бесплатный кооперативный экшен про космических ниндзя-варфреймов: стремительный паркур, сотни видов оружия и десятки уникальных боевых костюмов. Контент накапливался годами — от сюжетных квестов до клановых лабораторий.","en":"A free-to-play co-op action game about space-ninja Warframes: breakneck parkour, hundreds of weapons and dozens of unique combat suits. A decade of content ranges from cinematic quests to clan laboratories."},
+    feats: {"ru":["Паркур и стрельба сливаются в один поток","Полноценная free-to-play без платы за победу","Огромный мир с сюжетом на сотни часов"],"en":["Parkour and shooting fused into one flow","A true free-to-play with no pay-to-win","A huge world with hundreds of hours of story"]},
   },
   {
     t: 'Final Fantasy XIV', y: 2013, dev: 'Square Enix', gr: ['mmo', 'rpg'],
@@ -251,6 +319,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'mmo', 'pvpOnline'], pl: [1, 24], pf: ['pc', 'ps', 'xbox'], pr: 'subscription', pv: 1500,
     len: [100, 3000], dif: 3, pace: 3, rat: 91, mood: ['story', 'escape', 'progress'], coopQ: 9,
     desc: { ru: 'MMO с лучшим сюжетом в жанре: сотни часов истории, рейды на восемь и самая дружелюбная комьюнити.', en: 'The best story in MMOs: hundreds of hours of plot, eight-player raids and the friendliest community.' },
+    about: {"ru":"Сюжетная MMORPG, где одиночная кампания не уступает одиночным JRPG, а подземелья и рейды рассчитаны на группы. Один персонаж осваивает все классы — переключаться можно в любой момент, просто сменив оружие.","en":"A story-driven MMORPG whose solo campaign rivals standalone JRPGs, with dungeons and raids built for groups. One character learns every class — switch at any moment simply by changing weapons."},
+    feats: {"ru":["Одна из самых высоко оценённых MMO в истории","Все профессии на одном персонаже","Дружелюбное комьюнити и система наставничества"],"en":["One of the highest-rated MMOs ever","All classes on a single character","A welcoming community with a mentor system"]},
   },
   {
     t: 'World of Warcraft', y: 2004, dev: 'Blizzard', gr: ['mmo', 'rpg'],
@@ -258,6 +328,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'mmo', 'pvpOnline'], pl: [1, 40], pf: ['pc'], pr: 'subscription', pv: 1000,
     len: [100, 5000], dif: 3, pace: 3, rat: 83, mood: ['progress', 'escape', 'story'], coopQ: 8,
     desc: { ru: 'Классика MMO: гильдии, рейды и чувство дома, которое возвращается каждые несколько лет.', en: 'The MMO classic: guilds, raids and a sense of home that keeps pulling you back.' },
+    about: {"ru":"MMORPG, определившая жанр: два враждующих альянса, десятки зон, подземелья и рейды на десятки игроков. Игра живёт и развивается больше двадцати лет, а вместе с классическими серверами доступна и её оригинальная версия.","en":"The MMORPG that defined the genre: two warring factions, dozens of zones, dungeons and large-scale raids. The game has kept evolving for over twenty years, and Classic servers preserve its original form."},
+    feats: {"ru":["Эталон жанра, на который равняются все MMO","Рейды и арены — соревновательный контент на годы","Классические серверы для путешествия в историю игры"],"en":["The genre benchmark every MMO measures itself against","Raids and arenas as years-long competitive content","Classic servers as a trip through the game’s history"]},
   },
   {
     t: 'Guild Wars 2', y: 2012, dev: 'ArenaNet', gr: ['mmo', 'rpg'],
@@ -265,6 +337,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'mmo', 'pvpOnline'], pl: [1, 50], pf: ['pc'], pr: 'free', pv: 0,
     len: [60, 2000], dif: 3, pace: 3, rat: 85, mood: ['escape', 'relax', 'progress'], coopQ: 9,
     desc: { ru: 'Самая дружелюбная MMO: патрульные события собирают случайных игроков вместе без обязательств.', en: 'The friendliest MMO: world events pull strangers together without any commitment.' },
+    about: {"ru":"MMORPG без обязательной подписки: базовая игра бесплатна, а мир построен на динамических событиях, которые происходят сами по себе. Вертикального прогресса почти нет — экипировка десятилетней давности остаётся актуальной.","en":"An MMORPG with no mandatory subscription: the base game is free, and the world runs on dynamic events that happen on their own. There is almost no gear treadmill — equipment from years ago stays relevant."},
+    feats: {"ru":["Без гонки экипировки и ежедневной обязаловки","Динамические события вовлекают всех игроков рядом","Бесплатный вход в огромный живой мир"],"en":["No gear race and no daily chores","Dynamic events pull in everyone nearby","Free entry into a huge living world"]},
   },
   {
     t: 'Path of Exile 2', y: 2024, dev: 'Grinding Gear Games', gr: ['rpg', 'action'],
@@ -272,6 +346,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 6], pf: ['pc', 'ps', 'xbox'], pr: 'free', pv: 0,
     len: [60, 1000], dif: 5, pace: 4, rat: 84, mood: ['progress', 'adrenaline', 'escape'], coopQ: 8,
     desc: { ru: 'Тёмное фэнтези и глубочайшая система билдов: по-настоящему хардкорный рогалик-APRG на годы.', en: 'Dark fantasy and the deepest build system around: a truly hardcore action RPG for years.' },
+    about: {"ru":"Следующая глава хак-энд-слэш-саги: семь классов, сотни камней навыков и пассивное древо, в котором легко заблудиться на неделю. Боёвка стала медленнее и вдумчивее, уклонение и контроль толпы теперь решают не меньше урона.","en":"The next chapter of the hack-and-slash saga: seven classes, hundreds of skill gems and a passive tree you can get lost in for a week. Combat is slower and more deliberate — dodging and crowd control matter as much as damage."},
+    feats: {"ru":["Глубочайшая система сборки персонажей в жанре","Бесплатная модель без платы за силу","Эндгейм с сотнями модификаторов сложности"],"en":["The deepest character-building system in the genre","A free model with nothing sold for power","An endgame with hundreds of difficulty modifiers"]},
   },
   {
     t: 'Diablo IV', y: 2023, dev: 'Blizzard', gr: ['rpg', 'action'],
@@ -279,6 +355,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [40, 500], dif: 3, pace: 4, rat: 81, mood: ['progress', 'adrenaline', 'escape'], coopQ: 8, gp: 1,
     desc: { ru: 'Мрачный Санктуарий, сезонные персонажи и кооп на четверых с общего экрана и по сети.', en: 'Grim Sanctuary, seasonal characters and four-player co-op online or on a shared screen.' },
+    about: {"ru":"Мрачный хак-энд-слэш с открытым миром: Санктуарий погружается в войну между ангелами и демонами, а пять классов вычищают подземелья и мировых боссов. Сезоны каждые три месяца перетряхивают механики и мету сборки.","en":"A dark open-world hack-and-slash: Sanctuary sinks into a war between angels and demons while five classes clear dungeons and world bosses. Seasons every few months shake up the mechanics and build meta."},
+    feats: {"ru":["Возвращение к мрачному тону классических Diablo","Открытый мир с общими событиями и боссами","Сезонная модель с регулярным новым контентом"],"en":["A return to the grim tone of classic Diablo","An open world with shared events and bosses","Seasonal model with regular fresh content"]},
   },
   {
     t: 'Counter-Strike 2', y: 2023, dev: 'Valve', gr: ['shooter'],
@@ -286,6 +364,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [2, 10], pf: ['pc'], pr: 'free', pv: 0,
     len: [20, 5000], dif: 4, pace: 5, rat: 83, mood: ['compete', 'adrenaline', 'progress'],
     desc: { ru: 'Эталон тактического шутера 5×5: один раунд — минута, одна ошибка — весь матч.', en: 'The benchmark 5v5 tactical shooter: one round is a minute, one mistake is the match.' },
+    about: {"ru":"Легендарный тактический шутер «пять на пять»: спецназ против террористов, раунды без возрождений и экономика, в которой каждая покупка винтовки — решение. Наследник CS:GO на движке Source 2 с обновлёнными картами и дымом.","en":"The legendary 5v5 tactical shooter: counter-terrorists versus terrorists, no respawns mid-round and an economy where every rifle purchase is a decision. The successor to CS:GO on Source 2, with rebuilt maps and volumetric smokes."},
+    feats: {"ru":["Эталон соревновательной стрельбы уже два десятилетия","Честная модель мастерства: решает только навык","Крупнейшая киберспортивная сцена в истории шутеров"],"en":["The benchmark of competitive shooting for two decades","A pure skill model: nothing but aim and brains wins rounds","The biggest esports scene in shooter history"]},
   },
   {
     t: 'Valorant', y: 2020, dev: 'Riot Games', gr: ['shooter', 'tactics'],
@@ -293,6 +373,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [2, 10], pf: ['pc', 'ps', 'xbox'], pr: 'free', pv: 0,
     len: [20, 3000], dif: 4, pace: 5, rat: 80, mood: ['compete', 'adrenaline'],
     desc: { ru: 'Тактический шутер с агентами и способностями: продуманный, но прощающий новичкам.', en: 'A tactical shooter with agents and abilities: thoughtful, yet forgiving to newcomers.' },
+    about: {"ru":"Тактический шутер «пять на пять» от Riot: точная стрельба в стиле CS сочетается с агентами, у каждого из которых свои способности — дымы, флешки, разведка и ультимейты. Побеждает раунд тот, кто лучше стреляет и умнее пользуется навыками.","en":"A 5v5 tactical shooter from Riot: CS-style gunplay meets agents with unique abilities — smokes, flashes, recon and ultimates. Rounds go to whoever shoots better and uses utility smarter."},
+    feats: {"ru":["Стрельба решает, способности — множитель","Регулярные обновления агентов и карт","Бесплатная игра с развитым киберспортом"],"en":["Gunplay decides, abilities multiply","Regular agent and map updates","Free to play with a thriving esport"]},
   },
   {
     t: 'Dota 2', y: 2013, dev: 'Valve', gr: ['strategy'],
@@ -300,6 +382,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [2, 10], pf: ['pc'], pr: 'free', pv: 0,
     len: [50, 5000], dif: 5, pace: 4, rat: 84, mood: ['compete', 'progress'],
     desc: { ru: 'Самая глубокая MOBA: порог входа огромен, зато потолок мастерства почти бесконечен.', en: 'The deepest MOBA: a huge learning curve and an almost endless skill ceiling.' },
+    about: {"ru":"Главная стратегия жанра MOBA: две команды по пять игроков сходятся на карте с тремя линиями, чтобы уничтожить трон противника. Больше ста героев с уникальными способностями и предметами создают, пожалуй, самый высокий потолок мастерства в жанре.","en":"The defining MOBA: two teams of five meet on a three-lane map to destroy the enemy’s Ancient. Over a hundred heroes with unique abilities and items create arguably the highest skill ceiling in the genre."},
+    feats: {"ru":["Все герои бесплатны с первого дня","Глубина, которой учатся годами","The International — один из крупнейших призовых фондов в киберспорте"],"en":["Every hero free from day one","Depth that takes years to master","The International — one of esports’ biggest prize pools"]},
   },
   {
     t: 'League of Legends', y: 2009, dev: 'Riot Games', gr: ['strategy'],
@@ -307,6 +391,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [2, 10], pf: ['pc', 'mobile'], pr: 'free', pv: 0,
     len: [50, 5000], dif: 4, pace: 4, rat: 76, mood: ['compete', 'progress'],
     desc: { ru: 'Главная MOBA мира: легко начать, сложно остановиться, и всегда найдётся друг для пары.', en: 'The world\u2019s biggest MOBA: easy to start, hard to stop, and there is always a friend for a duo queue.' },
+    about: {"ru":"Самая популярная MOBA мира: матчи на 25–35 минут, больше ста шестидесяти чемпионов и сцена, сделавшая жанр киберспортом мирового масштаба. Порог входа дружелюбнее, чем у конкурентов, а обновления выходят каждые две недели.","en":"The world’s most-played MOBA: 25–35-minute matches, over 160 champions and the scene that turned the genre into a global esport. The entry ramp is friendlier than its rivals, and patches ship every two weeks."},
+    feats: {"ru":["Быстрые матчи — легко вписать в вечер","Постоянная ротация чемпионов и событий","Гигантская киберспортивная экосистема"],"en":["Quick matches that fit into an evening","Constant champion and event rotation","A gigantic esports ecosystem"]},
   },
   {
     t: 'Apex Legends', y: 2019, dev: 'Respawn', gr: ['shooter', 'action'],
@@ -314,6 +400,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [1, 3], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'free', pv: 0,
     len: [20, 3000], dif: 4, pace: 5, rat: 80, mood: ['adrenaline', 'compete'], coopQ: 7,
     desc: { ru: 'Лучшая стрельба в королевской битве: трио, скольжение и ощущение, что каждый бой честный.', en: 'The best gunplay in battle royale: trios, sliding and fights that feel fair.' },
+    about: {"ru":"Командная королевская битва от первого лица: отряды по три «легенды» с уникальными способностями сражаются за последний выживший на сжимающейся карте. Движение — подкаты, зиплайны, двойные прыжки — само по себе удовольствие.","en":"A team-based first-person battle royale: squads of three “Legends” with unique abilities fight to be the last squad standing on a shrinking map. The movement — slides, ziplines, double jumps — is a joy in itself."},
+    feats: {"ru":["Лучший мувмент в жанре батл-роялей","Умная система пингов: играть можно вообще без микрофона","Харизматичные легенды с собственными историями"],"en":["The best movement in the battle-royale genre","A smart ping system: you can play with no mic at all","Charismatic Legends with their own stories"]},
   },
   {
     t: 'Overwatch 2', y: 2022, dev: 'Blizzard', gr: ['shooter', 'action'],
@@ -321,6 +409,8 @@ export const PART_A = [
     md: ['pvpOnline'], pl: [1, 10], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'free', pv: 0,
     len: [20, 2000], dif: 3, pace: 5, rat: 72, mood: ['adrenaline', 'compete', 'laugh'], coopQ: 7,
     desc: { ru: 'Героический шутер 5×5: быстрые раунды, яркие герои и ультимейты, меняющие ход боя.', en: 'A 5v5 hero shooter: quick rounds, colorful heroes and ultimates that flip a fight.' },
+    about: {"ru":"Командный герой-шутер «пять на пять»: танки, урон и поддержка с уникальными способностями сражаются за точки и грузы. Каждые пару недель появляется новый герой, а матчи держатся на комбинациях умений, а не только на меткости.","en":"A 5v5 team hero shooter: tanks, damage and support heroes with unique abilities fight over objectives and payloads. New heroes arrive every few weeks, and matches hinge on ability combos, not just aim."},
+    feats: {"ru":["У каждого героя свой жанр внутри шутера","Читаемый командный бой с понятными целями","Бесплатная модель с регулярными сезонами"],"en":["Every hero feels like their own genre inside the shooter","Readable team fights with clear objectives","Free-to-play with regular seasons"]},
   },
   {
     t: 'Rocket League', y: 2015, dev: 'Psyonix', gr: ['sports', 'racing'],
@@ -328,6 +418,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline', 'pvpLocal'], pl: [1, 8], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'free', pv: 0,
     len: [10, 3000], dif: 4, pace: 5, rat: 86, mood: ['compete', 'adrenaline', 'laugh'], coopQ: 9,
     desc: { ru: 'Футбол машинами: правила понятны за минуту, а мастерство растёт годами — идеальный кооп на двоих.', en: 'Car soccer: the rules take a minute to learn and years to master: perfect two-player co-op.' },
+    about: {"ru":"Футбол на машинах: реактивные автомобили гоняют гигантский мяч по арене, а физика превращает каждый удар в акробатику. Правила объясняются за минуту, а полёты и удары через себя игроки оттачивают годами.","en":"Soccer with rocket cars: boost-powered vehicles chase a giant ball around an arena, and the physics turn every hit into acrobatics. The rules take a minute to learn, and aerial shots take years to master."},
+    feats: {"ru":["Чистый навык: нет ни прокачки, ни доната силы","Матчи по пять минут — идеально для вечера","Огромная киберспортивная сцена"],"en":["Pure skill: no progression, no pay-for-power","Five-minute matches, perfect for an evening","A massive esports scene"]},
   },
   {
     t: 'Fall Guys', y: 2020, dev: 'Mediatonic', gr: ['party'],
@@ -335,6 +427,8 @@ export const PART_A = [
     md: ['pvpOnline', 'coopOnline'], pl: [1, 60], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'free', pv: 0,
     len: [5, 300], dif: 1, pace: 3, rat: 77, mood: ['laugh', 'relax'], coopQ: 8,
     desc: { ru: 'Полоса препятствий на 60 человек: нелепо, ярко и отлично подходит для вечера с друзьями.', en: 'A 60-player obstacle course: silly, colorful and perfect for an evening with friends.' },
+    about: {"ru":"Бесплатное телешоу из мини-игр: десятки неуклюжих персонажей бегут, падают и хватаются на полосе препятствий, пока не останется победитель. Раунды короткие, правила мгновенные, а проигрывать здесь смешнее, чем выигрывать.","en":"A free-to-play game show of minigames: dozens of clumsy characters run, tumble and grab across obstacle courses until one winner remains. Rounds are short, rules are instant, and losing is funnier than winning."},
+    feats: {"ru":["Вечеринка без подготовки: зашёл и играешь","Постоянные коллаборации с играми и сериалами","Кроссплатформенный мультиплеер"],"en":["A zero-setup party: jump in and play","Constant collaborations with games and shows","Cross-platform multiplayer"]},
   },
   {
     t: 'PUBG: Battlegrounds', y: 2017, dev: 'Krafton', gr: ['shooter', 'survival'],
@@ -342,5 +436,7 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'mobile'], pr: 'free', pv: 0,
     len: [20, 2000], dif: 4, pace: 4, rat: 70, mood: ['adrenaline', 'tense', 'compete'], coopQ: 8,
     desc: { ru: 'Королевская битва с самой нервной посадкой: один выстрел решает всё, а друзья прикрывают.', en: 'The most nerve-wracking battle royale drop: one bullet decides everything while friends cover you.' },
+    about: {"ru":"Игра, популяризировавшая королевские битвы: сто человек высаживаются на остров, собирают оружие и экипировку и сражаются до последнего выжившего, пока зона сжимается. Темп реалистичный: стрельба с баллистикой, звук шагов и засады решают всё.","en":"The game that popularised the battle royale: a hundred players drop on an island, scavenge weapons and gear and fight to the last one standing as the zone closes. The pace is realistic — bullet ballistics, footsteps and ambushes decide everything."},
+    feats: {"ru":["Прародитель жанра королевских битв","Напряжённые финалы, где каждый звук имеет значение","Десятки карт и режимов на любой темп"],"en":["The originator of the battle-royale genre","Tense finales where every sound matters","Dozens of maps and modes for any pace"]},
   },
 ];
