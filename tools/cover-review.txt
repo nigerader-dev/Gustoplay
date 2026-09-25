@@ -3,7 +3,7 @@
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
 
 
-# ---- check:covers (exit=0) ----
+# ---- check:covers (exit=1) ----
 
 > gustoplay@1.0.0 check:covers
 > node tools/check-covers.mjs
@@ -18,4 +18,8 @@
   …проверено 350/430
   …проверено 400/430
 
-✅ Все 437 обложек на месте и отвечают.
+❌ Битые URL (1):
+  • football-manager-2024 (Football Manager 2024): HTTP 500 — https://store-images.s-microsoft.com/image/apps.40979.14065042993795106.481a54a3-96a1-4426-85ce-63c7ba75f93d.8ef9448a-29bf-449a-a73e-dec0e35cfdaf
+Замените запись в tools/steam-overrides.json и перезапустите covers:resolve.
+
+❌ Обложек в порядке: 436/437.
