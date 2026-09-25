@@ -9,7 +9,9 @@ import { GAMES } from '../js/catalog/index.js';
 
 const CONCURRENCY = 8;
 
-async function isAlive(url) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function probeOnce(url) {
   const opts = { signal: AbortSignal.timeout(20000) };
   try {
     let res = await fetch(url, { ...opts, method: 'HEAD', redirect: 'follow' });
@@ -19,6 +21,14 @@ async function isAlive(url) {
   } catch (error) {
     return error.message;
   }
+}
+
+/** Один повтор после паузы: сеть и CDN иногда «икуют» (429/503/таймаут). */
+async function isAlive(url) {
+  const problem = await probeOnce(url);
+  if (!problem) return null;
+  await sleep(2000);
+  return probeOnce(url);
 }
 
 const missing = GAMES.filter((g) => !g.cover);
