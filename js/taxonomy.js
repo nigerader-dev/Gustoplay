@@ -142,7 +142,7 @@ export const TAGS = {
   friendlier2: { ru: 'Специально для двоих', en: 'Made for two', group: 'multi' },
   lobby4:      { ru: 'Отлично на 3–4',    en: 'Great for 3–4',   group: 'multi' },
   lobbybig:    { ru: 'Для 5+ игроков',    en: 'Great for 5+',    group: 'multi' },
-  mmosocial:   { ru: 'Постоянный онлайн-мир', en: 'Persistent online world', group: 'multi' },
+  mmosocial:   { ru: 'MMO-мир',              en: 'Persistent MMO world', group: 'multi' },
   crosplay:    { ru: 'Кроссплей',         en: 'Cross-play',      group: 'multi' },
 
   // --- стиль и подача ---
