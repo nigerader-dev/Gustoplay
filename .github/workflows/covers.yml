@@ -65,38 +65,14 @@ jobs:
 
       - name: Коммит результата
         id: commit
-        env:
-          BRANCH: ${{ github.ref_name }}
-        run: |
-          git config user.name "gustoplay-bot"
-          git config user.email "gustoplay-bot@users.noreply.github.com"
-          git add js/catalog/steam-covers.js tools/cover-review.log
-          if git diff --cached --quiet; then
-            echo "::notice::covers-commit: изменений нет — обложки уже сопоставлены"
-            echo "pushed=yes" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          if ! git commit -m "chore(covers): официальные арты каталога (авто-резолвер)" > /tmp/commit.log 2>&1; then
-            echo "::error::covers-commit: git commit упал: $(head -c 400 /tmp/commit.log)"
-            echo "pushed=no" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          echo "::notice::covers-commit: создан $(git rev-parse --short HEAD)"
-          if git push origin "HEAD:refs/heads/${BRANCH}" > /tmp/push.log 2>&1; then
-            echo "::notice::covers-commit: запушено в ${BRANCH}"
-            echo "pushed=yes" >> "$GITHUB_OUTPUT"
-          else
-            echo "::warning::covers-commit: пуш в ветку недоступен (токен только на чтение) — данные уйдут аннотациями"
-            tail -3 /tmp/push.log || true
-            echo "pushed=no" >> "$GITHUB_OUTPUT"
-          fi
+        run: node tools/commit-covers.mjs
 
-      # Пуш в ветку может быть недоступен (токен только на чтение) — тогда
-      # результат уходит аннотациями и вкатывается коммитом снаружи.
-      # Шаг не роняет прогон: доставка данных важнее статуса.
+      # Результат в любом случае уходит аннотациями: пуш в ветку может быть
+      # недоступен (токен репозитория только на чтение), тогда маппинг
+      # вкатывается коммитом снаружи через tools/collect-cover-data.mjs.
       - name: Доставка данных через аннотации
-        run: |
-          node tools/emit-cover-data.mjs tools/cover-review.log
+        if: always()
+        run: node tools/emit-cover-data.mjs tools/cover-review.log
 
       - name: Отчёт по сомнительным совпадениям
         if: always()
