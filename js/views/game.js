@@ -22,6 +22,11 @@ export function render(ctx) {
   const { reasons } = scoreGame(game, profile, weights);
   const mark = profile.marks?.[game.slug]?.status || null;
 
+  // Полное описание: 2–4 предложения (поле about) + буллеты «за что любят» (feats).
+  // Пока about заполняется батчами, запасной вариант — короткое описание из карточек.
+  const aboutText = game.about?.[lang] || game.about?.ru || game.desc?.[lang] || '';
+  const feats = (game.feats?.[lang]?.length ? game.feats[lang] : game.feats?.ru || []).slice(0, 4);
+
   const moodReasons = (reasons.find((r) => r.type === 'mood')?.ids || []).map((id) => tl(MOODS, id));
   const tagReasons = (reasons.find((r) => r.type === 'tag')?.ids || []).map((id) => tl(TAGS, id));
   const genreReasons = (reasons.find((r) => r.type === 'genre')?.ids || []).map((id) => tl(GENRES, id));
@@ -57,7 +62,11 @@ export function render(ctx) {
           <span>${game.y}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
           <span class="dot-sep">•</span>${priceLabel(game)}
         </div>
-        <p class="game-desc">${esc(game.desc?.[lang] || '')}</p>
+        <p class="game-desc">${esc(aboutText)}</p>
+        ${feats.length ? `<div class="game-feats">
+          <strong>${icon('sparkles')} ${esc(t('game.features'))}</strong>
+          <ul>${feats.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
+        </div>` : ''}
 
         <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
 
@@ -110,7 +119,11 @@ export function render(ctx) {
 export function jsonLd(ctx) {
   const game = byId(ctx.params.slug);
   if (!game) return null;
-  return {
+  const lang = getLang();
+  const about = game.about?.[lang] || game.about?.ru || game.desc?.[lang] || '';
+  const feats = game.feats?.[lang]?.length ? game.feats[lang] : [];
+  const fullDescription = feats.length ? `${about} ${feats.map((f) => `• ${f}`).join(' ')}` : about;
+  const data = {
     '@context': 'https://schema.org',
     '@type': 'VideoGame',
     name: game.t,
@@ -120,8 +133,12 @@ export function jsonLd(ctx) {
     gamePlatform: game.platforms.map((id) => tl(PLATFORMS, id)),
     applicationCategory: 'Game',
     aggregateRating: { '@type': 'AggregateRating', ratingValue: game.rating / 10, bestRating: 10, ratingCount: 1200 },
-    description: game.desc?.[getLang()] || game.desc?.ru,
+    description: fullDescription || game.desc?.[lang] || game.desc?.ru,
   };
+  // официальная обложка — в JSON-LD, чтобы поисковики показывали реальный арт
+  if (game.cover) data.image = game.cover;
+  if (game.steamId) data.url = `https://store.steampowered.com/app/${game.steamId}/`;
+  return data;
 }
 
 export const title = (ctx) => {
@@ -131,5 +148,11 @@ export const title = (ctx) => {
 
 export const description = (ctx) => {
   const game = byId(ctx?.params?.slug);
-  return game ? game.desc?.[getLang()] || game.desc?.ru : '';
+  if (!game) return '';
+  // meta description: полное описание, укороченное до читаемых ~180 символов
+  const lang = getLang();
+  const full = game.about?.[lang] || game.about?.ru || game.desc?.[lang] || game.desc?.ru || '';
+  if (full.length <= 200) return full;
+  const cut = full.slice(0, 197);
+  return `${cut.slice(0, Math.max(80, cut.lastIndexOf(' ')))}…`;
 };

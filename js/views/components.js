@@ -77,10 +77,11 @@ export const meters = (game) => `
 
 export function coverImage(game, cls = 'cover-img') {
   const generated = coverDataUri(game);
-  // По умолчанию рисуем собственную обложку. Если владелец сайта положил официальные арты
-  // в /covers (FEATURES.realCovers = true), показываем их, а сгенерированную используем как запас.
+  // Основной источник — официальный арт магазина (сопоставление в js/catalog/steam-covers.js).
+  // Если владелец положил локальные арты в /covers/<slug>.jpg (FEATURES.realCovers),
+  // они в приоритете. Сгенерированная обложка — запасная: битая ссылка, офлайн, игра без арта.
   const src = game.cover || (FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated);
-  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(generated)}" data-steam-title="${esc(game.t)}" alt="${esc(game.t)}" loading="lazy" width="480" height="640"
+  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900"
     onerror="this.onerror=null;this.src=this.dataset.fallback">`;
 }
 
@@ -248,8 +249,12 @@ export const sectionTitle = (title, subtitle = '') => `
 export const storeLinks = (game) => {
   const steam = `${game.links.steam}${SITE.affiliates.steam}`;
   const ig = `${game.links.instantGaming}${SITE.affiliates.instantGaming}`;
+  const official = game.links.official
+    ? `<a class="btn btn-ghost" href="${esc(game.links.official)}" target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t('game.official'))}</a>`
+    : '';
   return `<div class="stores">
     <a class="btn btn-ghost" href="${steam}" target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>
+    ${official}
     <a class="btn btn-ghost" href="${ig}" target="_blank" rel="noopener nofollow">${icon('tag')} ${esc(t('game.instant'))}</a>
   </div>`;
 };

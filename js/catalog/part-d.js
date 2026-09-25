@@ -6,6 +6,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [30, 60], dif: 4, pace: 3, rat: 94, mood: ['story', 'feel', 'think', 'adrenaline'], gp: 1,
     desc: { ru: 'Художница стирает людей по годам, а отряд идёт её остановить: главная сенсация 2025 года.', en: 'A Paintress erases people by age and an expedition marches to stop her: the breakout hit of 2025.' },
+    about: {"ru":"Пошаговая RPG французской студии о мире, где художница каждый год стирает из реальности всех старше определённого возраста, — и экспедиции, идущей её остановить. Активные действия в пошаговом бою и одна из самых обсуждаемых игр 2025 года.","en":"A turn-based RPG from a French studio about a world where a Paintress erases everyone older than a certain age each year — and the expedition sent to stop her. Real-time actions inside turn-based combat and one of the most talked-about games of 2025."},
+    feats: {"ru":["Пошаговый бой с таймингами, который держит в тонусе","Визуальный стиль Прекрасной эпохи, не похожий ни на что","Сюжет с финалом, о котором спорят месяцами"],"en":["Turn-based combat with timings that keeps you sharp","A Belle Époque visual style unlike anything else","A story whose ending people debate for months"]},
   },
   {
     t: 'Hollow Knight: Silksong', y: 2025, dev: 'Team Cherry', gr: ['metroidvania', 'platformer', 'action'],
@@ -13,6 +15,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1500,
     len: [30, 60], dif: 5, pace: 5, rat: 92, mood: ['adrenaline', 'explore', 'story'], gp: 1,
     desc: { ru: 'Хорнет против нового королевства: быстрее, злее и воздушнее первой части.', en: 'Hornet against a new kingdom: faster, meaner and airier than the first game.' },
+    about: {"ru":"Долгожданное продолжение культовой метроидвании: Хорнет, охотница из первой части, прокладывает путь вверх по королевству Фарлун. Быстрее, акробатичнее и требовательнее оригинала — новый герой меняет всю физику боя.","en":"The long-awaited sequel to the cult metroidvania: Hornet, huntress from the first game, claws her way up through the kingdom of Pharloom. Faster, more acrobatic and more demanding than the original — a new hero changes the entire combat feel."},
+    feats: {"ru":["Одна из самых ожидаемых инди-игр десятилетия — вышла","Хорнет радикально меняет темп игры","Королевство, построенное для исследования"],"en":["One of the most anticipated indie games of the decade — now out","Hornet radically changes the pace","A kingdom built to be explored"]},
   },
   {
     t: 'Kingdom Come: Deliverance II', y: 2025, dev: 'Warhorse Studios', gr: ['rpg', 'adventure', 'simulator'],
@@ -20,6 +24,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [60, 150], dif: 4, pace: 2, rat: 88, mood: ['story', 'explore', 'think'],
     desc: { ru: 'Чешское средневековье без магии: меч, репутация и запоминание рецептов зелий.', en: 'Medieval Bohemia without magic: swordplay, reputation and memorizing potion recipes.' },
+    about: {"ru":"Продолжение реалистичной средневековой саги: сын кузнеца Индржих продолжает путь в Богемии пятнадцатого века, где даже перекусить и выспаться — часть выживания. Историческая достоверность, бои на мечах и жизнь без маркеров.","en":"The sequel to the realistic medieval saga: blacksmith’s son Henry continues his journey through fifteenth-century Bohemia, where even eating and sleeping are part of survival. Historical authenticity, sword fighting and a life without quest markers."},
+    feats: {"ru":["Средневековье без магии и драконов — честное","Репутация и внешний вид реально влияют на мир","Вдвое больше первой части по масштабу"],"en":["A medieval world without magic or dragons — honest","Reputation and appearance actually shape the world","Twice the scale of the first game"]},
   },
   {
     t: 'STALKER 2: Heart of Chornobyl', y: 2024, dev: 'GSC Game World', gr: ['shooter', 'survival', 'horror'],
@@ -27,6 +33,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'xbox'], pr: 'full', pv: 3990,
     len: [40, 100], dif: 4, pace: 3, rat: 74, mood: ['tense', 'explore', 'scare'], gp: 1,
     desc: { ru: 'Зона, аномалии и мутанты: выживание, где патроны считают, а погода убивает.', en: 'The Zone, anomalies and mutants: survival where you count bullets and weather kills.' },
+    about: {"ru":"Возвращение в Зону отчуждения: аномалии, артефакты и группировки в бесшовном открытом мире на движке Unreal Engine 5. Сюжет ветвится от решений, а А-Жизнь заставляет фракции жить своей жизнью, пока вы заняты другим.","en":"The return to the Exclusion Zone: anomalies, artefacts and factions in a seamless open world on Unreal Engine 5. The story branches with your decisions, and A-Life keeps factions living their own lives while you’re busy elsewhere."},
+    feats: {"ru":["Атмосфера Зоны, которую ждали пятнадцать лет","Бесшовный мир вместо карт-уровней","Выборы меняют судьбы группировок и финал"],"en":["The Zone atmosphere fans waited fifteen years for","A seamless world instead of level maps","Choices change faction fates and the ending"]},
   },
   {
     t: 'Warhammer 40,000: Space Marine 2', y: 2024, dev: 'Saber Interactive', gr: ['shooter', 'action'],
@@ -34,6 +42,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 6], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [15, 200], dif: 4, pace: 5, rat: 83, mood: ['adrenaline', 'progress', 'adrenaline'], coopQ: 9,
     desc: { ru: 'Титус против тысяч тиранидов: мясной кооп, где на экране реально сотни врагов.', en: 'Titus against thousands of Tyranids: meaty co-op with genuinely hundreds of enemies on screen.' },
+    about: {"ru":"Капитан Тит в мясорубке против тиранидов: орды врагов на экране, цепные мечи и болтеры, и зрелищность уровня лучших экшенов десятилетия. Кампания, кооператив на троих и мультиплеер в мире Вахи.","en":"Captain Titus in a meat grinder against the Tyranids: hordes of enemies on screen, chainswords and bolters, and spectacle on par with the best action games of the decade. Campaign, three-player co-op and multiplayer in the 40K universe."},
+    feats: {"ru":["Тираниды на весь экран — зрелище и вызов","Лучший экшен по вселенной Вархаммера","Кооперативная кампания на троих"],"en":["Tyranids filling the screen — spectacle and challenge","The best action game set in the Warhammer universe","A three-player co-op campaign"]},
   },
   {
     t: 'Peak', y: 2025, dev: 'Aggro Crab', gr: ['survival', 'party', 'adventure'],
@@ -41,6 +51,8 @@ export const PART_D = [
     md: ['coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'cheap', pv: 400,
     len: [10, 100], dif: 3, pace: 3, rat: 90, mood: ['laugh', 'adrenaline'], coopQ: 10,
     desc: { ru: 'Восхождение на гору с друзьями, где голод, холод и ваша же верёвка убивают чаще скал.', en: 'Climbing a mountain with friends where hunger, cold and your own rope kill more often than rocks.' },
+    about: {"ru":"Кооперативное скалолазание от создателей A Short Hike и Landfall: отряд скаутов карабкается на процедурную гору, страхуя друг друга верёвками и гаками. Падения смешные, вершина — общая, каждый забег уникален.","en":"Co-op climbing from the creators of A Short Hike and Landfall: a squad of scouts scales a procedural mountain, belaying each other with ropes and hooks. Falls are hilarious, the summit is shared, and every run is unique."},
+    feats: {"ru":["Кооператив, где без команды вершину не взять","Гора генерируется заново каждый день","Физика верёвок создаёт и трагедии, и комедию"],"en":["Co-op where the summit demands teamwork","The mountain regenerates every day","Rope physics create both tragedy and comedy"]},
   },
   {
     t: 'The Alters', y: 2025, dev: '11 bit studios', gr: ['survival', 'adventure', 'simulator'],
@@ -48,6 +60,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [20, 40], dif: 3, pace: 2, rat: 83, mood: ['story', 'think', 'create'], gp: 1,
     desc: { ru: 'Разные версии себя самого как рабочие смены: выживание, менеджмент и разговоры с собой.', en: 'Different versions of yourself as shift workers: survival, management and talking to yourself.' },
+    about: {"ru":"Выживание на планете, где солнце убивает: Ян — единственный выживший после катастрофы — создаёт альтернативные версии самого себя, каждая с другой судьбой и профессией. База, ресурсы и разговоры с собственными «я» о прожитых жизнях.","en":"Survival on a planet where the sun kills: Jan, the sole survivor of a crash, creates alternate versions of himself, each with a different life path and profession. Base-building, resources and conversations with your own selves about the lives you lived."},
+    feats: {"ru":["Каждый альт — это вы, но с другой судьбой","Менеджмент базы и психологии экипажа в одном","Эмоциональные решения без правильных ответов"],"en":["Every alter is you with a different fate","Base management and crew psychology in one","Emotional decisions with no right answers"]},
   },
   {
     t: 'Schedule I', y: 2025, dev: 'TVGS', gr: ['simulator', 'sandbox', 'strategy'],
@@ -55,6 +69,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'cheap', pv: 900,
     len: [20, 200], dif: 3, pace: 2, rat: 89, mood: ['progress', 'create', 'laugh'], coopQ: 9,
     desc: { ru: 'Криминальная империя от одного гаража: менеджмент, торговля и кооп с друзьями.', en: 'A criminal empire from a single garage: management, trading and co-op with friends.' },
+    about: {"ru":"Симулятор нелегального предпринимателя в соло-режиме и кооперативе: производите, улучшайте и продавайте «товар», выстраивая сеть от угла до города. Механики бизнес-симулятора, доведённые до комедийного абсурда.","en":"An illicit-entrepreneur simulator in solo and co-op: produce, refine and sell your “product”, building a network from one street corner to the whole city. Business-sim mechanics pushed into comedic absurdity."},
+    feats: {"ru":["Кооперативная бизнес-империя с друзьями","Производственные цепочки как в настоящем тайкуне","Всенародный инди-хит с миллионами игроков"],"en":["A co-op business empire with friends","Production chains like a real tycoon game","A grassroots indie hit with millions of players"]},
   },
   {
     t: 'Marvel Rivals', y: 2024, dev: 'NetEase', gr: ['shooter', 'action'],
@@ -62,6 +78,8 @@ export const PART_D = [
     md: ['pvpOnline'], pl: [1, 12], pf: ['pc', 'ps', 'xbox'], pr: 'free', pv: 0,
     len: [20, 1000], dif: 3, pace: 5, rat: 78, mood: ['adrenaline', 'compete', 'laugh'], coopQ: 8,
     desc: { ru: 'Героический шутер 6×6 с разрушаемыми локациями: самый весёлый хаос для компании.', en: 'A 6v6 hero shooter with destructible maps: the most fun chaos for a group.' },
+    about: {"ru":"Командный герой-шутер по вселенной Марвел: шесть на шесть, разрушаемые карты и связки супергероев, где Доктор Стрэндж и Железный человек комбинируют суперспособности. Бесплатный, живой и быстро обновляемый.","en":"A Marvel team hero shooter: six versus six, destructible maps and hero synergies where Doctor Strange and Iron Man combine ultimates. Free-to-play, alive and fast-updating."},
+    feats: {"ru":["Связки суперспособностей между героями","Разрушаемость меняет поле боя","Бесплатный вход и постоянные сезоны"],"en":["Ultimate synergies between heroes","Destruction reshapes the battlefield","Free entry with constant seasons"]},
   },
   {
     t: 'Escape from Tarkov', y: 2017, dev: 'Battlestate Games', gr: ['shooter', 'survival', 'simulator'],
@@ -69,6 +87,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 5], pf: ['pc'], pr: 'full', pv: 3500,
     len: [50, 1000], dif: 5, pace: 2, rat: 74, mood: ['tense', 'progress', 'adrenaline'], coopQ: 8,
     desc: { ru: 'Экстракшн-шутер без жалости: потерять снаряжение за 40 минут рейда — обычное дело.', en: 'A ruthless extraction shooter: losing 40 minutes of gear in a raid is just Tuesday.' },
+    about: {"ru":"Хардкорный экстракшен-шутер: рейды в город Тарков, где смерть означает потерю всего вынесенного снаряжения. Реалистичная баллистика, медицина по частям тела и экономика, где каждый патрон имеет цену.","en":"A hardcore extraction shooter: raids into the city of Tarkov, where death means losing all your gear. Realistic ballistics, body-part medicine and an economy where every bullet has a price."},
+    feats: {"ru":["Ставки настоящие: снаряжение теряется навсегда","Глубочайшая оружейная кастомизация в жанре","Адреналин выживания с хабаром на вес золота"],"en":["Real stakes: gear is lost for good","The deepest weapon customisation in the genre","Survival adrenaline with loot worth its weight in gold"]},
   },
   {
     t: 'Hunt: Showdown 1896', y: 2018, dev: 'Crytek', gr: ['shooter', 'horror', 'survival'],
@@ -76,6 +96,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 3], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 2490,
     len: [30, 500], dif: 5, pace: 3, rat: 80, mood: ['tense', 'adrenaline'], coopQ: 9,
     desc: { ru: 'Болота Луизианы, охотники на монстров и другие игроки, которые охотятся на вас.', en: 'Louisiana swamps, monster hunters and other players hunting you instead.' },
+    about: {"ru":"Экстракшен-хоррор в Луизиане 1896 года: охотники выслеживают монстра-босса, пока другие охотники выслеживают их. Звук решает всё — хруст ветки может стоить жизни, а дуэль на дальнем сарае становится историей на неделю.","en":"An extraction horror in 1896 Louisiana: hunters track a monster boss while other hunters track them. Sound decides everything — a snapped twig can cost your life, and a duel across a barn becomes a story for a week."},
+    feats: {"ru":["Лучший звуковой дизайн в шутерах","Напряжение от того, что охотятся и на вас","Атмосфера южной готики без аналогов"],"en":["The best sound design in shooters","Tension from being hunted yourself","Southern-gothic atmosphere without equal"]},
   },
   {
     t: 'Ready or Not', y: 2023, dev: 'VOID Interactive', gr: ['shooter', 'tactics', 'simulator'],
@@ -83,6 +105,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline'], pl: [1, 5], pf: ['pc'], pr: 'full', pv: 2990,
     len: [20, 200], dif: 5, pace: 3, rat: 82, mood: ['tense', 'adrenaline', 'think'], coopQ: 10,
     desc: { ru: 'SWAT-операции с приказами и заложниками: чистый тактический кооп без беготни.', en: 'SWAT operations with orders and hostages: pure tactical co-op without the running and gunning.' },
+    about: {"ru":"Тактический шутер про отряд спецназа: штурмы зданий, переговоры и правила применения силы, где неверный выстрел портит отчёт. Реалистичный темп, планирование и кооператив, в котором дисциплина важнее реакции.","en":"A tactical SWAT shooter: building breaches, negotiations and rules of engagement where a wrong shot ruins the report. Realistic pacing, planning and co-op where discipline beats reflexes."},
+    feats: {"ru":["Кооператив, где общаются даже жестами","Каждая миссия решается десятком способов","Напряжение реального штурма без аркады"],"en":["Co-op where even gestures communicate","Every mission solvable a dozen ways","The tension of a real breach without arcade shortcuts"]},
   },
   {
     t: 'GTFO', y: 2021, dev: '10 Chambers', gr: ['shooter', 'horror', 'tactics'],
@@ -90,6 +114,8 @@ export const PART_D = [
     md: ['coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'mid', pv: 1990,
     len: [30, 200], dif: 5, pace: 3, rat: 84, mood: ['tense', 'adrenaline'], coopQ: 10,
     desc: { ru: 'Хардкорный кооп для четырёх: один шумный выстрел убивает всю команду.', en: 'Hardcore four-player co-op where one loud shot kills the whole team.' },
+    about: {"ru":"Кооперативный хоррор-шутер для четвёрки: комплекс под землёй, спящие монстры и задания, где один выстрел без согласования будит весь этаж. Хардкор, в котором команда выживает только синхронной работой.","en":"A four-player co-op horror shooter: an underground complex, sleeping monsters and objectives where one unsynchronised shot wakes the whole floor. Hardcore that only survives on perfectly synced teamwork."},
+    feats: {"ru":["Командная дисциплина как главная механика","Атмосфера подземного кошмара","Терминалы и загадки уровня квестов-головоломок"],"en":["Team discipline as the core mechanic","An underground nightmare atmosphere","Terminals and puzzles worthy of a quest game"]},
   },
   {
     t: 'Risk of Rain 2', y: 2020, dev: 'Hopoo Games', gr: ['roguelike', 'shooter', 'action'],
@@ -97,6 +123,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1200,
     len: [20, 300], dif: 4, pace: 5, rat: 90, mood: ['adrenaline', 'progress'], coopQ: 9, gp: 1,
     desc: { ru: 'Сложность растёт каждую минуту, а билды становятся абсурдными: кооп-рогалик про математику.', en: 'Difficulty scales every minute and builds become absurd: a co-op roguelike about math.' },
+    about: {"ru":"Рогалик-шутер, переехавший в 3D: высадка на планету, сотни предметов, которые стакаются до безумия, и сложность, растущая каждую минуту. Один забег — ураган из взрывов, дождя урона и «последний лунный портал».","en":"A roguelike shooter that moved into 3D: land on a planet, stack hundreds of items into madness, and face difficulty rising every minute. One run is a hurricane of explosions, damage rain and “one last lunar portal”."},
+    feats: {"ru":["Стаки предметов превращают героя в стихийное бедствие","Кооператив до четырёх на одной орбите хаоса","Короткие забеги с бесконечной реиграбельностью"],"en":["Item stacks turn your hero into a natural disaster","Four-player co-op in shared orbit of chaos","Short runs with endless replayability"]},
   },
   {
     t: 'Remnant II', y: 2023, dev: 'Gunfire Games', gr: ['shooter', 'rpg', 'action'],
@@ -104,6 +132,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline'], pl: [1, 3], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 2490,
     len: [30, 200], dif: 4, pace: 4, rat: 85, mood: ['adrenaline', 'progress'], coopQ: 9, gp: 1,
     desc: { ru: 'Соулслайк с пушками и процедурными мирами: идеально проходится втроём.', en: 'A soulslike with guns and procedural worlds: perfect to clear as a trio.' },
+    about: {"ru":"«Дарк соулс с пушками» в кооперативе до троих: процедурные миры, секретные классы и боссы, которые находятся только если знать, где искать. Каждая генерация мира прячет контент, который видят не все.","en":"“Dark Souls with guns” in co-op for three: procedural worlds, hidden classes and bosses you only find if you know where to look. Every world generation hides content not everyone will ever see."},
+    feats: {"ru":["Процедурные миры с уникальными секретами","Кооперативный соулслайк — редкий зверь","Билды из классов и реликвий на сотни часов"],"en":["Procedural worlds with unique secrets","A co-op soulslike — a rare beast","Class and relic builds for hundreds of hours"]},
   },
   {
     t: 'Tom Clancy\u2019s Rainbow Six Siege', y: 2015, dev: 'Ubisoft', gr: ['shooter', 'tactics'],
@@ -111,6 +141,8 @@ export const PART_D = [
     md: ['pvpOnline', 'coopOnline'], pl: [1, 10], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1200,
     len: [30, 2000], dif: 5, pace: 4, rat: 80, mood: ['compete', 'adrenaline', 'think'], coopQ: 8,
     desc: { ru: 'Разрушаемые стены и одна жизнь на раунд: тактический шутер с самым высоким порогом входа.', en: 'Destructible walls and one life per round: the tactical shooter with the steepest learning curve.' },
+    about: {"ru":"Тактический шутер пять на пять, где стены ломаются, потолки простреливаются, а информация решает исход: операторы с гаджетами превращают каждый раунд в шахматы на тридцать секунд. Киберспортивная дисциплина с десятилетней поддержкой.","en":"A five-versus-five tactical shooter where walls break, ceilings are angles, and information decides rounds: operators with gadgets turn every round into thirty-second chess. An esports discipline with a decade of support."},
+    feats: {"ru":["Разрушаемость как тактический инструмент","Каждый оператор меняет правила раунда","Навык растёт годами — глубина не кончается"],"en":["Destruction as a tactical tool","Every operator changes the rules of the round","Skill that grows for years — the depth never ends"]},
   },
   {
     t: 'Halo Infinite', y: 2021, dev: '343 Industries', gr: ['shooter', 'action'],
@@ -118,6 +150,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 24], pf: ['pc', 'xbox'], pr: 'free', pv: 0,
     len: [20, 500], dif: 3, pace: 4, rat: 78, mood: ['adrenaline', 'compete', 'explore'], coopQ: 9, gp: 1,
     desc: { ru: 'Мастер Чиф, крюк-кошка и лучшая стрельба в серии: кампания вчетвером и бесплатный мультиплеер.', en: 'Master Chief, a grappling hook and the best shooting in the series: four-player campaign, free multiplayer.' },
+    about: {"ru":"Мастер Чиф возвращается на кольцо Зета-Гало: открытый мир с аутпостами, крюк-кошка, меняющая каждый бой, и мультиплеер, вернувший серию к классике. Кампания про спасение кольца и старый добрый «тридцать секунд фана».","en":"Master Chief returns to Zeta Halo: an open world with outposts, a grappling hook that changes every fight, and multiplayer that brought the series back to its roots. A campaign about saving the ring and good old “thirty seconds of fun”."},
+    feats: {"ru":["Гарпушин-крюк — лучшая игрушка в серии","Мультиплеер бесплатен и честен","Классический геймплей Хало в открытом формате"],"en":["The grappleshot — the best toy in the series","Multiplayer is free and fair","Classic Halo gameplay in an open format"]},
   },
   {
     t: 'Gears 5', y: 2019, dev: 'The Coalition', gr: ['shooter', 'action'],
@@ -125,6 +159,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'coopLocal', 'pvpOnline'], pl: [1, 6], pf: ['pc', 'xbox'], pr: 'mid', pv: 1990,
     len: [15, 100], dif: 3, pace: 5, rat: 84, mood: ['adrenaline', 'story'], coopQ: 9, gp: 1,
     desc: { ru: 'Укрытия, мясорубка и поездка на санях по льду: классический кооп-шутер на двоих-троих.', en: 'Cover, gore and a sled ride across ice: the classic two-to-three player co-op shooter.' },
+    about: {"ru":"Кейт Диаз ищет правду о своей семье и о рое, пока отряд прорубается через ледяные и пустынные земли Сера. Мясистый шутер с укрытиями, кооперативом на троих и режимами от орды до тактического «Улья».","en":"Kait Diaz searches for the truth about her family and the Swarm while the squad cuts across Sera’s ice and desert lands. A meaty cover shooter with three-player co-op and modes from Horde to the tactical Escape."},
+    feats: {"ru":["Эталон шутера с укрытиями","Кооперативная кампания и орды на выживание","Разнообразные режимы в одном пакете"],"en":["The benchmark cover shooter","Co-op campaign and survival hordes","Modes for every mood in one package"]},
   },
   {
     t: 'Titanfall 2', y: 2016, dev: 'Respawn', gr: ['shooter', 'action'],
@@ -132,6 +168,8 @@ export const PART_D = [
     md: ['solo', 'pvpOnline'], pl: [1, 16], pf: ['pc', 'ps', 'xbox'], pr: 'cheap', pv: 900,
     len: [6, 60], dif: 3, pace: 5, rat: 90, mood: ['adrenaline', 'story'],
     desc: { ru: 'Паркур, пилот и ТИТАН BT-7274: лучшая короткая кампания в шутерах за десятилетие.', en: 'Parkour, a pilot and BT-7274: the best short shooter campaign in a decade.' },
+    about: {"ru":"Пилот и его титан в лучшей кампании шутеров десятилетия: паркур пилота на стене и крыше, прыжки во времени и уровень «Эффект и Причина», который стал легендой. Мультиплеер быстрый, а дружба с машиной — настоящая.","en":"A pilot and their Titan in the best shooter campaign of the decade: wall-running parkour, time-shifts and the level “Effect and Cause”, which became a legend. Fast multiplayer and a genuinely felt bond with a machine."},
+    feats: {"ru":["Одна из лучших одиночных кампаний в шутерах","Паркур, который ощущается как полёт","Финал, ради которого стоило играть"],"en":["One of the greatest single-player campaigns in shooters","Parkour that feels like flying","A finale worth the whole game"]},
   },
   {
     t: 'Metro Exodus', y: 2019, dev: '4A Games', gr: ['shooter', 'survival', 'horror'],
@@ -139,6 +177,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1990,
     len: [15, 30], dif: 4, pace: 3, rat: 85, mood: ['story', 'tense', 'explore'],
     desc: { ru: 'Паровоз через постсоветскую пустошь: редкая игра, где тишина страшнее перестрелки.', en: 'A train across a post-Soviet wasteland: rare in making silence scarier than gunfire.' },
+    about: {"ru":"Артём покидает туннели московского метро и пересекает Россию на поезде «Аврора»: уровни-песочницы, времена года и дефицит патронов как валюты. Атмосфера постапокалипсиса, в которой слышно дыхание фильтров противогаза.","en":"Artyom leaves the Moscow metro tunnels and crosses Russia aboard the Aurora train: sandbox levels, seasons and bullets as scarce currency. A post-apocalyptic atmosphere where you can hear your gas-mask filters breathing."},
+    feats: {"ru":["Путешествие через всю страну на поезде","Уровни-песочницы вместо коридоров","Детали быта выживших, в которые веришь"],"en":["A cross-country journey by train","Sandbox levels instead of corridors","Survivor details you genuinely believe"]},
   },
   {
     t: 'Fallout 4', y: 2015, dev: 'Bethesda', gr: ['rpg', 'shooter', 'adventure'],
@@ -146,6 +186,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1500,
     len: [40, 300], dif: 3, pace: 3, rat: 84, mood: ['explore', 'progress', 'create'],
     desc: { ru: 'Пустошь, поселения и радио: строить базы и искать историю в каждой записке.', en: 'The wasteland, settlements and radio: build bases and find stories in every note.' },
+    about: {"ru":"Единственный выживший из убежища 111 ищет сына в Бостоне после ядерной войны: строительство поселений, компаньоны, сотни квестов и пустошь, где каждая радиостанция и каждый магазинчик хранят историю.","en":"The Sole Survivor of Vault 111 searches for their son in post-nuclear Boston: settlement building, companions, hundreds of quests and a wasteland where every radio station and shop keeps a story."},
+    feats: {"ru":["Строительство поселений из сотен деталей","Компаньоны с характерами и историями","Моды делают игру бесконечной"],"en":["Settlement building from hundreds of parts","Companions with personalities and stories","Mods make the game endless"]},
   },
   {
     t: 'Fallout 76', y: 2018, dev: 'Bethesda', gr: ['rpg', 'shooter', 'mmo'],
@@ -153,6 +195,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'mmo', 'pvpOnline'], pl: [1, 24], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1900,
     len: [50, 1000], dif: 3, pace: 3, rat: 72, mood: ['explore', 'create', 'progress'], coopQ: 9, gp: 1,
     desc: { ru: 'Аппалачия онлайн: дружелюбный кооп-выживальщик, где незнакомцы дарят вам стимпаки.', en: 'Appalachia online: a friendly co-op survival where strangers gift you stimpaks.' },
+    about: {"ru":"Онлайновый Фоллаут в Аппалачии: стройте базу в любом месте, выполняйте события с другими жителями и собирайте легенды в мире, который стал живым после десятков обновлений. Публичные команды — до четырёх выживших.","en":"An online Fallout in Appalachia: build a base anywhere, join events with other dwellers and farm legendaries in a world made alive by dozens of updates. Public teams of up to four survivors."},
+    feats: {"ru":["Кооператив в знакомой вселенной до четырёх игроков","Базы, события и сезонные квесты","Игра выросла в лучшую сторону в разы после релиза"],"en":["Four-player co-op in the familiar universe","Bases, events and seasonal quests","The game improved dramatically after launch"]},
   },
   {
     t: 'Dying Light 2: Stay Human', y: 2022, dev: 'Techland', gr: ['action', 'survival', 'horror'],
@@ -160,6 +204,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 2490,
     len: [25, 100], dif: 3, pace: 4, rat: 78, mood: ['adrenaline', 'explore'], coopQ: 9,
     desc: { ru: 'Паркур по крышам города зомби: ночью выходить не стоит, но именно это интересно.', en: 'Parkour across a zombie city\u2019s rooftops: you should not go out at night, which is exactly the appeal.' },
+    about: {"ru":"Паркур по крышам заражённого города, где ночью охотятся заражённые, а днём за территорию воюют фракции. Решения меняют облик города: кому отдать водонапорную башню — та часть города и расцветёт.","en":"Parkour across the rooftops of an infected city where the infected hunt at night and factions fight over territory by day. Decisions reshape the city: hand the water tower to a faction and their side of town blooms."},
+    feats: {"ru":["Паркур как главный способ передвижения","Ночь как отдельная игра с другими правилами","Кооператив до четырёх выживших"],"en":["Parkour as the main way to move","Night as a separate game with its own rules","Co-op for up to four survivors"]},
   },
   {
     t: 'Days Gone', y: 2019, dev: 'Bend Studio', gr: ['action', 'adventure', 'horror'],
@@ -167,6 +213,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps'], pr: 'mid', pv: 2490,
     len: [40, 80], dif: 3, pace: 3, rat: 76, mood: ['story', 'tense', 'explore'],
     desc: { ru: 'Мотобайк, орды фриков и медленное открытие истории: недооценённый зомби-опенворлд.', en: 'A motorbike, hordes of freakers and a slow burn story: an underrated open-world zombie game.' },
+    about: {"ru":"Байкер Дикон Сейнт-Итон выживает в Орегоне после пандемии: орды по пятьсот заражённых, байк, который нужно заправлять и чинить, и история о потере и надежде, раскрывающаяся не сразу.","en":"Biker Deacon St. John survives post-pandemic Oregon: hordes of five hundred freakers, a bike that needs fuel and repairs, and a story about loss and hope that unfolds slowly."},
+    feats: {"ru":["Орды в сотни врагов, на которые нужно охотиться с планом","Байк как второй герой истории","Недооценённый сюжет, набирающий силу к середине"],"en":["Hundreds-strong hordes you hunt with a plan","The bike as the second hero of the story","An underrated plot that grows on you"]},
   },
   {
     t: 'Sifu', y: 2022, dev: 'Sloclap', gr: ['action', 'fighting'],
@@ -174,6 +222,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1990,
     len: [10, 30], dif: 5, pace: 5, rat: 85, mood: ['adrenaline', 'progress'],
     desc: { ru: 'Кунг-фу про месть: каждая смерть старит вас, а учиться драться придётся по-настоящему.', en: 'Kung fu revenge where every death ages you: you genuinely have to learn to fight.' },
+    about: {"ru":"Кунг-фу мести: герой стареет на годы после каждой смерти, и к финалу может выйти стариком против банд. Бой построен на структуре, парированиях и использовании окружения, а каждая арена — головоломка из врагов.","en":"A kung-fu revenge tale: the hero ages years with every death and may face the final gang as an old master. Combat is built on structure, parries and using the environment, and every arena is a puzzle made of enemies."},
+    feats: {"ru":["Смерть = старение: цена ошибки видна на лице героя","Бой, в котором хочется стать мастером","Арены-головоломки с десятком способов зачистки"],"en":["Death means ageing: the cost of failure shows on your face","Combat that makes you want mastery","Puzzle arenas with a dozen ways to clear them"]},
   },
   {
     t: 'Hi-Fi Rush', y: 2023, dev: 'Tango Gameworks', gr: ['action', 'rhythm', 'platformer'],
@@ -181,6 +231,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'mid', pv: 1990,
     len: [10, 20], dif: 3, pace: 5, rat: 89, mood: ['adrenaline', 'laugh'], gp: 1,
     desc: { ru: 'Экшен в ритме рока: всё вокруг подстраивается под бит, даже ваши удары.', en: 'Rock-opera action where the world syncs to the beat, including your punches.' },
+    about: {"ru":"Экшен, в котором весь мир бьётся в ритм музыки: удары, выстрелы и даже вентиляторы двигаются под саундтрек. История о парне с музыкальным плеером в груди против корпорации — и одна из самых стильных игр десятилетия.","en":"An action game where the whole world beats to the music: hits, shots and even fans move to the soundtrack. The story of a guy with a music player in his chest against a megacorp — and one of the most stylish games of the decade."},
+    feats: {"ru":["Всё в мире синхронизировано с музыкой","Стиль рисованного мультфильма в 3D","Боссы как клипы на любимые треки"],"en":["Everything in the world syncs to the music","Cartoon style rendered in 3D","Boss fights staged like music videos"]},
   },
   {
     t: 'Beat Saber', y: 2019, dev: 'Beat Games', gr: ['rhythm', 'party'],
@@ -188,6 +240,8 @@ export const PART_D = [
     md: ['solo', 'coopLocal', 'pvpLocal'], pl: [1, 2], pf: ['pc', 'ps'], pr: 'mid', pv: 1990,
     len: [10, 500], dif: 3, pace: 5, rat: 91, mood: ['adrenaline', 'progress', 'relax'],
     desc: { ru: 'Рубить блоки в такт музыке: лучший VR-опыт и полноценная кардиотренировка.', en: 'Slashing blocks on beat: the best VR experience and a genuine cardio workout.' },
+    about: {"ru":"Рубите летящие блоки световыми мечами под музыку в виртуальной реальности: тело само понимает правила, а рекорды ставятся быстрее, чем успеваешь устать. Самая известная VR-игра планеты с тысячами пользовательских треков.","en":"Slash flying blocks with lightsabers to music in virtual reality: your body understands the rules instantly, and records fall before you get tired. The most famous VR game on the planet with thousands of custom tracks."},
+    feats: {"ru":["VR-вход для всей семьи за пять минут","Кардио-тренировка, которая не ощущается как спорт","Кастомные треки на любой вкус"],"en":["A five-minute VR entry point for the whole family","Cardio that never feels like exercise","Custom tracks for any taste"]},
   },
   {
     t: 'Crypt of the NecroDancer', y: 2015, dev: 'Brace Yourself Games', gr: ['rhythm', 'roguelike', 'puzzle'],
@@ -195,6 +249,8 @@ export const PART_D = [
     md: ['solo', 'coopLocal'], pl: [1, 2], pf: ['pc', 'ps', 'switch', 'mobile'], pr: 'cheap', pv: 600,
     len: [15, 200], dif: 5, pace: 4, rat: 87, mood: ['adrenaline', 'progress'], coopQ: 8,
     desc: { ru: 'Ходить можно только в ритм: хардкорный рогалик для тех, у кого есть чувство такта.', en: 'You may only move on beat: a hardcore roguelike for the rhythmically gifted.' },
+    about: {"ru":"Рогалик в ритм музыки: враги двигаются под бит, и вы должны ходить в такт — иначе урон мимо. Отличная музыка Дэнни Барановского, кооператив на двоих и режим на весь саундтрек, записанный под игру.","en":"A rhythm roguelike: enemies move to the beat, and you must step in time — or miss your attacks. A great Danny Baranowsky score, two-player co-op and modes built around the soundtrack composed for the game."},
+    feats: {"ru":["Рогалик + ритм-игра = жанр сам по себе","Кооператив на одном экране","Спин-офф с Каденцией и сюжетом"],"en":["Roguelike + rhythm game = a genre of its own","Same-screen co-op","Story spin-offs in the same universe"]},
   },
   {
     t: 'Life is Strange Remastered', y: 2022, dev: 'Deck Nine', gr: ['adventure', 'mystery'],
@@ -202,6 +258,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'mid', pv: 1500,
     len: [12, 20], dif: 1, pace: 2, rat: 83, mood: ['story', 'feel', 'think', 'story'],
     desc: { ru: 'Перемотка времени, школьная драма и очень тяжёлые решения: история, к которой возвращаются.', en: 'Time rewinds, high school drama and very heavy choices: a story people return to.' },
+    about: {"ru":"Макс возвращается в Аркадия-Бэй и обнаруживает, что может перематывать время: исправлять слова, спасать людей и выбирать, кого спасти нельзя. История о дружбе, взрослении и цене выбора под инди-саундтрек.","en":"Max returns to Arcadia Bay and discovers she can rewind time: fixing words, saving people and choosing who cannot be saved. A story about friendship, growing up and the cost of choice, set to an indie soundtrack."},
+    feats: {"ru":["Перемотка времени как механика диалогов","История, которую пересказывают друзьям","Саундтрек, который хочется забрать с собой"],"en":["Time rewind as a dialogue mechanic","A story you retell to friends","A soundtrack you want to keep"]},
   },
   {
     t: 'The Walking Dead: The Telltale Definitive Series', y: 2019, dev: 'Telltale', gr: ['adventure', 'horror'],
@@ -209,6 +267,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1990,
     len: [30, 60], dif: 1, pace: 2, rat: 84, mood: ['story', 'feel', 'think'],
     desc: { ru: 'История Ли и Клементины: сериал, который заставил взрослых людей плакать в 4 утра.', en: 'The story of Lee and Clementine: the series that made grown adults cry at 4 am.' },
+    about: {"ru":"Все сезоны истории Ли и Клементины в одном издании: апокалипсис, в котором главное не зомби, а люди и решения, которые нельзя отменить. Игра, сделавшая фразу «он это запомнит» легендарной.","en":"All seasons of Lee and Clementine’s story in one edition: an apocalypse where people matter more than zombies, and decisions cannot be undone. The game that made the line “he will remember that” legendary."},
+    feats: {"ru":["Одна из лучших историй в играх вообще","Решения, о которых жалеешь годами","Четыре сезона и эпилог в одном издании"],"en":["One of the greatest stories in games","Choices you regret for years","Four seasons and an epilogue in one edition"]},
   },
   {
     t: 'Steins;Gate Elite', y: 2019, dev: 'Mages', gr: ['visual', 'adventure', 'mystery'],
@@ -216,6 +276,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'switch', 'mobile'], pr: 'mid', pv: 1990,
     len: [30, 50], dif: 2, pace: 1, rat: 92, mood: ['story', 'think'],
     desc: { ru: 'Микроволновка, которая пишет в прошлое: лучшая визуальная новелла про путешествия во времени.', en: 'A microwave that texts the past: the best visual novel about time travel.' },
+    about: {"ru":"Визуальная новелла о самозваном «безумном учёном», случайно создавшем машину времени из микроволновки: от комедии в лаборатории до триллера о цене изменения прошлого. Версия Elite использует кадры аниме-адаптации.","en":"A visual novel about a self-styled “mad scientist” who accidentally builds a time machine from a microwave: from lab comedy to a thriller about the price of changing the past. Elite uses footage from the anime adaptation."},
+    feats: {"ru":["Одна из лучших историй о путешествиях во времени","Персонажи, которых невозможно не полюбить","Финальные главы держат как триллер"],"en":["One of the best time-travel stories anywhere","Characters you cannot help but love","Final chapters that grip like a thriller"]},
   },
   {
     t: 'Slime Rancher 2', y: 2022, dev: 'Monomi Park', gr: ['simulator', 'sandbox', 'adventure'],
@@ -223,6 +285,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'xbox', 'ps'], pr: 'mid', pv: 1990,
     len: [20, 100], dif: 1, pace: 2, rat: 84, mood: ['relax', 'explore', 'create'],
     desc: { ru: 'Ранчо слизней на радужном острове: бесконечно милое и абсолютно без стресса.', en: 'A slime ranch on a rainbow island: endlessly cute and completely stress-free.' },
+    about: {"ru":"Продолжение самого обаятельного фермерского симулятора: на радужном острове собирайте слаймов, стройте загоны и скрещивайте виды, пока пейзаж переливается всеми оттенками. Уют в концентрированном виде.","en":"The sequel to the most charming ranch sim: on a rainbow island, collect slimes, build corrals and crossbreed species while the scenery shimmers in every colour. Cosiness in concentrated form."},
+    feats: {"ru":["Слаймы — самый милый игровой ресурс","Остров, который хочется исследовать весь","Игра-антистресс без таймеров и давления"],"en":["Slimes are the cutest resource in games","An island you want to explore completely","An anti-stress game with no timers or pressure"]},
   },
   {
     t: 'Dave the Diver', y: 2023, dev: 'Mintrocket', gr: ['adventure', 'simulator', 'rpg'],
@@ -230,6 +294,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'switch', 'mobile'], pr: 'mid', pv: 1990,
     len: [25, 60], dif: 2, pace: 3, rat: 90, mood: ['relax', 'laugh', 'progress'],
     desc: { ru: 'Днём — дайвинг и рыба, вечером — суши-бар: смесь жанров, которая работает идеально.', en: 'Diving and fishing by day, running a sushi bar by night: a genre mashup that simply works.' },
+    about: {"ru":"Днём Дэйв ныряет в Голубую дыру за рыбой и тайнами, вечером управляет суши-баром: лов, меню, персонал и бесконечные сюрпризы. Игра, которая каждый час притворяется новым жанром и ни разу не повторяется.","en":"By day Dave dives the Blue Hole for fish and secrets; by night he runs a sushi bar: catch, menu, staff and endless surprises. A game that plays a new genre every hour and never repeats itself."},
+    feats: {"ru":["Дайвинг + менеджмент ресторана = идеальный цикл","Каждая глава приносит новую механику","Юмор и стиль, которые невозможно скопировать"],"en":["Diving + restaurant management = a perfect loop","Every chapter introduces a new mechanic","Humour and style nobody can copy"]},
   },
   {
     t: 'Cult of the Lamb', y: 2022, dev: 'Massive Monster', gr: ['roguelike', 'simulator', 'action'],
@@ -237,6 +303,8 @@ export const PART_D = [
     md: ['solo', 'coopLocal'], pl: [1, 2], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'mid', pv: 1500,
     len: [15, 60], dif: 3, pace: 3, rat: 85, mood: ['laugh', 'create', 'adrenaline'], coopQ: 8,
     desc: { ru: 'Культ милых зверьков с тёмной изнанкой: рогалик плюс менеджмент культовой секты.', en: 'A cult of cute animals with a dark side: a roguelike plus cult management.' },
+    about: {"ru":"Агнец, спасённый от жертвоприношения, строит собственный культ: прихожане, проповеди и жертвенные ритуалы днём, а вечером — забеги по подземельям за ресурсами. Милое искусство с чёрным юмором.","en":"A lamb saved from sacrifice builds its own cult: followers, sermons and rituals by day, roguelike dungeon runs for resources by night. Cute art with dark humour."},
+    feats: {"ru":["Два жанра в одном стильном флаконе","Прихожане со своими характерами и судьбами","Чёрный юмор под самой милой картинкой"],"en":["Two genres in one stylish package","Followers with personalities and fates","Dark humour under the cuttiest art"]},
   },
   {
     t: 'Kenshi', y: 2018, dev: 'Lo-Fi Games', gr: ['rpg', 'sandbox', 'survival', 'strategy'],
@@ -244,6 +312,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc'], pr: 'mid', pv: 1500,
     len: [50, 1000], dif: 5, pace: 1, rat: 84, mood: ['create', 'progress', 'escape'],
     desc: { ru: 'Вы никто в жестоком мире: можно стать рабом, торговцем или королём — игра не подскажет.', en: 'You are nobody in a brutal world: become a slave, a trader or a king with no guidance.' },
+    about: {"ru":"Песочница в постапокалиптическом мире, где вы никто: не избранный, не герой — просто жертва обстоятельств, которая может стать кем угодно. База, отряд, торговля или рабство — мир не подстраивается под игрока.","en":"A sandbox in a post-apocalyptic world where you are nobody: not the chosen one, not a hero — just a victim of circumstance who can become anything. Base, squad, trade or slavery — the world never bends to the player."},
+    feats: {"ru":["Свобода, которой нет больше нигде","Мир, существующий без вашего участия","Истории падения и взлёта, придуманные вами самими"],"en":["Freedom found nowhere else","A world that exists without you","Rise-and-fall stories you invent yourself"]},
   },
   {
     t: 'eFootball', y: 2021, dev: 'Konami', gr: ['sports'],
@@ -251,6 +321,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline', 'pvpLocal'], pl: [1, 22], pf: ['pc', 'ps', 'xbox', 'mobile'], pr: 'free', pv: 0,
     len: [10, 5000], dif: 3, pace: 4, rat: 45, mood: ['compete', 'progress'], coopQ: 7,
     desc: { ru: 'Бесплатный футбол: матчи по 6 минут, ежедневные награды и постоянный прогресс состава.', en: 'Free football: six-minute matches, daily rewards and constant squad progression.' },
+    about: {"ru":"Бесплатный футбольный симулятор от Konami — наследник Pro Evolution Soccer: обновляемый движок, лицензии клубов и режим «Команда мечты», который собирают миллионы игроков. Кроссплатформа между всеми устройствами.","en":"Konami’s free-to-play football sim — the successor to Pro Evolution Soccer: an evolving engine, club licences and the Dream Team mode played by millions. Cross-platform between every device."},
+    feats: {"ru":["Бесплатный вход и кроссплей","Наследие механик PES","Живые сезоны с обновлениями составов"],"en":["Free entry and crossplay","The PES mechanical legacy","Live seasons with roster updates"]},
   },
   {
     t: 'Clash of Clans', y: 2012, dev: 'Supercell', gr: ['strategy', 'mmo'],
@@ -258,6 +330,8 @@ export const PART_D = [
     md: ['solo', 'coopOnline', 'pvpOnline'], pl: [1, 50], pf: ['mobile'], pr: 'free', pv: 0,
     len: [50, 5000], dif: 3, pace: 1, rat: 74, mood: ['progress', 'create', 'compete'], coopQ: 8,
     desc: { ru: 'Кланы, войны и вечные апгрейды: тайм-гейтинг как жанр, в который играют 10 лет.', en: 'Clans, wars and endless upgrades: time-gating as a genre, going strong for a decade.' },
+    about: {"ru":"Мобильная классика: стройте деревню, укрепляйте её пушками и стенами и ходите в набеги на соседей вместе с кланом. Десять лет развития, клановые войны и лига легенд прямо в телефоне.","en":"A mobile classic: build your village, fortify it with cannons and walls, and raid neighbours together with your clan. Ten years of development, clan wars and a legends league right on your phone."},
+    feats: {"ru":["Эталон жанра мобильных стратегий","Клановые войны как командный спорт","Короткие сессии, длинная прогрессия"],"en":["The benchmark of mobile strategy","Clan wars as a team sport","Short sessions, long progression"]},
   },
   {
     t: 'Arknights', y: 2019, dev: 'Hypergryph', gr: ['strategy', 'tactics', 'rpg'],
@@ -265,6 +339,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['mobile', 'pc'], pr: 'free', pv: 0,
     len: [50, 1000], dif: 4, pace: 2, rat: 86, mood: ['think', 'collect', 'story'],
     desc: { ru: 'Тактическая гача-стратегия: продуманные карты, отличный мрачный сюжет и можно без денег.', en: 'A tactical gacha strategy: thoughtful maps, a strong grim story and fully playable for free.' },
+    about: {"ru":"Тактическая tower defense RPG в мире после катастрофы: оперативники разных классов встают на линии обороны, а история о заражённых Ориджиниумом рассказана на уровне визуальных новелл. Мобильная игра с неожиданно глубоким лором.","en":"A tactical tower-defense RPG set after a catastrophe: operators of different classes hold the defence lines, while the story of those infected with Oripathy is told at visual-novel level. A mobile game with unexpectedly deep lore."},
+    feats: {"ru":["Тактика с настоящим позиционированием","Лор, который читают как книгу","Арт-дирекшн уровня журнальных обложек"],"en":["Tactics with real positioning","Lore people read like a book","Art direction at magazine-cover level"]},
   },
   {
     t: 'Deltarune', y: 2025, dev: 'Toby Fox', gr: ['rpg', 'adventure'],
@@ -272,6 +348,8 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'switch'], pr: 'mid', pv: 1000,
     len: [15, 40], dif: 3, pace: 3, rat: 93, mood: ['story', 'feel', 'laugh', 'think'],
     desc: { ru: 'Наследник Undertale: три главы уже вышли, и они лучше, чем все ожидали.', en: 'The heir to Undertale: three chapters are out and they exceed every expectation.' },
+    about: {"ru":"Новая игра Тоби Фокса после Undertale: Крис и Сьюзи падают в тёмные миры, где бой можно пройти, не убив никого. Бесплатные главы, фирменный юмор и музыка, которая застревает в голове с первой темы.","en":"Toby Fox’s game after Undertale: Kris and Susie fall into dark worlds where every battle can be won without killing anyone. Free chapters, signature humour and music that sticks from the very first theme."},
+    feats: {"ru":["Бой, где пощада интереснее атаки","Бесплатный доступ к главам","Вселенная, связанная с Undertale тонкими нитями"],"en":["Combat where mercy beats attack","Chapters available for free","A world tied to Undertale by subtle threads"]},
   },
   {
     t: 'The Plucky Squire', y: 2024, dev: 'All Possible Futures', gr: ['adventure', 'platformer', 'puzzle'],
@@ -279,5 +357,7 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 2490,
     len: [8, 12], dif: 1, pace: 2, rat: 80, mood: ['relax', 'story', 'laugh'], gp: 1,
     desc: { ru: 'Герой книги выпрыгивает со страницы в 3D: семейное приключение, где всё время меняются стили.', en: 'A book hero jumps off the page into 3D: a family adventure that keeps switching styles.' },
+    about: {"ru":"Сквайр Джот живёт в книге приключений, пока злодей не выгоняет его на стол: герой прыгает между страницами и реальным миром, а жанры меняются от платформера до головоломки. Ода книгам, в которую играют вместе с детьми.","en":"Squire Jot lives inside a storybook until the villain throws him onto the desk: the hero leaps between pages and the real world, and genres shift from platformer to puzzle. An ode to books that families play together."},
+    feats: {"ru":["Переход между 2D-страницами и 3D-столом как механика","Игра, которую обожают дети и родители","Стиль ожившей иллюстрированной книги"],"en":["Jumping between 2D pages and the 3D desk as a mechanic","A game kids and parents both adore","The style of a living illustrated book"]},
   },
 ];

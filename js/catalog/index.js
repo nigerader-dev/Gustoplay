@@ -15,7 +15,14 @@
  *   mood  — настроения (id из MOODS) ← верхний слой квиза
  *   coopQ — 0..10, насколько хороша игра именно в компании (если применимо)
  *   gp / psp — есть ли в Game Pass / PS Plus каталоге
- *   desc  — { ru, en } одно предложение (используется в карточках и SEO-описаниях)
+ *   desc  — { ru, en } одно предложение (карточки, анонсы, SEO)
+ *   about — { ru, en } полное описание: 2–4 предложения (страница игры и JSON-LD)
+ *   feats — { ru: [...], en: [...] } 2–4 буллета «особенности / за что любят»
+ *
+ * Обложки: официальный арт магазинов. Сопоставление «игра → Steam AppID»
+ * хранится в ./steam-covers.js (генерирует tools/resolve-steam-covers.mjs,
+ * ручные правки — в tools/steam-overrides.json). Игры вне Steam берутся из
+ * того же файла с пометкой источника (GOG / Epic / официальный сайт).
  */
 import { GENRES, TAGS, MODES, PLATFORMS, MOODS, PRICE } from '../taxonomy.js';
 import { PART_A } from './part-a.js';
@@ -66,6 +73,9 @@ function normalize(g) {
     rating: g.rat ?? 75,
     moods: [...new Set((g.mood || []).filter((m) => MOODS[m]))],
     desc: g.desc || { ru: '', en: '' },
+    // полное описание и буллеты: появятся у всех игр; пока поле может отсутствовать
+    about: g.about || null,
+    feats: { ru: g.feats?.ru || [], en: g.feats?.en || [] },
     coopQ: g.coopQ ?? (modes.includes('coopOnline') || modes.includes('coopLocal') ? 6 : 0),
     // теги, которые генерируются автоматически (пригодятся для SEO-страниц и фильтров)
     allTags: [
@@ -75,8 +85,13 @@ function normalize(g) {
     ],
     // удобные поисковые ссылки (без партнёрских id — их подставляет config.js)
     links: {
-      steam: `https://store.steampowered.com/search/?term=${encodeURIComponent(g.t)}`,
+      // если известен Steam AppID (steam-covers.js) — ведём прямо на страницу игры
+      steam: g.steamId
+        ? `https://store.steampowered.com/app/${g.steamId}/`
+        : `https://store.steampowered.com/search/?term=${encodeURIComponent(g.t)}`,
       instantGaming: `https://www.instant-gaming.com/en/search/?q=${encodeURIComponent(g.t)}`,
+      // официальный сайт/страница в магазине — для игр, которых нет в Steam
+      official: g.url || null,
     },
   };
 }
@@ -101,6 +116,11 @@ export function validate() {
     if (!g.moods.length) problems.push(`${g.t}: нет валидных настроений`);
     if (g.players[0] > g.players[1]) problems.push(`${g.t}: pl перепутаны`);
     if (!g.desc.ru || !g.desc.en) problems.push(`${g.t}: нет описания`);
+    if (g.about && (!g.about.ru || !g.about.en)) problems.push(`${g.t}: about заполнен не на обоих языках`);
+    for (const lang of ['ru', 'en']) {
+      const feats = g.feats?.[lang] || [];
+      if (feats.length && (feats.length < 2 || feats.length > 4)) problems.push(`${g.t}: feats.${lang} должно быть 2–4 буллета`);
+    }
   }
   if (GAMES.length < 300) problems.push(`Слишком мало игр: ${GAMES.length} (ожидаем 300+)`);
   return problems;

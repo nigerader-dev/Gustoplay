@@ -248,19 +248,21 @@ writeFileSync(join(dist, 'ads.txt'), adsTxt);
 // Cloudflare Pages: заголовки безопасности берём из корневого _headers (там CSP, HSTS,
 // X-Frame-Options и правила кэша). Раньше сборка писала свой урезанный вариант и затирала их.
 const headersSrc = join(root, '_headers');
+// Имена CSS/JS без fingerprint — immutable-кэш здесь оставлять нельзя:
+// старый релиз залипнет на edge и пользователи не увидят обновления.
 const fallbackHeaders = `/*\
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
 
 /js/*
-  Cache-Control: public, max-age=31536000, immutable
-/css/*
-  Cache-Control: public, max-age=31536000, immutable
-/covers/*
-  Cache-Control: public, max-age=604800
-/*.html
   Cache-Control: public, max-age=0, must-revalidate
+/css/*
+  Cache-Control: public, max-age=0, must-revalidate
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/sw.js
+  Cache-Control: no-cache
 `;
 if (existsSync(headersSrc)) {
   cpSync(headersSrc, join(dist, '_headers'));

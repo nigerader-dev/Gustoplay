@@ -58,7 +58,12 @@ check('есть кнопка старта подбора', count('a[href="#/quiz
 check('есть блоки быстрого старта', count('.quick') >= 6);
 check('отрисованы карточки игр', count('.game-card') >= 3, `${count('.game-card')} шт.`);
 check('есть рекламный слот (заглушка)', count('.ad-slot, .ad-mock') >= 1);
-check('обложки генерируются как SVG', count('img[src^="data:image/svg"]') > 0);
+// основная обложка — официальный арт (а до его появления — сгенерированный SVG);
+// у каждой картинки обязан запасной SVG на случай битой ссылки/офлайна
+const covers = window.document.querySelectorAll('img.cover-img');
+check('обложки игр с запасным SVG-фолбэком', covers.length > 0
+  && [...covers].every((img) => String(img.dataset.fallback || '').startsWith('data:image/svg')));
+check('обложки ленивые и асинхронные', [...covers].every((img) => img.getAttribute('loading') === 'lazy' && img.getAttribute('decoding') === 'async'));
 
 console.log('\n1b. Ссылки шапки (регресс: в PATH-режиме работают, а не уходят в hash)');
 {

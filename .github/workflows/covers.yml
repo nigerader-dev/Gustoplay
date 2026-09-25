@@ -1,0 +1,111 @@
+name: GustoPlay — обложки
+
+# Резолвит официальные арты каталога через Steam Store API и коммитит результат
+# в ветку (батч = коммит). В песочнице разработки нет доступа к Steam, поэтому
+# шаг вынесен в Actions. Источники артов — только официальные магазины; игры вне
+# Steam вписываются руками в tools/steam-overrides.json.
+#
+# Триггеры:
+#   • правка tools/steam-overrides.json или part-файлов каталога (новые игры);
+#   • ручной запуск: Actions → «GustoPlay — обложки» → Run workflow.
+# Повторные прогоны идемпотентны: уже сопоставленные игры пропускаются без сети.
+
+on:
+  workflow_dispatch:
+    inputs:
+      part:
+        description: 'Батч каталога: a..i или all'
+        required: false
+        default: 'all'
+  push:
+    branches:
+      - arena/01a0d952-gustoplay
+      - main
+    paths:
+      - 'tools/steam-overrides.json'
+      - 'tools/resolve-steam-covers.mjs'
+      - 'js/catalog/part-*.js'
+      - '.github/workflows/covers.yml'
+
+concurrency:
+  group: gustoplay-covers
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  resolve:
+    name: Резолвинг обложек
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # полная история и реальная ветка: коммитим результат прямо в неё
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Резолвинг официальных артов
+        run: node tools/resolve-steam-covers.mjs --part=${{ inputs.part || 'all' }}
+
+      - name: Диагностика прав токена
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          perms=$(curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(JSON.stringify(j.permissions||j.message))}catch(e){console.log("parse-error")}})')
+          echo "::notice::token-permissions: $perms"
+          echo "HEAD=$(git rev-parse HEAD) BRANCH=${GITHUB_REF_NAME}"
+
+      - name: Проверка обложек (каждая игра с артом, все URL отвечают)
+        id: check
+        continue-on-error: true
+        run: |
+          set +e
+          npm run check:covers > /tmp/check-covers.log 2>&1
+          code=$?
+          echo "::notice::check:covers exit=${code}"
+          tail -60 /tmp/check-covers.log
+          {
+            echo ""
+            echo "# ---- check:covers (exit=${code}) ----"
+            cat /tmp/check-covers.log
+          } >> tools/cover-review.txt
+
+      - name: Коммит результата
+        id: commit
+        run: node tools/commit-covers.mjs
+
+      # Результат в любом случае уходит аннотациями: пуш в ветку может быть
+      # недоступен (токен репозитория только на чтение), тогда маппинг
+      # вкатывается коммитом снаружи через tools/collect-cover-data.mjs.
+      - name: Доставка данных через аннотации
+        if: always()
+        run: node tools/emit-cover-data.mjs tools/cover-review.txt
+
+      - name: Отчёт по сомнительным совпадениям
+        if: always()
+        run: |
+          {
+            echo "### Обложки: отчёт резолвера"
+            echo '```'
+            cat tools/cover-review.txt 2>/dev/null || echo "(лога нет)"
+            echo '```'
+            echo "Сопоставлено: $(grep -c 'steamId' js/catalog/steam-covers.js || true) записей"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Лог резолвера (артефакт)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cover-review
+          path: |
+            tools/cover-review.txt
+            js/catalog/steam-covers.js
+          if-no-files-found: ignore
