@@ -356,6 +356,13 @@ document.addEventListener('click', (event) => {
       render(false);
       break;
     }
+    case 'toggle-played': {
+      // чекбокс «показывать сыгранное»: checked уже обновлён браузером, сохраняем и пересчитываем
+      const p = getProfile();
+      setMeta({ lastPreset: { ...(p.meta?.lastPreset || {}), includePlayed: Boolean(target.checked) } });
+      render(false);
+      break;
+    }
     case 'reset-all': {
       if (!confirm(t('profile.reset.confirm'))) return;
       resetProfile();

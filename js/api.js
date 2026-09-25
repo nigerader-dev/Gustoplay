@@ -201,7 +201,7 @@ export async function renderGoogleButton(container, onCredential) {
     cancel_on_tap_outside: true,
   });
   globalThis.google.accounts.id.renderButton(container, {
-    theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with', locale: 'ru', width: 280,
+    theme: 'outline', size: 'large', shape: 'pill', text: 'continue_with', locale: getLang(), width: 280,
   });
   return true;
 }

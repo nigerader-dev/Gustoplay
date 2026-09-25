@@ -419,6 +419,8 @@ export const STRINGS = {
     'results.title': 'Your games',
     'results.subtitle': 'Pool after filters: {n} games. Mark played/liked and the list recalculates instantly.',
     'results.relaxed': 'Strict filters left too few games, so we widened the selection.',
+    'results.confidence': 'Match confidence: {n}%',
+    'results.confidence.hint': 'How clearly the top picks stand out from the middle of the pool. More marks mean higher confidence.',
     'results.empty': 'No games matched. Try loosening platform, budget or time filters.',
     'results.why': 'Why it fits',
     'results.more': 'Show more',

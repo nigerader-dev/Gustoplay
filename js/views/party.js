@@ -15,12 +15,14 @@ const PLAYER_PRESETS = [
 
 export function render(ctx) {
   const profile = getProfile();
-  const players = Number(ctx.query.players) || Number(profile.answers?.players) || 2;
+  // пресетов всего 4 (максимум «5+»): большее число сводим к 5, иначе подпись врёт,
+  // а активный пресет не подсвечивается
+  const players = Math.min(5, Number(ctx.query.players) || Number(profile.answers?.players) || 2);
   const platforms = (ctx.query.platforms ? String(ctx.query.platforms).split(',') : (profile.answers?.platforms || [])).filter((p) => PLATFORMS[p]);
   const freeOnly = ctx.query.free === '1';
 
   const games = recommendForParty({
-    players: players >= 5 ? 5 : players,
+    players,
     platforms,
     freeOnly,
     limit: 24,

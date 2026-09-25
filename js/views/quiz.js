@@ -49,7 +49,19 @@ function poolCount() {
 export function render(ctx) {
   const profile = getProfile();
   answers = { ...profile.answers };
-  step = Math.max(0, Math.min(ctx?.resumeStep || 0, flow().length - 1));
+  // Продолжаем с первого неотвеченного вопроса, а не с начала: ответы уже сохранены,
+  // прогонять человека по пройденному заново — плохой UX. Если отвечено всё — с первого.
+  let resume = ctx?.resumeStep;
+  if (resume === undefined || resume === null) {
+    resume = flow().findIndex((q) => {
+      const v = answers[q.id];
+      // пустой массив тоже считаем неотвеченным: свежий профиль хранит [] по умолчанию,
+      // а пропущенный вопрос проще пропустить ещё раз, чем начинать всем с середины
+      return v === undefined || v === null || v === '' || (Array.isArray(v) && v.length === 0);
+    });
+    if (resume < 0) resume = 0;
+  }
+  step = Math.max(0, Math.min(resume, flow().length - 1));
 
   return `
   <section class="quiz-page">
@@ -112,7 +124,7 @@ function goNext(root, skipped = false) {
  * Отрисовка шага
  * ------------------------------------------------------------------ */
 
-function renderStep(root) {
+function renderStep(root, scroll = true) {
   const questions = flow();
   step = Math.max(0, Math.min(step, questions.length - 1));
   const q = questions[step];

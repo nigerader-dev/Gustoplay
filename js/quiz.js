@@ -165,7 +165,6 @@ export const QUESTIONS = [
   {
     id: 'genres',
     key: 'q.genres',
-    key: 'q.genres',
     icon: '🎮',
     type: 'multi',
     min: 0,
@@ -264,7 +263,9 @@ export function summarize(answers) {
     if (list.length) rows.push({ key, ids: list, dict, raw });
   };
   row('q.mood', answers.mood, 'MOODS');
-  row('q.modes', answers.modes, 'MODES');
+  // ответы modes — это id квиза (solo/coop/pvp/mmo), а не id таксономии MODES:
+  // подписи берём из ANSWER_LABELS, иначе в профиле показываются сырые id
+  row('q.modes', answers.modes, null);
   row('q.players', answers.players ? [answers.players] : [], null);
   row('q.platforms', answers.platforms, 'PLATFORMS');
   row('q.time', answers.time && answers.time !== 'any' ? [answers.time] : [], null);
@@ -282,6 +283,7 @@ export function summarize(answers) {
 
 /** Готовые подписи для ответов, у которых нет словаря в таксономии */
 export const ANSWER_LABELS = {
+  modes: { solo: 'opt.solo', coop: 'opt.coop', pvp: 'opt.pvp', mmo: 'opt.mmo' },
   players: { 1: 'opt.players1', 2: 'opt.players2', 4: 'opt.players3', 8: 'opt.players5' },
   time: { tiny: 'opt.timeTiny', short: 'opt.timeShort', medium: 'opt.timeMedium', long: 'opt.timeLong', any: 'opt.timeAny' },
   difficulty: { easy: 'opt.diffEasy', normal: 'opt.diffNormal', hard: 'opt.diffHard', souls: 'opt.diffSouls', chill: 'opt.diffChill' },

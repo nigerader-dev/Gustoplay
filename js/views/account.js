@@ -61,6 +61,9 @@ const T = {
     resetBadToken: 'Ссылка неполная или устарела — запросите новую.',
     backToLogin: '← Ко входу',
     resetSent: 'Если такой адрес зарегистрирован, письмо уже в пути. Проверьте папку «Спам».',
+    emailBad: 'Проверьте адрес e-mail',
+    deleted: 'Аккаунт удалён',
+    browser: 'Браузер',
   },
   en: {
     title: 'Account',
@@ -435,14 +438,17 @@ export function mount(root) {
     }
   });
 
-  root.querySelectorAll('[data-action="session-revoke"]').forEach((btn) => {
-    btn.addEventListener('click', async () => {
-      try {
-        await revokeSession(btn.dataset.id);
-        state.sessions = await listSessions();
-      } catch (error) { fail(error.message); }
-      window.dispatchEvent(new CustomEvent('gf:rerender'));
-    });
+  // Отзыв сессий — делегированием: список подгружается асинхронно и заменяет кнопки,
+  // прямые обработчики на них умирали бы вместе со старыми узлами (кнопки не работали).
+  root.querySelector('#sessions-list')?.addEventListener('click', async (event) => {
+    const btn = event.target.closest('[data-action="session-revoke"]');
+    if (!btn || btn.disabled) return;
+    btn.disabled = true;
+    try {
+      await revokeSession(btn.dataset.id);
+      state.sessions = await listSessions();
+    } catch (error) { fail(error.message); return; }
+    window.dispatchEvent(new CustomEvent('gf:rerender'));
   });
 
   if (isLoggedIn()) {

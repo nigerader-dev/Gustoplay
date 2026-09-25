@@ -174,13 +174,24 @@ export function render(ctx) {
   </section>`;
 }
 
+/** Когда поиск вызвал пересчёт: вернём фокус в поле ввода (оно пересоздаётся при рендере) */
+let searchFocusAt = 0;
+
 export function mount(root) {
   const input = root.querySelector('#catalog-q');
   if (input) {
+    // после пересчёта по вводу фокус слетает на body — возвращаем в поиск, каретку в конец
+    if (searchFocusAt && Date.now() - searchFocusAt < 1500) input.focus();
+    searchFocusAt = 0;
+    try { if (document.activeElement === input) input.setSelectionRange(input.value.length, input.value.length); } catch { /* ignore */ }
     let timer;
     input.addEventListener('input', () => {
       clearTimeout(timer);
-      timer = setTimeout(() => updateQuery({ q: input.value, page: FEATURES.pageSize }), 260);
+      timer = setTimeout(() => {
+        // фокус возвращаем, только если пользователь всё ещё печатает (а не ушёл на фильтры)
+        searchFocusAt = document.activeElement === input ? Date.now() : 0;
+        updateQuery({ q: input.value, page: FEATURES.pageSize });
+      }, 260);
     });
   }
   root.querySelector('#catalog-sort')?.addEventListener('change', (e) => updateQuery({ sort: e.target.value }));
