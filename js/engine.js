@@ -84,8 +84,10 @@ export const PREFERENCES = {
 export const emptyProfile = () => ({
   version: 2,
   answers: {
-    mood: [], modes: [], players: null, company: '', platforms: [], time: 'any', session: '',
-    difficulty: [], genres: [], vibes: [], priority: [], novelty: '', price: 'any', avoid: [], partyMode: false,
+    // «не ответили» — это [], '' и null: движок трактует их как «без ограничений»
+    // (раньше time/price по умолчанию были 'any' — и прогресс свежего квиза показывал 71%)
+    mood: [], modes: [], players: null, company: '', platforms: [], time: '', session: '',
+    difficulty: [], genres: [], vibes: [], priority: [], novelty: '', price: '', avoid: [], partyMode: false,
   },
   /** отметки игр: { [slug]: { status, ts } }, status: liked | disliked | played | wishlist */
   marks: {},

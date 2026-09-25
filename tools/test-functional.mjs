@@ -162,6 +162,26 @@ store.resetProfile();
 store.setAnswers({ mood: ['relax'], modes: ['coop'] });
 await navigate('quiz');
 check('возврат в квиз продолжает с players, а не сначала', currentQ() === 'players', currentQ());
+{
+  const fresh = eng.emptyProfile().answers;
+  check('прогресс свежего квиза — 0% (было 71%)', quizDef.progress(fresh) === 0, `${quizDef.progress(fresh)}%`);
+  check('один ответ даёт 7%, а не половину', quizDef.progress({ ...fresh, mood: ['relax'] }) === 7);
+  check('время «до 8 часов» прячет сессию, прогресс честный',
+    quizDef.progress({ ...fresh, time: 'tiny' }) === 7);
+  const full = {
+    mood: ['relax'], modes: ['coop'], players: 4, company: 'friends', platforms: ['pc'],
+    time: 'short', session: 'evening', difficulty: ['normal'], genres: ['rpg'], vibes: ['cozy'],
+    priority: ['story'], novelty: 'new', price: 'free', avoid: ['grind'], seed: ['balatro'],
+  };
+  check('все 15 ответов — 100%', quizDef.progress(full) === 100);
+  const before = quizDef.progress({ ...fresh, mood: ['relax'] });
+  const after = quizDef.progress({ ...fresh, mood: ['relax'], players: 4 });
+  check('разблокировка ветки company не роняет прогресс', after > before, `${before}% → ${after}%`);
+  store.resetProfile();
+  await navigate('quiz');
+  check('на первом вопросе бар показывает 0%',
+    (window.document.querySelector('#quiz-progress-label')?.textContent || '').includes('0'));
+}
 
 /* ============================ 5. Результаты ============================ */
 console.log('\n5. Результаты: отметки, переключатели, пересчёт');

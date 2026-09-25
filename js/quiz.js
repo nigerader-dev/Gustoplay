@@ -114,6 +114,8 @@ export const QUESTIONS = [
     type: 'single',
     // спрашиваем только у тех, кто собирается играть с кем-то
     visible: (a) => (a.modes || []).some((m) => m === 'coop' || m === 'pvp' || m === 'mmo') || (a.players || 1) > 1,
+    // от каких ответов зависит видимость — нужно прогрессу, чтобы знаменатель не прыгал
+    dependsOn: ['modes', 'players'],
     options: () => COMPANY_OPTIONS,
   },
   {
@@ -145,6 +147,7 @@ export const QUESTIONS = [
     type: 'single',
     // если человек выбрал «до 8 часов», спрашивать про длину сессии уже не нужно
     visible: (a) => a.time !== 'tiny',
+    dependsOn: ['time'],
     options: () => SESSION_OPTIONS,
   },
   {
@@ -233,18 +236,31 @@ export const TOTAL_QUESTIONS = QUESTIONS.length;
 export const visibleQuestions = (answers) => QUESTIONS.filter((q) => (q.visible ? q.visible(answers) : true));
 
 /**
- * Прогресс прохождения квиза: считаем вопросы, на которые пользователь ответил
- * (для multi-вопросов ответом считается даже пустой массив — «прошёл и ничего не выбрал»).
+ * У вопроса есть осознанный ответ: непустой массив или непустой скаляр.
+ * Пустой массив — это «ещё не отвечали» (именно он плюс дефолтные 'any' давали 71% на старте).
+ */
+export const hasValue = (value) => (Array.isArray(value)
+  ? value.length > 0
+  : value !== null && value !== undefined && value !== '');
+
+/**
+ * Прогресс прохождения квиза: отвеченные / все вопросы, которые человеку предстоит увидеть.
+ * Условные вопросы, которые уже точно не покажутся (например, «сессия» при времени «до 8 часов»),
+ * из знаменателя исключаются; те, чья судьба ещё не решена, — остаются. Поэтому прогресс
+ * никогда не уменьшается от ответов: знаменатель только сужается, числитель только растёт.
  */
 export function progress(answers) {
-  const visible = visibleQuestions(answers);
   let done = 0;
-  for (const q of visible) {
-    const value = answers[q.id];
-    if (Array.isArray(value)) done += 1;
-    else if (value !== null && value !== undefined && value !== '') done += 1;
+  let decidedHidden = 0;
+  for (const q of QUESTIONS) {
+    if (hasValue(answers[q.id])) { done += 1; continue; }
+    const shown = q.visible ? q.visible(answers) : true;
+    if (shown) continue;
+    const undetermined = (q.dependsOn || []).some((dep) => !hasValue(answers[dep]));
+    if (!undetermined) decidedHidden += 1;
   }
-  return Math.min(100, Math.round((done / visible.length) * 100));
+  const total = Math.max(1, QUESTIONS.length - decidedHidden);
+  return Math.min(100, Math.round((done / total) * 100));
 }
 
 /** Применяет ответ к объекту ответов квиза (иммутабельно) */
