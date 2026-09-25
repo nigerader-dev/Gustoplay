@@ -3,7 +3,7 @@
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
 
 
-# ---- check:covers (exit=1) ----
+# ---- check:covers (exit=0) ----
 
 > gustoplay@1.0.0 check:covers
 > node tools/check-covers.mjs
@@ -18,20 +18,4 @@
   …проверено 350/430
   …проверено 400/430
 
-❌ Битые URL (13):
-  • the-binding-of-isaac-repentance (The Binding of Isaac: Repentance): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/1426300/library_600x900_2x.jpg
-  • ea-sports-fc-26 (EA Sports FC 26): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/3405690/library_600x900_2x.jpg
-  • peak (Peak): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/3527290/library_600x900_2x.jpg
-  • escape-from-tarkov (Escape from Tarkov): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/3932890/library_600x900_2x.jpg
-  • surviving-mars (Surviving Mars): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/3215050/library_600x900_2x.jpg
-  • wuthering-waves (Wuthering Waves): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/3513350/library_600x900_2x.jpg
-  • zenless-zone-zero (Zenless Zone Zero): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/4162040/library_600x900_2x.jpg
-  • afk-journey (AFK Journey): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/4195600/library_600x900_2x.jpg
-  • heroes-of-might-and-magic-iii (Heroes of Might and Magic III): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/4921760/library_600x900_2x.jpg
-  • diablo-ii-resurrected (Diablo II: Resurrected): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/2536520/library_600x900_2x.jpg
-  • the-elder-scrolls-iv-oblivion (The Elder Scrolls IV: Oblivion): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/2623190/library_600x900_2x.jpg
-  • prince-of-persia-the-sands-of-time (Prince of Persia: The Sands of Time): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/13600/library_600x900_2x.jpg
-  • splinter-cell-chaos-theory (Splinter Cell: Chaos Theory): HTTP 404 — https://cdn.akamai.steamstatic.com/steam/apps/13570/library_600x900_2x.jpg
-Замените запись в tools/steam-overrides.json и перезапустите covers:resolve.
-
-❌ Обложек в порядке: 424/437.
+✅ Все 437 обложек на месте и отвечают.
