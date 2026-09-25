@@ -484,7 +484,7 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
 }
 
 /* ============================ 13. Мобильный UI ============================ */
-console.log('\n13. Мобильный UI: бургер-меню и шторка фильтров');
+console.log('\n13. Мобильный UI: бургер-меню и панель фильтров');
 {
   await navigate('catalog');
   check('бургер-кнопка и панель в шапке', count('.burger') === 1 && count('#main-nav') === 1
@@ -504,23 +504,29 @@ console.log('\n13. Мобильный UI: бургер-меню и шторка 
   check('кнопка фильтров есть', count('.filters-toggle') === 1);
   click('.filters-toggle');
   await wait(20);
-  check('шторка открывается', count('#catalog-filters.open') === 1
-    && window.document.body.classList.contains('filters-open'));
+  check('панель открывается без блокировки скролла', count('#catalog-filters.open') === 1
+    && !window.document.body.classList.contains('filters-open'));
+  check('панель встроена в поток (перед списком игр)',
+    window.document.querySelector('#catalog-filters')?.nextElementSibling?.classList.contains('catalog-main'));
   click('[data-action="f-mode"][data-id="coopLocal"]');
   await wait(40);
-  check('шторка переживает выбор фильтра', count('#catalog-filters.open') === 1);
+  check('панель переживает выбор фильтра', count('#catalog-filters.open') === 1);
   check('бейдж считает активные фильтры',
     window.document.querySelector('.filters-count')?.textContent === '1');
-  check('кнопка «Показать N» в шторке',
+  check('кнопка «Показать N» в панели',
     /Показать|Show/.test(window.document.querySelector('.filters-foot .btn')?.textContent || ''));
+  click('.filters-foot .btn');
+  await wait(30);
+  check('«Показать N» сворачивает панель', count('#catalog-filters.open') === 0);
+  click('.filters-toggle');
+  await wait(20);
   window.document.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
   await wait(30);
-  check('Esc закрывает шторку', count('#catalog-filters.open') === 0
-    && !window.document.body.classList.contains('filters-open'));
+  check('Esc закрывает панель', count('#catalog-filters.open') === 0);
   click('.filters-toggle');
   await wait(20);
   await navigate('quiz');
-  check('уход со страницы сбрасывает шторку', !window.document.body.classList.contains('filters-open'));
+  check('уход со страницы сбрасывает панель', count('#catalog-filters.open') === 0);
 
   await navigate('genre/rpg');
   check('пресетный чип без крестика (снять его нельзя)',

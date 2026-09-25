@@ -175,7 +175,7 @@ export function render(ctx) {
           </select>
         </div>
         <button type="button" class="btn btn-ghost" data-action="f-reset">${esc(t('catalog.reset'))}</button>
-        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-toggle">${esc(t('catalog.show', { n: found.length }))}</button></div>
+        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-apply">${esc(t('catalog.show', { n: found.length }))}</button></div>
       </aside>
 
       <div class="catalog-main">

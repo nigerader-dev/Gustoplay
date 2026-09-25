@@ -205,7 +205,6 @@ function render(scroll = true) {
   document.body.classList.remove('menu-open');
   if (!['catalog', 'mode', 'genre', 'tag', 'mood', 'platform'].includes(ctx.name)) {
     catalog.setFiltersOpen(false);
-    document.body.classList.remove('filters-open');
   }
 
   const view = ctx.route?.view;
@@ -407,7 +406,14 @@ document.addEventListener('click', (event) => {
       catalog.setFiltersOpen(willOpen);
       document.getElementById('catalog-filters')?.classList.toggle('open', willOpen);
       document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', String(willOpen));
-      document.body.classList.toggle('filters-open', willOpen);
+      break;
+    }
+    case 'filters-apply': {
+      // «Показать N игр»: сворачиваем панель и подкручиваем к результатам
+      catalog.setFiltersOpen(false);
+      document.getElementById('catalog-filters')?.classList.remove('open');
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', 'false');
+      try { document.getElementById('catalog-found')?.scrollIntoView({ block: 'start' }); } catch { /* ignore */ }
       break;
     }
     case 'theme-toggle': {
@@ -485,10 +491,10 @@ document.addEventListener('keydown', (event) => {
   }
   if (event.key === 'Escape') {
     if (document.querySelector('.nav.open')) closeMenu(true);
-    else if (document.getElementById('catalog-filters')?.classList.contains('open')) {
+    else if (catalog.isFiltersOpen()) {
       catalog.setFiltersOpen(false);
-      document.body.classList.remove('filters-open');
-      render(false);
+      document.getElementById('catalog-filters')?.classList.remove('open');
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', 'false');
       document.querySelector('.filters-toggle')?.focus();
     }
   }

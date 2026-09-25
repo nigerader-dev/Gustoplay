@@ -66,11 +66,16 @@ check('панель .nav.open выезжает', flat.some((e) => e.selectors.in
 check('оверлей .nav-overlay.show есть', flat.some((e) => e.selectors.includes('.nav-overlay.show')));
 check('скролл фона блокируется (body.menu-open)', flat.some((e) => e.selectors.includes('body.menu-open') && hasDecl(e, 'overflow', (v) => v === 'hidden')));
 
-/* ---------- 3. Шторка фильтров ---------- */
-console.log('\n3. Шторка фильтров каталога');
+/* ---------- 3. Панель фильтров (инлайн, без шторки) ---------- */
+console.log('\n3. Панель фильтров каталога');
 check('.filters-toggle скрыт на десктопе', flat.some((e) => !e.media && e.selectors.includes('.filters-toggle') && hasDecl(e, 'display', (v) => v === 'none')));
 check('.filters-toggle показан до 900px', flat.some((e) => inMedia(e, '900') && e.selectors.includes('.filters-toggle') && hasDecl(e, 'display', (v) => v !== 'none')));
-check('панель .filters.open раскрывается', flat.some((e) => e.selectors.includes('.filters.open')));
+check('панель .filters.open раскрывается в потоке',
+  flat.some((e) => e.selectors.includes('.filters.open') && hasDecl(e, 'display', (v) => v === 'grid')));
+check('на мобиле панель по умолчанию скрыта (display:none)',
+  flat.some((e) => inMedia(e, '900') && e.selectors.includes('.filters') && hasDecl(e, 'display', (v) => v === 'none')));
+check('фильтры нигде не fixed (шторки нет)',
+  !flat.some((e) => e.selectors.includes('.filters') && hasDecl(e, 'position', (v) => v === 'fixed')));
 check('кнопка «Показать N» (.filters-foot) есть', flat.some((e) => e.selectors.includes('.filters-foot .btn')));
 check('бейдж числа фильтров (.filters-count) есть', flat.some((e) => e.selectors.includes('.filters-count')));
 
