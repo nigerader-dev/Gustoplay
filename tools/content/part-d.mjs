@@ -412,7 +412,7 @@ export default [
     slug: 'arknights', title: 'Arknights',
     about: {
       ru: 'Тактическая tower defense RPG в мире после катастрофы: оперативники разных классов встают на линии обороны, а история о заражённых Ориджиниумом рассказана на уровне визуальных новелл. Мобильная игра с неожиданно глубоким лором.',
-      en: 'A tactical tower-defense RPG set after a catastrophe: operators of different classes hold the defence lines, while the story of those infected with Oripathy is told at visual-novel level. A mobile game with unexpectedly deep lore.',
+      en: 'A tactical tower defence RPG set after a catastrophe: operators of different classes hold the defence lines, while the story of those infected with Oripathy is told at visual-novel level. A mobile game with unexpectedly deep lore.',
     },
     feats: {
       ru: ['Тактика с настоящим позиционированием', 'Лор, который читают как книгу', 'Арт-дирекшн уровня журнальных обложек'],

@@ -339,7 +339,7 @@ export const PART_D = [
     md: ['solo'], pl: [1, 1], pf: ['mobile', 'pc'], pr: 'free', pv: 0,
     len: [50, 1000], dif: 4, pace: 2, rat: 86, mood: ['think', 'collect', 'story'],
     desc: { ru: 'Тактическая гача-стратегия: продуманные карты, отличный мрачный сюжет и можно без денег.', en: 'A tactical gacha strategy: thoughtful maps, a strong grim story and fully playable for free.' },
-    about: {"ru":"Тактическая tower defense RPG в мире после катастрофы: оперативники разных классов встают на линии обороны, а история о заражённых Ориджиниумом рассказана на уровне визуальных новелл. Мобильная игра с неожиданно глубоким лором.","en":"A tactical tower-defense RPG set after a catastrophe: operators of different classes hold the defence lines, while the story of those infected with Oripathy is told at visual-novel level. A mobile game with unexpectedly deep lore."},
+    about: {"ru":"Тактическая tower defense RPG в мире после катастрофы: оперативники разных классов встают на линии обороны, а история о заражённых Ориджиниумом рассказана на уровне визуальных новелл. Мобильная игра с неожиданно глубоким лором.","en":"A tactical tower defence RPG set after a catastrophe: operators of different classes hold the defence lines, while the story of those infected with Oripathy is told at visual-novel level. A mobile game with unexpectedly deep lore."},
     feats: {"ru":["Тактика с настоящим позиционированием","Лор, который читают как книгу","Арт-дирекшн уровня журнальных обложек"],"en":["Tactics with real positioning","Lore people read like a book","Art direction at magazine-cover level"]},
   },
   {

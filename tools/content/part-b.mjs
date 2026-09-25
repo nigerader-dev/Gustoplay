@@ -83,7 +83,7 @@ export default [
   {
     slug: 'lies-of-p', title: 'Lies of P',
     about: {
-      ru: 'Соулслайк по мотивам Пиноккио: механический мальчик идёт через Белль-эток, поражённый безумием марионеток, и учится лгать — каждая ложня меняет его человечность. Бой собран из парирований, идеальных уклонений и сменного оружия.',
+      ru: 'Соулслайк по мотивам Пиноккио: механический мальчик идёт через Белль-эток, поражённый безумием марионеток, и учится лгать — каждая ложь меняет его человечность. Бой собран из парирований, идеальных уклонений и сменного оружия.',
       en: 'A Pinocchio-inspired soulslike: a mechanical boy crosses the plague-mad city of Krat, where puppets have gone feral, and learns to lie — each lie shaping his humanity. Combat mixes parries, perfect dodges and swappable weapons.',
     },
     feats: {
@@ -424,8 +424,8 @@ export default [
   {
     slug: 'dead-cells', title: 'Dead Cells',
     about: {
-      ru: 'Рогалевания в замке, который перестраивается после каждой смерти: стремительный бой десятками видов оружия, мутации и бесконечные петли прокачки. Темп такой, что пауза между забегами длится секунды.',
-      en: 'A roguelitevania in a castle that rebuilds itself after every death: frantic combat with dozens of weapons, mutations and endless progression loops. The pace is such that breaks between runs last seconds.',
+      ru: 'Рогалик-метроидвания в замке, который перестраивается после каждой смерти: стремительный бой десятками видов оружия, мутации и бесконечные петли прокачки. Темп такой, что пауза между забегами длится секунды.',
+      en: 'A roguelike metroidvania in a castle that rebuilds itself after every death: frantic combat with dozens of weapons, mutations and endless progression loops. The pace is such that breaks between runs last seconds.',
     },
     feats: {
       ru: ['Один из самых быстрых боёвок в жанре', 'Ежедневные испытания и режимы для ветеранов', 'Годы бесплатных обновлений и кроссоверов'],
@@ -457,7 +457,7 @@ export default [
   {
     slug: 'the-binding-of-isaac-repentance', title: 'The Binding of Isaac: Repentance',
     about: {
-      ru: 'Рогалик про Айзека, сбегающего в подвал от фанатичной матери: случайные комнаты, сотни предметов и синергии, которые превщают слёзы героя в рельсотрон или рой мух. Версия Repentance собрала весь контент десяти лет разработки.',
+      ru: 'Рогалик про Айзека, сбегающего в подвал от фанатичной матери: случайные комнаты, сотни предметов и синергии, которые превращают слёзы героя в рельсотрон или рой мух. Версия Repentance собрала весь контент десяти лет разработки.',
       en: 'A roguelike about Isaac, fleeing into the basement from a fanatical mother: random rooms, hundreds of items and synergies that turn the hero’s tears into a railgun or a swarm of flies. Repentance gathers a decade of content.',
     },
     feats: {
