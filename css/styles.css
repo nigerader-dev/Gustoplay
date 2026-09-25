@@ -92,7 +92,7 @@
     radial-gradient(900px 460px at 96% 4%, rgba(34, 211, 238, .12), transparent 62%),
     radial-gradient(700px 420px at 55% 118%, rgba(168, 85, 247, .08), transparent 60%);
 
-  --max-width: 1200px;
+  --max-width: 1280px;
   --font: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   --header-h: 68px;
 }
@@ -207,7 +207,7 @@ button, input, select { font: inherit; color: inherit; }
 }
 .header-inner {
   max-width: var(--max-width); margin: 0 auto; padding: var(--space-3) var(--space-5);
-  display: flex; align-items: center; gap: 18px; min-height: var(--header-h);
+  display: flex; align-items: center; gap: 14px; min-height: var(--header-h);
 }
 .logo { display: flex; align-items: center; gap: 10px; font-weight: 750; letter-spacing: var(--track-tight); }
 
@@ -229,11 +229,14 @@ button, input, select { font: inherit; color: inherit; }
 .cover-badge .icon, .plat .icon { width: 1em; height: 1em; }
 .mark .icon { width: 1.2em; height: 1.2em; }
 .logo-text { display: flex; flex-direction: column; line-height: 1.12; }
-.logo-text small { font-weight: 500; color: var(--text-muted); font-size: var(--text-2xs); letter-spacing: .01em; }
-.nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: wrap; align-items: center; }
+.logo-text small {
+  font-weight: 500; color: var(--text-muted); font-size: var(--text-2xs);
+  letter-spacing: .01em; white-space: nowrap;
+}
+.nav { display: flex; gap: 4px; margin-left: auto; flex-wrap: nowrap; align-items: center; }
 .nav-link {
   display: inline-flex; align-items: center; gap: 7px;
-  padding: 9px 13px; border-radius: var(--radius-full); font-weight: 550; color: var(--text-soft); font-size: .94rem;
+  padding: 9px 10px; border-radius: var(--radius-full); font-weight: 550; color: var(--text-soft); font-size: .93rem;
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 .nav-link:hover { background: var(--bg-sunken); color: var(--text); }
@@ -850,14 +853,25 @@ select.input { cursor: pointer; }
 /* Брейкпоинты: 1080 (ноутбук: страница игры), 900 (планшет: бургер, фильтры,
    hero в колонку), 640 (телефон), 480 (компактный телефон). */
 
+/* --- узкий десктоп: шапка остаётся в одну строку --- */
+/* Шесть пунктов меню + логотип с подписью + переключатели не помещались в 1280px:
+   последний пункт («Как это работает») уезжал на вторую строку, шапка вырастала
+   с 68 до 111px, а справа оставалось пустое место. Ниже 1400px подпись логотипа
+   скрывается, а пункты становятся плотнее — меню снова в одну строку. */
+@media (max-width: 1500px) {
+  .logo-text small { display: none; }
+  .nav { gap: 2px; }
+  .nav-link { padding: 9px 10px; font-size: .92rem; }
+}
+
 /* --- ноутбук и узкий десктоп --- */
 @media (max-width: 1080px) {
   .game-hero { grid-template-columns: 220px 1fr; }
   .game-side { grid-column: 1 / -1; }
 }
 
-/* --- планшет --- */
-@media (max-width: 900px) {
+/* --- планшет и узкий ноутбук: меню уходит в шторку --- */
+@media (max-width: 1140px) {
   .header-inner { gap: 12px; padding: 10px 16px; }
   /* бургер вместо десктопной навигации */
   .burger { display: inline-flex; }

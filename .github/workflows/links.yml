@@ -89,6 +89,39 @@ jobs:
         continue-on-error: true
         run: node tools/check-store-links.mjs --candidates=tools/store-candidates.json 2>&1 | tee /tmp/candidates.log
 
+      - name: Результат в PR (комментарием — логи и артефакты из закрытых сред недоступны)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Проверка ссылок на магазины (авто)"
+            echo
+            echo '**Текущие данные**'
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Проблемных|Игр без ссылки)' /tmp/links.log || true
+            echo '```'
+            if grep -q 'VERIFIED_JSON' /tmp/candidates.log 2>/dev/null; then
+              echo '<details><summary>Проверенные кандидаты (готовы к переносу в js/catalog/store-links.js)</summary>'
+              echo
+              echo '```json'
+              sed -n '/--- VERIFIED_JSON ---/,/--- END_VERIFIED_JSON ---/p' /tmp/candidates.log
+              echo '```'
+              echo '</details>'
+            fi
+            if grep -q 'STEAM_SUGGESTIONS_JSON' /tmp/candidates.log 2>/dev/null; then
+              echo '<details><summary>Страницы Steam, которых нет в данных</summary>'
+              echo
+              echo '```json'
+              sed -n '/--- STEAM_SUGGESTIONS_JSON ---/,/--- END_STEAM_SUGGESTIONS_JSON ---/p' /tmp/candidates.log
+              echo '```'
+              echo '</details>'
+            fi
+          } > /tmp/comment.md
+          if [ -s /tmp/comment.md ] && [ -n "${{ github.event.number }}" ]; then
+            gh pr comment "${{ github.event.number }}" --body-file /tmp/comment.md || true
+          fi
+
       - name: Сводка
         run: |
           {
