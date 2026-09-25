@@ -9,17 +9,17 @@ import { SITE } from '../config.js';
 const FAQ = {
   ru: [
     ['Почему вы предлагаете именно эти игры?', 'Каждая игра получает скор из совпадений по настроению, жанрам, тегам и режимам, плюс качество, длина и цена. Отдельные веса у ваших отметок «играл / понравилось / не понравилось». Логика полностью видна в карточке — блок «Почему подходит».'],
-    ['Как работают отметки игр?', '«Понравилось» усиливает теги, жанры и настроения этой игры, а «не понравилось» — ослабляет. Отметка «играл» просто убирает игру из выдачи, «хочу сыграть» поднимает в начало. Пересчёт мгновенный и обратимы — можно снять отметку.'],
+    ['Как работают отметки игр?', '«Понравилось» усиливает теги, жанры и настроения этой игры, а «не понравилось» — ослабляет. Отметка «играл» убирает игру из выдачи, «хочу сыграть» поднимает её в начало. Пересчёт мгновенный, и его всегда можно отменить — достаточно снять отметку.'],
     ['Нужна ли регистрация?', 'Нет. Профиль вкуса хранится в localStorage браузера. На другом устройстве можно выгрузить профиль в JSON и вставить его там же.'],
     ['Как часто обновляется каталог?', 'Мы добавляем новые игры и правим теги каждую неделю. Если игры не хватает — напишите нам, мы поставим её в приоритет.'],
-    ['Вы получаете деньги за рекомендации?', 'Нет. Рекомендации строит алгоритм, рекламные блоки помечены и не влияют на выдачу. Магазины мы показываем нейтрально: обычные ссылки на поиск, без накрутки позиций.'],
+    ['Вы получаете деньги за рекомендации?', 'Нет. Рекомендации строит алгоритм, рекламные блоки помечены и не влияют на выдачу. В блоке покупки — только прямые ссылки: страница игры в Steam или официальный магазин издателя, без перепродавцов и накрутки позиций.'],
   ],
   en: [
     ['Why are these games recommended?', 'Each game gets a score from mood, genre, tag and mode matches plus quality, length and price. Your marks carry separate weights. Everything is visible in the "Why it fits" block.'],
     ['How do marks work?', 'Liked strengthens that game\u2019s tags, genres and moods; disliked weakens them. Played hides a game, wishlist pushes it up. Recalculation is instant and reversible.'],
     ['Do I need an account?', 'No. Your taste profile lives in browser localStorage and can be exported as JSON to move to another device.'],
     ['How often is the catalog updated?', 'We add games and fix tags weekly. Missing a game? Tell us and we will prioritise it.'],
-    ['Do you get paid for recommendations?', 'No. Recommendations are algorithmic, ad blocks are labelled and do not affect results. Store links are neutral search links.'],
+    ['Do you get paid for recommendations?', 'No. Recommendations are algorithmic, ad blocks are labelled and do not affect results. The buy block shows direct links only: the game’s page in Steam or the publisher’s official store — no resellers, no paid placement.'],
   ],
 };
 

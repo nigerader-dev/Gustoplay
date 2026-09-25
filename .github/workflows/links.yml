@@ -1,0 +1,107 @@
+name: GustoPlay — ссылки на магазины
+
+# Каждая игра должна вести на конкретную страницу игры (Steam или официальный магазин
+# издателя), а не на поиск по названию. Проверка ходит в интернет, поэтому вынесена из
+# основного ci.yml: она идёт по расписанию, при правках каталога, вручную и на PR.
+#
+# Вручную (например, после добавления кандидатов в tools/store-candidates.json):
+#   gh workflow run links.yml -f candidates=tools/store-candidates.json
+# В логе и в сводке прогона появятся блоки STEAM_SUGGESTIONS_JSON / VERIFIED_JSON —
+# это проверенные ссылки, готовые к переносу в данные. Ничего не применяется автоматически.
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidates:
+        description: 'Файл с кандидатами (пусто — проверить текущие данные)'
+        required: false
+        default: ''
+  pull_request:
+    paths:
+      - 'js/catalog/**'
+      - 'tools/store-candidates.json'
+      - 'tools/check-store-links.mjs'
+      - '.github/workflows/links.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'js/catalog/**'
+      - 'tools/store-candidates.json'
+      - 'tools/check-store-links.mjs'
+      - '.github/workflows/links.yml'
+  schedule:
+    - cron: '0 6 * * 1'   # каждый понедельник, 06:00 UTC
+
+jobs:
+  # Строгая проверка: мёртвая ссылка, чужой appid или игра без ссылки — провал.
+  # На PR не запускается, чтобы незаполненные кандидаты не красили пул-реквест.
+  links:
+    if: github.event_name != 'pull_request'
+    name: Ссылки на страницы игр
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+
+      - name: Проверка ссылок
+        env:
+          CANDIDATES: ${{ inputs.candidates }}
+        run: |
+          if [ -n "$CANDIDATES" ]; then
+            node tools/check-store-links.mjs --suggest --candidates="$CANDIDATES" 2>&1 | tee /tmp/links.log
+          else
+            node tools/check-store-links.mjs --suggest 2>&1 | tee /tmp/links.log
+          fi
+          {
+            echo "### Ссылки на магазины"
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Проблемных|Игр без ссылки|✅|❌)' /tmp/links.log | head -40
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # На PR: проверяем, что все ссылки в данных ведут на конкретные страницы, и отдельно
+  # проверяем заготовленные адреса для игр без Steam (результат — в сводке прогона).
+  candidates:
+    if: github.event_name == 'pull_request'
+    name: Кандидаты магазинов (проверка)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+
+      - name: Проверка текущих ссылок
+        continue-on-error: true
+        run: node tools/check-store-links.mjs 2>&1 | tee /tmp/links.log
+
+      - name: Проверка кандидатов
+        continue-on-error: true
+        run: node tools/check-store-links.mjs --candidates=tools/store-candidates.json 2>&1 | tee /tmp/candidates.log
+
+      - name: Сводка
+        run: |
+          {
+            echo "### Текущие ссылки"
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Проблемных|Игр без ссылки)' /tmp/links.log || true
+            echo '```'
+            echo "### Проверенные кандидаты (готовы к переносу в данные)"
+            echo '```json'
+            sed -n '/VERIFIED_JSON/,/END_VERIFIED_JSON/p' /tmp/candidates.log || true
+            echo '```'
+            echo "### Страницы Steam, которых нет в данных"
+            echo '```json'
+            sed -n '/STEAM_SUGGESTIONS_JSON/,/END_STEAM_SUGGESTIONS_JSON/p' /tmp/candidates.log || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

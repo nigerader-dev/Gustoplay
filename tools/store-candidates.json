@@ -1,0 +1,128 @@
+{
+  "_комментарий": "Кандидаты официальных страниц для игр без Steam. Ничего не применяется без проверки: tools/check-store-links.mjs открывает каждую ссылку и сверяет заголовок страницы с названием игры. Порядок в списке — приоритет (берётся первый прошедший проверку).",
+  "stores": {
+    "minecraft": [
+      { "url": "https://www.minecraft.net/", "label": "game.storeOfficial" }
+    ],
+    "world-of-warcraft": [
+      { "url": "https://worldofwarcraft.blizzard.com/", "label": "game.storeBattleNet" },
+      { "url": "https://us.shop.battle.net/en-us/family/world-of-warcraft", "label": "game.storeBattleNet" }
+    ],
+    "valorant": [
+      { "url": "https://playvalorant.com/", "label": "game.storeOfficial" }
+    ],
+    "league-of-legends": [
+      { "url": "https://www.leagueoflegends.com/", "label": "game.storeOfficial" }
+    ],
+    "bloodborne": [
+      { "url": "https://www.playstation.com/en-us/games/bloodborne/", "label": "game.storePlaystation" }
+    ],
+    "alan-wake-2": [
+      { "url": "https://www.alanwake.com/", "label": "game.storeOfficial" }
+    ],
+    "alan-wake-remastered": [
+      { "url": "https://www.alanwake.com/", "label": "game.storeOfficial" }
+    ],
+    "animal-crossing-new-horizons": [
+      { "url": "https://www.nintendo.com/us/store/products/animal-crossing-new-horizons-switch/", "label": "game.storeNintendo" }
+    ],
+    "gran-turismo-7": [
+      { "url": "https://www.gran-turismo.com/us/products/gt7/", "label": "game.storeOfficial" },
+      { "url": "https://www.playstation.com/en-us/games/gran-turismo-7/", "label": "game.storePlaystation" }
+    ],
+    "football-manager-2024": [
+      { "url": "https://www.footballmanager.com/", "label": "game.storeOfficial" }
+    ],
+    "mario-kart-8-deluxe": [
+      { "url": "https://www.nintendo.com/us/store/products/mario-kart-8-deluxe-switch/", "label": "game.storeNintendo" }
+    ],
+    "genshin-impact": [
+      { "url": "https://genshin.hoyoverse.com/", "label": "game.storeOfficial" }
+    ],
+    "honkai-star-rail": [
+      { "url": "https://hsr.hoyoverse.com/", "label": "game.storeOfficial" }
+    ],
+    "brawl-stars": [
+      { "url": "https://supercell.com/en/games/brawlstars/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.supercell.brawlstars", "label": "game.storeGooglePlay" }
+    ],
+    "roblox": [
+      { "url": "https://www.roblox.com/", "label": "game.storeOfficial" }
+    ],
+    "fortnite": [
+      { "url": "https://www.fortnite.com/", "label": "game.storeOfficial" }
+    ],
+    "clash-of-clans": [
+      { "url": "https://supercell.com/en/games/clashofclans/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.supercell.clashofclans", "label": "game.storeGooglePlay" }
+    ],
+    "clash-royale": [
+      { "url": "https://supercell.com/en/games/clashroyale/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.supercell.clashroyale", "label": "game.storeGooglePlay" }
+    ],
+    "arknights": [
+      { "url": "https://arknights.global/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.YoStarEN.Arknights", "label": "game.storeGooglePlay" }
+    ],
+    "super-mario-party-jamboree": [
+      { "url": "https://www.nintendo.com/us/store/products/super-mario-party-jamboree-switch/", "label": "game.storeNintendo" }
+    ],
+    "xenoblade-chronicles-3": [
+      { "url": "https://www.nintendo.com/us/store/products/xenoblade-chronicles-3-switch/", "label": "game.storeNintendo" }
+    ],
+    "fire-emblem-three-houses": [
+      { "url": "https://www.nintendo.com/us/store/products/fire-emblem-three-houses-switch/", "label": "game.storeNintendo" }
+    ],
+    "starcraft-ii": [
+      { "url": "https://starcraft2.blizzard.com/", "label": "game.storeBattleNet" },
+      { "url": "https://us.shop.battle.net/en-us/family/starcraft-ii", "label": "game.storeBattleNet" }
+    ],
+    "warcraft-iii-reforged": [
+      { "url": "https://warcraft3.blizzard.com/", "label": "game.storeBattleNet" },
+      { "url": "https://us.shop.battle.net/en-us/product/warcraft-iii-reforged", "label": "game.storeBattleNet" }
+    ],
+    "metroid-dread": [
+      { "url": "https://www.nintendo.com/us/store/products/metroid-dread-switch/", "label": "game.storeNintendo" }
+    ],
+    "super-smash-bros-ultimate": [
+      { "url": "https://www.nintendo.com/us/store/products/super-smash-bros-ultimate-switch/", "label": "game.storeNintendo" }
+    ],
+    "mobile-legends-bang-bang": [
+      { "url": "https://m.mobilelegends.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.mobile.legends", "label": "game.storeGooglePlay" }
+    ],
+    "call-of-duty-mobile": [
+      { "url": "https://www.callofduty.com/mobile", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.activision.callofduty.shooter", "label": "game.storeGooglePlay" }
+    ],
+    "free-fire": [
+      { "url": "https://ff.garena.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.dts.freefireth", "label": "game.storeGooglePlay" }
+    ],
+    "pubg-mobile": [
+      { "url": "https://www.pubgmobile.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.tencent.ig", "label": "game.storeGooglePlay" }
+    ],
+    "pok-mon-tcg-pocket": [
+      { "url": "https://www.pokemon.com/us/pokemon-tcg-pocket", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=jp.pokemon.pokemontcgp", "label": "game.storeGooglePlay" }
+    ],
+    "whiteout-survival": [
+      { "url": "https://www.whiteoutsurvival.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.grandsoft.interstellar.wos", "label": "game.storeGooglePlay" }
+    ],
+    "project-sekai-colorful-stage": [
+      { "url": "https://www.colorfulstage.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.sega.pjsekai", "label": "game.storeGooglePlay" }
+    ],
+    "castlevania-symphony-of-the-night": [
+      { "url": "https://www.konami.com/games/castlevania/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.konami.castlevania", "label": "game.storeGooglePlay" }
+    ],
+    "monopoly-go": [
+      { "url": "https://www.monopolygo.com/", "label": "game.storeOfficial" },
+      { "url": "https://play.google.com/store/apps/details?id=com.scopely.monopolygo", "label": "game.storeGooglePlay" }
+    ]
+  },
+  "steam": {}
+}

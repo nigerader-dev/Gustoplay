@@ -35,6 +35,7 @@ import { PART_G } from './part-g.js';
 import { PART_H } from './part-h.js';
 import { PART_I } from './part-i.js';
 import { STEAM_COVERS } from './steam-covers.js';
+import { STORE_LINKS } from './store-links.js';
 
 const slugify = (s) =>
   s
@@ -47,6 +48,13 @@ const raw = [...PART_A, ...PART_B, ...PART_C, ...PART_D, ...PART_E, ...PART_F, .
 
 function normalize(g) {
   const slug = g.slug || slugify(g.t);
+  const cover = STEAM_COVERS[slug] || {};
+  // ВАЖНО: appid приходит из steam-covers.js и подмешивается ниже, поэтому читать его
+  // из сырой записи нельзя — так ссылка «Открыть в Steam» превращалась в поиск по названию
+  // (баг, из-за которого кнопка вела не на страницу игры).
+  const steamId = cover.steamId || g.steamId || null;
+  // официальный магазин/сайт для игр без страницы в Steam (см. js/catalog/store-links.js)
+  const storeLink = STORE_LINKS[slug] || null;
   const modes = (g.md || []).filter((m) => MODES[m]);
   const platforms = (g.pf || []).filter((p) => PLATFORMS[p]);
   // облачный гейминг доступен почти для всех крупных ПК-игр
@@ -58,7 +66,8 @@ function normalize(g) {
 
   return {
     ...g,
-    ...((STEAM_COVERS[slug]) || {}),
+    ...cover,
+    steamId,
     slug,
     genres: [...new Set(genres)],
     tags: [...new Set(tags)],
@@ -83,15 +92,13 @@ function normalize(g) {
       ...(len[1] <= 12 || tags.includes('short') ? ['short'] : []),
       ...(len[1] >= 60 ? ['long'] : []),
     ],
-    // удобные поисковые ссылки (без партнёрских id — их подставляет config.js)
+    // Ссылки на конкретные страницы магазинов. Поисковых ссылок-заглушек нет:
+    // если страницы игры в Steam нет (Nintendo, мобильные, Battle.net), кнопка Steam
+    // не показывается, а вместо неё идёт официальный магазин/сайт издателя.
     links: {
-      // если известен Steam AppID (steam-covers.js) — ведём прямо на страницу игры
-      steam: g.steamId
-        ? `https://store.steampowered.com/app/${g.steamId}/`
-        : `https://store.steampowered.com/search/?term=${encodeURIComponent(g.t)}`,
-      instantGaming: `https://www.instant-gaming.com/en/search/?q=${encodeURIComponent(g.t)}`,
-      // официальный сайт/страница в магазине — для игр, которых нет в Steam
-      official: g.url || null,
+      steam: steamId ? `https://store.steampowered.com/app/${steamId}/` : null,
+      official: storeLink?.url || null,
+      officialLabel: storeLink?.label || 'game.official',
     },
   };
 }

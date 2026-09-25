@@ -36,7 +36,6 @@ export const SITE = {
   /** Ссылки на партнёрские программы магазинов. Пусто — обычные ссылки без меток. */
   affiliates: {
     steam: '',          // например: '&utm_source=gustoplay'
-    instantGaming: '',  // например: '?igr=gustoplay'
   },
 };
 
