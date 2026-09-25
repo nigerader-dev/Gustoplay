@@ -22,7 +22,7 @@
  *
  * Токен: панель Cloudflare → My Profile → API Tokens → Create Token.
  * Нужны права: Account → Workers Scripts → Edit, Account → D1 → Edit,
- * Account → Cloudflare Pages → Edit, Zone → DNS → Edit (для домена и Turnstile).
+ * Account → Cloudflare Pages → Edit, Zone → DNS → Edit, Zone → Cache Purge (для домена, Turnstile и автоматической очистки edge-кэша).
  */
 import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync, existsSync, mkdtempSync, appendFileSync } from 'node:fs';
@@ -518,6 +518,27 @@ if (zoneId && DOMAIN) {
       console.log(`::warning::DNS-запись ${host} не создана: ${created.errors?.[0]?.message || 'нет прав'} — нужно право «Zone → DNS → Edit» для этой зоны`);
     }
   }
+}
+
+/* ------------------------------------------------------------------ *
+ * 7. Инвалидация edge-кэша
+ * ------------------------------------------------------------------ *
+ * Pages может обновиться раньше apex-домена. Purge после успешной публикации
+ * закрывает это окно и не требует ручной очистки в панели Cloudflare.
+ */
+if (zoneId) {
+  step('Очищаю edge-кэш зоны после публикации');
+  const purged = await cfZone(`/zones/${zoneId}/purge_cache`, {
+    method: 'POST',
+    body: { purge_everything: true },
+  });
+  if (purged.ok) ok(`кэш зоны ${DOMAIN} очищен`);
+  else {
+    bad(`не удалось очистить кэш зоны: ${purged.errors?.[0]?.message || `HTTP ${purged.status}`}`);
+    console.log('::warning::Добавьте токену право Zone → Cache Purge, иначе apex может показывать старый релиз.');
+  }
+} else {
+  warn('зона не подключена — purge пропущен; после подключения домена он выполнится автоматически');
 }
 
 /* ------------------------------------------------------------------ *

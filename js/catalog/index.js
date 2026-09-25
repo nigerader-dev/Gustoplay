@@ -27,6 +27,7 @@ import { PART_F } from './part-f.js';
 import { PART_G } from './part-g.js';
 import { PART_H } from './part-h.js';
 import { PART_I } from './part-i.js';
+import { STEAM_COVERS } from './steam-covers.js';
 
 const slugify = (s) =>
   s
@@ -50,6 +51,7 @@ function normalize(g) {
 
   return {
     ...g,
+    ...((STEAM_COVERS[slug]) || {}),
     slug,
     genres: [...new Set(genres)],
     tags: [...new Set(tags)],
