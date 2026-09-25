@@ -64,6 +64,7 @@ jobs:
           echo "HEAD=$(git rev-parse HEAD) BRANCH=${GITHUB_REF_NAME}"
 
       - name: Коммит результата
+        id: commit
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
@@ -72,18 +73,30 @@ jobs:
           git add js/catalog/steam-covers.js tools/cover-review.log
           if git diff --cached --quiet; then
             echo "::notice::covers-commit: изменений нет — обложки уже сопоставлены"
+            echo "pushed=yes" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           if ! git commit -m "chore(covers): официальные арты каталога (авто-резолвер)" > /tmp/commit.log 2>&1; then
             echo "::error::covers-commit: git commit упал: $(head -c 400 /tmp/commit.log)"
-            exit 1
+            echo "pushed=no" >> "$GITHUB_OUTPUT"
+            exit 0
           fi
           echo "::notice::covers-commit: создан $(git rev-parse --short HEAD)"
-          if ! git push origin "HEAD:refs/heads/${BRANCH}" > /tmp/push.log 2>&1; then
-            while IFS= read -r line; do echo "::error::covers-push: $line"; done < <(tail -6 /tmp/push.log)
-            exit 1
+          if git push origin "HEAD:refs/heads/${BRANCH}" > /tmp/push.log 2>&1; then
+            echo "::notice::covers-commit: запушено в ${BRANCH}"
+            echo "pushed=yes" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::covers-commit: пуш в ветку недоступен (токен только на чтение) — данные уйдут аннотациями"
+            tail -3 /tmp/push.log || true
+            echo "pushed=no" >> "$GITHUB_OUTPUT"
           fi
-          echo "::notice::covers-commit: запушено в ${BRANCH}"
+
+      # Пуш в ветку может быть недоступен (токен только на чтение) — тогда
+      # результат уходит аннотациями и вкатывается коммитом снаружи.
+      # Шаг не роняет прогон: доставка данных важнее статуса.
+      - name: Доставка данных через аннотации
+        run: |
+          node tools/emit-cover-data.mjs tools/cover-review.log
 
       - name: Отчёт по сомнительным совпадениям
         if: always()
@@ -95,11 +108,6 @@ jobs:
             echo '```'
             echo "Сопоставлено: $(grep -c 'steamId' js/catalog/steam-covers.js || true) записей"
           } >> "$GITHUB_STEP_SUMMARY"
-          # список нерешённых игр (MISS/ERROR) дублируем аннотациями — виден через API
-          grep -E '^(MISS|ERROR)' tools/cover-review.log | while IFS= read -r line; do
-            echo "::notice::cover-review: $line"
-          done
-          echo "::notice::cover-review: CHECK-совпадений: $(grep -c '^CHECK' tools/cover-review.log || true), всего записей: $(grep -c 'steamId' js/catalog/steam-covers.js || true)"
 
       - name: Лог резолвера (артефакт)
         if: always()

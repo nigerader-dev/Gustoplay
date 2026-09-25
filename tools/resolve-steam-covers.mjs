@@ -51,7 +51,8 @@ try { overrides = JSON.parse(await readFile(overridesPath, 'utf8')); } catch { /
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 /** Нормализация для сравнения названий: регистр, пунктуация, диакритика не важны */
-const norm = (s) => String(s || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+// ™/®/© убираем ДО NFKD: иначе марка разложится в «TM» и сломает сравнение
+const norm = (s) => String(s || '').replace(/[™®©]/g, '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 const steamCoverUrl = (id) => `https://cdn.akamai.steamstatic.com/steam/apps/${id}/library_600x900_2x.jpg`;
 
 async function fetchJson(url, tries = 3) {
