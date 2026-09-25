@@ -83,7 +83,10 @@ if (!process.argv.includes('--run')) {
   process.exit(0);
 }
 
-const extra = process.argv.slice(process.argv.indexOf('--') + 1).filter((a) => a !== '--');
+// Дополнительные ключи берём только после разделителя «--»: без него
+// process.argv содержит путь к node и сам скрипт, и они уезжали в test:visual.
+const dashAt = process.argv.indexOf('--');
+const extra = dashAt === -1 ? [] : process.argv.slice(dashAt + 1).filter((a) => a !== '--');
 console.log(`\n▶ npm run test:visual${extra.length ? ` — ${extra.join(' ')}` : ''}\n`);
 const run = spawnSync('npm', ['run', 'test:visual', ...(extra.length ? ['--', ...extra] : [])], { env, stdio: 'inherit' });
 process.exit(run.status ?? 1);
