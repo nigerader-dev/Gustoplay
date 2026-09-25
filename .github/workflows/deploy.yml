@@ -1,0 +1,113 @@
+name: GustoPlay — деплой в Cloudflare
+
+# Полностью автоматический выпуск сайта и API: тесты → сборка → публикация.
+#
+# Что нужно один раз (5 минут, без команд в терминале):
+#   Settings → Secrets and variables → Actions → New repository secret:
+#     CLOUDFLARE_API_TOKEN   — токен Cloudflare (права: Workers Scripts, D1, Pages, DNS — Edit)
+#     CLOUDFLARE_ACCOUNT_ID  — Account ID из правого сайдбара панели Cloudflare
+#     CLOUDFLARE_ZONE_TOKEN  — необязательно: токен с правом Zones: Edit, чтобы деплой сам
+#                              добавлял домен gustoplay.ru в аккаунт (если такого права нет
+#                              у основного токена; NS печатается в лог деплоя)
+#   Необязательно, но включает Google-вход, письма и защиту форм:
+#     GOOGLE_CLIENT_ID, RESEND_API_KEY, MAIL_FROM
+#     (Turnstile, база D1, домен — создаются автоматически)
+#
+# Если секретов Cloudflare в репозитории нет, деплой аккуратно пропускается
+# (жёлтая пометка «skipped» вместо красного креста).
+#
+# После этого каждый push в master/main обновляет сайт сам.
+# Ручной запуск: Actions → GustoPlay — деплой в Cloudflare → Run workflow.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master, main]
+
+concurrency:
+  group: gustoplay-deploy
+  cancel-in-progress: false
+
+env:
+  WRANGLER_SEND_METRICS: 'false'
+
+jobs:
+  guard:
+    name: Ключи Cloudflare на месте?
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      has_secrets: ${{ steps.check.outputs.has_secrets }}
+    steps:
+      - name: Проверка секретов
+        id: check
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "has_secrets=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_secrets=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Секреты CLOUDFLARE_API_TOKEN и CLOUDFLARE_ACCOUNT_ID не заданы — деплой в Cloudflare пропущен. Чтобы включить, добавьте их: Settings → Secrets and variables → Actions."
+          fi
+
+  deploy:
+    name: Проверки → сборка → публикация
+    needs: guard
+    if: needs.guard.outputs.has_secrets == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Установка зависимостей
+        run: npm ci
+
+      # Публикуем только проверенный код: сначала все тесты, потом деплой.
+      - run: npm run check
+      - run: npm run audit
+      - run: npm test
+      - run: npm run test:api
+      - run: npm run test:e2e
+
+      - name: Секреты воркера из настроек репозитория
+        env:
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          MAIL_FROM: ${{ secrets.MAIL_FROM }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const keys = ["GOOGLE_CLIENT_ID", "TURNSTILE_SECRET", "RESEND_API_KEY", "MAIL_FROM"];
+            const lines = keys.filter((k) => process.env[k]).map((k) => `${k} = ${JSON.stringify(process.env[k])}`);
+            if (!lines.length) { console.log("Секретов нет — e-mail-аккаунты работают, Google и письма выключены."); }
+            else { fs.writeFileSync("worker/.dev.vars", lines.join("\n") + "\n"); console.log("Готово:", lines.map((l) => l.split(" = ")[0]).join(", ")); }
+          '
+
+      # Один скрипт делает всё: база D1 + схема, маршрут /api/*, Turnstile,
+      # сборка с адресом API, секреты, публикация воркера и сайта, домен.
+      - name: Развёртывание
+        run: npm run deploy
+
+      - name: Итог
+        run: |
+          {
+            echo "### GustoPlay опубликован 🎮"
+            echo ""
+            echo "- сайт: ${PAGES_URL:-https://gustoplay.pages.dev}"
+            echo "- страниц: $(find dist -name '*.html' | wc -l) · размер: $(du -sh dist | cut -f1)"
+            echo "- API аккаунтов: /api/* на домене"
+            echo "- подробности: docs/DEPLOY.md"
+          } >> "$GITHUB_STEP_SUMMARY"

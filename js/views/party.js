@@ -1,0 +1,69 @@
+/** «Во что поиграть вместе»: подбор под конкретную компанию и платформы. */
+import { recommendForParty } from '../engine.js';
+import { MODES, PLATFORMS } from '../taxonomy.js';
+import { t, tl, getLang } from '../i18n.js';
+import { getProfile } from '../store.js';
+import { cardsGrid, esc, emptyState, filterGroup } from './components.js';
+import { currentPath, navigate } from '../nav.js';
+
+const PLAYER_PRESETS = [
+  { id: 2, label: '2', icon: '👫' },
+  { id: 3, label: '3', icon: '🧑‍🤝‍🧑' },
+  { id: 4, label: '4', icon: '👨‍👩‍👧' },
+  { id: 5, label: '5+', icon: '🎉' },
+];
+
+export function render(ctx) {
+  const profile = getProfile();
+  const players = Number(ctx.query.players) || Number(profile.answers?.players) || 2;
+  const platforms = (ctx.query.platforms ? String(ctx.query.platforms).split(',') : (profile.answers?.platforms || [])).filter((p) => PLATFORMS[p]);
+  const freeOnly = ctx.query.free === '1';
+
+  const games = recommendForParty({
+    players: players >= 5 ? 5 : players,
+    platforms,
+    freeOnly,
+    limit: 24,
+    seed: (profile.meta?.seed || 1) + players,
+    lang: getLang(),
+  });
+
+  const form = `
+    <div class="party-form">
+      ${filterGroup(t('party.players'), PLAYER_PRESETS, [players], { action: 'p-players' })}
+      ${filterGroup(t('party.platforms'), Object.keys(PLATFORMS).map((id) => ({ id, label: tl(PLATFORMS, id), icon: PLATFORMS[id].icon })), platforms, { action: 'p-platform' })}
+      ${filterGroup(' ', [{ id: 1, label: t('party.freeOnly'), icon: '🆓' }], freeOnly ? [1] : [], { action: 'p-free' })}
+    </div>`;
+
+  const localCoop = games.filter((g) => g.modes.includes('coopLocal')).length;
+
+  return `
+  <section class="section party">
+    <header class="section-head">
+      <h1>${esc(t('party.title'))}</h1>
+      <p>${esc(t('party.subtitle'))}</p>
+    </header>
+    ${form}
+    <div class="notice">🎯 ${esc(t('party.result', { n: players, m: games.length }))}
+      ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
+    </div>
+    ${games.length
+      ? cardsGrid(games, { marks: getProfile().marks })
+      : emptyState(t('results.empty'), t('party.localHint'), `<a class="btn btn-primary" href="#/catalog?coopLocal=1" data-action="nav">${esc(tl(MODES, 'coopLocal'))}</a>`)}
+    <div class="center"><a class="btn btn-ghost" href="#/catalog" data-action="nav">${esc(t('home.cta.catalog'))}</a></div>
+  </section>`;
+}
+
+/** Обновление параметров компании в адресе */
+export function updateParty(patch) {
+  const [, queryString = ''] = currentPath().split('?');
+  const params = new URLSearchParams(queryString);
+  for (const [key, value] of Object.entries(patch)) {
+    if (value === null || value === undefined || value === '' || (Array.isArray(value) && !value.length)) params.delete(key);
+    else params.set(key, Array.isArray(value) ? value.join(',') : String(value));
+  }
+  navigate(`party${params.toString() ? `?${params}` : ''}`, { replace: true });
+}
+
+export const title = () => `${t('party.title')} — ${t('site.name')}`;
+export const description = () => t('party.subtitle');

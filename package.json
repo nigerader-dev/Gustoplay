@@ -1,0 +1,37 @@
+{
+  "name": "gustoplay",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GustoPlay — умный подбор игры по вкусу: квиз, обучение на вашем опыте, кооп/мультиплеер/сингл",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "dev:accounts": "node --experimental-sqlite tools/local-api-server.mjs",
+    "start": "node server.js",
+    "preview": "node server.js --dir=dist",
+    "build": "node tools/build-static.mjs",
+    "build:fast": "node tools/build-static.mjs --no-prerender",
+    "deploy": "node tools/deploy-cloudflare.mjs",
+    "deploy:check": "node tools/deploy-cloudflare.mjs --check",
+    "test": "node tools/smoke-test.mjs",
+    "test:api": "node --experimental-sqlite tools/test-api.mjs",
+    "test:e2e": "node --experimental-sqlite tools/test-e2e.mjs",
+    "test:all": "npm run check && npm run audit && npm test && npm run test:api && npm run test:e2e",
+    "verify:build": "node tools/verify-build.mjs",
+    "check": "node tools/check-catalog.mjs",
+    "clean": "node tools/clean-catalog.mjs",
+    "audit": "node tools/audit-catalog.mjs",
+    "backup": "node tools/backup.mjs backup",
+    "backup:list": "node tools/backup.mjs list",
+    "backup:verify": "node tools/backup.mjs verify",
+    "backup:restore": "node tools/backup.mjs restore",
+    "backup:status": "node tools/backup.mjs status",
+    "commit": "node tools/backup.mjs commit"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.3"
+  }
+}
