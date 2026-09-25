@@ -35,7 +35,7 @@
 ```bash
 cd gustoplay   # корень этого репозитория
 npm ci                                        # зависимости нужны для сборки и тестов
-node server.js                                # сайт → http://0.0.0.0:5173
+node server.js                                # сайт → http://0.0.0.0:5173 (+ live reload: правишь — браузер обновляется сам)
 npm run dev:accounts -- --dir=dist            # сайт + настоящие аккаунты (нужен Node 22+)
 ```
 

@@ -2,17 +2,29 @@
  * GustoPlay — минималистичный статический сервер для локальной разработки и предпросмотра.
  * Без зависимостей. Слушает 0.0.0.0, не ставит X-Frame-Options (нужно для live-preview в iframe).
  *
- *   node server.js                 # раздаёт текущую папку на http://0.0.0.0:5173
+ * В dev-режиме включён live reload (tools/live-reload.mjs): браузер сам обновляется
+ * при любой правке index.html, css/, js/, sw.js и манифеста. CSS подменяется без
+ * перезагрузки страницы. В прод-сборку и в превью dist/ скрипт перезагрузки не попадает.
+ *
+ *   node server.js                 # раздаёт текущую папку на http://0.0.0.0:5173 (+ live reload)
  *   PORT=8080 node server.js       # свой порт
- *   node server.js --dir=dist      # раздаёт собранную статику (после npm run build)
+ *   node server.js --dir=dist      # раздаёт собранную статику (после npm run build, без reload)
+ *   node server.js --no-reload     # dev без автообновления
  */
 import http from 'node:http';
 import { createReadStream, statSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { extname, join, normalize, resolve } from 'node:path';
+import { createReloader, injectReload } from './tools/live-reload.mjs';
 
-const root = resolve(process.cwd(), process.argv.find((a) => a.startsWith('--dir='))?.slice(6) || '.');
+const explicitDir = process.argv.find((a) => a.startsWith('--dir='))?.slice(6);
+const root = resolve(process.cwd(), explicitDir || '.');
 const port = Number(process.env.PORT || 5173);
 const host = '0.0.0.0';
+
+// Live reload — только для разработки: по умолчанию при раздаче корня проекта,
+// для собранного dist/ выключен (там должен быть прод). --reload форсирует.
+const live = !process.argv.includes('--no-reload') && (!explicitDir || process.argv.includes('--reload'));
+const reloader = live ? createReloader({ root }) : null;
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -42,15 +54,21 @@ function send(res, code, body, type = 'text/plain; charset=utf-8') {
 
 function serveFile(res, file) {
   const ext = extname(file).toLowerCase();
+  // в dev-режиме подмешиваем live reload в каждую html-страницу (включая SPA-fallback)
+  if (reloader && ext === '.html') {
+    return send(res, 200, injectReload(readFileSync(file, 'utf8')), MIME['.html']);
+  }
+  const noCache = ext === '.html' || (reloader && (ext === '.js' || ext === '.mjs' || ext === '.css'));
   res.writeHead(200, {
     'Content-Type': MIME[ext] || 'application/octet-stream',
-    'Cache-Control': ext === '.html' ? 'no-store' : 'public, max-age=60',
+    'Cache-Control': noCache ? 'no-store' : 'public, max-age=60',
     'Content-Length': statSync(file).size,
   });
   createReadStream(file).pipe(res);
 }
 
 const server = http.createServer((req, res) => {
+  if (reloader?.handle(req, res)) return;
   const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
   let target = normalize(join(root, urlPath));
 
@@ -85,5 +103,8 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, host, () => {
   console.log(`GustoPlay dev server → http://${host}:${port}  (root: ${root})`);
+  console.log(live
+    ? 'Live reload: ON — правишь файлы, браузер обновляется сам (CSS — без перезагрузки).'
+    : 'Live reload: off.');
   console.log('Для превью в браузере открой прокси-адрес порта из панели Arena.');
 });
