@@ -101,6 +101,20 @@ jobs:
       - name: Развёртывание
         run: npm run deploy
 
+      - name: Проверка продакшена (gustoplay.ru)
+        continue-on-error: true
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -o /tmp/live.html -w '%{http_code}' --max-time 20 -L https://gustoplay.ru || true)
+            if [ "$code" = "200" ] && grep -qi "gustoplay" /tmp/live.html; then
+              echo "✅ gustoplay.ru отвечает: HTTP 200, страница GustoPlay отдаётся"
+              exit 0
+            fi
+            echo "Попытка $i: HTTP ${code:-нет ответа} — жду 10 секунд"
+            sleep 10
+          done
+          echo "::warning::gustoplay.ru не подтвердился из раннера — проверь сайт вручную (DNS может обновляться до нескольких минут)."
+
       - name: Итог
         run: |
           {
