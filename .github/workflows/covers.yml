@@ -25,6 +25,7 @@ on:
       - 'tools/steam-overrides.json'
       - 'tools/resolve-steam-covers.mjs'
       - 'js/catalog/part-*.js'
+      - '.github/workflows/covers.yml'
 
 concurrency:
   group: gustoplay-covers
@@ -32,6 +33,7 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   resolve:
@@ -40,6 +42,10 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
+        with:
+          # полная история и реальная ветка: коммитим результат прямо в неё
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
 
       - uses: actions/setup-node@v5
         with:
@@ -49,19 +55,25 @@ jobs:
         run: node tools/resolve-steam-covers.mjs --part=${{ inputs.part || 'all' }}
 
       - name: Коммит результата
+        env:
+          BRANCH: ${{ github.ref_name }}
         run: |
+          set -x
           git config user.name "gustoplay-bot"
           git config user.email "gustoplay-bot@users.noreply.github.com"
           git add js/catalog/steam-covers.js tools/cover-review.log
           if git diff --cached --quiet; then
             echo "Изменений нет — обложки уже сопоставлены."
+            exit 0
+          fi
+          git commit -m "chore(covers): официальные арты каталога (авто-резолвер)"
+          git push origin "HEAD:refs/heads/${BRANCH}" 2>&1 | tee /tmp/push.log || true
+          if git ls-remote --exit-code origin "refs/heads/${BRANCH}" | grep -q "$(git rev-parse HEAD)"; then
+            echo "OK: коммит в ветке"
           else
-            git commit -m "chore(covers): официальные арты каталога (авто-резолвер)"
-            for i in 1 2 3; do
-              git push origin "HEAD:${GITHUB_REF_NAME}" && break
-              echo "Пуш не прошёл (ветка уехала вперёд) — ребейз и попытка $i снова"
-              git pull --rebase origin "${GITHUB_REF_NAME}"
-            done
+            echo "::error::Не удалось запушить результат резолвера (см. /tmp/push.log). Права токена: contents:write."
+            tail -5 /tmp/push.log
+            exit 1
           fi
 
       - name: Отчёт по сомнительным совпадениям
@@ -72,12 +84,19 @@ jobs:
             echo '```'
             cat tools/cover-review.log 2>/dev/null || echo "(лога нет)"
             echo '```'
+            echo "Сопоставлено: $(grep -c 'steamId' js/catalog/steam-covers.js || true) записей"
           } >> "$GITHUB_STEP_SUMMARY"
+          # первые строки лога дублируем аннотациями — они видны через API
+          head -c 1800 tools/cover-review.log | while IFS= read -r line; do
+            echo "::notice::cover-review: $line"
+          done
 
       - name: Лог резолвера (артефакт)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cover-review
-          path: tools/cover-review.log
+          path: |
+            tools/cover-review.log
+            js/catalog/steam-covers.js
           if-no-files-found: ignore
