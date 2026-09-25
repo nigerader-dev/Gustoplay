@@ -192,6 +192,31 @@ for (const width of WIDTHS) {
       };
     });
 
+    // Плашки на обложке: оценка справа сверху, «сколько игроков» слева сверху —
+    // они не должны пересекаться между собой и вылезать за картинку
+    const cover = await page.evaluate(() => {
+      const card = document.querySelector('.game-card');
+      if (!card) return null;
+      const img = card.querySelector('.card-cover');
+      const badge = card.querySelector('.cover-badge');
+      const rating = card.querySelector('.rating');
+      if (!img || !badge) return null;
+      const a = img.getBoundingClientRect(), b = badge.getBoundingClientRect();
+      const r = rating?.getBoundingClientRect();
+      const overlap = (x, y) => !(x.right <= y.left || y.right <= x.left || x.bottom <= y.top || y.bottom <= x.top);
+      return {
+        outside: b.left < a.left - 0.5 || b.right > a.right + 0.5 || b.top < a.top - 0.5 || b.bottom > a.bottom + 0.5,
+        withRating: r ? overlap(b, r) : false,
+        // внизу обложки подпись «год · студия» (у официального арта и у нашей запасной
+        // обложки), поэтому плашка игроков должна стоять в верхней половине картинки
+        overCaption: b.top - a.top > a.height / 2,
+      };
+    });
+    if (cover?.outside) failures.push(`плашка игроков вылезает за обложку (${name} @${width})`);
+    if (cover?.withRating) failures.push(`плашка игроков налезает на оценку (${name} @${width})`);
+    if (cover?.overCaption) failures.push(`плашка игроков перекрывает подпись обложки (${name} @${width})`);
+    if (cover && !cover.outside && !cover.withRating && !cover.overCaption) console.log(`   ↳ плашки обложки не пересекаются`);
+
     if (SHOTS === 'all' || (SHOTS === 'key' && KEY.has(name))) {
       const { join } = await import('node:path');
       await page.screenshot({ path: join(OUT, `${name}-${width}${TAG ? '-' + TAG : ''}.png`) });
