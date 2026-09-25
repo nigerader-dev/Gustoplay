@@ -14,9 +14,14 @@
     "deploy": "node tools/deploy-cloudflare.mjs",
     "deploy:check": "node tools/deploy-cloudflare.mjs --check",
     "test": "node tools/smoke-test.mjs",
+    "test:functional": "node tools/test-functional.mjs",
+    "test:a11y": "node tools/check-a11y.mjs",
+    "test:css": "node tools/check-responsive.mjs",
+    "test:visual": "node tools/shots.mjs",
     "test:api": "node --experimental-sqlite tools/test-api.mjs",
     "test:e2e": "node --experimental-sqlite tools/test-e2e.mjs",
-    "test:all": "npm run check && npm run audit && npm test && npm run test:api && npm run test:e2e",
+    "test:reload": "node tools/test-reload.mjs",
+    "test:all": "npm run check && npm run audit && npm test && npm run test:functional && npm run test:a11y && npm run test:css && npm run test:visual && npm run test:api && npm run test:e2e && npm run test:reload",
     "verify:build": "node tools/verify-build.mjs",
     "check": "node tools/check-catalog.mjs",
     "clean": "node tools/clean-catalog.mjs",
@@ -32,6 +37,7 @@
     "node": ">=18"
   },
   "devDependencies": {
+    "css": "^3.0.0",
     "jsdom": "^24.1.3"
   }
 }

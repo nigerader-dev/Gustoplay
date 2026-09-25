@@ -1,26 +1,29 @@
 /** «Во что поиграть вместе»: подбор под конкретную компанию и платформы. */
 import { recommendForParty } from '../engine.js';
+import { icon } from '../icons.js';
 import { MODES, PLATFORMS } from '../taxonomy.js';
-import { t, tl, getLang } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { getProfile } from '../store.js';
 import { cardsGrid, esc, emptyState, filterGroup } from './components.js';
 import { currentPath, navigate } from '../nav.js';
 
 const PLAYER_PRESETS = [
-  { id: 2, label: '2', icon: '👫' },
-  { id: 3, label: '3', icon: '🧑‍🤝‍🧑' },
-  { id: 4, label: '4', icon: '👨‍👩‍👧' },
-  { id: 5, label: '5+', icon: '🎉' },
+  { id: 2, label: '2' },
+  { id: 3, label: '3' },
+  { id: 4, label: '4' },
+  { id: 5, label: '5+' },
 ];
 
 export function render(ctx) {
   const profile = getProfile();
-  const players = Number(ctx.query.players) || Number(profile.answers?.players) || 2;
+  // пресетов всего 4 (максимум «5+»): большее число сводим к 5, иначе подпись врёт,
+  // а активный пресет не подсвечивается
+  const players = Math.min(5, Number(ctx.query.players) || Number(profile.answers?.players) || 2);
   const platforms = (ctx.query.platforms ? String(ctx.query.platforms).split(',') : (profile.answers?.platforms || [])).filter((p) => PLATFORMS[p]);
   const freeOnly = ctx.query.free === '1';
 
   const games = recommendForParty({
-    players: players >= 5 ? 5 : players,
+    players,
     platforms,
     freeOnly,
     limit: 24,
@@ -32,7 +35,7 @@ export function render(ctx) {
     <div class="party-form">
       ${filterGroup(t('party.players'), PLAYER_PRESETS, [players], { action: 'p-players' })}
       ${filterGroup(t('party.platforms'), Object.keys(PLATFORMS).map((id) => ({ id, label: tl(PLATFORMS, id), icon: PLATFORMS[id].icon })), platforms, { action: 'p-platform' })}
-      ${filterGroup(' ', [{ id: 1, label: t('party.freeOnly'), icon: '🆓' }], freeOnly ? [1] : [], { action: 'p-free' })}
+      ${filterGroup(' ', [{ id: 1, label: t('party.freeOnly'), icon: 'gift' }], freeOnly ? [1] : [], { action: 'p-free' })}
     </div>`;
 
   const localCoop = games.filter((g) => g.modes.includes('coopLocal')).length;
@@ -44,7 +47,7 @@ export function render(ctx) {
       <p>${esc(t('party.subtitle'))}</p>
     </header>
     ${form}
-    <div class="notice">🎯 ${esc(t('party.result', { n: players, m: games.length }))}
+    <div class="notice">${icon('target')} ${esc(tp('party.result', games.length, { n: players, m: games.length }))}
       ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
     </div>
     ${games.length

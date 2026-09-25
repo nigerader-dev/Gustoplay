@@ -1,7 +1,8 @@
 /** Страница результатов: персональная выдача с объяснениями и пересчётом на ходу. */
 import { recommend, tasteSummary } from '../engine.js';
+import { icon } from '../icons.js';
 import { GENRES, TAGS } from '../taxonomy.js';
-import { t, tl } from '../i18n.js';
+import { t, tl, tp } from '../i18n.js';
 import { getProfile, setMeta, trackImpressions, resetProfile } from '../store.js';
 import { navigate } from '../nav.js';
 import { FEATURES } from '../config.js';
@@ -22,14 +23,14 @@ export function render() {
   trackImpressions(result.list.map((x) => x.game.slug));
 
   if (!result.list.length) {
-    return `<section class="section">${emptyState(t('results.empty'), t('home.cta.start'), `<a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('quiz.restart'))}</a>`)}</section>`;
+    return `<section class="section"><h1>${esc(t('results.title'))}</h1>${emptyState(t('results.empty'), t('home.cta.start'), `<a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('quiz.restart'))}</a>`)}</section>`;
   }
 
   const filtersBar = `
     <div class="results-bar">
       <div class="results-count">
-        <strong>${esc(t('results.pool'))}: ${result.poolSize}</strong>
-        <span>${esc(t('results.subtitle', { n: result.poolSize }))}</span>
+        <strong>${esc(tp('results.pool', result.poolSize))}</strong>
+        <span>${esc(t('results.subtitle'))}</span>
         ${result.confidence >= 25 ? `<span class="results-confidence" title="${esc(t('results.confidence.hint'))}">${esc(t('results.confidence', { n: result.confidence }))}</span>` : ''}
       </div>
       <div class="results-actions">
@@ -37,8 +38,8 @@ export function render() {
           <input type="checkbox" data-action="toggle-played" ${preset.includePlayed ? 'checked' : ''}>
           <span>${esc(t('results.showPlayed'))}</span>
         </label>
-        ${FEATURES.reshuffle ? `<button type="button" class="btn btn-outline" data-action="reshuffle">🔄 ${esc(t('results.reshuffle'))}</button>` : ''}
-        <a class="btn btn-ghost" href="#/quiz" data-action="nav">✏️ ${esc(t('quiz.restart'))}</a>
+        ${FEATURES.reshuffle ? `<button type="button" class="btn btn-outline" data-action="reshuffle">${icon('refresh')} ${esc(t('results.reshuffle'))}</button>` : ''}
+        <a class="btn btn-ghost" href="#/quiz" data-action="nav">${icon('edit')} ${esc(t('quiz.restart'))}</a>
       </div>
     </div>`;
 
@@ -48,7 +49,7 @@ export function render() {
         <span class="taste-label">${esc(t('profile.topTags'))}</span>
         <div class="chips-cloud small">
           ${summary.topTags.slice(0, 6).map((id) => `<a class="chip" href="#/tag/${id}" data-action="nav">${esc(tl(TAGS, id))}</a>`).join('')}
-          ${summary.topGenres.slice(0, 3).map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${GENRES[id]?.icon || ''} ${esc(tl(GENRES, id))}</a>`).join('')}
+          ${summary.topGenres.slice(0, 3).map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</a>`).join('')}
         </div>
       </div>
       ${summary.negativeTags.length ? `<div>
@@ -69,7 +70,7 @@ export function render() {
       <p>${answered ? esc(t('quiz.intro')) : esc(t('home.hero.lead'))}</p>
     </header>
 
-    ${result.relaxed ? `<div class="notice">⚠️ ${esc(t('results.relaxed'))}</div>` : ''}
+    ${result.relaxed ? `<div class="notice">${icon('alert')} ${esc(t('results.relaxed'))}</div>` : ''}
     ${tasteBlock}
     ${filtersBar}
     ${adSlot('results-inline')}
@@ -91,4 +92,4 @@ export function showMore(n = FEATURES.pageSize) {
 export function reset() { limit = FEATURES.pageSize; }
 
 export const title = () => `${t('results.title')} — ${t('site.name')}`;
-export const description = () => t('results.subtitle', { n: '190+' });
+export const description = () => t('results.subtitle');

@@ -14,6 +14,9 @@ coverage/
 backups/
 restore/
 
+# Скриншоты визуального QA (tools/shots.mjs) — тяжёлые, живут только локально
+docs/qa-shots/
+
 .DS_Store
 *.log
 .env*

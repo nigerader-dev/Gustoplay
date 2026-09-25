@@ -5,6 +5,7 @@
 import { GENRES, TAGS, MODES, PLATFORMS, PRICE } from '../taxonomy.js';
 import { coverDataUri, tagColor } from '../cover.js';
 import { t, tl, getLang } from '../i18n.js';
+import { icon } from '../icons.js';
 import { ADS, AD_SLOTS, SITE, FEATURES } from '../config.js';
 import { getConsent, adCount, bumpAdCounter } from '../store.js';
 
@@ -16,7 +17,7 @@ export const esc = (s = '') => String(s)
  * ------------------------------------------------------------------ */
 
 export const modeBadges = (game, limit = 3) => game.modes.slice(0, limit)
-  .map((m) => `<span class="badge badge-mode" title="${esc(tl(MODES, m))}">${MODES[m]?.icon || ''} ${esc(tl(MODES, m))}</span>`)
+  .map((m) => `<span class="badge badge-mode" title="${esc(tl(MODES, m))}">${icon(MODES[m]?.icon)} ${esc(tl(MODES, m))}</span>`)
   .join('');
 
 export const playersLabel = (game) => (game.players[0] === game.players[1]
@@ -24,7 +25,7 @@ export const playersLabel = (game) => (game.players[0] === game.players[1]
   : `${game.players[0]}–${game.players[1]}`);
 
 export const platformIcons = (game) => game.platforms
-  .map((p) => `<span class="plat" title="${esc(tl(PLATFORMS, p))}">${PLATFORMS[p]?.icon || ''}</span>`)
+  .map((p) => `<span class="plat" title="${esc(tl(PLATFORMS, p))}">${icon(PLATFORMS[p]?.icon)}</span>`)
   .join('');
 
 export const tagChips = (game, limit = 6, link = true) => game.tags.slice(0, limit)
@@ -39,8 +40,8 @@ export const tagChips = (game, limit = 6, link = true) => game.tags.slice(0, lim
 
 export const genreChips = (game, limit = 3, link = true) => game.genres.slice(0, limit)
   .map((id) => (link
-    ? `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${GENRES[id]?.icon || ''} ${esc(tl(GENRES, id))}</a>`
-    : `<span class="chip chip-genre">${GENRES[id]?.icon || ''} ${esc(tl(GENRES, id))}</span>`))
+    ? `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</a>`
+    : `<span class="chip chip-genre">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</span>`))
   .join('');
 
 export const ratingPill = (game) => {
@@ -75,8 +76,7 @@ export const meters = (game) => `
  * ------------------------------------------------------------------ */
 
 export function coverImage(game, cls = 'cover-img') {
-  const icon = GENRES[game.genres[0]]?.icon || '🎮';
-  const generated = coverDataUri(game, icon);
+  const generated = coverDataUri(game);
   // По умолчанию рисуем собственную обложку. Если владелец сайта положил официальные арты
   // в /covers (FEATURES.realCovers = true), показываем их, а сгенерированную используем как запас.
   const src = FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated;
@@ -101,7 +101,7 @@ export function gameCard(game, opts = {}) {
       ${coverImage(game)}
       ${ratingPill(game)}
       <div class="card-cover-meta">
-        <span class="cover-badge">${MODES[game.modes[0]]?.icon || '🎮'} ${playersLabel(game)}</span>
+        <span class="cover-badge">${icon(MODES[game.modes[0]]?.icon)} ${playersLabel(game)}</span>
       </div>
     </a>
     <div class="card-body">
@@ -114,7 +114,7 @@ export function gameCard(game, opts = {}) {
       ${whyHtml}
       <div class="card-foot">
         ${priceLabel(game)}
-        <span class="len">⏱ ${lengthLabel(game)}</span>
+        <span class="len">${icon('clock')} ${lengthLabel(game)}</span>
       </div>
       ${markButtons(game.slug, mark)}
     </div>
@@ -133,16 +133,16 @@ export const cardsGrid = (games, opts = {}) => `<div class="grid">${games.map((g
 
 export function markButtons(slug, status = null) {
   const items = [
-    { id: 'played', icon: '🎮', label: t('mark.played'), tip: t('mark.played.tip') },
-    { id: 'liked', icon: '❤️', label: t('mark.liked'), tip: t('mark.liked.tip') },
-    { id: 'disliked', icon: '👎', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
-    { id: 'wishlist', icon: '🔖', label: t('mark.wishlist'), tip: '' },
+    { id: 'played', icon: 'controller', label: t('mark.played'), tip: t('mark.played.tip') },
+    { id: 'liked', icon: 'heart', label: t('mark.liked'), tip: t('mark.liked.tip') },
+    { id: 'disliked', icon: 'minusCircle', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
+    { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: '' },
   ];
   return `<div class="marks" data-slug="${slug}">
     <span class="marks-label">${esc(t('results.mark'))}:</span>
     ${items.map((i) => `<button type="button" class="mark ${status === i.id ? 'on' : ''}"
       data-action="mark" data-slug="${slug}" data-status="${i.id}" title="${esc(i.tip || i.label)}"
-      aria-pressed="${status === i.id}">${i.icon} <span>${esc(i.label)}</span></button>`).join('')}
+      aria-pressed="${status === i.id}">${icon(i.icon)} <span>${esc(i.label)}</span></button>`).join('')}
   </div>`;
 }
 
@@ -156,7 +156,7 @@ export function filterGroup(title, options, activeIds, { multi = true, action = 
     <div class="filter-title">${esc(title)}</div>
     <div class="filter-options">
       ${options.map((o) => `<button type="button" class="chip chip-btn ${activeIds.includes(o.id) ? 'on' : ''}"
-        data-action="${action}" data-id="${o.id}" aria-pressed="${activeIds.includes(o.id)}">${o.icon || ''} ${esc(o.label)}</button>`).join('')}
+        data-action="${action}" data-id="${o.id}" aria-pressed="${activeIds.includes(o.id)}">${o.icon ? `${icon(o.icon)} ` : ''}${esc(o.label)}</button>`).join('')}
     </div>
   </div>`;
 }
@@ -231,9 +231,9 @@ export const breadcrumbs = (items) => `<nav class="crumbs">${items
     : `<a href="${i.href}" data-action="nav">${esc(i.label)}</a><span class="dot-sep">/</span>`))
   .join('')}</nav>`;
 
-export const emptyState = (title, text, cta = '') => `
+export const emptyState = (title, text, cta = '', iconName = 'search') => `
   <div class="empty">
-    <div class="empty-icon">🔍</div>
+    <div class="empty-icon">${icon(iconName)}</div>
     <h3>${esc(title)}</h3>
     <p>${esc(text)}</p>
     ${cta}
@@ -249,7 +249,7 @@ export const storeLinks = (game) => {
   const steam = `${game.links.steam}${SITE.affiliates.steam}`;
   const ig = `${game.links.instantGaming}${SITE.affiliates.instantGaming}`;
   return `<div class="stores">
-    <a class="btn btn-ghost" href="${steam}" target="_blank" rel="noopener nofollow">🛒 ${esc(t('game.steam'))}</a>
-    <a class="btn btn-ghost" href="${ig}" target="_blank" rel="noopener nofollow">💸 ${esc(t('game.instant'))}</a>
+    <a class="btn btn-ghost" href="${steam}" target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>
+    <a class="btn btn-ghost" href="${ig}" target="_blank" rel="noopener nofollow">${icon('tag')} ${esc(t('game.instant'))}</a>
   </div>`;
 };

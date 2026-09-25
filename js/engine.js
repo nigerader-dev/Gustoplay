@@ -51,14 +51,14 @@ export const TIME_RANGES = {
 export const PREFERENCES = {
   /** С кем чаще играете (вопрос «company») */
   company: {
-    friends: { tags: ['coopfocused', 'laugh', 'voicechat', 'lobbybig', 'party'], genres: ['party'], mood: { laugh: 2, compete: 1 } },
-    partner: { tags: ['cozy', 'storyrich', 'coopLocal', 'choices', 'relaxing'], mood: { feel: 2, story: 1.5 } },
-    kids: { tags: ['family', 'cute', 'colorful', 'nonviolent', 'coopLocal'], mood: { relax: 2, laugh: 1 } },
+    friends: { tags: ['coopfocused', 'funny', 'voicechat', 'lobbybig', 'social'], genres: ['party'], mood: { laugh: 2, compete: 1 } },
+    partner: { tags: ['cozy', 'storyrich', 'splitscreen', 'choices', 'relaxing'], mood: { feel: 2, story: 1.5 } },
+    kids: { tags: ['family', 'cute', 'colorful', 'nonviolent', 'splitscreen'], mood: { relax: 2, laugh: 1 } },
     randoms: { tags: ['pvpfocused', 'voicechat', 'battleroyale', 'clan'], mood: { compete: 2.5, adrenaline: 1 } },
   },
   /** Сколько длится одна сессия (вопрос «session») */
   session: {
-    quick: { tags: ['short', 'episodic', 'endlessloop', 'roguelike'], mood: { relax: 0.6 } },
+    quick: { tags: ['short', 'episodic', 'endlessloop', 'timeloop'], mood: { relax: 0.6 } },
     medium: { tags: ['replayable', 'coopfocused'] },
     evening: { tags: ['openworld', 'long', 'endless', 'storyrich'], mood: { escape: 1.2, progress: 0.8 } },
   },
@@ -66,8 +66,8 @@ export const PREFERENCES = {
   priority: {
     story: { tags: ['storyrich', 'dialogheavy', 'choices', 'cinematic'], mood: { story: 3, feel: 1.5 } },
     mechanics: { tags: ['tbs', 'deckbuilding', 'automation', 'management', 'basebuilding'], mood: { think: 2.5 } },
-    freedom: { tags: ['openworld', 'exploration', 'sandbox', 'mods'], mood: { explore: 2.5, create: 2 } },
-    competition: { tags: ['pvpfocused', 'arena', 'battleroyale', 'esports'], mood: { compete: 3 } },
+    freedom: { tags: ['openworld', 'exploration', 'crafting', 'mods'], mood: { explore: 2.5, create: 2 } },
+    competition: { tags: ['pvpfocused', 'arena', 'battleroyale', 'squad'], mood: { compete: 3 } },
   },
   /** Насколько свежая игра нужна (вопрос «novelty») */
   novelty: {
@@ -84,8 +84,10 @@ export const PREFERENCES = {
 export const emptyProfile = () => ({
   version: 2,
   answers: {
-    mood: [], modes: [], players: null, company: '', platforms: [], time: 'any', session: '',
-    difficulty: [], genres: [], vibes: [], priority: [], novelty: '', price: 'any', avoid: [], partyMode: false,
+    // «не ответили» — это [], '' и null: движок трактует их как «без ограничений»
+    // (раньше time/price по умолчанию были 'any' — и прогресс свежего квиза показывал 71%)
+    mood: [], modes: [], players: null, company: '', platforms: [], time: '', session: '',
+    difficulty: [], genres: [], vibes: [], priority: [], novelty: '', price: '', avoid: [], partyMode: false,
   },
   /** отметки игр: { [slug]: { status, ts } }, status: liked | disliked | played | wishlist */
   marks: {},
@@ -162,7 +164,9 @@ export function computeWeights(profile) {
   for (const m of a.mood || []) add(mood, m, 3);
   for (const g of a.genres || []) add(genre, g, 2.5);
   for (const t of a.vibes || []) add(tag, t, 2);
-  for (const m of a.modes || []) add(mode, m, 2);
+  // режимы квиза (coop/pvp) раскрываем в режимы каталога: иначе вес висит на id,
+  // которого нет ни у одной игры, и «кооп» никак не усиливает кооп-игры
+  for (const m of a.modes || []) for (const real of MODE_GROUPS[m] || [m]) add(mode, real, 2);
 
   // 2. Мягкие предпочтения (компания, сессия, приоритеты, свежесть)
   const soft = PREFERENCES.company[a.company];
@@ -500,7 +504,9 @@ export function recommend(profile, opts = {}) {
 
   let visible = pool.filter((g) => !hidden(g));
   if (visible.length < limit) {
-    relaxed = pool.length >= limit;
+    // показываем не строгое совпадение — интерфейс обязан честно сказать об этом
+    // (раньше при пустом пуле фильтры игнорировались молча)
+    relaxed = true;
     visible = pool.length >= limit ? pool : GAMES.filter((g) => !hidden(g));
   }
 

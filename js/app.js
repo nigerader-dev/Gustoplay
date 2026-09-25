@@ -4,6 +4,7 @@
  * это важно и для Core Web Vitals (влияет на SEO и доход с рекламы).
  */
 import { setLang, getLang, t, tl } from './i18n.js';
+import { icon } from './icons.js';
 import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, SITE } from './config.js';
@@ -33,11 +34,11 @@ const ROUTES = [
   { path: ['quiz'], view: quiz, name: 'quiz' },
   { path: ['results'], view: results, name: 'results' },
   { path: ['catalog'], view: catalog, name: 'catalog' },
-  { path: ['mode', ':id'], view: catalog, name: 'mode', preset: (p) => ({ modes: [p.id], heading: `${MODES[p.id]?.icon || ''} ${tl(MODES, p.id)}` }) },
-  { path: ['genre', ':id'], view: catalog, name: 'genre', preset: (p) => ({ genres: [p.id], heading: `${GENRES[p.id]?.icon || ''} ${tl(GENRES, p.id)}` }) },
+  { path: ['mode', ':id'], view: catalog, name: 'mode', preset: (p) => ({ modes: [p.id], heading: tl(MODES, p.id), icon: MODES[p.id]?.icon }) },
+  { path: ['genre', ':id'], view: catalog, name: 'genre', preset: (p) => ({ genres: [p.id], heading: tl(GENRES, p.id), icon: GENRES[p.id]?.icon }) },
   { path: ['tag', ':id'], view: catalog, name: 'tag', preset: (p) => ({ tags: [p.id], heading: tl(TAGS, p.id) }) },
-  { path: ['mood', ':id'], view: catalog, name: 'mood', preset: (p) => ({ moods: [p.id], heading: `${MOODS[p.id]?.icon || ''} ${tl(MOODS, p.id)}` }) },
-  { path: ['platform', ':id'], view: catalog, name: 'platform', preset: (p) => ({ platforms: [p.id], heading: `${PLATFORMS[p.id]?.icon || ''} ${tl(PLATFORMS, p.id)}` }) },
+  { path: ['mood', ':id'], view: catalog, name: 'mood', preset: (p) => ({ moods: [p.id], heading: tl(MOODS, p.id), icon: MOODS[p.id]?.icon }) },
+  { path: ['platform', ':id'], view: catalog, name: 'platform', preset: (p) => ({ platforms: [p.id], heading: tl(PLATFORMS, p.id), icon: PLATFORMS[p.id]?.icon }) },
   { path: ['game', ':slug'], view: gameView, name: 'game' },
   { path: ['party'], view: party, name: 'party' },
   { path: ['profile'], view: profileView, name: 'profile' },
@@ -93,23 +94,26 @@ function header(ctx) {
   <header class="header">
     <div class="header-inner">
       <a class="logo" href="#/" data-action="nav" aria-label="${t('site.name')}">
-        <span class="logo-mark">🎮</span>
+        <span class="logo-mark">${icon('controller')}</span>
         <span class="logo-text">${t('site.name')}<small>${t('site.tagline')}</small></span>
       </a>
-      <nav class="nav" aria-label="main">
-        ${navItem('#/quiz', '🎯 ' + t('nav.quiz'), 'quiz', ctx)}
-        ${navItem('#/catalog', '🗂️ ' + t('nav.catalog'), 'catalog', ctx)}
-        ${navItem('#/party', '👫 ' + t('nav.party'), 'party', ctx)}
-        ${navItem('#/profile', '⭐ ' + t('nav.profile'), 'profile', ctx)}
-        ${navItem('#/account', (isLoggedIn() ? '👤 ' : '🔐 ') + t('nav.account'), 'account', ctx)}
+      <nav class="nav" id="main-nav" aria-label="main">
+        <button type="button" class="nav-close" data-action="menu-close" aria-label="${t('common.close')}">${icon('x')}</button>
+        ${navItem('#/quiz', icon('compass') + ' ' + t('nav.quiz'), 'quiz', ctx)}
+        ${navItem('#/catalog', icon('grid') + ' ' + t('nav.catalog'), 'catalog', ctx)}
+        ${navItem('#/party', icon('users') + ' ' + t('nav.party'), 'party', ctx)}
+        ${navItem('#/profile', icon('heart') + ' ' + t('nav.profile'), 'profile', ctx)}
+        ${navItem('#/account', (isLoggedIn() ? icon('user') : icon('lock')) + ' ' + t('nav.account'), 'account', ctx)}
         ${navItem('#/about', t('nav.about'), 'about', ctx, ' nav-link-soft')}
       </nav>
       <div class="header-tools">
         <button type="button" class="icon-btn" data-action="lang-toggle" title="${t('common.lang')}">${lang.toUpperCase()}</button>
-        <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">🌗</button>
+        <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
+        <button type="button" class="icon-btn burger" data-action="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="${t('common.menu')}"><span></span><span></span><span></span></button>
       </div>
     </div>
-  </header>`;
+  </header>
+  <button type="button" class="nav-overlay" data-action="menu-close" aria-label="${t('common.close')}" tabindex="-1"></button>`;
 }
 
 function footer() {
@@ -120,7 +124,7 @@ function footer() {
     <div class="footer-inner">
       <div class="footer-col">
         <div class="logo">
-          <span class="logo-mark">🎮</span><span class="logo-text">${t('site.name')}</span>
+          <span class="logo-mark">${icon('controller')}</span><span class="logo-text">${t('site.name')}</span>
         </div>
         <p class="muted">${t('common.footer.note')}</p>
       </div>
@@ -155,7 +159,7 @@ function consentBanner() {
   return `
   <div class="consent" id="consent">
     <div>
-      <strong>🍪 ${t('about.ads.title')}</strong>
+      <strong>${icon('cookie')} ${t('about.ads.title')}</strong>
       <p>${t('consent.text')}</p>
     </div>
     <div class="consent-actions">
@@ -197,6 +201,12 @@ function render(scroll = true) {
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
   currentCtx = ctx;
   resetAdCounter();
+  // мобильные панели не переживают смену страницы (шторка фильтров живёт
+  // только на страницах каталога, где её состояние хранит модуль catalog)
+  document.body.classList.remove('menu-open');
+  if (!['catalog', 'mode', 'genre', 'tag', 'mood', 'platform'].includes(ctx.name)) {
+    catalog.setFiltersOpen(false);
+  }
 
   const view = ctx.route?.view;
   let html = '';
@@ -204,8 +214,8 @@ function render(scroll = true) {
   let description = t('site.description');
 
   if (!view) {
-    html = `<section class="section"><div class="empty"><div class="empty-icon">🧭</div>
-      <h3>${t('common.notFound')}</h3><p>${t('common.notFound.text')}</p>
+    html = `<section class="section"><div class="empty"><div class="empty-icon">${icon('compass')}</div>
+      <h1>${t('common.notFound')}</h1><p>${t('common.notFound.text')}</p>
       <div class="panel-actions"><a class="btn btn-primary" href="#/quiz" data-action="nav">${t('home.cta.start')}</a>
       <a class="btn btn-ghost" href="#/catalog" data-action="nav">${t('nav.catalog')}</a></div></div></section>`;
   } else {
@@ -303,7 +313,7 @@ window.addEventListener('gf:marks-changed', () => {
   const node = document.createElement('button');
   node.type = 'button';
   node.className = 'refresh-pill';
-  node.innerHTML = `🔄 ${t('results.recount')}`;
+  node.innerHTML = `${icon('refresh')} ${t('results.recount')}`;
   node.addEventListener('click', () => {
     node.remove();
     refreshPill = null;
@@ -317,6 +327,15 @@ window.addEventListener('gf:marks-changed', () => {
 /* ------------------------------------------------------------------ *
  * Глобальные действия (делегирование событий)
  * ------------------------------------------------------------------ */
+
+/** Закрыть мобильное меню (панель, оверлей, блокировка скролла) */
+function closeMenu(restoreFocus = false) {
+  document.getElementById('main-nav')?.classList.remove('open');
+  document.querySelector('.nav-overlay')?.classList.remove('show');
+  document.body.classList.remove('menu-open');
+  document.querySelector('.burger')?.setAttribute('aria-expanded', 'false');
+  if (restoreFocus) document.querySelector('.burger')?.focus();
+}
 
 document.addEventListener('click', (event) => {
   const target = event.target.closest('[data-action]');
@@ -356,10 +375,46 @@ document.addEventListener('click', (event) => {
       render(false);
       break;
     }
+    case 'toggle-played': {
+      // чекбокс «показывать сыгранное»: checked уже обновлён браузером, сохраняем и пересчитываем
+      const p = getProfile();
+      setMeta({ lastPreset: { ...(p.meta?.lastPreset || {}), includePlayed: Boolean(target.checked) } });
+      render(false);
+      break;
+    }
     case 'reset-all': {
       if (!confirm(t('profile.reset.confirm'))) return;
       resetProfile();
       navigate('quiz');
+      break;
+    }
+    case 'menu-toggle': {
+      const panel = document.getElementById('main-nav');
+      const willOpen = !panel?.classList.contains('open');
+      panel?.classList.toggle('open', willOpen);
+      document.querySelector('.nav-overlay')?.classList.toggle('show', willOpen);
+      document.body.classList.toggle('menu-open', willOpen);
+      target.setAttribute('aria-expanded', String(willOpen));
+      if (willOpen) panel?.querySelector('.nav-link')?.focus();
+      break;
+    }
+    case 'menu-close': {
+      closeMenu(true);
+      break;
+    }
+    case 'filters-toggle': {
+      const willOpen = !catalog.isFiltersOpen();
+      catalog.setFiltersOpen(willOpen);
+      document.getElementById('catalog-filters')?.classList.toggle('open', willOpen);
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', String(willOpen));
+      break;
+    }
+    case 'filters-apply': {
+      // «Показать N игр»: сворачиваем панель и подкручиваем к результатам
+      catalog.setFiltersOpen(false);
+      document.getElementById('catalog-filters')?.classList.remove('open');
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', 'false');
+      try { document.getElementById('catalog-found')?.scrollIntoView({ block: 'start' }); } catch { /* ignore */ }
       break;
     }
     case 'theme-toggle': {
@@ -434,6 +489,15 @@ document.addEventListener('keydown', (event) => {
     event.preventDefault();
     navigate('catalog');
     setTimeout(() => document.getElementById('catalog-q')?.focus(), 160);
+  }
+  if (event.key === 'Escape') {
+    if (document.querySelector('.nav.open')) closeMenu(true);
+    else if (catalog.isFiltersOpen()) {
+      catalog.setFiltersOpen(false);
+      document.getElementById('catalog-filters')?.classList.remove('open');
+      document.querySelector('.filters-toggle')?.setAttribute('aria-expanded', 'false');
+      document.querySelector('.filters-toggle')?.focus();
+    }
   }
 });
 

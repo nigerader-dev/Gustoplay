@@ -23,14 +23,14 @@ export const VIBE_TAGS = [
 
 /** «Чего не хочу»: у каждого варианта — теги и жёсткие исключения */
 export const AVOID_OPTIONS = [
-  { id: 'mtx',       icon: '💳', tags: ['mtx'] },
-  { id: 'timegate',  icon: '⏳', tags: ['timegate'] },
-  { id: 'grind',     icon: '🔁', tags: ['grind'] },
-  { id: 'difficult', icon: '💀', tags: ['difficult', 'soulslike', 'hardcoresim', 'bullethell'] },
-  { id: 'horror',    icon: '👻', genres: ['horror'] },
-  { id: 'cutscenes', icon: '🎬', tags: ['cutscenes'] },
-  { id: 'long',      icon: '🕰️', long: true },
-  { id: 'pvp',       icon: '🥊', pvpOnly: true },
+  { id: 'mtx',       icon: 'card', tags: ['mtx'] },
+  { id: 'timegate',  icon: 'hourglass', tags: ['timegate'] },
+  { id: 'grind',     icon: 'refresh', tags: ['grind'] },
+  { id: 'difficult', icon: 'skull', tags: ['difficult', 'soulslike', 'hardcoresim', 'bullethell'] },
+  { id: 'horror',    icon: 'ghost', genres: ['horror'] },
+  { id: 'cutscenes', icon: 'film', tags: ['cutscenes'] },
+  { id: 'long',      icon: 'mountain', long: true },
+  { id: 'pvp',       icon: 'clash', pvpOnly: true },
 ];
 
 export const MOOD_LIMIT = 3;
@@ -41,40 +41,40 @@ export const PRIORITY_LIMIT = 2;
 
 /** Варианты для «с кем чаще играете» — влияют на мягкие веса движка */
 export const COMPANY_OPTIONS = [
-  { id: 'friends', icon: '🧑‍🤝‍🧑', labelKey: 'opt.companyFriends' },
-  { id: 'partner', icon: '💞', labelKey: 'opt.companyPartner' },
-  { id: 'kids', icon: '🧸', labelKey: 'opt.companyKids' },
-  { id: 'randoms', icon: '🎧', labelKey: 'opt.companyRandoms' },
+  { id: 'friends', icon: 'users', labelKey: 'opt.companyFriends', hintKey: 'opt.companyFriends.hint' },
+  { id: 'partner', icon: 'heart', labelKey: 'opt.companyPartner', hintKey: 'opt.companyPartner.hint' },
+  { id: 'kids', icon: 'shapes', labelKey: 'opt.companyKids', hintKey: 'opt.companyKids.hint' },
+  { id: 'randoms', icon: 'headphones', labelKey: 'opt.companyRandoms', hintKey: 'opt.companyRandoms.hint' },
 ];
 
 /** Длина одной игровой сессии */
 export const SESSION_OPTIONS = [
-  { id: 'quick', icon: '⏳', labelKey: 'opt.sessionQuick' },
-  { id: 'medium', icon: '🕐', labelKey: 'opt.sessionMedium' },
-  { id: 'evening', icon: '🌙', labelKey: 'opt.sessionEvening' },
+  { id: 'quick', icon: 'bolt', labelKey: 'opt.sessionQuick', hintKey: 'opt.sessionQuick.hint' },
+  { id: 'medium', icon: 'clock', labelKey: 'opt.sessionMedium', hintKey: 'opt.sessionMedium.hint' },
+  { id: 'evening', icon: 'moon', labelKey: 'opt.sessionEvening', hintKey: 'opt.sessionEvening.hint' },
 ];
 
 /** Что важнее всего — до двух вариантов */
 export const PRIORITY_OPTIONS = [
-  { id: 'story', icon: '📖', labelKey: 'opt.priorityStory' },
-  { id: 'mechanics', icon: '🧩', labelKey: 'opt.priorityMechanics' },
-  { id: 'freedom', icon: '🗺️', labelKey: 'opt.priorityFreedom' },
-  { id: 'competition', icon: '🏆', labelKey: 'opt.priorityCompetition' },
+  { id: 'story', icon: 'book', labelKey: 'opt.priorityStory', hintKey: 'opt.priorityStory.hint' },
+  { id: 'mechanics', icon: 'sliders', labelKey: 'opt.priorityMechanics', hintKey: 'opt.priorityMechanics.hint' },
+  { id: 'freedom', icon: 'compass', labelKey: 'opt.priorityFreedom', hintKey: 'opt.priorityFreedom.hint' },
+  { id: 'competition', icon: 'trophy', labelKey: 'opt.priorityCompetition', hintKey: 'opt.priorityCompetition.hint' },
 ];
 
 /** Насколько свежая игра нужна */
 export const NOVELTY_OPTIONS = [
-  { id: 'new', icon: '🆕', labelKey: 'opt.noveltyNew' },
-  { id: 'indie', icon: '💎', labelKey: 'opt.noveltyIndie' },
-  { id: 'classic', icon: '🏛️', labelKey: 'opt.noveltyClassic' },
-  { id: 'any', icon: '🤷', labelKey: 'opt.noveltyAny' },
+  { id: 'new', icon: 'sparkles', labelKey: 'opt.noveltyNew', hintKey: 'opt.noveltyNew.hint' },
+  { id: 'indie', icon: 'gem', labelKey: 'opt.noveltyIndie', hintKey: 'opt.noveltyIndie.hint' },
+  { id: 'classic', icon: 'rewind', labelKey: 'opt.noveltyClassic', hintKey: 'opt.noveltyClassic.hint' },
+  { id: 'any', icon: 'dice', labelKey: 'opt.noveltyAny' },
 ];
 
 export const QUESTIONS = [
   {
     id: 'mood',
     key: 'q.mood',
-    icon: '🎯',
+    icon: 'sparkles',
     type: 'multi',
     min: 1,
     max: MOOD_LIMIT,
@@ -83,43 +83,45 @@ export const QUESTIONS = [
   {
     id: 'modes',
     key: 'q.modes',
-    icon: '👥',
+    icon: 'users',
     type: 'multi',
     min: 0,
     max: 4,
     options: () => [
-      { id: 'solo', icon: '🧍', labelKey: 'opt.solo' },
-      { id: 'coop', icon: '🤝', labelKey: 'opt.coop' },
-      { id: 'pvp', icon: '⚔️', labelKey: 'opt.pvp' },
-      { id: 'mmo', icon: '🌐', labelKey: 'opt.mmo' },
+      { id: 'solo', icon: 'user', labelKey: 'opt.solo', hintKey: 'opt.solo.hint' },
+      { id: 'coop', icon: 'users', labelKey: 'opt.coop', hintKey: 'opt.coop.hint' },
+      { id: 'pvp', icon: 'clash', labelKey: 'opt.pvp', hintKey: 'opt.pvp.hint' },
+      { id: 'mmo', icon: 'infinity', labelKey: 'opt.mmo', hintKey: 'opt.mmo.hint' },
     ],
   },
   {
     id: 'players',
     key: 'q.players',
-    icon: '🔢',
+    icon: 'crowd',
     type: 'single',
     // вопрос нужен всегда, но формулировка особенно важна для компанейских игр
     options: () => [
-      { id: 1, icon: '🧍', labelKey: 'opt.players1' },
-      { id: 2, icon: '👫', labelKey: 'opt.players2' },
-      { id: 4, icon: '👨‍👩‍👧', labelKey: 'opt.players3' },
-      { id: 8, icon: '🎉', labelKey: 'opt.players5' },
+      { id: 1, icon: 'user', labelKey: 'opt.players1' },
+      { id: 2, icon: 'users', labelKey: 'opt.players2' },
+      { id: 4, icon: 'usersPlus', labelKey: 'opt.players3' },
+      { id: 8, icon: 'crowd', labelKey: 'opt.players5' },
     ],
   },
   {
     id: 'company',
     key: 'q.company',
-    icon: '🫂',
+    icon: 'heart',
     type: 'single',
     // спрашиваем только у тех, кто собирается играть с кем-то
     visible: (a) => (a.modes || []).some((m) => m === 'coop' || m === 'pvp' || m === 'mmo') || (a.players || 1) > 1,
+    // от каких ответов зависит видимость — нужно прогрессу, чтобы знаменатель не прыгал
+    dependsOn: ['modes', 'players'],
     options: () => COMPANY_OPTIONS,
   },
   {
     id: 'platforms',
     key: 'q.platforms',
-    icon: '🖥️',
+    icon: 'monitor',
     type: 'multi',
     min: 0,
     max: 6,
@@ -128,45 +130,45 @@ export const QUESTIONS = [
   {
     id: 'time',
     key: 'q.time',
-    icon: '⏱️',
+    icon: 'clock',
     type: 'single',
     options: () => [
-      { id: 'tiny', icon: '⚡', labelKey: 'opt.timeTiny' },
-      { id: 'short', icon: '🌤️', labelKey: 'opt.timeShort' },
-      { id: 'medium', icon: '🗓️', labelKey: 'opt.timeMedium' },
-      { id: 'long', icon: '🏔️', labelKey: 'opt.timeLong' },
-      { id: 'any', icon: '🤷', labelKey: 'opt.timeAny' },
+      { id: 'tiny', icon: 'bolt', labelKey: 'opt.timeTiny', hintKey: 'opt.timeTiny.hint' },
+      { id: 'short', icon: 'sun', labelKey: 'opt.timeShort', hintKey: 'opt.timeShort.hint' },
+      { id: 'medium', icon: 'calendar', labelKey: 'opt.timeMedium', hintKey: 'opt.timeMedium.hint' },
+      { id: 'long', icon: 'mountain', labelKey: 'opt.timeLong', hintKey: 'opt.timeLong.hint' },
+      { id: 'any', icon: 'dice', labelKey: 'opt.timeAny' },
     ],
   },
   {
     id: 'session',
     key: 'q.session',
-    icon: '⌛',
+    icon: 'moon',
     type: 'single',
     // если человек выбрал «до 8 часов», спрашивать про длину сессии уже не нужно
     visible: (a) => a.time !== 'tiny',
+    dependsOn: ['time'],
     options: () => SESSION_OPTIONS,
   },
   {
     id: 'difficulty',
     key: 'q.difficulty',
-    icon: '🎚️',
+    icon: 'sliders',
     type: 'multi',
     min: 0,
     max: 4,
     options: () => [
-      { id: 'easy', icon: '🌿', labelKey: 'opt.diffEasy' },
-      { id: 'normal', icon: '⚖️', labelKey: 'opt.diffNormal' },
-      { id: 'hard', icon: '🔥', labelKey: 'opt.diffHard' },
-      { id: 'souls', icon: '💀', labelKey: 'opt.diffSouls' },
-      { id: 'chill', icon: '🧘', labelKey: 'opt.diffChill' },
+      { id: 'easy', icon: 'leaf', labelKey: 'opt.diffEasy', hintKey: 'opt.diffEasy.hint' },
+      { id: 'normal', icon: 'scale', labelKey: 'opt.diffNormal', hintKey: 'opt.diffNormal.hint' },
+      { id: 'hard', icon: 'fire', labelKey: 'opt.diffHard', hintKey: 'opt.diffHard.hint' },
+      { id: 'souls', icon: 'skull', labelKey: 'opt.diffSouls', hintKey: 'opt.diffSouls.hint' },
+      { id: 'chill', icon: 'snowflake', labelKey: 'opt.diffChill', hintKey: 'opt.diffChill.hint' },
     ],
   },
   {
     id: 'genres',
     key: 'q.genres',
-    key: 'q.genres',
-    icon: '🎮',
+    icon: 'grid',
     type: 'multi',
     min: 0,
     max: GENRE_LIMIT,
@@ -175,7 +177,7 @@ export const QUESTIONS = [
   {
     id: 'vibes',
     key: 'q.vibes',
-    icon: '✨',
+    icon: 'gem',
     type: 'multi',
     min: 0,
     max: VIBE_LIMIT,
@@ -184,7 +186,7 @@ export const QUESTIONS = [
   {
     id: 'priority',
     key: 'q.priority',
-    icon: '🧭',
+    icon: 'target',
     type: 'multi',
     min: 0,
     max: PRIORITY_LIMIT,
@@ -193,26 +195,26 @@ export const QUESTIONS = [
   {
     id: 'novelty',
     key: 'q.novelty',
-    icon: '📅',
+    icon: 'calendar',
     type: 'single',
     options: () => NOVELTY_OPTIONS,
   },
   {
     id: 'price',
     key: 'q.price',
-    icon: '💰',
+    icon: 'coins',
     type: 'single',
     options: () => [
-      { id: 'any', icon: '♾️', labelKey: 'opt.priceAny' },
-      { id: 'free', icon: '🆓', labelKey: 'opt.priceFree' },
-      { id: 'upto1000', icon: '🪙', labelKey: 'opt.price1000' },
-      { id: 'upto2500', icon: '💵', labelKey: 'opt.price2500' },
+      { id: 'any', icon: 'tag', labelKey: 'opt.priceAny' },
+      { id: 'free', icon: 'gift', labelKey: 'opt.priceFree', hintKey: 'opt.priceFree.hint' },
+      { id: 'upto1000', icon: 'coin', labelKey: 'opt.price1000', hintKey: 'opt.price1000.hint' },
+      { id: 'upto2500', icon: 'coins', labelKey: 'opt.price2500', hintKey: 'opt.price2500.hint' },
     ],
   },
   {
     id: 'avoid',
     key: 'q.avoid',
-    icon: '🚫',
+    icon: 'ban',
     type: 'multi',
     min: 0,
     max: 5,
@@ -221,7 +223,7 @@ export const QUESTIONS = [
   {
     id: 'seed',
     key: 'q.seed',
-    icon: '⭐',
+    icon: 'star',
     type: 'games',
     min: 0,
     max: SEED_LIMIT,
@@ -234,18 +236,31 @@ export const TOTAL_QUESTIONS = QUESTIONS.length;
 export const visibleQuestions = (answers) => QUESTIONS.filter((q) => (q.visible ? q.visible(answers) : true));
 
 /**
- * Прогресс прохождения квиза: считаем вопросы, на которые пользователь ответил
- * (для multi-вопросов ответом считается даже пустой массив — «прошёл и ничего не выбрал»).
+ * У вопроса есть осознанный ответ: непустой массив или непустой скаляр.
+ * Пустой массив — это «ещё не отвечали» (именно он плюс дефолтные 'any' давали 71% на старте).
+ */
+export const hasValue = (value) => (Array.isArray(value)
+  ? value.length > 0
+  : value !== null && value !== undefined && value !== '');
+
+/**
+ * Прогресс прохождения квиза: отвеченные / все вопросы, которые человеку предстоит увидеть.
+ * Условные вопросы, которые уже точно не покажутся (например, «сессия» при времени «до 8 часов»),
+ * из знаменателя исключаются; те, чья судьба ещё не решена, — остаются. Поэтому прогресс
+ * никогда не уменьшается от ответов: знаменатель только сужается, числитель только растёт.
  */
 export function progress(answers) {
-  const visible = visibleQuestions(answers);
   let done = 0;
-  for (const q of visible) {
-    const value = answers[q.id];
-    if (Array.isArray(value)) done += 1;
-    else if (value !== null && value !== undefined && value !== '') done += 1;
+  let decidedHidden = 0;
+  for (const q of QUESTIONS) {
+    if (hasValue(answers[q.id])) { done += 1; continue; }
+    const shown = q.visible ? q.visible(answers) : true;
+    if (shown) continue;
+    const undetermined = (q.dependsOn || []).some((dep) => !hasValue(answers[dep]));
+    if (!undetermined) decidedHidden += 1;
   }
-  return Math.min(100, Math.round((done / visible.length) * 100));
+  const total = Math.max(1, QUESTIONS.length - decidedHidden);
+  return Math.min(100, Math.round((done / total) * 100));
 }
 
 /** Применяет ответ к объекту ответов квиза (иммутабельно) */
@@ -264,7 +279,9 @@ export function summarize(answers) {
     if (list.length) rows.push({ key, ids: list, dict, raw });
   };
   row('q.mood', answers.mood, 'MOODS');
-  row('q.modes', answers.modes, 'MODES');
+  // ответы modes — это id квиза (solo/coop/pvp/mmo), а не id таксономии MODES:
+  // подписи берём из ANSWER_LABELS, иначе в профиле показываются сырые id
+  row('q.modes', answers.modes, null);
   row('q.players', answers.players ? [answers.players] : [], null);
   row('q.platforms', answers.platforms, 'PLATFORMS');
   row('q.time', answers.time && answers.time !== 'any' ? [answers.time] : [], null);
@@ -282,6 +299,7 @@ export function summarize(answers) {
 
 /** Готовые подписи для ответов, у которых нет словаря в таксономии */
 export const ANSWER_LABELS = {
+  modes: { solo: 'opt.solo', coop: 'opt.coop', pvp: 'opt.pvp', mmo: 'opt.mmo' },
   players: { 1: 'opt.players1', 2: 'opt.players2', 4: 'opt.players3', 8: 'opt.players5' },
   time: { tiny: 'opt.timeTiny', short: 'opt.timeShort', medium: 'opt.timeMedium', long: 'opt.timeLong', any: 'opt.timeAny' },
   difficulty: { easy: 'opt.diffEasy', normal: 'opt.diffNormal', hard: 'opt.diffHard', souls: 'opt.diffSouls', chill: 'opt.diffChill' },

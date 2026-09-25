@@ -20,10 +20,15 @@ import { DatabaseSync } from 'node:sqlite';
 import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { extname, dirname, join, normalize, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createReloader, injectReload } from './live-reload.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(here, '..');
-const siteRoot = resolve(projectRoot, process.argv.find((a) => a.startsWith('--dir='))?.slice(6) || '.');
+const explicitDir = process.argv.find((a) => a.startsWith('--dir='))?.slice(6);
+const siteRoot = resolve(projectRoot, explicitDir || '.');
+// Live reload — только при разработке из корня проекта, для dist/ выключен (там прод).
+const live = !process.argv.includes('--no-reload') && (!explicitDir || process.argv.includes('--reload'));
+const reloader = live ? createReloader({ root: siteRoot }) : null;
 const port = Number(process.env.PORT || 5173);
 const host = '0.0.0.0';
 const dataDir = join(projectRoot, '.data');
@@ -106,9 +111,13 @@ const send = (res, code, body, type = 'text/plain; charset=utf-8') => {
 
 const serveFile = (res, file) => {
   const ext = extname(file).toLowerCase();
+  if (reloader && ext === '.html') {
+    return send(res, 200, injectReload(readFileSync(file, 'utf8')), MIME['.html']);
+  }
+  const noCache = ext === '.html' || (reloader && (ext === '.js' || ext === '.mjs' || ext === '.css'));
   res.writeHead(200, {
     'Content-Type': MIME[ext] || 'application/octet-stream',
-    'Cache-Control': ext === '.html' ? 'no-store' : 'public, max-age=60',
+    'Cache-Control': noCache ? 'no-store' : 'public, max-age=60',
     'Content-Length': statSync(file).size,
   });
   createReadStream(file).pipe(res);
@@ -117,6 +126,7 @@ const serveFile = (res, file) => {
 /* ---------------------------- сервер ---------------------------- */
 
 const server = http.createServer(async (req, res) => {
+  if (reloader?.handle(req, res)) return;
   const url = new URL(req.url, `http://localhost:${port}`);
   const origin = req.headers.origin || `http://localhost:${port}`;
 
@@ -174,7 +184,7 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(port, host, () => {
   console.log(`GustoPlay (сайт + API аккаунтов) → http://${host}:${port}`);
-  console.log(`   статика:  ${siteRoot}`);
+  console.log(`   статика:  ${siteRoot}${reloader ? '  (live reload: ON)' : ''}`);
   console.log(`   база:     ${dbPath}`);
   console.log(`   проверить: http://${host}:${port}/api/health`);
   if (env.ALLOW_RESET_DEBUG === 'true') {

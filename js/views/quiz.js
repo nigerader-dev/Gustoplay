@@ -1,7 +1,8 @@
 /** Квиз: пошаговые вопросы с выбором ответа, ветвлением, живым счётчиком пула и мгновенным сохранением. */
 import { QUESTIONS, visibleQuestions, progress, SEED_LIMIT } from '../quiz.js';
+import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, PLATFORMS } from '../taxonomy.js';
-import { t, tl } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { GAMES } from '../catalog/index.js';
 import { hardFilter } from '../engine.js';
 import { getProfile, setAnswers, markGame } from '../store.js';
@@ -49,7 +50,19 @@ function poolCount() {
 export function render(ctx) {
   const profile = getProfile();
   answers = { ...profile.answers };
-  step = Math.max(0, Math.min(ctx?.resumeStep || 0, flow().length - 1));
+  // Продолжаем с первого неотвеченного вопроса, а не с начала: ответы уже сохранены,
+  // прогонять человека по пройденному заново — плохой UX. Если отвечено всё — с первого.
+  let resume = ctx?.resumeStep;
+  if (resume === undefined || resume === null) {
+    resume = flow().findIndex((q) => {
+      const v = answers[q.id];
+      // пустой массив тоже считаем неотвеченным: свежий профиль хранит [] по умолчанию,
+      // а пропущенный вопрос проще пропустить ещё раз, чем начинать всем с середины
+      return v === undefined || v === null || v === '' || (Array.isArray(v) && v.length === 0);
+    });
+    if (resume < 0) resume = 0;
+  }
+  step = Math.max(0, Math.min(resume, flow().length - 1));
 
   return `
   <section class="quiz-page">
@@ -112,7 +125,7 @@ function goNext(root, skipped = false) {
  * Отрисовка шага
  * ------------------------------------------------------------------ */
 
-function renderStep(root) {
+function renderStep(root, scroll = true) {
   const questions = flow();
   step = Math.max(0, Math.min(step, questions.length - 1));
   const q = questions[step];
@@ -132,7 +145,7 @@ function renderStep(root) {
   body.innerHTML = `
     <div class="quiz-card" data-q="${q.id}">
       <div class="quiz-q-head">
-        <span class="quiz-icon">${q.icon || '❓'}</span>
+        <span class="quiz-icon">${icon(q.icon || 'help')}</span>
         <div>
           <h2>${esc(t(`${q.key}.title`))}</h2>
           <p>${esc(t(`${q.key}.text`))}</p>
@@ -209,16 +222,17 @@ function poolCounter() {
   const enough = count >= 12;
   return `<div class="quiz-pool ${enough ? '' : 'warn'}">
     <span class="quiz-pool-dot"></span>
-    ${esc(t('quiz.pool', { n: count }))}
+    ${esc(tp('quiz.pool', count))}
   </div>`;
 }
 
 function optionHtml(q, opt, value) {
   const on = toArray(value).some((v) => String(v) === String(opt.id));
-  const icon = opt.icon ? `<span class="opt-icon">${opt.icon}</span>` : '';
-  const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : '';
+  const iconHtml = opt.icon ? `<span class=\"opt-icon\">${icon(opt.icon)}</span>` : '';
+  const dictHint = opt.dict && DICTS[opt.dict][opt.id]?.hint ? DICTS[opt.dict][opt.id].hint[getLang()] : null;
+  const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : dictHint ? `<small class="opt-hint">${esc(dictHint)}</small>` : '';
   return `<button type="button" class="opt ${on ? 'on' : ''}" data-action="quiz-option" data-q="${q.id}" data-id="${esc(String(opt.id))}" aria-pressed="${on}">
-    ${icon}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
+    ${iconHtml}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
   </button>`;
 }
 

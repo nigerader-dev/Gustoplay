@@ -2,15 +2,16 @@
  *  поэтому любую выборку можно скопировать ссылкой, а поисковики видят её как отдельную страницу. */
 import { GAMES } from '../catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS, PRICE } from '../taxonomy.js';
-import { t, tl, getLang } from '../i18n.js';
+import { t, tl, tp, getLang } from '../i18n.js';
 import { adSlot, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionList, platformOptionList, modeOptionList, tagOptions } from './components.js';
 import { getProfile } from '../store.js';
+import { icon } from '../icons.js';
 import { FEATURES } from '../config.js';
 import { currentPath, navigate } from '../nav.js';
 
 const POPULAR_TAGS = [
   'coopfocused', 'splitscreen', 'storyrich', 'openworld', 'difficult', 'cozy', 'short',
-  'long', 'replayable', 'lowsysreq', 'steamdeck', 'mods', 'crafting', 'dark', 'cozy',
+  'long', 'replayable', 'lowsysreq', 'steamdeck', 'mods', 'crafting', 'dark',
 ].filter((id) => TAGS[id]);
 
 const SORTS = {
@@ -20,6 +21,11 @@ const SORTS = {
   players: (a, b) => b.players[1] - a.players[1],
   title: (a, b) => a.t.localeCompare(b.t, getLang()),
 };
+
+/** Открыта ли шторка фильтров на мобиле (переживает перерендеры при выборе фильтров) */
+let filtersOpen = false;
+export const isFiltersOpen = () => filtersOpen;
+export const setFiltersOpen = (value) => { filtersOpen = Boolean(value); };
 
 /** Парсим фильтры из query-строки (все значения — простые списки через запятую) */
 export function parseFilters(query = {}, preset = {}) {
@@ -97,13 +103,13 @@ export function render(ctx) {
   const presetTitle = ctx.preset?.heading;
   const heading = presetTitle || t('catalog.title');
   const subtitle = presetTitle
-    ? t('catalog.subtitle', { n: found.length })
-    : t('catalog.subtitle', { n: GAMES.length });
+    ? tp('catalog.subtitle', found.length)
+    : tp('catalog.subtitle', GAMES.length);
 
   // Все непустые фильтры собираем в ссылку-«поделиться»
   const activeChips = [
-    ...filters.modes.map((id) => ({ label: `${MODES[id].icon} ${tl(MODES, id)}`, kind: 'mode', id })),
-    ...filters.platforms.map((id) => ({ label: `${PLATFORMS[id].icon} ${tl(PLATFORMS, id)}`, kind: 'platform', id })),
+    ...filters.modes.map((id) => ({ icn: MODES[id].icon, label: tl(MODES, id), kind: 'mode', id })),
+    ...filters.platforms.map((id) => ({ icn: PLATFORMS[id].icon, label: tl(PLATFORMS, id), kind: 'platform', id })),
     ...filters.genres.map((id) => ({ label: tl(GENRES, id), kind: 'genre', id })),
     ...filters.tags.map((id) => ({ label: tl(TAGS, id), kind: 'tag', id })),
     ...filters.moods.map((id) => ({ label: tl(MOODS, id), kind: 'mood', id })),
@@ -113,74 +119,104 @@ export function render(ctx) {
     ...(filters.coopLocal ? [{ label: tl(MODES, 'coopLocal'), kind: 'coopLocal', id: 1 }] : []),
   ];
 
+  const activeFilterCount = filters.modes.length + filters.platforms.length + filters.genres.length
+    + filters.tags.length + filters.moods.length + (filters.players ? 1 : 0)
+    + (filters.price !== 'any' ? 1 : 0) + (filters.time !== 'any' ? 1 : 0) + (filters.coopLocal ? 1 : 0);
+
+  // чипы пресетных разделов (/genre/rpg и т.п.) снять нельзя — рисуем их без крестика,
+  // иначе крестик обещает то, чего не делает
+  const presetKey = { mode: 'modes', platform: 'platforms', genre: 'genres', tag: 'tags', mood: 'moods' };
+  const isPresetChip = (c) => (ctx.preset?.[presetKey[c.kind]] || []).some((x) => String(x) === String(c.id));
+  const chipHtml = (c) => {
+    const icn = c.icn ? `${icon(c.icn)} ` : '';
+    return isPresetChip(c)
+      ? `<span class="chip chip-active">${icn}${esc(c.label)}</span>`
+    : `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${icn}${esc(c.label)} <span aria-hidden=\"true\">×</span></button>`;
+  };
+
   return `
   <section class="section catalog">
     <header class="section-head">
-      <h1>${esc(heading)}</h1>
+      <h1>${ctx.preset?.icon ? `${icon(ctx.preset.icon)} ` : ''}${esc(heading)}</h1>
       <p>${esc(subtitle)}</p>
     </header>
 
+    <button type="button" class="btn btn-outline filters-toggle" data-action="filters-toggle" aria-expanded="${filtersOpen}" aria-controls="catalog-filters">${icon('search')} ${esc(t('catalog.filters'))}${activeFilterCount ? ` <span class="filters-count">${activeFilterCount}</span>` : ''}</button>
+
     <div class="catalog-layout">
-      <aside class="filters" id="catalog-filters">
+      <aside class="filters${filtersOpen ? ' open' : ''}" id="catalog-filters">
+        <div class="filters-head"><span>${esc(t('catalog.filters'))}</span><button type="button" data-action="filters-toggle" aria-label="${esc(t('common.close'))}">${icon('x')}</button></div>
         <div class="filter-search">
           <input type="search" class="input" id="catalog-q" placeholder="${esc(t('catalog.search'))}" value="${esc(filters.q)}">
         </div>
 
         ${filterGroup(t('catalog.mode'), modeOptionList(), filters.modes, { action: 'f-mode' })}
         ${filterGroup(t('catalog.players'), [
-          { id: 2, label: '2+', icon: '👫' }, { id: 4, label: '4+', icon: '👨‍👩‍👧' }, { id: 8, label: '8+', icon: '🎉' },
+          { id: 2, label: '2+', icon: 'users' }, { id: 4, label: '4+', icon: 'usersPlus' }, { id: 8, label: '8+', icon: 'crowd' },
         ], filters.players ? [filters.players] : [], { action: 'f-players' })}
         ${filterGroup(t('catalog.platform'), platformOptionList(), filters.platforms, { action: 'f-platform' })}
         ${filterGroup(t('catalog.genre'), genreOptionList(), filters.genres, { action: 'f-genre' })}
         ${filterGroup(t('catalog.price'), [
-          { id: 'free', label: tl(PRICE, 'free'), icon: '🆓' },
-          { id: 'upto1000', label: tl(PRICE, 'cheap'), icon: '🪙' },
-          { id: 'upto2500', label: tl(PRICE, 'mid'), icon: '💵' },
+          { id: 'free', label: tl(PRICE, 'free'), icon: 'gift' },
+          { id: 'upto1000', label: tl(PRICE, 'cheap'), icon: 'coin' },
+          { id: 'upto2500', label: tl(PRICE, 'mid'), icon: 'coins' },
         ], filters.price !== 'any' ? [filters.price] : [], { action: 'f-price' })}
         ${filterGroup(t('catalog.time'), [
-          { id: 'tiny', label: '≤ 8 ч', icon: '⚡' },
-          { id: 'short', label: '≤ 20 ч', icon: '🌤️' },
-          { id: 'medium', label: '20–60 ч', icon: '🗓️' },
-          { id: 'long', label: '60+ ч', icon: '🏔️' },
+          { id: 'tiny', label: '≤ 8 ч', icon: 'bolt' },
+          { id: 'short', label: '≤ 20 ч', icon: 'sun' },
+          { id: 'medium', label: '20–60 ч', icon: 'calendar' },
+          { id: 'long', label: '60+ ч', icon: 'mountain' },
         ], filters.time !== 'any' ? [filters.time] : [], { action: 'f-time' })}
         ${filterGroup(t('catalog.tags'), tagOptions(POPULAR_TAGS), filters.tags, { action: 'f-tag' })}
         ${filterGroup(t('catalog.localCoop'), [
-          { id: 1, label: tl(MODES, 'coopLocal'), icon: '🛋️' },
+          { id: 1, label: tl(MODES, 'coopLocal'), icon: 'users' },
         ], filters.coopLocal ? [1] : [], { action: 'f-cooplocal' })}
 
         <div class="filter-group">
           <div class="filter-title">${esc(t('catalog.sort'))}</div>
-          <select class="input" id="catalog-sort">
+          <select class="input" id="catalog-sort" aria-label="${esc(t('catalog.sort'))}">
             ${Object.keys(SORTS).map((id) => `<option value="${id}" ${filters.sort === id ? 'selected' : ''}>${esc(t(`catalog.sort.${id}`))}</option>`).join('')}
           </select>
         </div>
         <button type="button" class="btn btn-ghost" data-action="f-reset">${esc(t('catalog.reset'))}</button>
+        <div class="filters-foot"><button type="button" class="btn btn-primary" data-action="filters-apply">${esc(tp('catalog.show', found.length))}</button></div>
       </aside>
 
       <div class="catalog-main">
         <div class="catalog-topbar">
-          <strong id="catalog-found">${esc(t('catalog.found', { n: found.length }))}</strong>
-          ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map((c) => `<button type="button" class="chip chip-active" data-action="f-remove" data-kind="${c.kind}" data-id="${esc(String(c.id))}">${esc(c.label)} ✕</button>`).join('')}</div>` : ''}
+          <strong id="catalog-found">${esc(tp('catalog.found', found.length))}</strong>
+          ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map(chipHtml).join('')}</div>` : ''}
         </div>
 
         ${found.length
           ? `<div class="grid" id="catalog-grid">${shown.map((g) => gameCard(g, { mark: getProfile().marks?.[g.slug]?.status || null })).join('')}</div>`
           : emptyState(t('results.empty'), t('catalog.reset'), `<button type="button" class="btn btn-primary" data-action="f-reset">${esc(t('catalog.reset'))}</button>`)}
 
-        ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(t('catalog.showMore', { n: more }))}</button></div>` : ''}
+        ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(tp('catalog.showMore', more))}</button></div>` : ''}
         ${adSlot('catalog-inline')}
       </div>
     </div>
   </section>`;
 }
 
+/** Когда поиск вызвал пересчёт: вернём фокус в поле ввода (оно пересоздаётся при рендере) */
+let searchFocusAt = 0;
+
 export function mount(root) {
   const input = root.querySelector('#catalog-q');
   if (input) {
+    // после пересчёта по вводу фокус слетает на body — возвращаем в поиск, каретку в конец
+    if (searchFocusAt && Date.now() - searchFocusAt < 1500) input.focus();
+    searchFocusAt = 0;
+    try { if (document.activeElement === input) input.setSelectionRange(input.value.length, input.value.length); } catch { /* ignore */ }
     let timer;
     input.addEventListener('input', () => {
       clearTimeout(timer);
-      timer = setTimeout(() => updateQuery({ q: input.value, page: FEATURES.pageSize }), 260);
+      timer = setTimeout(() => {
+        // фокус возвращаем, только если пользователь всё ещё печатает (а не ушёл на фильтры)
+        searchFocusAt = document.activeElement === input ? Date.now() : 0;
+        updateQuery({ q: input.value, page: FEATURES.pageSize });
+      }, 260);
     });
   }
   root.querySelector('#catalog-sort')?.addEventListener('change', (e) => updateQuery({ sort: e.target.value }));
@@ -227,4 +263,4 @@ export function removeFilter(kind, id, current) {
 }
 
 export const title = (ctx) => `${ctx?.preset?.heading || t('catalog.title')} — ${t('site.name')}`;
-export const description = (ctx) => `${ctx?.preset?.heading || t('catalog.title')}. ${t('catalog.subtitle', { n: GAMES.length })}`;
+export const description = (ctx) => `${ctx?.preset?.heading || t('catalog.title')}. ${tp('catalog.subtitle', GAMES.length)}`;
