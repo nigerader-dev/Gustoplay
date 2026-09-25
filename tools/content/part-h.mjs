@@ -3,6 +3,17 @@
  * Названия с \u2019 в исходнике каталога записаны экранированно для точного совпадения. */
 export default [
   {
+    slug: 'wilmots-warehouse', title: "Wilmot's Warehouse",
+    about: {
+      ru: 'Вилмот — квадратный работник склада, который должен помнить, где лежит всё: товары приходят, заказы уходят, а полки заполняются так, как удобно вам. Головоломка про организацию, ставшая медитацией.',
+      en: 'Wilmot is a square warehouse worker who must remember where everything lives: goods arrive, orders leave, and the shelves fill up however you like. A puzzle about organisation that became a meditation.',
+    },
+    feats: {
+      ru: ['Система хранения как игровая механика', 'Темп, который вы задаёте сами', 'Очарование в каждом квадратике'],
+      en: ['Storage organisation as a game mechanic', 'A pace you set yourself', 'Charm in every little square'],
+    },
+  },
+  {
     slug: 'unpacking', title: 'Unpacking',
     about: {
       ru: 'Игра о распаковке коробок при переездах — и о жизни, рассказанной через вещи: от студенческого общежития до семейного дома. Ни строчки текста, зато каждая статуэтка и каждая кружка говорят о своей хозяйке.',

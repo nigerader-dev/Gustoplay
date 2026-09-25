@@ -213,6 +213,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 6], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'cheap', pv: 700,
     len: [20, 500], dif: 4, pace: 2, rat: 88, mood: ['progress', 'tense', 'escape'], coopQ: 9,
     desc: { ru: 'Тим Бертон в выживании: зимой все умирают от голода, летом — от пожара, и это весело.', en: 'Tim Burton does survival: everyone starves in winter, burns in summer, and it is hilarious.' },
+    about: {"ru":"Выживание в рисованном мире Тима Бёртона: собирайте ресурсы, стройте лагерь и не дайте тьме, голоду и безумию съесть вас раньше зимы. Кооператив до шести выживших в мире, который не прощает ошибок и обожает сюрпризы.","en":"Survival in a Tim-Burton-esque hand-drawn world: gather resources, build camp and don’t let darkness, hunger and sanity eat you before winter. Co-op for up to six survivors in a world that forgives nothing and loves surprises."},
+    feats: {"ru":["Стиль, который не спутать ни с чем","Кооператив до шести выживших","Сезоны и боссы, к которым нужно готовиться"],"en":["A style unlike anything else","Co-op for up to six survivors","Seasons and bosses that demand preparation"]},
   },
   {
     t: 'Project Zomboid', y: 2013, dev: 'The Indie Stone', gr: ['survival', 'simulator', 'rpg'],

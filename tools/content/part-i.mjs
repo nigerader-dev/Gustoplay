@@ -1,0 +1,676 @@
+/** Контент-батч I: ретро-классика, ритм, файтинги, настолки и онлайн (см. js/catalog/part-i.js).
+ * Применяется скриптом: node tools/apply-content.mjs i
+ * Названия с типографским апострофом ’ в исходнике записаны тем же символом. */
+export default [
+  {
+    slug: 'baldurs-gate-ii-enhanced-edition', title: "Baldur's Gate II: Enhanced Edition",
+    about: {
+      ru: 'Классика изометрических РПГ по правилам AD&D: героя похищает маг Иреникус, и путь из подземелий ведёт через Амна в войны вампиров и драконов. Издание включает дополнения и улучшения для современных систем.',
+      en: 'A classic isometric RPG built on AD&D rules: the mage Irenikus abducts the hero, and the escape from his dungeons leads through Amn into wars of vampires and dragons. The edition includes expansions and modern-system improvements.',
+    },
+    feats: {
+      ru: ['Одна из величайших РПГ в истории', 'Спутники, ставшие легендами жанра', 'Сотни часов контента с дополнениями'],
+      en: ['One of the greatest RPGs ever made', 'Companions who became genre legends', 'Hundreds of hours of content with expansions'],
+    },
+  },
+  {
+    slug: 'half-life', title: 'Half-Life',
+    about: {
+      ru: 'Учёный Гордон Фримен переживает катастрофу в исследовательском центре «Чёрная Меза» и прокладывает путь наружу. Шутер 1998 года, который первым рассказал историю без катсцен и изменил жанр навсегда.',
+      en: 'Scientist Gordon Freeman survives a catastrophe at the Black Mesa research facility and fights his way out. The 1998 shooter that first told a story without cutscenes and changed the genre forever.',
+    },
+    feats: {
+      ru: ['Повествование без единого катсцена', 'Основа всей современной серии', 'Игра, определившая жанр на годы вперёд'],
+      en: ['Storytelling without a single cutscene', 'The foundation of the entire series', 'A game that defined the genre for years'],
+    },
+  },
+  {
+    slug: 'heroes-of-might-and-magic-iii', title: 'Heroes of Might and Magic III',
+    about: {
+      ru: 'Пошаговая классика: стройте замок, нанимайте армию и захватывайте карту Эрафии отрядом героя. Семь фракций, сотни артефактов и карты, в которые играют десятилетиями — с друзьями за одним экраном.',
+      en: 'A turn-based classic: build a castle, recruit an army and conquer the map of Erathia with a hero-led squad. Seven factions, hundreds of artefacts and maps people have played for decades — together on one screen.',
+    },
+    feats: {
+      ru: ['Горячие стулья: несколько игроков за одним ПК', 'Глубина, не стареющая десятилетиями', 'Культовый статус среди стратегий'],
+      en: ['Hot-seat multiplayer on one PC', 'Depth that never ages', 'Cult status among strategy games'],
+    },
+  },
+  {
+    slug: 'age-of-empires-ii-the-age-of-kings', title: 'Age of Empires II: The Age of Kings',
+    about: {
+      ru: 'Оригинал легендарной средневековой стратегии 1999 года: от тёмных веков до имперского периода, тринадцать цивилизаций и кампании от Чингисхана до Жанны д’Арк. Игра, положившая начало целой династии.',
+      en: 'The original 1999 medieval strategy legend: from the Dark Ages to the Imperial age, thirteen civilisations and campaigns from Genghis Khan to Joan of Arc. The game that started a whole dynasty.',
+    },
+    feats: {
+      ru: ['Кампании с реальными историческими фигурами', 'Основа серии, живущей двадцать пять лет', 'Классический баланс и узнаваемый стиль'],
+      en: ['Campaigns with real historical figures', 'The base of a twenty-five-year-old series', 'Classic balance and a recognisable style'],
+    },
+  },
+  {
+    slug: 'diablo-ii-resurrected', title: 'Diablo II: Resurrected',
+    about: {
+      ru: 'Ремейк эталона жанра хак-н-слэш: семь классов, четыре акта и бесконечная охота за предметами в Санктуарии. Верность оригиналу покадровая, с возможностью переключиться на графику 2000 года одним нажатием.',
+      en: 'A faithful remake of the hack-and-slash benchmark: seven classes, four acts and an endless hunt for loot in Sanctuary. Frame-for-frame faithful, with a one-button switch back to the 2000 graphics.',
+    },
+    feats: {
+      ru: ['Тот самый Диабло, только красивый', 'Семь непохожих классов', 'Билды и предметы, которые изучают годами'],
+      en: ['The same Diablo, now beautiful', 'Seven distinct classes', 'Builds and loot studied for years'],
+    },
+  },
+  {
+    slug: 'warcraft-iii-reforged', title: 'Warcraft III: Reforged',
+    about: {
+      ru: 'Стратегия о судьбе Азерота с героями как центром каждого отряда: Артас, Тралл и Иллидан ведут кампании, а пользовательские карты породили Доту и жанр моба. Обновлённое издание классики.',
+      en: 'The strategy about Azeroth’s fate with heroes at the centre of every squad: Arthas, Thrall and Illidan lead the campaigns, and its custom maps birthed Dota and the MOBA genre. An updated edition of the classic.',
+    },
+    feats: {
+      ru: ['Герои с прокачкой как сердце стратегии', 'Кампании, ставшие легендой', 'Родина жанра моба'],
+      en: ['Leveling heroes as the strategy’s heart', 'Legendary campaigns', 'The birthplace of the MOBA genre'],
+    },
+  },
+  {
+    slug: 'star-wars-battlefront-ii-2005', title: 'Star Wars: Battlefront II (2005)',
+    about: {
+      ru: 'Классический сетевой шутер по Звёздным войнам: от пехоты до джедаев, от наземных боёв до космоса в Галактических завоеваниях. Игра детства для целого поколения, соединившая масштаб и узнаваемые битвы.',
+      en: 'The classic Star Wars multiplayer shooter: from troopers to Jedi, from ground battles to space in Galactic Conquest. A childhood game for a whole generation, blending scale with iconic battles.',
+    },
+    feats: {
+      ru: ['Битвы на земле и в космосе одновременно', 'Режим Галактических завоеваний', 'Герои саги прямо на поле боя'],
+      en: ['Ground and space battles at once', 'The Galactic Conquest mode', 'Saga heroes on the battlefield'],
+    },
+  },
+  {
+    slug: 'stronghold-crusader', title: 'Stronghold Crusader',
+    about: {
+      ru: 'Строительство замка и осада в пустынях крестовых походов: экономика ресурсов и стены, с которых льётся кипящая смола. Классическая стратегия, где планирование замка важнее численности армии.',
+      en: 'Castle building and sieges in the Crusades deserts: a resource economy and walls pouring boiling pitch. A classic strategy where castle planning matters more than army size.',
+    },
+    feats: {
+      ru: ['Замки, которые строятся для обороны', 'Кампании против Крысы, Змеи и Халифа', 'Экономика и осада в одном ритме'],
+      en: ['Castles built to be defended', 'Campaigns against the Rat, Snake and Caliph', 'Economy and siege in one rhythm'],
+    },
+  },
+  {
+    slug: 'dead-space-2008', title: 'Dead Space (2008)',
+    about: {
+      ru: 'Оригинал космохоррора об Айзеке Кларке на корабле «Ишимура»: некроморфы, стратегическое расчленение и звук, который страшнее картинки. Игра, доказавшая, что хоррор выживает и в космосе.',
+      en: 'The original space horror about Isaac Clarke aboard the Ishimura: Necromorphs, strategic dismemberment and sound scarier than the visuals. The game that proved horror survives in space.',
+    },
+    feats: {
+      ru: ['Оружие — инструменты, ставшие оружием', 'Некроморфы, которых надо разбирать', 'Атмосфера, ставшая эталоном жанра'],
+      en: ['Weapons are tools turned into arms', 'Necromorphs you must dismember', 'An atmosphere that became the genre benchmark'],
+    },
+  },
+  {
+    slug: 'the-elder-scrolls-iv-oblivion', title: 'The Elder Scrolls IV: Oblivion',
+    about: {
+      ru: 'Сиродил во всей красе: врата Обливиона открываются по всему миру, а игрок идёт от заключённого до героя, выполняя сотни квестов. Эталон открытого мира середины двухтысячных и гильдий с собственными сюжетами.',
+      en: 'Cyrodiil in all its glory: Oblivion gates open across the world while the player rises from prisoner to hero through hundreds of quests. The mid-2000s open-world benchmark and guilds with their own stories.',
+    },
+    feats: {
+      ru: ['Гильдии с полноценными сюжетными линиями', 'Мир, живущий по расписанию', 'Классика, в которую возвращаются спустя годы'],
+      en: ['Guilds with full storylines', 'A world living on a schedule', 'A classic people return to for years'],
+    },
+  },
+  {
+    slug: 'prince-of-persia-the-sands-of-time', title: 'Prince of Persia: The Sands of Time',
+    about: {
+      ru: 'Принц выпускает Пески Времени и получает кинжал, отматывающий судьбу: паркур по дворцу, бои и головоломки, где ошибка — не конец, а шаг назад. Экшен, научивший жанр прощать игроку ошибки.',
+      en: 'The Prince unleashes the Sands of Time and gains a dagger that rewinds fate: palace parkour, fights and puzzles where a mistake is a step back, not the end. The action game that taught the genre to forgive.',
+    },
+    feats: {
+      ru: ['Перемотка времени как механика', 'Паркур, опередивший своё время', 'История, рассказанная голосом самого принца'],
+      en: ['Time rewind as a mechanic', 'Parkour ahead of its time', 'A story narrated by the Prince himself'],
+    },
+  },
+  {
+    slug: 'beyond-good-evil', title: 'Beyond Good & Evil',
+    about: {
+      ru: 'Журналистка Джейд разоблачает заговор на планете Хиллис, фотографируя животных и сражаясь с врагами посохом. Приключенческая классика Мишеля Анселя, опередившая время и ставшая культовой.',
+      en: 'Journalist Jade uncovers a conspiracy on the planet Hillys, photographing creatures and fighting foes with a staff. Michel Ancel’s adventure classic, ahead of its time and beloved ever since.',
+    },
+    feats: {
+      ru: ['Героиня, ставшая иконой', 'Смесь экшена, головоломок и стелса', 'Культ, выросший из недооценённого релиза'],
+      en: ['A heroine who became an icon', 'A mix of action, puzzles and stealth', 'A cult born from an underrated release'],
+    },
+  },
+  {
+    slug: 'sid-meiers-civilization-iv', title: 'Sid Meier’s Civilization IV',
+    about: {
+      ru: 'Четвёртая часть легендарной серии: религия и культура как механики, пять путей к победе и «Одно ещё ход» в чистом виде. Игра 2005 года, закрепила формулу, по которой серия живёт до сих пор.',
+      en: 'The fourth entry in the legendary series: religion and culture as mechanics, five paths to victory and “one more turn” in its purest form. The 2005 game that locked in the formula the series still lives by.',
+    },
+    feats: {
+      ru: ['Пять разных путей к победе', 'Религия и культура как инструменты', 'Формула «ещё один ход» без компромиссов'],
+      en: ['Five different paths to victory', 'Religion and culture as tools', 'The “one more turn” formula, uncompromised'],
+    },
+  },
+  {
+    slug: 'command-conquer-red-alert-2', title: 'Command & Conquer: Red Alert 2',
+    about: {
+      ru: 'Альтернативная холодная война, где Советский Союз идёт на Запад с психотехнологиями и гигантскими дирижаблями: быстрый темп, узнаваемые юниты и фирменный юмор серии с живыми видеовставками.',
+      en: 'An alternate Cold War where the Soviet Union marches West with psi-tech and giant blimps: fast pace, recognisable units and the series’ signature humour with live-action inserts.',
+    },
+    feats: {
+      ru: ['Две кампании с разным характером', 'Узнаваемые юниты вроде Киборга-танка', 'Темп, который до сих пор эталон'],
+      en: ['Two campaigns with distinct character', 'Iconic units like the Apocalypse tank', 'A pace that is still a benchmark'],
+    },
+  },
+  {
+    slug: 'silent-hill-2', title: 'Silent Hill 2',
+    about: {
+      ru: 'Оригинал 2001 года: Джеймс Сандерленд получает письмо от умершей жены и приходит в туманный Сайлент Хилл, где город становится зеркалом его вины. Психологический хоррор, до которого жанру далеко и сейчас.',
+      en: 'The 2001 original: James Sunderland receives a letter from his dead wife and comes to fog-drenched Silent Hill, where the town becomes a mirror of his guilt. A psychological horror the genre still hasn’t caught up to.',
+    },
+    feats: {
+      ru: ['Сюжет, который обсуждают десятилетиями', 'Пирамидоголовый как символ жанра', 'Город, читающий душу игрока'],
+      en: ['A story debated for decades', 'Pyramid Head as a genre symbol', 'A town that reads the player’s soul'],
+    },
+  },
+  {
+    slug: 'steins-gate', title: 'Steins;Gate',
+    about: {
+      ru: 'Оригинальная визуальная новелла о самозваном учёном Окабэ и случайной машине времени из микроволновки: от комедии в лаборатории до триллера, где каждое изменение прошлого имеет цену.',
+      en: 'The original visual novel about self-styled scientist Okabe and an accidental time machine built from a microwave: from lab comedy to a thriller where every change to the past has a price.',
+    },
+    feats: {
+      ru: ['Одна из лучших историй о времени', 'Персонажи, которых любят всем сердцем', 'Финальные главы уровня триллера'],
+      en: ['One of the best time-travel stories', 'Characters loved with all the heart', 'Final chapters at thriller level'],
+    },
+  },
+  {
+    slug: 'doki-doki-literature-club', title: 'Doki Doki Literature Club',
+    about: {
+      ru: 'Бесплатная визуальная новелла о школьном литературном клубе, которая притворяется милой ровно до того момента, когда ей нужно перестать. Игру нельзя описывать без спойлеров — только играть.',
+      en: 'A free visual novel about a school literature club that pretends to be cute exactly until it mustn’t. The game cannot be described without spoilers — only played.',
+    },
+    feats: {
+      ru: ['Один из самых известных сюжетных поворотов', 'Бесплатный вход в незабываемый опыт', 'Игра, ломающая ожидания жанра'],
+      en: ['One of the most famous twists', 'Free entry to an unforgettable experience', 'A game that breaks genre expectations'],
+    },
+  },
+  {
+    slug: 'the-house-in-fata-morgana', title: 'The House in Fata Morgana',
+    about: {
+      ru: 'Визуальная новелла о проклятом особняке, чьи комнаты рассказывают трагедии разных эпох, ведущих к одной тайне. Готическая история о принятии, которую называют одной из лучших новелл в истории.',
+      en: 'A visual novel about a cursed mansion whose rooms tell tragedies from different eras, all leading to one secret. A gothic story of acceptance, called one of the best novels in the medium.',
+    },
+    feats: {
+      ru: ['Готический сюжет на несколько эпох', 'Темы принятия и сострадания', 'Высочайшие оценки игроков всех платформ'],
+      en: ['A gothic plot spanning eras', 'Themes of acceptance and compassion', 'Top ratings from players on every platform'],
+    },
+  },
+  {
+    slug: 'va-11-hall-a-second-round', title: 'Va-11 Hall-A: Second Round',
+    about: {
+      ru: 'Продолжение новеллы о баре Валхалла: барменша Джилл снова смешивает напитки и слушает истории жителей киберпанк-города. Та же тёплая подача, те же разговоры, что важнее любых выборов.',
+      en: 'A sequel to the VA-11 HALL-A novel: bartender Jill again mixes drinks and listens to the stories of the cyberpunk city’s residents. The same warm tone, the same conversations that matter more than any choice.',
+    },
+    feats: {
+      ru: ['Возвращение любимого бара и героев', 'Диалоги важнее любых выборов', 'Атмосфера киберпанка без насилия'],
+      en: ['The return of the beloved bar and cast', 'Dialogue over any choice', 'Cyberpunk atmosphere without violence'],
+    },
+  },
+  {
+    slug: 'project-sekai-colorful-stage', title: 'Project Sekai: Colorful Stage!',
+    about: {
+      ru: 'Ритм-игра с песнями вокалоидов и живыми группами: пять ансамблей со своими историями и десятки треков разной сложности. От авторов Хатсунэ Мику — с кооперативом и событиями.',
+      en: 'A rhythm game featuring Vocaloid songs and live bands: five ensembles with their own stories and dozens of tracks at varying difficulty. From the Hatsune Miku creators, with co-op and events.',
+    },
+    feats: {
+      ru: ['Треки от классики вокалоидов до новинок', 'Пять групп с характерами и историями', 'Кооперативные ритм-матчи'],
+      en: ['Tracks from Vocaloid classics to new hits', 'Five bands with personalities and stories', 'Co-op rhythm matches'],
+    },
+  },
+  {
+    slug: 'castlevania-symphony-of-the-night', title: 'Castlevania: Symphony of the Night',
+    about: {
+      ru: 'Алукард исследует замок Дракулы, перестраивающий сам себя: игра, соединившая платформер и исследование, и давшая имя жанру «метроидвания». Классика 1997 года, которую проходят до сих пор.',
+      en: 'Alucard explores Dracula’s castle, which rearranges itself: the game that fused platforming and exploration and named the “metroidvania” genre. A 1997 classic still played today.',
+    },
+    feats: {
+      ru: ['Игра, давшая имя целому жанру', 'Замок с секретами в каждом углу', 'Атмосфера готического хоррора'],
+      en: ['The game that named a genre', 'A castle with secrets in every corner', 'A gothic-horror atmosphere'],
+    },
+  },
+  {
+    slug: 'ender-lilies-quietus-of-the-knights', title: 'Ender Lilies: Quietus of the Knights',
+    about: {
+      ru: 'Метроидвания о жрице Лили в королевстве, поражённом дождём смерти: её сопровождают духи павших рыцарей, сражающиеся за неё. Меланхоличная красота и бои, построенные на смене духов.',
+      en: 'A metroidvania about the priestess Lily in a kingdom stricken by a rain of death, accompanied by the spirits of fallen knights who fight for her. Melancholic beauty and combat built on swapping spirits.',
+    },
+    feats: {
+      ru: ['Духи-компаньоны как боевая система', 'Один из самых красивых пиксельных миров', 'Меланхолия, от которой замирает сердце'],
+      en: ['Companion spirits as the combat system', 'One of the most beautiful pixel worlds', 'Melancholy that stops your heart'],
+    },
+  },
+  {
+    slug: 'afterimage', title: 'Afterimage',
+    about: {
+      ru: 'Метроидвания в нарисованном мире Энгартин: героиня с кистью-мечом исследует огромный континент, встречает боссов и раскрывает тайну исчезнувшей наставницы. Больше ста локаций и десятки оружий.',
+      en: 'A metroidvania in the hand-drawn world of Engardin: a heroine with a brush-sword explores a huge continent, faces bosses and uncovers the mystery of her missing mentor. Over a hundred locations and dozens of weapons.',
+    },
+    feats: {
+      ru: ['Рисованный мир размером с континент', 'Больше ста локаций для исследования', 'Смена оружия меняет стиль боя'],
+      en: ['A hand-drawn continent-sized world', 'Over a hundred locations to explore', 'Weapon swapping changes playstyle'],
+    },
+  },
+  {
+    slug: 'metroid-dread', title: 'Metroid Dread',
+    about: {
+      ru: 'Самус Аран на планете ЗДР против роботов ЭММИ, от которых нужно убегать: возвращение классического 2D-Метроида спустя девятнадцать лет. Темп, дизайн карты и погони, ставшие визитной карточкой.',
+      en: 'Samus Aran on planet ZDR against the E.M.M.I. robots she must flee: the return of classic 2D Metroid after nineteen years. Tempo, map design and chases that became its signature.',
+    },
+    feats: {
+      ru: ['Погони ЭММИ, меняющие ритм игры', 'Дизайн карты уровня классики серии', 'Лучший 2D-Метроид современности'],
+      en: ['E.M.M.I. chases that change the pace', 'Map design at the series’ classic level', 'The best modern 2D Metroid'],
+    },
+  },
+  {
+    slug: 'hatsune-miku-project-diva-mega-mix', title: 'Hatsune Miku: Project DIVA Mega Mix+',
+    about: {
+      ru: 'Ритм-игра с вокалоидами: десятки треков Хатсунэ Мику, клипы в аниме-стиле и режимы от новичка до экстремала. Лучший вход в мир ритм-игр с японскими виртуальными звёздами.',
+      en: 'A rhythm game with Vocaloids: dozens of Hatsune Miku tracks, anime-style clips and modes from beginner to extreme. The best entry into rhythm games with Japan’s virtual stars.',
+    },
+    feats: {
+      ru: ['Десятки треков и клипов', 'Кастомизация персонажей', 'Режимы на любой уровень мастерства'],
+      en: ['Dozens of tracks and clips', 'Character customisation', 'Modes for every skill level'],
+    },
+  },
+  {
+    slug: 'rhythm-doctor', title: 'Rhythm Doctor',
+    about: {
+      ru: 'Ритм-игра, где нужно нажимать на седьмую долю: пациенты, истории и уровни, которые ломают сам экран, чтобы сбить вас с такта. Один из самых изобретательных ритм-проектов, с кооперативом.',
+      en: 'A rhythm game where you press on the seventh beat: patients, stories and levels that break the screen itself to throw you off tempo. One of the most inventive rhythm games, with co-op.',
+    },
+    feats: {
+      ru: ['Уровни, ломающие интерфейс игры', 'Сюжетные персонажи-пациенты', 'Кооператив до двух игроков'],
+      en: ['Levels that break the game’s interface', 'Story-driven patient characters', 'Co-op for up to two players'],
+    },
+  },
+  {
+    slug: 'muse-dash', title: 'Muse Dash',
+    about: {
+      ru: 'Ритм-раннер в аниме-стиле: героини бегут и бьют врагов под музыку, попадая в ноты. Двести треков, кооператив и лёгкий порог входа, за которым прячется настоящая сложность.',
+      en: 'An anime-style rhythm runner: heroines run and strike enemies to the music, hitting the notes. Two hundred tracks, co-op and an easy entry hiding real difficulty.',
+    },
+    feats: {
+      ru: ['Простой вход, глубокая сложность', 'Двести треков в разных жанрах', 'Кооператив на двоих'],
+      en: ['Easy entry, deep difficulty', 'Two hundred tracks across genres', 'Two-player co-op'],
+    },
+  },
+  {
+    slug: 'trombone-champ', title: 'Trombone Champ',
+    about: {
+      ru: 'Ритм-игра про тромбон, где промахнуться веселее, чем попасть: классические мелодии, абсурдный юмор и коллекция карточек «тромбонистов». Феномен, в который играют, чтобы смеяться.',
+      en: 'A trombone rhythm game where missing is funnier than hitting: classical tunes, absurd humour and a collectible card set of “trombonists”. A phenomenon people play to laugh.',
+    },
+    feats: {
+      ru: ['Промахи смешнее точных нот', 'Классика в самом нелепом виде', 'Коллекция карточек как отдельная радость'],
+      en: ['Misses funnier than perfect notes', 'Classics in the silliest form', 'A card collection as a joy of its own'],
+    },
+  },
+  {
+    slug: 'tekken-8', title: 'Tekken 8',
+    about: {
+      ru: 'Новая глава легендарного файтинга: разрушаемые арены, агрессия через систему Хит и тридцать два бойца с фирменными стилями. Режимы от аркады до сетевой игры с откатным неткодом.',
+      en: 'The next chapter of the legendary fighter: destructible stages, aggression driven by the Heat system and thirty-two fighters with signature styles. Modes from arcade to online with rollback netcode.',
+    },
+    feats: {
+      ru: ['Разрушаемые арены и зрелищность', 'Система Хит поощряет агрессию', 'Откатный неткод для честной сетевой игры'],
+      en: ['Destructible stages and spectacle', 'The Heat system rewards aggression', 'Rollback netcode for fair online play'],
+    },
+  },
+  {
+    slug: 'street-fighter-6', title: 'Street Fighter 6',
+    about: {
+      ru: 'Уличный боец возвращается в лучшей форме: открытый Мировой тур для новичков, классический аркадный режим и сетевые бои с комментариями в реальном времени. Файтинг, открывающий жанр каждому.',
+      en: 'Street Fighter returns at its best: an open World Tour for newcomers, a classic arcade mode and online fights with real-time commentary. A fighter that opens the genre to everyone.',
+    },
+    feats: {
+      ru: ['Мировой тур как обучение через игру', 'Живые комментарии боёв', 'Лучший онлайн в жанре'],
+      en: ['World Tour as learning through play', 'Live fight commentary', 'The genre’s best online'],
+    },
+  },
+  {
+    slug: 'guilty-gear-strive', title: 'Guilty Gear Strive',
+    about: {
+      ru: 'Файтинг, выглядящий как аниме в движении: уникальные персонажи, разрушаемые стены и рок-саундтрек. Сетевая игра с откатным кодом и режимы для новичков делают его доступнее, чем кажется.',
+      en: 'A fighter that looks like anime in motion: unique characters, wall breaks and a rock soundtrack. Rollback online and beginner modes make it more approachable than it looks.',
+    },
+    feats: {
+      ru: ['Визуал уровня аниме-фильма', 'Каждый персонаж — свой жанр', 'Рок-саундтрек, который помнят все'],
+      en: ['Anime-film-level visuals', 'Every character is their own genre', 'A rock soundtrack everyone remembers'],
+    },
+  },
+  {
+    slug: 'mortal-kombat-11', title: 'Mortal Kombat 11',
+    about: {
+      ru: 'Одиннадцатая глава легендарной серии: жестокость возведена в абсолют, ростер объединил эпохи, а кастомизация бойцов — десятки вариантов внешнего вида. Фаталити на месте.',
+      en: 'The eleventh chapter of the legendary series: brutality taken to its peak, a roster uniting the eras and fighter customisation with dozens of looks. Fatalities included.',
+    },
+    feats: {
+      ru: ['Фаталити как визитная карточка', 'Ростер из разных эпох серии', 'Глубокая кастомизация бойцов'],
+      en: ['Fatalities as the signature', 'A roster spanning series eras', 'Deep fighter customisation'],
+    },
+  },
+  {
+    slug: 'super-smash-bros-ultimate', title: 'Super Smash Bros. Ultimate',
+    about: {
+      ru: 'Все бойцы сразу: восемьдесят девять персонажей от Марио до Соника на одной арене. Самый полный файтинг-кроссовер в истории с режимами для одного, компании и сети.',
+      en: 'Everyone at once: eighty-nine fighters from Mario to Sonic in one arena. The most complete crossover fighter in history with modes for solo, groups and online.',
+    },
+    feats: {
+      ru: ['89 персонажей — «все уже здесь»', 'Локальный мультиплеер до восьми', 'Режим Духов с сотнями боёв'],
+      en: ['89 characters — “everyone is here”', 'Local multiplayer for eight', 'Spirits mode with hundreds of fights'],
+    },
+  },
+  {
+    slug: 'multiversus', title: 'MultiVersus',
+    about: {
+      ru: 'Файтинг-кроссовер вселенной Уорнер Бразерс: Багз Банни, Бэтмен, Арья Старк и другие дерутся на аренах в духе Смэш. Бесплатный, с кооперативом два на два и командными механиками.',
+      en: 'A crossover fighter from the Warner Bros. universe: Bugs Bunny, Batman, Arya Stark and more battle on Smash-style arenas. Free-to-play, with two-versus-two co-op and team mechanics.',
+    },
+    feats: {
+      ru: ['Герои из десятка вселенных в одном файтинге', 'Командный формат два на два', 'Бесплатный вход'],
+      en: ['Heroes from a dozen universes in one fighter', 'Two-versus-two team format', 'Free entry'],
+    },
+  },
+  {
+    slug: 'beamng-drive', title: 'BeamNG.drive',
+    about: {
+      ru: 'Симулятор мягкой физики кузова: каждая авария просчитывается деформацией металла в реальном времени. Испытания, гонки и краш-тесты — площадка для тех, кто хочет понять, как машина ломается.',
+      en: 'A soft-body vehicle physics simulator: every crash is calculated as real-time metal deformation. Challenges, racing and crash tests — a playground for those who want to see how a car breaks.',
+    },
+    feats: {
+      ru: ['Самая реалистичная деформация в играх', 'Сотни сценариев и модов', 'Краш-тесты как отдельное искусство'],
+      en: ['The most realistic deformation in games', 'Hundreds of scenarios and mods', 'Crash tests as an art form'],
+    },
+  },
+  {
+    slug: 'trackmania-nations', title: 'Trackmania Nations',
+    about: {
+      ru: 'Бесплатная версия культовой аркадной гонки: тысячи трасс, идеал чистого времени круга и сообщество, создающее контент каждый день. Вход в серию Трекмания без затрат.',
+      en: 'The free edition of the cult arcade racer: thousands of tracks, the pursuit of a perfect lap and a community creating content daily. A cost-free entry into Trackmania.',
+    },
+    feats: {
+      ru: ['Бесплатный доступ к ядру серии', 'Трассы, создаваемые сообществом', 'Чистый скилл без прокачки'],
+      en: ['Free access to the series core', 'Community-created tracks', 'Pure skill with no progression'],
+    },
+  },
+  {
+    slug: 'art-of-rally', title: 'Art of Rally',
+    about: {
+      ru: 'Минималистичный раллийный симулятор с видом сверху: физика скольжения, десятки машин и трассы, вдохновлённые золотой эрой ралли. Стиль, от которого ралли выглядит как искусство.',
+      en: 'A minimalist top-down rally sim: slide physics, dozens of cars and stages inspired by rallying’s golden era. A style that makes rallying look like art.',
+    },
+    feats: {
+      ru: ['Физика скольжения, покоряющая с первого заноса', 'Эстетика золотой эры ралли', 'Минимализм, в котором нет ничего лишнего'],
+      en: ['Slide physics that win you over instantly', 'Golden-era rally aesthetics', 'A minimalism with nothing extra'],
+    },
+  },
+  {
+    slug: 'hot-wheels-unleashed-2', title: 'Hot Wheels Unleashed 2',
+    about: {
+      ru: 'Гонки по оранжевым трекам Хот Вилс, собранным из настоящих конструкторов: прыжки, петли и трассы, построенные прямо в комнате. Редактор трасс и кооператив прилагаются.',
+      en: 'Racing on orange Hot Wheels tracks built from the real construction set: jumps, loops and courses laid out right in the room. A track editor and co-op included.',
+    },
+    feats: {
+      ru: ['Треки из настоящего конструктора', 'Редактор собственных трасс', 'Игра, одинаково любимая детьми и взрослыми'],
+      en: ['Tracks made from the real construction set', 'A builder for your own tracks', 'Loved equally by kids and adults'],
+    },
+  },
+  {
+    slug: 'ea-sports-fc-25', title: 'EA Sports FC 25',
+    about: {
+      ru: 'Футбольный симулятор с технологиями реальных данных: тактика через роли игроков, режим Раш пять на пять и карьера с женскими лигами. Следующий шаг серии после ухода от бренда ФИФА.',
+      en: 'A football sim powered by real-world data: tactics through player roles, a five-versus-five Rush mode and careers including women’s leagues. The series’ next step after leaving the FIFA brand.',
+    },
+    feats: {
+      ru: ['Тактические роли меняют игру', 'Режим Раш для быстрой игры', 'Карьера с реальными данными'],
+      en: ['Tactical roles change the game', 'Rush mode for quick play', 'Careers with real-world data'],
+    },
+  },
+  {
+    slug: 'tony-hawks-pro-skater-1-2', title: 'Tony Hawk’s Pro Skater 1 + 2',
+    about: {
+      ru: 'Ремейк двух классических частей: те самые парки, тот же счёт на миллионы и саундтрек, на котором выросло поколение. Финты, комбо и две минуты на максимум очков.',
+      en: 'A remake of two classic entries: the same parks, the same million-point scores and the soundtrack a generation grew up on. Tricks, combos and two minutes for the maximum score.',
+    },
+    feats: {
+      ru: ['Классика, воссозданная с любовью', 'Саундтрек эпохи в новой записи', 'Редактор парков и онлайн-матчи'],
+      en: ['A classic lovingly recreated', 'The era’s soundtrack re-recorded', 'A park editor and online matches'],
+    },
+  },
+  {
+    slug: 'wwe-2k24', title: 'WWE 2K24',
+    about: {
+      ru: 'Симулятор реслинга с крупнейшим ростером суперзвёзд: карьеры, создание собственного бойца и матчи от классических до королевской битвы. Двадцать лет серии в лучшем виде.',
+      en: 'A wrestling sim with the largest superstars roster: careers, custom fighter creation and matches from classic to royal rumble. Twenty years of the series at its best.',
+    },
+    feats: {
+      ru: ['Сотни суперзвёзд в одном ростере', 'Режимы карьеры и создания бойца', 'Зрелищность настоящего шоу'],
+      en: ['Hundreds of superstars in one roster', 'Career and creation modes', 'The spectacle of a real show'],
+    },
+  },
+  {
+    slug: 'golf-it', title: 'Golf It!',
+    about: {
+      ru: 'Мини-гольф с безумными картами и мультиплеером до восьми игроков: трамплины, порталы и движущиеся препятствия в темах от пиратских до космических. Идеален для игры с друзьями.',
+      en: 'Mini golf with wild maps and multiplayer for up to eight: jumps, portals and moving obstacles across themes from pirate to space. Perfect for playing with friends.',
+    },
+    feats: {
+      ru: ['До восьми игроков в одном лобби', 'Тысячи пользовательских карт', 'Веселье важнее точности'],
+      en: ['Up to eight players in one lobby', 'Thousands of community maps', 'Fun over precision'],
+    },
+  },
+  {
+    slug: 'splinter-cell-chaos-theory', title: 'Splinter Cell: Chaos Theory',
+    about: {
+      ru: 'Вершина стелс-серии о Сэме Фишере: свет и тьма, вертикальные уровни и три пути через каждую миссию. Игра 2005 года, до сих пор считающаяся эталоном жанра.',
+      en: 'The peak of the Sam Fisher stealth series: light and shadow, vertical levels and three ways through every mission. The 2005 game still considered the genre benchmark.',
+    },
+    feats: {
+      ru: ['Свет и тень как главные механики', 'Кооперативные миссии на двоих', 'Свобода подхода к каждой задаче'],
+      en: ['Light and shadow as core mechanics', 'Two-player co-op missions', 'Freedom in every approach'],
+    },
+  },
+  {
+    slug: 'hitman-blood-money', title: 'Hitman: Blood Money',
+    about: {
+      ru: 'Классическая часть серии об Агенте 47: каждая миссия — песочница идеального убийства, где несчастный случай выглядит лучше выстрела. Игра, закрепившая формулу песочного стелса.',
+      en: 'A classic entry about Agent 47: every mission is a sandbox of the perfect kill, where an accident looks better than a shot. The game that locked in the sandbox-stealth formula.',
+    },
+    feats: {
+      ru: ['Каждая цель — сотня способов устранения', 'Рейтинг бесшумности в конце миссии', 'Эталон песочного стелса'],
+      en: ['A hundred ways per target', 'A silence rating after each mission', 'The sandbox-stealth benchmark'],
+    },
+  },
+  {
+    slug: 'shadow-tactics-blades-of-the-shogun', title: 'Shadow Tactics: Blades of the Shogun',
+    about: {
+      ru: 'Тактика в реальном времени в Японии эпохи Эдо: пять специалистов — от самурая до гейши — выполняют невозможные задания, где каждый шаг просчитан. Наследник Коммандос в лучшей форме.',
+      en: 'Real-time tactics in Edo-period Japan: five specialists — from samurai to geisha — execute impossible missions where every step is calculated. The heir to Commandos at its best.',
+    },
+    feats: {
+      ru: ['Пять героев с уникальными способностями', 'Уровни как головоломки на исполнение', 'Япония Эдо с любовью к деталям'],
+      en: ['Five heroes with unique abilities', 'Levels as execution puzzles', 'Edo Japan with loving detail'],
+    },
+  },
+  {
+    slug: 'her-story', title: 'Her Story',
+    about: {
+      ru: 'Детектив, где вы ищете по базе полицейских интервью: вводите слова, смотрите клипы и складываете правду из фрагментов. Игра, переизобретшая жанр интерактивного расследования.',
+      en: 'A detective game where you search a database of police interviews: type words, watch clips and assemble the truth from fragments. The game that reinvented interactive investigation.',
+    },
+    feats: {
+      ru: ['Расследование через поиск как механика', 'История, складываемая из осколков', 'Финал, который зависит только от вас'],
+      en: ['Investigation via search as a mechanic', 'A story assembled from shards', 'An ending shaped only by you'],
+    },
+  },
+  {
+    slug: 'paradise-killer', title: 'Paradise Killer',
+    about: {
+      ru: 'Детектив в неоновом открытом мире, где суд решает, кого казнить: собирайте улики, допрашивайте бессмертных и выносите вердикт, который может оказаться неверным. Визуальный стиль и саундтрек вне конкуренции.',
+      en: 'A detective story in a neon open world where a trial decides who dies: gather evidence, interrogate immortals and deliver a verdict that may be wrong. A visual style and soundtrack beyond competition.',
+    },
+    feats: {
+      ru: ['Открытое расследование без линейности', 'Неоновый сити-поп в каждом кадре', 'Вердикт как ваша ответственность'],
+      en: ['Open-ended investigation', 'Neon city-pop in every frame', 'The verdict as your responsibility'],
+    },
+  },
+  {
+    slug: 'case-of-the-golden-idol', title: 'Case of the Golden Idol',
+    about: {
+      ru: 'Сборник загадочных смертей, связанных золотым идолом: изучайте застывшие сцены и заполняйте пропуски в описании событий. Детектив, где дедукция — единственный инструмент.',
+      en: 'A collection of mysterious deaths tied to a golden idol: examine frozen scenes and fill the blanks in the account of events. A detective game where deduction is your only tool.',
+    },
+    feats: {
+      ru: ['Двенадцать сцен-загадок в одной истории', 'Механика заполнения пропусков', 'Сюжет, связывающий все дела'],
+      en: ['Twelve puzzle scenes in one story', 'A fill-in-the-blanks mechanic', 'A plot tying all cases together'],
+    },
+  },
+  {
+    slug: 'pubg-mobile', title: 'PUBG Mobile',
+    about: {
+      ru: 'Королевская битва, с которой всё началось, на телефоне: сто игроков, один выживший и карты, ставшие классикой жанра. Полноценный батл-рояль с реалистичной стрельбой в кармане.',
+      en: 'The battle royale that started it all, on mobile: a hundred players, one survivor and maps that became genre classics. A full battle royale with realistic gunplay in your pocket.',
+    },
+    feats: {
+      ru: ['Классические карты Эрангель и Мирамар', 'Реалистичная баллистика', 'Сезоны и режимы на годы'],
+      en: ['Classic maps like Erangel and Miramar', 'Realistic ballistics', 'Seasons and modes for years'],
+    },
+  },
+  {
+    slug: 'melvor-idle', title: 'Melvor Idle',
+    about: {
+      ru: 'Инкриментальная РПГ без боя на экране: качайте навыки, добывайте ресурсы и побеждайте монстров, пока занимаетесь своими делами. Вдохновлена Рунайскейпом и одобрена его создателями.',
+      en: 'An incremental RPG with no on-screen combat: train skills, gather resources and defeat monsters while you do other things. Inspired by RuneScape and endorsed by its creators.',
+    },
+    feats: {
+      ru: ['Прогресс идёт даже офлайн', 'Двадцать навыков для прокачки', 'Идеальная игра фоном'],
+      en: ['Progress continues offline', 'Twenty skills to train', 'The perfect background game'],
+    },
+  },
+  {
+    slug: 'cookie-clicker', title: 'Cookie Clicker',
+    about: {
+      ru: 'Игра, породившая жанр инкрементальных кликеров: пеките печеньки, покупайте бабушек и доводите производство до абсурдных величин. Простая, бесконечная и затягивающая.',
+      en: 'The game that spawned the incremental clicker genre: bake cookies, buy grandmas and drive production to absurd numbers. Simple, endless and addictive.',
+    },
+    feats: {
+      ru: ['Родоначальник жанра кликеров', 'Прогресс, который не заканчивается', 'Абсурд как награда за терпение'],
+      en: ['The originator of the clicker genre', 'Progress that never ends', 'Absurdity as a reward for patience'],
+    },
+  },
+  {
+    slug: 'tabletop-simulator', title: 'Tabletop Simulator',
+    about: {
+      ru: 'Виртуальный стол для любых настольных игр: шахматы, Мафия, собственные прототипы и тысячи модов из мастерской. Физика фигурок и свобода делать что угодно — включая переворачивать стол.',
+      en: 'A virtual table for any board game: chess, Mafia, your own prototypes and thousands of workshop mods. Physical pieces and the freedom to do anything — including flipping the table.',
+    },
+    feats: {
+      ru: ['Любая настолка в одном месте', 'Тысячи модов в мастерской', 'Кооператив до десяти игроков'],
+      en: ['Any board game in one place', 'Thousands of workshop mods', 'Co-op for up to ten players'],
+    },
+  },
+  {
+    slug: 'gloomhaven', title: 'Gloomhaven',
+    about: {
+      ru: 'Цифровая версия крупнейшей настольной кампании: тактические бои по картам, прокачка наёмников и ветвящаяся история, меняющаяся от решений. Больше сотни сценариев на сотни часов.',
+      en: 'A digital version of the biggest board-game campaign: card-driven tactical battles, mercenary progression and a branching story shaped by choices. Over a hundred scenarios for hundreds of hours.',
+    },
+    feats: {
+      ru: ['Глубочайшая настольная кампания в цифре', 'Кооператив до четырёх наёмников', 'Решения меняют мир кампании'],
+      en: ['The deepest board-game campaign in digital', 'Co-op for up to four mercenaries', 'Choices reshape the campaign world'],
+    },
+  },
+  {
+    slug: 'ticket-to-ride', title: 'Ticket to Ride',
+    about: {
+      ru: 'Классическая железнодорожная настолка в цифре: собирайте карты вагонов и прокладывайте маршруты между городами, пока соперники не заняли ваши пути. Простые правила, настоящая стратегия.',
+      en: 'The classic railway board game in digital form: collect train cards and claim routes between cities before rivals take your paths. Simple rules, real strategy.',
+    },
+    feats: {
+      ru: ['Правила за пять минут', 'Напряжение от занятых маршрутов', 'Карты Европы, США и десятки других'],
+      en: ['Rules in five minutes', 'Tension from blocked routes', 'Europe, USA and dozens of maps'],
+    },
+  },
+  {
+    slug: 'codenames', title: 'Codenames',
+    about: {
+      ru: 'Командная игра в ассоциации: капитаны дают одно слово-подсказку, а команды угадывают своих агентов среди карточек. Одна ошибка может отдать победу соперникам. Идеал для вечеринок и онлайн.',
+      en: 'A team word-association game: captains give one-word clues while teammates guess their agents among the cards. One mistake can hand victory to the rivals. Perfect for parties and online.',
+    },
+    feats: {
+      ru: ['Лучшая командная игра в слова', 'Напряжение одного слова-подсказки', 'Режимы для вечеринок и онлайн-друзей'],
+      en: ['The best team word game', 'The tension of a one-word clue', 'Modes for parties and online friends'],
+    },
+  },
+  {
+    slug: 'the-elder-scrolls-online', title: 'The Elder Scrolls Online',
+    about: {
+      ru: 'ММОРПГ во вселенной Свитков: весь Тамриэль открыт с первого дня, сюжет на сотни часов и свобода качать любой класс как угодно. Игра, где исследователь важнее гонки за экипировкой.',
+      en: 'An MMO in the Elder Scrolls universe: all of Tamriel is open from day one, a story spanning hundreds of hours and the freedom to build any class any way. A game where the explorer matters more than the gear race.',
+    },
+    feats: {
+      ru: ['Весь Тамриэль без зон по уровню', 'Полная озвучка квестов', 'Гибкость классов без жёстких рамок'],
+      en: ['All of Tamriel without level-gating', 'Fully voiced quests', 'Class flexibility without hard limits'],
+    },
+  },
+  {
+    slug: 'black-desert-online', title: 'Black Desert Online',
+    about: {
+      ru: 'ММОРПГ с самой зрелищной боевой системой: комбо-экшен без автоприцеливания, глубокая жизнь ремесленника и осады сотен игроков. Мир, в котором можно жить, не вступая в бой.',
+      en: 'An MMO with the most spectacular combat: combo action without auto-targeting, deep life skills and hundred-player sieges. A world you can live in without ever fighting.',
+    },
+    feats: {
+      ru: ['Боёвка уровня файтинга', 'Ремёсла как отдельная игра', 'Масштабные осады гильдий'],
+      en: ['Fighting-game-level combat', 'Life skills as a game of their own', 'Large-scale guild sieges'],
+    },
+  },
+  {
+    slug: 'star-wars-the-old-republic', title: 'Star Wars: The Old Republic',
+    about: {
+      ru: 'ММОРПГ с восемью полностью озвученными классовыми историями: от ситха-воина до контрабандиста. Три тысячи лет до фильмов, свой флот и выборы, влияющие на сюжет каждой главы.',
+      en: 'An MMO with eight fully voiced class stories: from Sith Warrior to Smuggler. Three thousand years before the films, your own ship and choices shaping each chapter’s plot.',
+    },
+    feats: {
+      ru: ['Восемь озвученных сюжетов в одной игре', 'Выборы света и тьмы в квестах', 'Свой корабль как база героя'],
+      en: ['Eight voiced stories in one game', 'Light and dark choices in quests', 'Your own ship as a home base'],
+    },
+  },
+  {
+    slug: 'path-of-exile', title: 'Path of Exile',
+    about: {
+      ru: 'Бесплатный диаблоид с самой глубокой прокачкой в жанре: пассивное дерево на тысячи узлов, лиги каждые месяцы и экономика, которой управляют сами игроки. Эталон хардкорного экшен-РПГ.',
+      en: 'A free-to-play ARPG with the deepest progression in the genre: a passive tree of thousands of nodes, leagues every few months and a player-driven economy. The benchmark of hardcore action RPGs.',
+    },
+    feats: {
+      ru: ['Пассивное дерево без границ глубины', 'Новые лиги каждые несколько месяцев', 'Честная бесплатная модель'],
+      en: ['A passive tree with endless depth', 'New leagues every few months', 'A fair free-to-play model'],
+    },
+  },
+  {
+    slug: 'monopoly-go', title: 'Monopoly GO!',
+    about: {
+      ru: 'Монополия в мобильном формате: бросайте кубики, стройте достопримечательности и нападайте на города друзей. Самая доходная мобильная игра своего времени, рассчитанная на короткие сессии.',
+      en: 'Monopoly in a mobile format: roll dice, build landmarks and raid friends’ towns. The highest-grossing mobile game of its time, built for short sessions.',
+    },
+    feats: {
+      ru: ['Классика в карманном формате', 'События и турниры каждую неделю', 'Социальные нападения на города друзей'],
+      en: ['A classic in pocket format', 'Weekly events and tournaments', 'Social raids on friends’ towns'],
+    },
+  },
+  {
+    slug: 'asphalt-legends-unite', title: 'Asphalt Legends Unite',
+    about: {
+      ru: 'Аркадные гонки на лицензированных суперкарах по трассам всего мира: трамплины, заносы и нитро в темпе, который не даёт заскучать. Обновлённая версия серии Асфальт с кроссплатформой.',
+      en: 'Arcade racing with licensed supercars on tracks around the world: jumps, drifts and nitro at a pace that never lets you get bored. The updated Asphalt installment with cross-platform play.',
+    },
+    feats: {
+      ru: ['Сотни лицензированных машин', 'Трамплины и трюки на каждой трассе', 'Кроссплатформенные гонки'],
+      en: ['Hundreds of licensed cars', 'Jumps and stunts on every track', 'Cross-platform racing'],
+    },
+  },
+];

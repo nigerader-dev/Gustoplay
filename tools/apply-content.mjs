@@ -37,7 +37,9 @@ for (const entry of content) {
   const F = js(entry.feats);
 
   // 1) объектный формат: `t: 'Название',` … конец записи `\n  },`
-  const tIdx = src.indexOf(`t: '${entry.title}',`);
+  //    (названия с апострофом в исходнике в двойных кавычках)
+  let tIdx = src.indexOf(`t: '${entry.title}',`);
+  if (tIdx < 0) tIdx = src.indexOf(`t: "${entry.title}",`);
   if (tIdx >= 0) {
     const endIdx = src.indexOf('\n  },', tIdx);
     if (endIdx < 0) { problems.push(`${entry.slug}: не найден конец записи`); continue; }
@@ -49,9 +51,10 @@ for (const entry of content) {
   }
 
   // 2) g()-формат: однострочный вызов, название — первый аргумент
-  const gIdx = src.indexOf(`g('${entry.title.replace(/'/g, "\\'")}',`) >= 0
-    ? src.indexOf(`g('${entry.title.replace(/'/g, "\\'")}',`)
-    : src.indexOf(`g('${entry.title}',`);
+  //    (названия с апострофом в исходнике в двойных кавычках)
+  let gIdx = src.indexOf(`g('${entry.title.replace(/'/g, "\\'")}',`);
+  if (gIdx < 0) gIdx = src.indexOf(`g('${entry.title}',`);
+  if (gIdx < 0) gIdx = src.indexOf(`g("${entry.title}",`);
   if (gIdx < 0) { problems.push(`${entry.slug}: запись не найдена в part-${letter}`); continue; }
   const lineEnd = src.indexOf('\n', gIdx);
   const lineStart = src.lastIndexOf('\n', gIdx) + 1;

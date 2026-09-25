@@ -3,6 +3,17 @@
  * Названия с \u2019 в исходнике каталога записаны экранированно для точного совпадения. */
 export default [
   {
+    slug: 'deaths-door', title: "Death's Door",
+    about: {
+      ru: 'Ворон-жнец, у которого украли душу, отправляется в мир, где никто не умирает: изометрический экшен с боссами в духе зельды и меланхоличным юмором о работе, смерти и смысле. От создателей Титан Соулс.',
+      en: 'A reaper crow whose soul was stolen sets out for a land where no one dies: an isometric action game with Zelda-like bosses and melancholy humour about work, death and meaning. From the creators of Titan Souls.',
+    },
+    feats: {
+      ru: ['Боссы с характером и историей', 'Мир, полный тихого юмора', 'Изометрия, отточенная до идеала'],
+      en: ['Bosses with character and story', 'A world full of quiet humour', 'Isometric design polished to perfection'],
+    },
+  },
+  {
     slug: 'max-payne-3', title: 'Max Payne 3',
     about: {
       ru: 'Макс Пейн спивается в Сан-Паулу, работая телохранителем, и втягивается в войну с картелями. Слоу-мо с прыжками, стрельба в падении и один из самых мрачных нуаров в играх — история о человеке, которому нечего терять.',

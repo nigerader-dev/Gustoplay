@@ -2,6 +2,17 @@
  * Применяется скриптом: node tools/apply-content.mjs e */
 export default [
   {
+    slug: 'no-mans-sky', title: "No Man's Sky",
+    about: {
+      ru: 'Процедурная вселенная из квинтиллионов планет: исследуйте, стройте базы, торгуйте и летите к центру галактики, встречая чужие расы и аномалии. Игра, прошедшая путь от громкого разочарования до образцовой поддержки обновлениями.',
+      en: 'A procedural universe of quintillions of planets: explore, build bases, trade and fly toward the galaxy’s centre, meeting alien races and anomalies. A game that went from loud disappointment to a byword for redemption through updates.',
+    },
+    feats: {
+      ru: ['Каждая планета — новая посадка', 'Кооператив в общей вселенной', 'Годы бесплатных обновлений, меняющих игру'],
+      en: ['Every planet is a new landing', 'Co-op in a shared universe', 'Years of free game-changing updates'],
+    },
+  },
+  {
     slug: 'sons-of-the-forest', title: 'Sons of the Forest',
     about: {
       ru: 'Выживание на острове с каннибалами в кооперативе до восьми человек: стройте базу, рубите лес и отбивайтесь от мутантов, пока спутники-компаньоны помогают по хозяйству. Графика и физика следующего поколения при полной свободе действий.',

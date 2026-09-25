@@ -3,6 +3,17 @@
  * Факты — из метаданных каталога и общеизвестных сведений об играх; ничего выдуманного. */
 export default [
   {
+    slug: 'dont-starve-together', title: "Don't Starve Together",
+    about: {
+      ru: 'Выживание в рисованном мире Тима Бёртона: собирайте ресурсы, стройте лагерь и не дайте тьме, голоду и безумию съесть вас раньше зимы. Кооператив до шести выживших в мире, который не прощает ошибок и обожает сюрпризы.',
+      en: 'Survival in a Tim-Burton-esque hand-drawn world: gather resources, build camp and don’t let darkness, hunger and sanity eat you before winter. Co-op for up to six survivors in a world that forgives nothing and loves surprises.',
+    },
+    feats: {
+      ru: ['Стиль, который не спутать ни с чем', 'Кооператив до шести выживших', 'Сезоны и боссы, к которым нужно готовиться'],
+      en: ['A style unlike anything else', 'Co-op for up to six survivors', 'Seasons and bosses that demand preparation'],
+    },
+  },
+  {
     slug: 'deep-rock-galactic', title: 'Deep Rock Galactic',
     about: {
       ru: 'Кооперативный шутер про отряд космических гномов на службе горнодобывающей корпорации. Команда из четырёх классов спускается в процедурные пещеры, добывает минералы и отбивается от роев жуков. У каждого класса свой инструмент: бур, платформа, турель или фонарь — без слаженной работы миссию не закрыть.',
