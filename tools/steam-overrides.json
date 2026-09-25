@@ -22,6 +22,10 @@
     "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000027619/9989957eae3a6b545194c42fec2071675c34aadacd65e6b33fdfe7b3b6a86c3a",
     "src": "nintendo"
   },
+  "arknights": {
+    "cover": "https://webusstatic.yo-star.com/web-cms-prod/upload/content/2025/07/30/EUy7rIMH.png",
+    "src": "hypergryph"
+  },
   "asphalt-legends-unite": {
     "steamId": 1815780,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1815780/library_600x900_2x.jpg",
@@ -41,10 +45,22 @@
     "cover": "https://image.api.playstation.com/vulcan/img/rnd/202010/2614/O2Z66UWrZH8zcejxopwWxhGu.png",
     "src": "playstation"
   },
+  "brawl-stars": {
+    "cover": "https://supercell.com/_next/static/media/games_thumbnail_brawlstars.59dcf516.jpg",
+    "src": "supercell"
+  },
   "case-of-the-golden-idol": {
     "steamId": 1677770,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1677770/library_600x900_2x.jpg",
     "src": "steam"
+  },
+  "clash-of-clans": {
+    "cover": "https://supercell.com/_next/static/media/games_thumbnail_clashofclans.c50b0ec8.jpg",
+    "src": "supercell"
+  },
+  "clash-royale": {
+    "cover": "https://supercell.com/_next/static/media/games_thumbnail_clashroyale.d4751945.jpg",
+    "src": "supercell"
   },
   "command-conquer-red-alert-2": {
     "steamId": 2229850,
@@ -169,6 +185,10 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1250410/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "minecraft": {
+    "cover": "https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Homepage_Discover-our-games_MC-Vanilla-KeyArt_864x864.jpg",
+    "src": "mojang"
+  },
   "nioh-2": {
     "steamId": 1325200,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1325200/library_600x900_2x.jpg",
@@ -188,6 +208,10 @@
     "steamId": 1184370,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1184370/library_600x900_2x.jpg",
     "src": "steam"
+  },
+  "pok-mon-tcg-pocket": {
+    "cover": "https://tcgpocket.pokemon.com/_images/launch/b4b_en.png",
+    "src": "pokemon"
   },
   "resident-evil-2-remake": {
     "steamId": 883710,
@@ -238,6 +262,10 @@
     "steamId": 6060,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/6060/library_600x900_2x.jpg",
     "src": "steam"
+  },
+  "starcraft-ii": {
+    "cover": "https://blz-contentstack-images.akamaized.net/v3/assets/blta8f9a8e092360c6c/blt3873027b9450f357/61a50f033c4e21100a80f1fc/starcraft2.jpg",
+    "src": "blizzard"
   },
   "stronghold-crusader": {
     "steamId": 40970,
@@ -297,10 +325,22 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/914210/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "valorant": {
+    "cover": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png",
+    "src": "riot"
+  },
+  "warcraft-iii-reforged": {
+    "cover": "https://blz-contentstack-images.akamaized.net/v3/assets/blta8f9a8e092360c6c/blt4fa9fad9bfea6020/6aa5a932dee8842e5ccbacc7/blizz_w3r_nologo.png",
+    "src": "blizzard"
+  },
   "warhammer-end-times-vermintide-2": {
     "steamId": 552500,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/552500/library_600x900_2x.jpg",
     "src": "steam"
+  },
+  "world-of-warcraft": {
+    "cover": "https://blz-contentstack-images.akamaized.net/v3/assets/blta8f9a8e092360c6c/blt5b9630b991abc743/6939c64f5a1d2c822390a263/WoW_GameCard.png",
+    "src": "blizzard"
   },
   "xenoblade-chronicles-3": {
     "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000053336/e933b48650b33b355e9cf2583da5c94b77180e40fb02d050041083dd62f4df39",
