@@ -53,24 +53,45 @@ function nameScore(a, b) {
   return common / Math.max(A.size, B.size);
 }
 
-async function getJson(url) {
-  const res = await fetch(url, {
-    headers: { 'User-Agent': 'GustoPlay-link-check/1.0 (+https://gustoplay.ru)' },
-    signal: AbortSignal.timeout(25000),
-    redirect: 'follow',
-  });
-  if (!res.ok) return { ok: false, status: res.status };
+/**
+ * Отказ по частоте (429 и родственные) — это не «мёртвая ссылка», а «нас не пустили».
+ * Steam ограничивает запросы с адресов CI, поэтому такие ответы нельзя ни считать
+ * живыми, ни записывать в проблемы: иначе проверка красит валидные данные.
+ */
+const THROTTLED = new Set([403, 429, 500, 502, 503, 504]);
+const RETRIES = 3;
+
+async function getJson(url, attempt = 0) {
+  let res;
+  try {
+    res = await fetch(url, {
+      headers: { 'User-Agent': 'GustoPlay-link-check/1.0 (+https://gustoplay.ru)' },
+      signal: AbortSignal.timeout(25000),
+      redirect: 'follow',
+    });
+  } catch (e) {
+    // сети нет или хост недоступен — это окружение, а не свойство ссылки
+    if (attempt < RETRIES) { await sleep(1000 * (attempt + 1)); return getJson(url, attempt + 1); }
+    return { ok: false, status: String(e?.cause?.code || e?.name || 'network'), throttled: true };
+  }
+  if (!res.ok) {
+    if (THROTTLED.has(res.status) && attempt < RETRIES) {
+      await sleep(1500 * (attempt + 1));           // backoff: 1.5s, 3s, 4.5s
+      return getJson(url, attempt + 1);
+    }
+    return { ok: false, status: res.status, throttled: THROTTLED.has(res.status) };
+  }
   return { ok: true, data: await res.json() };
 }
 
 /** Страница игры в Steam по appid: существует ли и то ли это название */
 async function steamApp(appid) {
-  const { ok, data, status } = await getJson(
+  const { ok, data, status, throttled } = await getJson(
     `https://store.steampowered.com/api/appdetails?appids=${appid}&filters=basic&l=english`,
   );
-  if (!ok) return { status, found: false };
+  if (!ok) return { status, found: false, unchecked: Boolean(throttled) };
   const entry = data?.[String(appid)];
-  if (!entry?.success || !entry.data?.name) return { status: 200, found: false };
+  if (!entry?.success || !entry.data?.name) return { status: 200, found: false, unchecked: false };
   return { status: 200, found: true, name: entry.data.name };
 }
 
@@ -109,6 +130,7 @@ const withoutSteam = list.filter((g) => !g.steamId);
 
 const deadSteam = [];
 const wrongSteam = [];
+const unchecked = [];   // Steam не дал проверить (троттлинг/сеть) — не проблема данных
 const steamSuggestions = [];
 const badOfficial = [];
 const noLink = [];
@@ -118,7 +140,10 @@ console.log(`Проверяю ссылки на магазины у ${list.lengt
 console.log(`1. Страницы в Steam (${withSteam.length} игр с известным appid)`);
 for (const [i, game] of withSteam.entries()) {
   const app = await steamApp(game.steamId);
-  if (!app.found) {
+  if (!app.found && app.unchecked) {
+    unchecked.push({ slug: game.slug, title: game.t, id: game.steamId, status: app.status });
+    console.log(`  ⏳ ${game.slug}: appid ${game.steamId} не проверен — Steam ответил ${app.status}`);
+  } else if (!app.found) {
     deadSteam.push({ slug: game.slug, title: game.t, id: game.steamId, status: app.status });
     console.log(`  ❌ ${game.slug}: appid ${game.steamId} не отвечает (${app.status})`);
   } else {
@@ -131,7 +156,7 @@ for (const [i, game] of withSteam.entries()) {
   await sleep(STEAM_DELAY);
   if ((i + 1) % 50 === 0) console.log(`  …проверено ${i + 1}/${withSteam.length}`);
 }
-console.log(`  Итог: живых ${withSteam.length - deadSteam.length - wrongSteam.length}, подозрительных ${wrongSteam.length}, мёртвых ${deadSteam.length}\n`);
+console.log(`  Итог: живых ${withSteam.length - deadSteam.length - wrongSteam.length - unchecked.length}, подозрительных ${wrongSteam.length}, мёртвых ${deadSteam.length}, не проверено ${unchecked.length}\n`);
 
 console.log(`2. Игры без appid (${withoutSteam.length}) — ищу страницы в Steam`);
 for (const game of withoutSteam) {
@@ -239,6 +264,7 @@ console.log('=== ИТОГ ===');
 console.log(`Мёртвых appid: ${deadSteam.length}`);
 console.log(`Подозрительных appid (возможно, чужая игра): ${wrongSteam.length}`);
 console.log(`Предложений добавить Steam: ${steamSuggestions.length}`);
+console.log(`Не проверено из-за ограничений Steam: ${unchecked.length}`);
 console.log(`Проблемных официальных ссылок: ${badOfficial.length}`);
 console.log(`Игр без ссылки: ${noLink.length}`);
 
@@ -257,4 +283,11 @@ if (hardProblems) {
   for (const s of noLink) console.log(`  • ${s.slug}: нет ссылки на магазин`);
   process.exit(1);
 }
-console.log('\n✅ Все ссылки ведут на конкретные страницы и отвечают.');
+if (unchecked.length) {
+  // Честно: часть ссылок проверить не дали, поэтому «всё хорошо» сказать нельзя
+  console.log(`\n⚠️  Проверка неполная: ${unchecked.length} ссылок Steam остались непроверенными`);
+  console.log('   (Steam ограничил запросы с адресов CI — это не ошибка данных).');
+  console.log('   Остальные ссылки ведут на конкретные страницы и отвечают.');
+} else {
+  console.log('\n✅ Все ссылки ведут на конкретные страницы и отвечают.');
+}
