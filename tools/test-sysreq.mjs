@@ -199,6 +199,18 @@ check('перенос строки внутри значения не теряе
 check('пустой вход не выдумывает полей',
   parseSteamRequirements('') === null && parseSteamRequirements(null) === null);
 
+// Качество значений: магазин пишет метки со звёздочкой и подмешивает чужие строки
+const messy = parseSteamRequirements('Minimum:<br><strong>OS *:</strong> Windows 10 64-bit<br>'
+  + '<strong>Storage:</strong> 60 GB<br>VR Support: 10GB VRAM GPU<br>or better<br>'
+  + '<strong>Additional Notes:</strong> /');
+check('метка со звёздочкой («OS *:») распознаётся', messy.os === 'Windows 10 64-bit', JSON.stringify(messy.os));
+check('неизвестная метка не приклеивается к предыдущему полю',
+  messy.disk === '60 GB' && !/VR|better/.test(JSON.stringify(messy)), JSON.stringify(messy));
+check('значение из одного разделителя («/») не попадает в данные',
+  messy.note === undefined && messy.sound === undefined);
+check('русские метки со звёздочкой тоже распознаются',
+  parseSteamRequirements('ОС *: Windows 10<br>Поддержка VR: 10 ГБ<br>Оперативная память: 8 ГБ ОЗУ').ram === '8 ГБ ОЗУ');
+
 server.close();
 await rm(tmp, { recursive: true, force: true });
 

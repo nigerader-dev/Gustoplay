@@ -27,10 +27,12 @@ console.log(`::notice::sysreq-meta: ${Object.keys(SYSREQ).length} записей
 let log = '';
 if (logPath) { try { log = await readFile(logPath, 'utf8'); } catch { /* отчёта может не быть */ } }
 for (const line of log.split('\n')) {
-  if (line.startsWith('MISS') || line.startsWith('LANG') || line.startsWith('Ошибка')) {
+  if (line.startsWith('MISS') || line.startsWith('LANG') || line.startsWith('ERR') || line.startsWith('DIAG') || line.startsWith('Ошибка')) {
     console.log(`::notice::sysreq-review: ${line}`);
   }
 }
-for (const line of log.split('\n').slice(0, 6)) {
+// Первые строки отчёта (покрытие, причины, способы получения) — в аннотации:
+// журнал джоба из закрытых сред не читается, а это единственный канал диагностики.
+for (const line of log.split('\n').slice(0, 14)) {
   if (line.trim()) console.log(`::notice::sysreq-report: ${line}`);
 }

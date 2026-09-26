@@ -58,6 +58,10 @@ const delay = Number(arg('delay') || 250);
 // поток он упирается в лимит джоба (45 минут), поэтому по умолчанию два потока.
 const concurrency = Math.max(1, Math.min(6, Number(arg('concurrency') || 2)));
 const progressEvery = Math.max(1, Number(arg('progress') || 25));
+// Витрина магазина для третьей попытки: часть игр Steam отдаёт только с явной
+// страной (например, возрастной фильтр). Пустая строка отключает попытку.
+const cc = arg('cc') === undefined ? 'us' : String(arg('cc'));
+const diagLimit = Math.max(0, Number(arg('diag') || 12));
 const TIMEOUT = 30000;
 // Куда писать результат: по умолчанию — рабочие файлы сайта; ключи нужны проверке
 // tools/test-sysreq.mjs, которая поднимает локальную «Заглушку Steam» и не должна
@@ -91,23 +95,48 @@ const withoutId = games.filter((g) => !STEAM_COVERS[g.slug]?.steamId);
  * Сеть
  * ------------------------------------------------------------------ */
 
-async function fetchJson(url, tries = 3) {
+/**
+ * Запрос с ретраями. Возвращает не только тело, но и факт ответа: без этого нельзя
+ * отличить «магазин не публикует требования» от «запрос не прошёл», а в отчёте
+ * такие случаи нельзя смешивать (первый прогон именно так и потерял 401 игру).
+ */
+async function fetchInfo(url, tries = 3) {
+  let last = { status: 0, error: 'запросов не было' };
   for (let i = 1; i <= tries; i += 1) {
     try {
       const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(TIMEOUT) });
-      if (res.status === 429) { await sleep(4000 * i); continue; }
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      return await res.json();
+      const text = await res.text();
+      if (res.status === 429) { last = { status: 429, error: 'HTTP 429', bytes: text.length }; await sleep(4000 * i); continue; }
+      if (!res.ok) { last = { status: res.status, error: `HTTP ${res.status}`, bytes: text.length }; await sleep(1200 * i); continue; }
+      try {
+        return { status: res.status, json: JSON.parse(text), bytes: text.length };
+      } catch (error) {
+        last = { status: res.status, error: `разбор JSON: ${String(error?.message || error).slice(0, 50)}`, bytes: text.length };
+      }
     } catch (error) {
-      if (i === tries) throw error;
-      await sleep(1500 * i);
+      last = { status: 0, error: `сеть: ${String(error?.message || error).slice(0, 60)}` };
     }
+    await sleep(1200 * i);
   }
-  return null;
+  return last;
 }
 
-const detailsUrl = (id, lang, filters = true) =>
-  `${API_BASE}/api/appdetails?appids=${id}&l=${lang}${filters ? '&filters=pc_requirements' : ''}`;
+/** Короткое описание ответа магазина — для отчёта и аннотаций */
+function describeAnswer(res) {
+  if (!res) return 'нет ответа';
+  if (!res.json) return `HTTP ${res.status || '—'} ${res.error || ''}`.trim();
+  const json = res.json;
+  const keys = Object.keys(json);
+  const app = json[keys[0]];
+  const data = app?.data;
+  return `HTTP ${res.status} success=${app?.success} data=${Array.isArray(data) ? `array(${data.length})` : typeof data}`
+    + ` pc_requirements=${data?.pc_requirements ? 'есть' : 'нет'} байт=${res.bytes}`;
+}
+
+const fetchJson = async (url, tries = 3) => (await fetchInfo(url, tries)).json ?? null;
+
+const detailsUrl = (id, lang, filters = true, cc = '') =>
+  `${API_BASE}/api/appdetails?appids=${id}&l=${lang}${filters ? '&filters=pc_requirements' : ''}${cc ? `&cc=${cc}` : ''}`;
 
 /** Диагностика одной игры: HTTP-статус, тип data и наличие pc_requirements */
 async function probeOne(id, lang, filters) {
@@ -171,17 +200,22 @@ const stripTags = (html) => String(html || '')
   .replace(/&gt;/gi, '>')
   .replace(/[ \t\u00a0]+/g, ' ');
 
-/** «ОС: Windows 10» / «OS: Windows 10» / «Processor: …» → ключ поля */
+/**
+ * Метки полей. Магазин пишет их по-разному: «OS:», «OS *:», «Операционная система:»,
+ * «Дополнительно:». Поэтому сравниваем саму метку уже нормализованной (без «*»,
+ * точек и пробелов по краям), а не строку целиком — так поле не теряется из-за
+ * звёздочки, а «Requires a 64-bit…» не уезжает в примечания.
+ */
 const FIELD_LABELS = [
-  [/^(os|операционная система|ос)\s*:/i, 'os'],
-  [/^(processor|процессор)\s*:/i, 'cpu'],
-  [/^(memory|оперативная память|память|озу)\s*:/i, 'ram'],
-  [/^(graphics|video card|видеокарта|графика|видео)\s*:/i, 'gpu'],
-  [/^(directx|директх)\s*:/i, 'dx'],
-  [/^(storage|hard drive|место на диске|жёсткий диск|жесткий диск|диск|накопитель)\s*:/i, 'disk'],
-  [/^(sound card|звуковая карта)\s*:/i, 'sound'],
-  [/^(network|сеть|интернет)\s*:/i, 'net'],
-  [/^(additional notes|дополнительно|примечания|дополнительная информация)\s*:/i, 'note'],
+  [/^(os|операционная система|ос)$/i, 'os'],
+  [/^(processor|процессор)$/i, 'cpu'],
+  [/^(memory|оперативная память|память|озу)$/i, 'ram'],
+  [/^(graphics|video card|видеокарта|графика|видео)$/i, 'gpu'],
+  [/^(directx|директх)$/i, 'dx'],
+  [/^(storage|hard drive|место на диске|жёсткий диск|жесткий диск|диск|накопитель)$/i, 'disk'],
+  [/^(sound card|звуковая карта)$/i, 'sound'],
+  [/^(network|сеть|интернет)$/i, 'net'],
+  [/^(additional notes|дополнительно|примечания|дополнительная информация)$/i, 'note'],
 ];
 
 const REQUIRE_64 = [
@@ -192,6 +226,15 @@ const REQUIRE_64 = [
 
 const DEFAULTS = {};
 const clean = (s) => String(s || '').replace(/\s+/g, ' ').replace(/^[-–—:;,. ]+/, '').replace(/[;,]\s*$/, '').trim();
+/** Значение требования: убираем служебные разделители по краям, пустое — не значение */
+const cleanValue = (s) => {
+  const out = String(s || '')
+    .replace(/^[\s/\\|•·»«]+/, ' ')
+    .replace(/[\s/\\|]+$/, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return /^[\-–—:;,.!?/\\|•·]+$/.test(out) ? '' : out;
+};
 
 /**
  * Разбирает HTML требований в объект { os, cpu, ram, gpu, dx, disk, note, bit64 }.
@@ -206,17 +249,28 @@ export function parseRequirements(html) {
   for (const line of lines) {
     if (/^(minimum|recommended|минимальные|рекомендуемые|минимум|рекомендуется)\s*:?$/i.test(line)) continue;
     if (REQUIRE_64.some((re) => re.test(line))) { out.bit64 = true; continue; }
-    // Пара «найденное совпадение + ключ поля»: раньше здесь стояла деструктуризация
-    // [, m, key] — она давала key = undefined (в паре всего два элемента), и все поля
-    // уезжали в свойство «undefined»: файл заполнялся мусором.
-    const found = FIELD_LABELS.map(([re, key]) => [line.match(re), key]).find(([m]) => m);
-    if (found) {
-      const [m, key] = found;
-      const value = clean(line.slice(m[0].length));
+
+    // «Метка: значение». Всё, что похоже на метку, но нам неизвестно («VR Support:»,
+    // «Поддержка VR:»), пропускаем: раньше такие строки приклеивались к предыдущему
+    // полю, и в «Место на диске» попадало «60 GB Поддержка VR: 10GB VRAM…».
+    const labelMatch = line.match(/^([^:]{1,45}):\s*(.*)$/);
+    if (labelMatch) {
+      const label = labelMatch[1].toLowerCase().replace(/^[\s*•·-]+/, '').replace(/[\s*.]+$/, '').trim();
+      // Пара «найденное совпадение + ключ поля»: раньше здесь стояла деструктуризация
+      // [, m, key] — она давала key = undefined (в паре всего два элемента), и все поля
+      // уезжали в свойство «undefined»: файл заполнялся мусором.
+      const found = FIELD_LABELS.map(([re, key]) => [label.match(re), key]).find(([m]) => m);
+      if (!found) { current = null; continue; }
+      const key = found[1];
+      const value = cleanValue(labelMatch[2]);
       if (value) { out[key] = out[key] ? `${out[key]} ${value}` : value; current = key; }
       continue;
     }
-    if (current && out[current] && out[current].length < 200) out[current] = `${out[current]} ${line}`;
+
+    // Строка без метки — продолжение предыдущего значения (магазин переносит его
+    // на следующую строку). Служебный мусор («/», «-», «•») не приклеиваем.
+    const cont = cleanValue(line);
+    if (cont && current && out[current] && out[current].length < 200) out[current] = `${out[current]} ${cont}`;
   }
   return Object.keys(out).length ? out : null;
 }
@@ -273,6 +327,25 @@ function mergeLevel(ru, en) {
  * Сбор данных
  * ------------------------------------------------------------------ */
 
+/**
+ * Проверка старых данных перед слиянием. Файл мог быть собран прошлой (ошибочной)
+ * версией разбора: тогда в значения попадали чужие метки («60 GB Поддержка VR:
+ * 10GB VRAM GPU…»). Такие записи лучше пересобрать, чем показывать в интерфейсе,
+ * поэтому запись с внутренней меткой вида «Слово:» не используется как запасная.
+ */
+const SUSPICIOUS_VALUE = /(^|\s)[A-ZА-ЯЁ][\p{L}\p{N} .+-]{2,30}:\s/iu;
+function cleanEntry(entry) {
+  if (!entry || typeof entry !== 'object') return undefined;
+  for (const value of Object.values(entry)) {
+    if (!value || typeof value !== 'object') return undefined;
+    for (const field of Object.values(value)) {
+      const texts = typeof field === 'string' ? [field] : [field?.ru, field?.en].filter(Boolean);
+      if (texts.some((t) => SUSPICIOUS_VALUE.test(String(t)))) return undefined;
+    }
+  }
+  return entry;
+}
+
 async function readJson(path, fallback = {}) {
   try {
     const { readFile } = await import('node:fs/promises');
@@ -298,27 +371,33 @@ async function main() {
   const misses = [];
   const mismatches = [];
   const unreadable = [];
+  const diagnostics = [];
+  const reasons = {};
+  const how = {};
 
   console.log(`Игр со steamId: ${allWithId.length}; в этой порции: ${withId.length}`
     + `${offset ? ` (с ${offset + 1}-й)` : ''}; потоков: ${concurrency}, delay=${delay}мс`);
 
-  /** Один appid, один язык: сначала с фильтром, пусто — повторяем без фильтра */
+  /**
+   * Один appid, один язык. Сначала с фильтром pc_requirements, если пусто — без
+   * фильтра (у части приложений фильтр отдаёт пустой data), если и там пусто —
+   * с явной витриной (cc): так магазин отвечает на возрастные игры.
+   * Возвращает и сам ответ — по нему в отчёте видно причину «нет данных».
+   */
   async function readReqs(id, lang) {
-    let app = null;
-    try {
-      app = (await fetchJson(detailsUrl(id, lang))) ?? null;
-    } catch (error) {
-      console.log(`::warning::appid ${id} (${lang}) не получен: ${String(error?.message || error).slice(0, 120)}`);
-      unreadable.push(`${id}|${lang}|${String(error?.message || error).slice(0, 60)}`);
-    }
-    let req = app?.[String(id)]?.data?.pc_requirements ?? null;
-    if (!req) {
-      try {
-        const full = (await fetchJson(detailsUrl(id, lang, false))) ?? null;
-        req = full?.[String(id)]?.data?.pc_requirements ?? null;
-      } catch { /* останется «нет данных» */ }
-    }
-    return req;
+    const first = await fetchInfo(detailsUrl(id, lang));
+    let req = first.json?.[String(id)]?.data?.pc_requirements ?? null;
+    if (req) return { req, how: 'filter', first };
+
+    const second = await fetchInfo(detailsUrl(id, lang, false));
+    req = second.json?.[String(id)]?.data?.pc_requirements ?? null;
+    if (req) return { req, how: 'без фильтра', first, second };
+
+    if (!cc) return { req: null, how: 'нет', first, second };
+
+    const third = await fetchInfo(detailsUrl(id, lang, false, cc));
+    req = third.json?.[String(id)]?.data?.pc_requirements ?? null;
+    return { req, how: req ? `cc=${cc}` : 'нет', first, second, third };
   }
 
   // Пул воркеров: каждый берёт следующую игру из очереди и опрашивает оба языка.
@@ -328,8 +407,10 @@ async function main() {
   const worker = async () => {
     while (queue.length) {
       const g = queue.shift();
-      const [ru, en] = await Promise.all([readReqs(g.id, 'russian'), readReqs(g.id, 'english')]);
+      const [ruRes, enRes] = await Promise.all([readReqs(g.id, 'russian'), readReqs(g.id, 'english')]);
       await sleep(delay);
+      const ru = ruRes.req;
+      const en = enRes.req;
 
       const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
       const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
@@ -338,8 +419,19 @@ async function main() {
         const ruHas = Boolean(ru?.minimum || ru?.recommended);
         const enHas = Boolean(en?.minimum || en?.recommended);
         if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
+        for (const [lang, res] of [['ru', ruRes], ['en', enRes]]) {
+          if (res.req) how[res.how] = (how[res.how] || 0) + 1;
+        }
       } else {
         misses.push(`${g.slug} (${g.id}) ${g.title}`);
+        // Почему нет данных: без этого отчёта «MISS» ничего не объясняет
+        const reason = /HTTP 4\d\d|HTTP 5\d\d|разбор JSON|сеть:/.test(describeAnswer(ruRes.first)) ? 'запрос не прошёл'
+          : (ruRes.first.json?.[String(g.id)]?.success === false || enRes.first.json?.[String(g.id)]?.success === false ? 'магазин ответил success=false'
+            : 'в ответе нет pc_requirements');
+        reasons[reason] = (reasons[reason] || 0) + 1;
+        if (diagnostics.length < diagLimit) {
+          diagnostics.push(`DIAG ${g.slug} (${g.id}) ru[${describeAnswer(ruRes.first)} → ${ruRes.how}] en[${describeAnswer(enRes.first)} → ${enRes.how}]`);
+        }
       }
 
       done += 1;
@@ -355,7 +447,7 @@ async function main() {
   const merged = {};
   for (const g of allWithId) {
     const fresh = collected[g.slug];
-    const old = existing[g.slug];
+    const old = cleanEntry(existing[g.slug]);
     const override = overrides[g.slug];
     const entry = override || fresh || old;
     if (entry) merged[g.slug] = entry;
@@ -368,6 +460,9 @@ async function main() {
     `Требования к ПК: ${Object.keys(merged).length} из ${allWithId.length} игр со steamId`,
     `Игр без steamId (данные недоступны через Store API): ${withoutId.length} — ${withoutId.map((g) => g.slug).join(', ')}`,
     `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
+    'Причины: ' + (Object.entries(reasons).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
+    'Как получены: ' + (Object.entries(how).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
+    ...diagnostics,
     `Ответы с ошибкой сети/HTTP (appid|язык|причина): ${unreadable.length}`,
     ...unreadable.slice(0, 40).map((u) => `ERR ${u}`),
     ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
