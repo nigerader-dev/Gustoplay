@@ -18,6 +18,13 @@
  * одиночный appid — нормальный ответ). Поэтому опрашиваем строго по одному appid
  * за раз: 401 игра × 2 языка ≈ 800 запросов, это минуты при задержке 250 мс.
  *
+ * ВАЖНО про ключ ответа: магазин отвечает объектом, ключ которого НЕ ВСЕГДА равен
+ * запрошенному appid (проверено 26.09.2026 на живом API: appids=548430 →
+ * {"4207930":{…,"steam_appid":548430,…}}). Поэтому карточка ищется по ключу appid,
+ * затем по совпадению steam_appid внутри карточки, затем как единственная карточка
+ * в ответе — см. readCard(). Именно на этом сломался прогон 6: 12 игр получили
+ * полную карточку с требованиями, но записались в отчёт как «нет данных».
+ *
  * Источник данных — только официальный Store API (appdetails → pc_requirements).
  * Ничего не выдумывается: если магазин не публикует требования, игры просто нет
  * в результате, и это видно в отчёте tools/sysreq-review.txt.
@@ -58,13 +65,13 @@ const delay = Number(arg('delay') || 250);
 // поток он упирается в лимит джоба (45 минут), поэтому по умолчанию два потока.
 const concurrency = Math.max(1, Math.min(6, Number(arg('concurrency') || 2)));
 const progressEvery = Math.max(1, Number(arg('progress') || 25));
-// Витрина магазина для третьей попытки: часть игр Steam отдаёт только с явной
-// страной (например, возрастной фильтр). Пустая строка отключает попытку.
+// Витрина магазина для повторных проходов: часть игр Steam отдаёт только с явной
+// страной (например, возрастной фильтр). Пустая строка отключает витрину.
 const cc = arg('cc') === undefined ? 'us' : String(arg('cc'));
 const diagLimit = Math.max(0, Number(arg('diag') || 12));
 // Проходы по недостающим играм. Магазин отвечает `success: true, data: []` на часть
 // запросов (троттлинг): прогон 3 показал так 293 игры из 401. Повторный проход по
-// ним — с большей паузой и в один поток — обычно отдаёт данные.
+// ним — с большей паузой, в один-два потока и с явной витриной cc — обычно отдаёт данные.
 const passes = Math.max(1, Math.min(6, Number(arg('passes') || 1)));
 // Таймаут запроса. 30 секунд на «залипший» запрос в сумме с ретраями съедали
 // минуты (прогон 4 упёрся в лимит джоба), поэтому 12 секунд: магазин либо отвечает
@@ -128,16 +135,71 @@ async function fetchInfo(url, tries = 3) {
   return last;
 }
 
+/**
+ * Достаёт карточку приложения из ответа appdetails.
+ *
+ * Магазин отвечает объектом с ключом appid — но НЕ ВСЕГДА запрошенным. Проверено
+ * 26.09.2026 на живом API:
+ *   appdetails?appids=548430&l=english → {"4207930":{"success":true,"data":{…,"steam_appid":548430,…}}}
+ *   appdetails?appids=550&l=russian&cc=us → {"322070":{"success":true,"data":{…,"steam_appid":550,…}}}
+ * Старый разбор искал json[appid] и объявлял такие ответы пустыми: в прогоне 6 из-за
+ * этого 12 игр (deep-rock-galactic, left-4-dead-2, it-takes-two …) попали в отчёт
+ * строкой «pc_requirements=есть», но с пометкой «нет данных». Поэтому карточку ищем
+ * так: ключ appid → карточка с совпадающим steam_appid → единственная карточка
+ * в ответе. Способ поиска (`via`) попадает в отчёт, чтобы это не пряталось.
+ */
+function readCard(json, id) {
+  if (!json || typeof json !== 'object') return { app: null, via: 'нет ответа' };
+  const direct = json[String(id)];
+  if (direct) return { app: direct, via: 'ключ appid' };
+  const cards = (Array.isArray(json) ? json : Object.values(json))
+    .filter((v) => v && typeof v === 'object' && 'data' in v);
+  const byAppId = cards.find((v) => String(v.data?.steam_appid ?? '') === String(id));
+  if (byAppId) return { app: byAppId, via: 'steam_appid в карточке' };
+  if (cards.length === 1) return { app: cards[0], via: 'единственная карточка в ответе' };
+  if (cards.length) return { app: cards[0], via: `первая из ${cards.length} карточек` };
+  return { app: null, via: 'карточки нет' };
+}
+
+/**
+ * pc_requirements приходит либо объектом { minimum, recommended }, либо строкой HTML
+ * (так магазин отдаёт требования старых приложений). Раньше строка молча терялась.
+ */
+function reqLevels(pc) {
+  if (!pc) return {};
+  if (typeof pc === 'string') return { minimum: pc };
+  return {
+    minimum: typeof pc.minimum === 'string' && pc.minimum ? pc.minimum : undefined,
+    recommended: typeof pc.recommended === 'string' && pc.recommended ? pc.recommended : undefined,
+  };
+}
+
 /** Короткое описание ответа магазина — для отчёта и аннотаций */
-function describeAnswer(res) {
+function describeAnswer(res, id) {
   if (!res) return 'нет ответа';
   if (!res.json) return `HTTP ${res.status || '—'} ${res.error || ''}`.trim();
-  const json = res.json;
-  const keys = Object.keys(json);
-  const app = json[keys[0]];
+  const { app, via } = readCard(res.json, id);
   const data = app?.data;
+  const pc = data?.pc_requirements;
+  const kind = !pc ? 'нет' : (typeof pc === 'string' ? 'строкой' : 'объектом');
   return `HTTP ${res.status} success=${app?.success} data=${Array.isArray(data) ? `array(${data.length})` : typeof data}`
-    + ` pc_requirements=${data?.pc_requirements ? 'есть' : 'нет'} байт=${res.bytes}`;
+    + ` pc_requirements=${kind} найдено=${via} байт=${res.bytes}`;
+}
+
+/**
+ * Почему у игры нет данных. Раньше всё сваливалось в одну строку «в ответе нет
+ * pc_requirements» (прогон 3: 293 игры) — и было непонятно, где троттлинг
+ * (магазин отвечает success:true с пустой карточкой), а где запрос не прошёл.
+ * Различаем случаи по фактам из ответа, а не по догадке.
+ */
+function describeMissReason(results, id) {
+  if (results.some((r) => !r.first?.json)) return 'запрос не прошёл';
+  const cards = results.map((r) => readCard(r.first.json, id).app);
+  if (cards.every((c) => !c || c.success === false)) return 'магазин ответил success=false';
+  const datas = cards.map((c) => c?.data);
+  if (datas.some((d) => d == null || (Array.isArray(d) && d.length === 0))) return 'магазин отдал пустую карточку (троттлинг)';
+  if (datas.some((d) => d?.pc_requirements)) return 'требования пришли, но не разобрались';
+  return 'в карточке нет pc_requirements';
 }
 
 const fetchJson = async (url, tries = 3) => (await fetchInfo(url, tries)).json ?? null;
@@ -146,27 +208,31 @@ const detailsUrl = (id, lang, filters = true, cc = '') =>
   `${API_BASE}/api/appdetails?appids=${id}&l=${lang}${filters ? '&filters=pc_requirements' : ''}${cc ? `&cc=${cc}` : ''}`;
 
 /** Диагностика одной игры: HTTP-статус, тип data и наличие pc_requirements */
-async function probeOne(id, lang, filters) {
-  const url = detailsUrl(id, lang, filters);
-  let status = 0;
+async function probeOne(id, lang, filters, storefront = '') {
+  const label = `${filters ? 'фильтр' : 'без фильтра'}${storefront ? ` cc=${storefront}` : ''}`;
+  const url = detailsUrl(id, lang, filters, storefront);
   try {
     const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(TIMEOUT) });
-    status = res.status;
-    const app = res.ok ? (await res.json())?.[String(id)] : null;
-    const req = app?.data?.pc_requirements;
-    console.log(`::notice::sysreq-probe: ${filters ? 'фильтр' : 'без фильтра'} ${lang} HTTP ${status} success=${app?.success} data=${Array.isArray(app?.data) ? 'array' : typeof app?.data} pc_requirements=${req ? typeof req : 'нет'}`);
-    if (req) console.log(`::notice::sysreq-probe: ${JSON.stringify(req).slice(0, 700)}`);
-    return Boolean(req);
+    const body = res.ok ? await res.json() : null;
+    const { app, via } = readCard(body, id);
+    const keys = body && typeof body === 'object' ? Object.keys(body).join(',') : '—';
+    const levels = reqLevels(app?.data?.pc_requirements);
+    console.log(`::notice::sysreq-probe: ${label} ${lang} HTTP ${res.status} success=${app?.success}`
+      + ` key=${keys} найдено=${via} data=${Array.isArray(app?.data) ? `array(${app.data.length})` : typeof app?.data}`
+      + ` уровни=${[levels.minimum ? 'min' : '', levels.recommended ? 'rec' : ''].filter(Boolean).join('+') || 'нет'}`);
+    if (levels.minimum || levels.recommended) console.log(`::notice::sysreq-probe: ${JSON.stringify(levels).slice(0, 700)}`);
+    return Boolean(levels.minimum || levels.recommended);
   } catch (error) {
-    console.log(`::notice::sysreq-probe: ${filters ? 'фильтр' : 'без фильтра'} ${lang} ошибка сети: ${String(error?.message || error).slice(0, 120)}`);
+    console.log(`::notice::sysreq-probe: ${label} ${lang} ошибка сети: ${String(error?.message || error).slice(0, 120)}`);
     return false;
   }
 }
 
 /**
- * Диагностика: у appdetails есть параметр filters, но у части приложений он отдаёт
- * пустой data. Пробуем оба варианта на одном appid и печатаем, что именно вернул
- * Steam. Плюс отдельно проверяем, почему падают пакетные запросы (HTTP 400).
+ * Диагностика (--probe): печатаем, что именно отвечает магазин на один appid.
+ * Проверяем три варианта — фильтр, без фильтра и без фильтра с витриной, — чтобы
+ * в следующих прогонах было видно, какой из них живой. Заодно проверяем, почему
+ * падают пакетные запросы (HTTP 400).
  */
 async function probe() {
   const sample = withId.find((g) => g.slug === 'deep-rock-galactic') || withId[0];
@@ -174,6 +240,7 @@ async function probe() {
   await probeOne(sample.id, 'russian', true);
   await probeOne(sample.id, 'russian', false);
   await probeOne(sample.id, 'english', false);
+  await probeOne(sample.id, 'english', false, cc || 'us');
   // Пакетный запрос — чтобы в отчёте была видна причина прошлых HTTP 400
   const group = withId.slice(0, 5).map((g) => g.id);
   for (const [label, url] of [
@@ -386,27 +453,30 @@ async function main() {
     + `${offset ? ` (с ${offset + 1}-й)` : ''}; потоков: ${concurrency}, delay=${delay}мс`);
 
   /**
-   * Один appid, один язык. Сначала с фильтром pc_requirements, если пусто — без
-   * фильтра (у части приложений фильтр отдаёт пустой data), если и там пусто —
-   * с явной витриной (cc): так магазин отвечает на возрастные игры.
-   * Возвращает и сам ответ — по нему в отчёте видно причину «нет данных».
+   * Один appid, один язык: одна карточка appdetails за запрос (магазин отвечает
+   * HTTP 400, если запросить несколько appid сразу).
+   *
+   * Вариант с filters=pc_requirements больше не используется: 26.09.2026 магазин
+   * отдаёт по нему успешный ответ с пустыми данными — `{"620":{"success":true,
+   * "data":[]}}` (проверено на 550 и 620; в прогоне 6 первый проход на фильтре
+   * собрал 0 игр из 401, потратив 802 запроса). Первый проход — обычная карточка
+   * без витрины (её дешевле отдаёт кэш), повторные проходы — с явной витриной cc:
+   * так магазин отвечает по возрастным играм и отпускает троттлинг.
    */
   async function readReqs(id, lang, pass = 1) {
-    // Повторные проходы не тратят запросы на варианты, которые уже дали пусто
-    // (фильтр и «без фильтра»): просим сразу полную карточку с явной витриной —
-    // так проход по 335 недостающим играм занимает минуты, а не полчаса.
-    if (pass > 1) {
-      const retry = await fetchInfo(detailsUrl(id, lang, false, cc), 2);
-      const reqRetry = retry.json?.[String(id)]?.data?.pc_requirements ?? null;
-      return { req: reqRetry, how: reqRetry ? `повторный проход (${pass})` : 'нет', first: retry };
-    }
-
-    // Первый проход — самый дешёвый: одна страница с фильтром. Всё, что магазин
-    // не отдал (а таких игр больше половины), доберут повторные проходы: там уже
-    // без фильтра и с явной витриной. Так прогон укладывается в лимит джоба.
-    const first = await fetchInfo(detailsUrl(id, lang), 2);
-    const req = first.json?.[String(id)]?.data?.pc_requirements ?? null;
-    return { req, how: req ? 'filter' : 'нет', first };
+    const url = pass > 1 ? detailsUrl(id, lang, false, cc) : detailsUrl(id, lang, false, '');
+    const retry = await fetchInfo(url, 2);
+    const { app, via } = readCard(retry.json, id);
+    const levels = reqLevels(app?.data?.pc_requirements);
+    const req = levels.minimum || levels.recommended ? levels : null;
+    return {
+      req,
+      levels,
+      how: req ? (pass > 1 ? `повторный проход (${pass})` : 'первый проход') : 'нет',
+      first: retry,
+      app,
+      via,
+    };
   }
 
   /**
@@ -423,31 +493,32 @@ async function main() {
         const g = queue.shift();
         const [ruRes, enRes] = await Promise.all([readReqs(g.id, 'russian', pass), readReqs(g.id, 'english', pass)]);
         await sleep(passDelay);
-        const ru = ruRes.req;
-        const en = enRes.req;
+        const ru = ruRes.levels || {};
+        const en = enRes.levels || {};
 
-        const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
-        const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
+        const min = mergeLevel(parseRequirements(ru.minimum), parseRequirements(en.minimum));
+        const rec = mergeLevel(parseRequirements(ru.recommended), parseRequirements(en.recommended));
         if (min || rec) {
           collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
           added += 1;
           if (pass > 1) lastPass[g.slug] = pass;
-          const ruHas = Boolean(ru?.minimum || ru?.recommended);
-          const enHas = Boolean(en?.minimum || en?.recommended);
+          const ruHas = Boolean(ru.minimum || ru.recommended);
+          const enHas = Boolean(en.minimum || en.recommended);
           if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
           for (const res of [ruRes, enRes]) {
             if (res.req) how[res.how] = (how[res.how] || 0) + 1;
           }
         } else {
-          // Почему нет данных: без этого отчёта «MISS» ничего не объясняет
-          const reason = /HTTP 4\d\d|HTTP 5\d\d|разбор JSON|сеть:/.test(describeAnswer(ruRes.first)) ? 'запрос не прошёл'
-            : (ruRes.first.json?.[String(g.id)]?.success === false || enRes.first.json?.[String(g.id)]?.success === false ? 'магазин ответил success=false'
-              : 'в ответе нет pc_requirements');
+          // Почему нет данных: без этого отчёта «MISS» ничего не объясняет.
+          // Разбираем честно: пустая карточка (троттлинг) — не то же самое, что
+          // неудавшийся запрос или карточка без блока pc_requirements.
+          const reason = describeMissReason([ruRes, enRes], g.id);
           if (pass === passes) {
-            misses.push(`${g.slug} (${g.id}) ${g.title}`);
+            if (!misses.includes(`${g.slug} (${g.id}) ${g.title}`)) misses.push(`${g.slug} (${g.id}) ${g.title}`);
             reasons[reason] = (reasons[reason] || 0) + 1;
             if (diagnostics.length < diagLimit) {
-              diagnostics.push(`DIAG ${g.slug} (${g.id}) ru[${describeAnswer(ruRes.first)} → ${ruRes.how}] en[${describeAnswer(enRes.first)} → ${enRes.how}]`);
+              diagnostics.push(`DIAG ${g.slug} (${g.id}) ru[${describeAnswer(ruRes.first, g.id)} → ${ruRes.how}]`
+                + ` en[${describeAnswer(enRes.first, g.id)} → ${enRes.how}]`);
             }
           }
         }
@@ -544,4 +615,4 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   });
 }
 
-export { parseRequirements as parseSteamRequirements };
+export { parseRequirements as parseSteamRequirements, readCard as readCardForTest };
