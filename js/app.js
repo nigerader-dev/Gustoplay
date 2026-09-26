@@ -5,10 +5,10 @@
  */
 import { setLang, getLang, t, tl } from './i18n.js';
 import { icon } from './icons.js';
-import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl } from './nav.js';
+import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, SITE } from './config.js';
-import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled } from './store.js';
+import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
 import { initAnalytics, track, trackPageview } from './analytics.js';
 
 import { byId } from './catalog/index.js';
@@ -145,6 +145,7 @@ function footer() {
         ${topTags.map((id) => `<a href="#/tag/${id}" data-action="nav">${tl(TAGS, id)}</a>`).join('')}
         <a href="#/privacy" data-action="nav">${t('about.privacy.title')}</a>
         <a href="#/terms" data-action="nav">${t('common.footer.terms')}</a>
+        ${ADS.consentRequired ? `<button type="button" class="footer-link" data-action="consent-open">${t('consent.change')}</button>` : ''}
       </div>
     </div>
     <div class="footer-bottom">
@@ -154,8 +155,28 @@ function footer() {
   </footer>`;
 }
 
+let consentReopen = false;
+
+/**
+ * Предупреждение: браузер не сохраняет данные (приватный режим, переполнено хранилище).
+ * Без него человек ставил отметки, перезагружал страницу и не понимал, почему всё пусто.
+ */
+function storageWarning() {
+  const lines = [];
+  if (isStorageBroken()) lines.push(t('storage.warning'));
+  if (isMarksCapped()) lines.push(`${t('marks.limit')} ${marksLimit()}`);
+  const syncErr = getSyncError();
+  if (syncErr) lines.push(`${t('sync.warning')} ${syncErr}`);
+  if (!lines.length) return '';
+  return lines.map((line) => `
+  <div class="notice notice-warn" role="status">
+    <span>${icon('alert')} ${esc(line)}</span>
+  </div>`).join('');
+}
+
 function consentBanner() {
-  if (!ADS.consentRequired || getConsent()) return '';
+  if (!ADS.consentRequired) return '';
+  if (getConsent() && !consentReopen) return '';
   return `
   <div class="consent" id="consent">
     <div>
@@ -169,6 +190,27 @@ function consentBanner() {
     </div>
   </div>`;
 }
+
+/**
+ * Ступенчатый откат обложек. Событие error не всплывает, поэтому слушаем на фазе
+ * перехвата: 1) арт магазина → 2) сгенерированная обложка. При включённом
+ * FEATURES.realCovers первой ступенью идёт локальный файл владельца.
+ * Одна битая ссылка больше не оставляет пустую рамку вместо картинки.
+ */
+document.addEventListener('error', (event) => {
+  const img = event.target;
+  if (!img || img.tagName !== 'IMG') return;
+  const step = img.dataset.fbStep || '0';
+  if (step === '0' && img.dataset.fallback) {
+    img.dataset.fbStep = '1';
+    img.src = img.dataset.fallback;
+    return;
+  }
+  if (step === '1' && img.dataset.fallback2) {
+    img.dataset.fbStep = '2';
+    img.src = img.dataset.fallback2;
+  }
+}, true);
 
 /* ------------------------------------------------------------------ *
  * Рендер страницы
@@ -231,7 +273,7 @@ function render(scroll = true) {
   // и для того, чтобы «поделиться ссылкой» давало нормальный адрес. Заменяем весь собранный
   // документ (шапка/подвал/плашка тоже): раньше ссылки шапки оставались hash-ссылками
   // и в PATH-режиме не работали вовсе.
-  const page = `${header(ctx)}<main id="main" class="main">${html}</main>${footer()}${consentBanner()}`;
+  const page = `${header(ctx)}${storageWarning()}<main id="main" class="main">${html}</main>${footer()}${consentBanner()}`;
   app.innerHTML = PATH_MODE ? page.replace(/href="#\/([^"]*)"/g, (_, rest) => `href="${link(rest)}"`) : page;
   setHead(titleText, description);
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
@@ -285,6 +327,18 @@ function ensureAdScripts() {
     s.async = true;
     s.crossOrigin = 'anonymous';
     document.head.append(s);
+    // Авторекламу AdSense включает только при явном ADS.adsense.autoAds: true,
+    // иначе сети показывают блоки в местах, где мы их не планировали.
+    if (ADS.adsense.autoAds) {
+      s.addEventListener('load', () => {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: ADS.adsense.client,
+            enable_page_level_ads: true,
+          });
+        } catch { /* сеть недоступна — обычные блоки продолжат работать */ }
+      });
+    }
   }
 
   // Инициализация блоков после загрузки скриптов
@@ -307,21 +361,23 @@ function ensureAdScripts() {
 
 let refreshPill = null;
 
+/**
+ * Отметка на странице подбора сразу пересчитывает список — как и обещает главная
+ * («список пересчитается на ходу»). Раньше появлялась плашка, которая через 12 секунд
+ * просто исчезала: если её не заметить, подбор выглядел так, будто отметку проигнорировали.
+ * Теперь список обновляется сам, а плашка стала коротким подтверждением «Подбор обновлён».
+ */
 window.addEventListener('gf:marks-changed', () => {
   if (currentCtx?.name !== 'results') return;
+  render(false);
   if (refreshPill) return;
-  const node = document.createElement('button');
-  node.type = 'button';
-  node.className = 'refresh-pill';
-  node.innerHTML = `${icon('refresh')} ${t('results.recount')}`;
-  node.addEventListener('click', () => {
-    node.remove();
-    refreshPill = null;
-    render(false);
-  });
+  const node = document.createElement('div');
+  node.className = 'refresh-pill refresh-pill-info';
+  node.setAttribute('role', 'status');
+  node.innerHTML = `${icon('refresh')} ${t('results.updated')}`;
   document.body.append(node);
   refreshPill = node;
-  setTimeout(() => { if (refreshPill === node) { node.remove(); refreshPill = null; } }, 12000);
+  setTimeout(() => { if (refreshPill === node) { node.remove(); refreshPill = null; } }, 2600);
 });
 
 /* ------------------------------------------------------------------ *
@@ -432,6 +488,7 @@ document.addEventListener('click', (event) => {
     }
     case 'consent-accept': {
       setConsent('all');
+      consentReopen = false;
       initAnalytics({ consent: 'all' });
       adScriptsLoaded = false;
       render(false);
@@ -439,7 +496,15 @@ document.addEventListener('click', (event) => {
     }
     case 'consent-decline': {
       setConsent('necessary');
+      consentReopen = false;
       document.getElementById('consent')?.remove();
+      break;
+    }
+    case 'consent-open': {
+      // Решение можно изменить в любой момент: было «только необходимые» — вернули баннер
+      consentReopen = true;
+      render(false);
+      document.getElementById('consent')?.scrollIntoView({ block: 'nearest' });
       break;
     }
     /* --- фильтры каталога --- */
@@ -551,20 +616,27 @@ document.addEventListener('click', (event) => {
 
   render(true);
 
-  // Если сохранён токен — тихо проверяем сессию и подтягиваем актуальный профиль
+  // Если сохранён токен — тихо проверяем сессию и подтягиваем актуальный профиль.
+  // Серверный профиль не подменяет локальный, а сливается с ним: иначе только что
+  // поставленные отметки (автоотправка ждёт 4 секунды) и настройки устройства
+  // пропадали при перезагрузке страницы. Объединённый профиль отправляем обратно,
+  // чтобы сервер тоже не остался со старой версией.
   if (isLoggedIn()) {
-    import('./api.js').then(async ({ me, pullProfile }) => {
+    import('./api.js').then(async ({ me, pullProfile, pushProfile }) => {
       try {
         await me();
         const remote = await pullProfile();
-        if (remote) {
-          const { replaceProfile } = await import('./store.js');
-          replaceProfile(remote);
-          window.dispatchEvent(new CustomEvent('gf:rerender'));
-        }
-      } catch {
-        // токен мог устареть: работаем локально, без ошибок в интерфейсе
-        clearSession();
+        const { adoptRemote, needsPush, getProfile } = await import('./store.js');
+        const changed = needsPush(getProfile(), remote);
+        adoptRemote(remote);
+        // Отправляем только если в браузере были данные, которых нет на сервере
+        if (changed) pushProfile(getProfile()).catch(() => { /* нет связи — дошлём позже */ });
+        window.dispatchEvent(new CustomEvent('gf:rerender'));
+      } catch (error) {
+        // Сессию сбрасываем только при явном «токен недействителен» (401).
+        // Раньше выход происходил при любой ошибке, включая пропавшую на минуту сеть:
+        // пользователь входил заново и думал, что аккаунт «отключился» сам.
+        if (error?.status === 401) clearSession();
       }
     });
   } else {
@@ -583,5 +655,8 @@ function registerServiceWorker() {
   if (globalThis.location?.protocol !== 'https:') return;
   const host = globalThis.location?.hostname || '';
   if (!host.endsWith(SITE.domain)) return;
-  navigator.serviceWorker.register('/sw.js').catch(() => { /* офлайн — необязательная роскошь */ });
+  // Путь с базой деплоя: при выкладке в подпапку (GitHub Pages) жёсткий '/sw.js'
+  // давал 404 — офлайн-режим молча отключался. base() возвращает '' для корня.
+  const scopePath = `${base()}/sw.js`.replace(/\/{2,}/g, '/');
+  navigator.serviceWorker.register(scopePath).catch(() => { /* офлайн — необязательная роскошь */ });
 }

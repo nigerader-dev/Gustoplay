@@ -4,7 +4,8 @@ import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, MODES, PLATFORMS } from '../taxonomy.js';
 import { t, tl, tp, getLang } from '../i18n.js';
 import { adSlot, houseAd, cardsGrid, sectionTitle, esc } from './components.js';
-import { markedGames } from '../store.js';
+import { markedGames, getProfile } from '../store.js';
+import { progress } from '../quiz.js';
 
 export function render() {
   const lang = getLang();
@@ -25,12 +26,25 @@ export function render() {
     { icon: 'star', key: 'scifi', href: '#/tag/scifi', label: tl(TAGS, 'scifi') },
   ];
 
+  // Блок «продолжить» показываем и без отметок: иначе человек, который прошёл подбор,
+  // возвращался на главную и не видел ни своих результатов, ни возможности продолжить —
+  // выглядело так, будто ответы пропали.
+  const profile = getProfile();
+  const answered = progress(profile.answers);
+  // «Пройдено» считаем по доле отвеченных вопросов, а не по meta.completedAt:
+  // это поле обновляется при каждом ответе и означает «когда отвечали в последний раз».
+  const finished = answered === 100;
   const continueBlock = liked
     ? `<div class="continue">
         <strong>${esc(t('profile.stats', { liked, played: markedGames('played').length, wishlist: markedGames('wishlist').length, disliked: markedGames('disliked').length }))}</strong>
         <a class="btn btn-primary" href="#/results" data-action="nav">${esc(t('results.title'))}</a>
       </div>`
-    : '';
+    : answered > 0
+      ? `<div class="continue">
+        <strong>${esc(finished ? t('home.continue.done') : t('home.continue.partial', { n: answered }))}</strong>
+        <a class="btn btn-primary" href="${finished ? '#/results' : '#/quiz'}" data-action="nav">${esc(finished ? t('results.title') : t('quiz.title'))}</a>
+      </div>`
+      : '';
 
   return `
   <section class="hero">

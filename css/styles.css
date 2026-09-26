@@ -872,8 +872,10 @@ select.input { cursor: pointer; }
   display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 26px;
 }
 .footer-head { margin: 0 0 .6em; font-size: .8rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
-.footer-col a { display: block; padding: 3px 0; color: var(--text-soft); font-size: .92rem; transition: color var(--dur-fast) var(--ease); }
-.footer-col a:hover { color: var(--accent); }
+.footer-col a, .footer-col .footer-link { display: block; padding: 3px 0; color: var(--text-soft); font-size: .92rem; transition: color var(--dur-fast) var(--ease); }
+.footer-col a:hover, .footer-col .footer-link:hover { color: var(--accent); }
+/* кнопка «Настройки cookie» в подвале: выглядит ссылкой, но остаётся кнопкой */
+.footer-col .footer-link { background: none; border: 0; cursor: pointer; text-align: left; font-family: inherit; }
 .footer-bottom {
   max-width: var(--max-width); margin: 0 auto; padding: 14px 20px 28px;
   display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
@@ -891,6 +893,8 @@ select.input { cursor: pointer; }
   display: inline-flex; align-items: center; gap: 8px;
 }
 .refresh-pill:hover { background: var(--accent-hover); }
+/* подтверждение пересчёта: не кнопка, а сообщение — не мигает под курсором и не мешает кликам */
+.refresh-pill-info { cursor: default; pointer-events: none; }
 @keyframes pill-in { from { opacity: 0; transform: translate(-50%, 14px) } to { opacity: 1; transform: translate(-50%, 0) } }
 
 /* ------------------------------- адаптив ---------------------------------- */
@@ -1146,6 +1150,10 @@ select.input { cursor: pointer; }
 .google-slot, .turnstile-slot { display: flex; justify-content: center; margin-bottom: 4px; min-height: 4px; }
 .auth-card .btn-lg { width: 100%; }
 .notice-error { background: rgba(217, 83, 79, .12); color: var(--danger, #d9534f); }
+/* предупреждение о недоступном хранилище: полоса под шапкой, вровень с контентом */
+.notice-warn { display: flex; align-items: center; gap: 8px; max-width: var(--max-width); margin: var(--space-4) auto 0; padding-inline: var(--space-5); }
+.notice-warn span { display: flex; align-items: center; gap: 8px; }
+.notice-warn svg { flex: none; }
 .account-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); margin-top: 22px; }
 .sessions { display: grid; gap: 8px; }
 .session-row {

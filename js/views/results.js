@@ -5,6 +5,7 @@ import { GENRES, TAGS } from '../taxonomy.js';
 import { t, tl, tp } from '../i18n.js';
 import { getProfile, setMeta, trackImpressions, resetProfile } from '../store.js';
 import { navigate } from '../nav.js';
+import { progress } from '../quiz.js';
 import { FEATURES } from '../config.js';
 import { adSlot, cardsGrid, emptyState, esc } from './components.js';
 
@@ -17,7 +18,9 @@ export function render() {
   // запрашиваем сразу длинный хвост, чтобы «показать ещё» не пересобирал топ
   const result = recommend(profile, { limit: Math.max(limit, 60), seed, includePlayed: !!preset.includePlayed });
   const summary = tasteSummary(profile);
-  const answered = !!profile.meta?.completedAt;
+  // Есть ли ответы: считаем по доле отвеченных вопросов, а не по meta.completedAt —
+  // это поле обновляется при каждом ответе и раньше означало «что-то когда-то отвечали».
+  const answered = progress(profile.answers) > 0;
 
   // учитываем показы: следующая выдача не будет «залипать» на тех же играх
   trackImpressions(result.list.map((x) => x.game.slug));
