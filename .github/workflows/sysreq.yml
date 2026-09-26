@@ -1,0 +1,102 @@
+name: GustoPlay — требования к ПК
+
+# Тянет минимальные и рекомендуемые требования к ПК из Steam Store API и коммитит
+# js/catalog/sysreq.js в ветку. В песочнице разработки сети к Steam нет (ответ 000),
+# поэтому шаг живёт в Actions — так же, как резолвер обложек (covers.yml).
+#
+# Триггеры:
+#   • правка инструмента, формата или оверрайдов требований;
+#   • ручной запуск: Actions → «GustoPlay — требования к ПК» → Run workflow
+#     (режим probe — диагностика одного запроса, ничего не пишет в файл).
+#
+# Данные доставляются двумя путями: коммитом (если токен может писать в ветку)
+# и аннотациями прогона — их забирает tools/collect-sysreq-data.mjs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'probe — диагностика одного запроса, full — все игры каталога'
+        required: false
+        default: 'full'
+  push:
+    branches:
+      - arena/01a0ddd3-gustoplay
+      - main
+    paths:
+      - 'tools/pull-system-requirements.mjs'
+      - 'tools/sysreq-format.mjs'
+      - 'tools/sysreq-overrides.json'
+      - '.github/workflows/sysreq.yml'
+
+concurrency:
+  group: gustoplay-sysreq
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  resolve:
+    name: Требования к ПК
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # полная история и реальная ветка: коммитим результат прямо в неё
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Сбор требований из Steam Store API
+        run: |
+          if [ "${{ inputs.mode || 'full' }}" = "probe" ]; then
+            node tools/pull-system-requirements.mjs --probe
+          else
+            node tools/pull-system-requirements.mjs --batch=20 --delay=900
+          fi
+
+      - name: Диагностика прав токена
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          perms=$(curl -s -H "Authorization: Bearer $TOKEN" -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{const j=JSON.parse(s);console.log(JSON.stringify(j.permissions||j.message))}catch(e){console.log("parse-error")}})')
+          echo "::notice::token-permissions: $perms"
+          echo "HEAD=$(git rev-parse HEAD) BRANCH=${GITHUB_REF_NAME}"
+
+      - name: Коммит результата
+        id: commit
+        continue-on-error: true
+        run: node tools/commit-sysreq.mjs
+
+      # Результат в любом случае уходит аннотациями: пуш в ветку может быть
+      # недоступен (токен репозитория только на чтение).
+      - name: Доставка данных через аннотации
+        if: always()
+        run: node tools/emit-sysreq-data.mjs tools/sysreq-review.txt
+
+      - name: Сводка прогона
+        if: always()
+        run: |
+          {
+            echo "### Требования к ПК: отчёт сборщика"
+            echo '```'
+            head -60 tools/sysreq-review.txt 2>/dev/null || echo "(отчёта нет)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Лог сборщика (артефакт)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sysreq-review
+          path: |
+            tools/sysreq-review.txt
+            js/catalog/sysreq.js
+          if-no-files-found: ignore

@@ -26,6 +26,7 @@
     "verify:build": "node tools/verify-build.mjs",
     "check": "node tools/check-catalog.mjs",
     "covers:resolve": "node tools/resolve-steam-covers.mjs",
+    "sysreq:pull": "node tools/pull-system-requirements.mjs",
     "check:covers": "node tools/check-covers.mjs",
     "check:text": "node tools/check-text.mjs",
     "check:stores": "node tools/check-store-links.mjs",
