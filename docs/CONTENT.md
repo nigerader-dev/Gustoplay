@@ -68,7 +68,7 @@
 ```bash
 npm run covers:resolve      # дорезолвить недостающие (нужен доступ к Steam; в песочнице —
                             #   GitHub Actions → «GustoPlay — обложки», батчами по part-файлам)
-npm run check:covers        # у всех 437 игр есть обложка и каждый URL отвечает
+npm run check:covers        # у всех 436 игр есть обложка и каждый URL отвечает
 ```
 
 ## 4. Санитарные процедуры

@@ -409,7 +409,6 @@ export const STEAM_COVERS = {
   "unrailed": {"steamId":1016920,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1016920/library_600x900_2x.jpg","src":"steam"},
   "until-dawn": {"steamId":2172010,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/2172010/library_600x900_2x.jpg","src":"steam"},
   "va-11-hall-a": {"steamId":447530,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/447530/library_600x900_2x.jpg","src":"steam"},
-  "va-11-hall-a-second-round": {"steamId":914210,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/914210/library_600x900_2x.jpg","src":"steam"},
   "valheim": {"steamId":892970,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/892970/library_600x900_2x.jpg","src":"steam"},
   "valorant": {"cover":"https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png","src":"riot"},
   "vampire-survivors": {"steamId":1794680,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1794680/library_600x900_2x.jpg","src":"steam"},

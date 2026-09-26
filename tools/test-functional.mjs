@@ -131,7 +131,9 @@ console.log('\n3. Квиз: живой счётчик и проход до ре�
 store.resetProfile();
 await navigate('quiz');
 const pool0 = poolNum();
-check('счётчик пула показывает весь каталог', pool0 === 437, String(pool0));
+// число игр берём из каталога, а не константой: каталог меняется (одна выдуманная
+// запись удалена — см. docs/FIX-PLAN.md), и тест не должен падать из-за этого
+check('счётчик пула показывает весь каталог', pool0 === GAMES.length, `${pool0} при каталоге ${GAMES.length}`);
 clickAll('.opt', 2); await wait(15);
 check('счётчик пересчитался после ответов', poolNum() >= 0 && poolNum() <= pool0, String(poolNum()));
 // отвечаем на всё подряд и доходим до результатов
@@ -534,9 +536,9 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
   check('другой seed → другие баллы',
     r1.list.map((x) => x.score.toFixed(3)).join(',') !== r3.list.map((x) => x.score.toFixed(3)).join(','));
   check('у топа есть объяснения «почему»', r1.list[0]?.why?.length > 0);
-  check('пул меньше каталога при фильтрах', r1.poolSize > 0 && r1.poolSize < 437, String(r1.poolSize));
+  check('пул меньше каталога при фильтрах', r1.poolSize > 0 && r1.poolSize < GAMES.length, String(r1.poolSize));
   const empty = eng.recommend({ answers: {}, marks: {}, impressions: {} }, { limit: 12, seed: 1 });
-  check('пустой профиль даёт полный пул без падений', empty.poolSize === 437 && empty.list.length > 0);
+  check('пустой профиль даёт полный пул без падений', empty.poolSize === GAMES.length && empty.list.length > 0);
   const weird = eng.recommend(
     { answers: { modes: ['mmo'], players: 8, time: 'tiny', price: 'free' }, marks: { 'no-such-game': { status: 'liked', ts: 1 } }, impressions: {} },
     { limit: 12, seed: 1 },

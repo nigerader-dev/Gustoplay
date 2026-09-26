@@ -37,21 +37,48 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 /** Нормализация названия для сравнения: без марок, регистра, пунктуации и диакритики */
 const norm = (s) => String(s || '')
   .replace(/[™®©]/g, '')
+  // «S.T.A.L.K.E.R.» → «STALKER»: иначе точки разбивают название на отдельные буквы
+  .replace(/\b(?:[a-z]\.){2,}/gi, (m) => m.replace(/\./g, ''))
+  // притяжательное «'s» не должно оставлять одиночную «s» после чистки пунктуации
+  .replace(/['’ʼ]s\b/gi, '')
   .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
   .toLowerCase()
-  .replace(/\b(the|a|an|edition|remastered|definitive|deluxe|complete|enhanced|goty|game of the year)\b/g, ' ')
+  .replace(/\b(the|a|an|edition|remastered|remake|definitive|deluxe|complete|enhanced|goty|game of the year)\b/g, ' ')
+  // приписки изданий: страница в Steam часто называется иначе, чем игра в каталоге
+  // («Death Stranding» ↔ «DEATH STRANDING DIRECTOR'S CUT», «Control» ↔ «CONTROL Ultimate Edition»)
+  .replace(/\b(director|directors|cut|ultimate|final|legacy|collection|anniversary|gold|premium|bundle|pack|trilogy|hd)\b/g, ' ')
   .replace(/[^a-z0-9]+/g, ' ')
   .trim();
 
-/** Похожесть двух названий: доля общих слов (1 — совпадают полностью) */
+/**
+ * Похожесть двух названий: доля общих слов (1 — совпадают полностью).
+ * Сравнение с приписками изданий («Director's Cut», «Ultimate Edition») не должно
+ * выглядеть как «чужая игра», иначе проверка шумит на корректных данных.
+ */
 function nameScore(a, b) {
-  const A = new Set(norm(a).split(' ').filter(Boolean));
-  const B = new Set(norm(b).split(' ').filter(Boolean));
-  if (!A.size || !B.size) return 0;
+  const na = norm(a), nb = norm(b);
+  if (!na || !nb) return 0;
+  if (na === nb) return 1;
+  // одно название целиком входит в другое: «Spiritfarer» ↔ «Spiritfarer Farewell»
+  if (` ${nb} `.includes(` ${na} `) || ` ${na} `.includes(` ${nb} `)) return 0.9;
+  // разница только в номере части: «Overwatch 2» ↔ «Overwatch»
+  const stripNum = (x) => x.replace(/\s+\d+$/, '');
+  if (stripNum(na) === stripNum(nb)) return 0.75;
+  const A = new Set(na.split(' ').filter(Boolean));
+  const B = new Set(nb.split(' ').filter(Boolean));
   let common = 0;
   for (const w of A) if (B.has(w)) common += 1;
   return common / Math.max(A.size, B.size);
 }
+
+/**
+ * Пары, где страница в Steam называется иначе по объективной причине: на ПК игра
+ * выходила только в составе сборника. Такие случаи перечисляются здесь поимённо,
+ * чтобы проверка не считала их ошибкой — но и не пропускала всё подряд.
+ */
+const STEAM_ALLOW = {
+  'uncharted-4-a-thiefs-end': { appid: 1659420, why: 'на ПК Uncharted 4 выходила только в сборнике Legacy of Thieves Collection' },
+};
 
 /**
  * Отказ по частоте (429 и родственные) — это не «мёртвая ссылка», а «нас не пустили».
@@ -188,9 +215,12 @@ for (const [i, game] of withSteam.entries()) {
     console.log(`  ❌ ${game.slug}: appid ${game.steamId} не отвечает (${app.status})`);
   } else {
     const score = nameScore(game.t, app.name);
-    if (score < 0.6) {
+    const allowed = STEAM_ALLOW[game.slug];
+    if (score < 0.6 && !(allowed && allowed.appid === game.steamId)) {
       wrongSteam.push({ slug: game.slug, title: game.t, id: game.steamId, steamName: app.name, score: score.toFixed(2) });
       console.log(`  ⚠️  ${game.slug}: «${game.t}» → Steam «${app.name}» (совпадение ${score.toFixed(2)})`);
+    } else if (score < 0.6) {
+      console.log(`  ℹ️  ${game.slug}: «${game.t}» → Steam «${app.name}» — известно и объяснено: ${allowed.why}`);
     }
   }
   await sleep(STEAM_DELAY);
