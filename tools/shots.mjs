@@ -684,6 +684,48 @@ if (INTERACTION) {
       await page.close();
     }
 
+    /* --- И. «Показать ещё» не уводит страницу наверх (каталог и «Компания») --- */
+    // Жалоба пользователя: нажатие кнопки внизу списка возвращало в самый верх
+    // документа. Проверяем позицию прокрутки до и после нажатия: разметка выше
+    // кнопки не меняется, поэтому страница обязана остаться на месте.
+    for (const [width, route, pool] of [
+      [360, '/catalog', false], [1440, '/catalog', false],
+      [360, '/party?players=2&platforms=pc&free=1', true], [1440, '/party?players=2&platforms=pc&free=1', true],
+    ]) {
+      const page = await newPage(width);
+      await goto(page, route);
+      await page.waitForSelector('[data-action="show-more"]', { timeout: 5000 }).catch(() => {});
+      const before = await page.evaluate(() => {
+        const btn = document.querySelector('[data-action="show-more"]');
+        if (!btn) return null;
+        btn.scrollIntoView({ block: 'center' });
+        return { cards: document.querySelectorAll('.game-card').length, label: btn.textContent.trim().slice(0, 30) };
+      });
+      if (!before) { markBad(`@${width} ${route}: кнопки «Показать ещё» нет`); await page.close(); continue; }
+      // У страницы `scroll-behavior: smooth`: прокрутку к кнопке надо дождаться,
+      // иначе «до» замеряется посреди анимации и тест ловит собственный сдвиг.
+      const settled = async () => {
+        let last = -1;
+        for (let i = 0; i < 25; i += 1) {
+          const y = await page.evaluate(() => Math.round(window.scrollY));
+          if (y === last) return y;
+          last = y;
+          await new Promise((r) => setTimeout(r, 100));
+        }
+        return last;
+      };
+      const yBefore = await settled();
+      await page.evaluate(() => document.querySelector('[data-action="show-more"]').click());
+      await new Promise((r) => setTimeout(r, 300));
+      const yAfter = await settled();
+      const after = { y: yAfter, cards: await page.evaluate(() => document.querySelectorAll('.game-card').length) };
+      const name = pool ? '«Компания»' : 'каталог';
+      if (after.cards <= before.cards) markBad(`@${width} ${name}: «Показать ещё» не добавило карточек (${before.cards} → ${after.cards})`);
+      else if (Math.abs(after.y - yBefore) > 2) markBad(`@${width} ${name}: прокрутка уехала при «Показать ещё» (${yBefore} → ${after.y})`);
+      else markOk(`@${width} ${name}: «Показать ещё» добавило карточки (${before.cards} → ${after.cards}) и оставило страницу на месте (${after.y}px, «${before.label}»)`, );
+      await page.close();
+    }
+
     await ib.close();
   }
 }

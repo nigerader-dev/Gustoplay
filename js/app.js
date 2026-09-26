@@ -289,11 +289,13 @@ function render(scroll = true) {
   lastRouteName = ctx.name;
   if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
   // Возврат позиции для «Показать ещё»: разметка выше кнопки не меняется,
-  // поэтому человек остаётся ровно там, где нажал.
+  // поэтому человек остаётся ровно там, где нажал. behavior: 'instant' — важно:
+  // 'auto' подчиняется CSS `html { scroll-behavior: smooth }`, и страница
+  // уезжала бы к цели анимацией (в браузерном тесте это выглядело как прыжок).
   if (restoreScrollY !== null) {
     const y = restoreScrollY;
     restoreScrollY = null;
-    window.scrollTo({ top: y, behavior: 'auto' });
+    window.scrollTo({ top: y, behavior: 'instant' });
   }
 }
 
