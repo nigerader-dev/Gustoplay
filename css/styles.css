@@ -1021,7 +1021,15 @@ select.input { cursor: pointer; }
   @supports not (backdrop-filter: blur(1px)) {
     .quiz-nav { background: var(--bg); }
   }
+  /* На 320px три кнопки панели не влезали в строку (последняя уходила за экран
+     на 21px): уменьшаем отступы и кегль, а перенос оставляем страховкой для
+     совсем узких экранов вроде Galaxy Fold (280px). */
+  .quiz-nav { flex-wrap: wrap; }
   .quiz-nav .btn { padding: 10px 12px; font-size: .9rem; }
+  @media (max-width: 360px) {
+    .quiz-nav { gap: 8px; }
+    .quiz-nav .btn { padding: 9px 8px; font-size: .84rem; }
+  }
 
   .game-hero { grid-template-columns: 1fr; }
   .game-cover { max-width: 260px; margin-inline: auto; width: 100%; }
@@ -1055,6 +1063,15 @@ select.input { cursor: pointer; }
   .mark-row-title { grid-area: title; white-space: normal; overflow-wrap: anywhere; }
   .mark-row-status { grid-area: status; margin-left: 0; }
   .mark-row .btn { grid-area: remove; align-self: center; }
+}
+
+/* --- очень узкие экраны (сгибаемые телефоны, 280px) --- */
+@media (max-width: 320px) {
+  /* На 280px кнопка меню уезжала за край экрана (шапка 310px при экране 280px) —
+     без неё меню не открыть. Оставляем иконку бренда, прячем название. */
+  .logo-text { display: none; }
+  .header-inner { gap: 8px; padding: 10px 10px; }
+  .header-tools { gap: 6px; }
 }
 
 /* --- компактный телефон --- */

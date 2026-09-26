@@ -130,6 +130,15 @@ check('панель квиза имеет сплошной фон без backdro
     && e.declarations.length && cssText.includes('@supports not (backdrop-filter: blur(1px))')
     && /@supports not \(backdrop-filter: blur\(1px\)\) \{\s*\.quiz-nav \{ background: var\(--bg\); \}/.test(cssText)));
 
+// На 280px (сгибаемый телефон) шапка была 310px: кнопка меню уезжала за край,
+// и меню нельзя было открыть — прячем название бренда на очень узких экранах.
+check('на очень узких экранах скрывается название бренда',
+  flat.some((e) => inMedia(e, '320') && e.selectors.includes('.logo-text') && hasDecl(e, 'display', (v) => v === 'none')));
+// На 320px три кнопки панели квиза не влезали: «Дальше» уходила за экран на 21px.
+check('панель квиза переносит кнопки, а не вылезает',
+  flat.some((e) => e.selectors.includes('.quiz-nav') && hasDecl(e, 'flex-wrap', (v) => v === 'wrap')));
+check('на узких экранах кнопки квиза компактнее',
+  flat.some((e) => inMedia(e, '360') && e.selectors.includes('.quiz-nav .btn')));
 check('баннер согласия не полагается на transform для центрирования',
   flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'margin-inline', (v) => v === 'auto'))
   && !flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'transform', (v) => v.includes('translateX'))));

@@ -544,7 +544,9 @@ if (INTERACTION) {
     // Прошлая проверка обрезки смотрела только каталог, поэтому не поймала, что на
     // 360px строка отметки в профиле шире своей панели: колонка грида растягивалась
     // под неразрывное название игры, и подпись статуса уезжала за край экрана.
-    for (const width of [360, 768]) {
+    // 280/320 — сгибаемые телефоны: на 280px у шапки уезжала за край кнопка меню,
+    // на 320px не влезали три кнопки панели квиза.
+    for (const width of [280, 320, 360, 768]) {
       for (const [name, route] of [['profile', '/profile'], ['quiz', '/quiz'], ['party', '/party'], ['game', '/game/balatro'], ['about', '/about']]) {
         const page = await newPage(width);
         await goto(page, route);
@@ -580,8 +582,25 @@ if (INTERACTION) {
           });
           return out.slice(0, 5);
         });
-        if (!over.length) markOk(`@${width} ${name}: все блоки внутри экрана`);
-        else markBad(`@${width} ${name}: вылезает за экран — ${over.join(' · ')}`);
+        // заодно обрезанный рамкой текст: раньше это проверялось только на каталоге,
+        // поэтому не поймало обрезанные подписи шкал и названия в «Моём вкусе»
+        const clip = await page.evaluate(() => {
+          const out = [];
+          document.querySelectorAll('#app *').forEach((el) => {
+            if (!el.childNodes.length) return;
+            const text = [...el.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.trim()).join(' ').trim();
+            if (text.length < 3) return;
+            const cs = getComputedStyle(el);
+            const rect = el.getBoundingClientRect();
+            if (rect.width <= 2 || rect.height <= 2 || cs.clipPath !== 'none') return;
+            if (cs.overflow !== 'hidden' && cs.overflow !== 'clip' && cs.textOverflow !== 'ellipsis') return;
+            if (el.scrollWidth > el.clientWidth + 2 && el.clientWidth > 2) out.push(`${el.className || el.tagName}: «${text.slice(0, 30)}»`);
+          });
+          return out.slice(0, 5);
+        });
+        const bad = [...over.map((x) => `вылезает за экран (${x})`), ...clip.map((x) => `обрезан текст (${x})`)];
+        if (!bad.length) markOk(`@${width} ${name}: все блоки внутри экрана, текст не обрезан`);
+        else markBad(`@${width} ${name}: ${bad.join(' · ')}`);
         await page.close();
       }
     }
