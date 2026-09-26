@@ -46,8 +46,8 @@ jobs:
   resolve:
     name: Требования к ПК
     runs-on: ubuntu-latest
-    # ~800 запросов по одному appid с задержкой 250 мс: около 5–8 минут
-    timeout-minutes: 45
+    # ~800 запросов по одному appid в три потока: запас на медленные ответы
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
         with:
@@ -64,7 +64,7 @@ jobs:
           if [ "${{ inputs.mode || 'full' }}" = "probe" ]; then
             node tools/pull-system-requirements.mjs --probe
           else
-            node tools/pull-system-requirements.mjs --delay=250
+            node tools/pull-system-requirements.mjs --delay=200 --concurrency=3
           fi
 
       - name: Диагностика прав токена

@@ -176,8 +176,15 @@ check('в файле нет HTML-тегов', !/<br|<strong|<li/i.test(file));
 console.log('\n3. Отчёт сборщика');
 const report = await readFile(review, 'utf8');
 check('отчёт называет число игр с требованиями', /Требования к ПК: 4 из 4/.test(report), report.split('\n')[0]);
-check('отчёт перечисляет приложения без требований', /Данные не получены \(нет pc_requirements или запрос не прошёл\): 0/.test(report),
-  (report.split('\n').find((l) => l.startsWith('Данные не получены')) || '').slice(0, 80));
+// Отчёт считается по ВСЕМУ каталогу (401 игра со steamId), даже когда порция
+// запросов маленькая: иначе порционный прогон стирал бы чужие данные.
+const missing = Number((report.match(/Данные не получены[^:]*: (\d+)/) || [])[1]);
+check('отчёт считает покрытие по всему каталогу, а не по порции',
+  /Требования к ПК: 4 из 401 игр со steamId/.test(report) && missing === 397,
+  (report.split('\n').slice(0, 3).join(' | ')).slice(0, 120));
+check('приложения без требований перечислены строками MISS',
+  /^MISS /m.test(report) && !/^MISS (deep-rock-galactic|helldivers-2|left-4-dead-2|warhammer-end-times-vermintide-2) /m.test(report),
+  `${(report.match(/^MISS /gm) || []).length} строк MISS`);
 check('отчёт не содержит ошибок сети', /Ответы с ошибкой сети\/HTTP \(appid\|язык\|причина\): 0/.test(report),
   (report.split('\n').find((l) => l.startsWith('Ответы с ошибкой')) || '').slice(0, 80));
 

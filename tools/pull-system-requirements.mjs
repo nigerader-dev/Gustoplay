@@ -48,8 +48,15 @@ const overridesFile = new URL('./sysreq-overrides.json', import.meta.url);
 
 const arg = (name) => process.argv.find((x) => x.startsWith(`--${name}=`))?.split('=')[1];
 const PROBE = process.argv.includes('--probe');
-const limit = Number(arg('limit') || Infinity);
+// limit/offset — порция игр для быстрого или частичного прогона (части
+// накапливаются: ранее собранные данные сохраняются, см. merged ниже)
+const limitArg = arg('limit');
+const limit = limitArg ? Number(limitArg) : Infinity;
+const offset = Math.max(0, Number(arg('offset') || 0));
 const delay = Number(arg('delay') || 250);
+// Сколько appid опрашиваем одновременно. Полный прогон — ~800 запросов; в один
+// поток он упирается в лимит джоба (45 минут), поэтому по умолчанию два потока.
+const concurrency = Math.max(1, Math.min(6, Number(arg('concurrency') || 2)));
 const progressEvery = Math.max(1, Number(arg('progress') || 25));
 const TIMEOUT = 30000;
 // Куда писать результат: по умолчанию — рабочие файлы сайта; ключи нужны проверке
@@ -66,10 +73,12 @@ const slugify = (s) => s.toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const games = PARTS.flatMap((list) => list).map((g) => ({ ...g, slug: g.slug || slugify(g.t) }));
-let withId = games
+// Все игры, у которых есть steamId: по этому списку собирается итоговый файл,
+// чтобы частичный прогон (--limit/--offset) не стирал ранее собранные данные.
+const allWithId = games
   .map((g) => ({ slug: g.slug, title: g.t, id: STEAM_COVERS[g.slug]?.steamId }))
-  .filter((g) => g.id)
-  .slice(0, limit);
+  .filter((g) => g.id);
+let withId = allWithId.slice(offset, Number.isFinite(limit) ? offset + limit : undefined);
 // Ключ проверок (tools/test-sysreq.mjs): подменяет appid первых игр на тестовые,
 // чтобы прогнать сборщик против локальной заглушки магазина. В бою не используется.
 const idsOverride = (arg('ids') || '').split(',').map((x) => x.trim()).filter(Boolean);
@@ -276,10 +285,12 @@ async function main() {
 
   const overrides = await readJson(overridesFile);
 
-  // Старые данные сохраняем: если Steam не ответит по части игр, файл не обеднеет
+  // Старые данные сохраняем: если Steam не ответит по части игр или прогон идёт
+  // порцией (--limit/--offset), файл не обеднеет. Читаем именно тот файл, в который
+  // пишем (outPath), иначе частичный прогон затирал бы всё собранное ранее.
   let existing = {};
   try {
-    const mod = await import(`${outFile.href}?t=${Date.now()}`);
+    const mod = await import(`${pathToFileURL(outPath).href}?t=${Date.now()}`);
     existing = mod.SYSREQ || {};
   } catch { /* файла ещё нет */ }
 
@@ -288,7 +299,8 @@ async function main() {
   const mismatches = [];
   const unreadable = [];
 
-  console.log(`Игр со steamId: ${withId.length}; запросов: ${withId.length * 2} (по одному appid, 2 языка, delay=${delay}мс)`);
+  console.log(`Игр со steamId: ${allWithId.length}; в этой порции: ${withId.length}`
+    + `${offset ? ` (с ${offset + 1}-й)` : ''}; потоков: ${concurrency}, delay=${delay}мс`);
 
   /** Один appid, один язык: сначала с фильтром, пусто — повторяем без фильтра */
   async function readReqs(id, lang) {
@@ -309,32 +321,39 @@ async function main() {
     return req;
   }
 
-  for (const [index, g] of withId.entries()) {
-    const perLang = {};
-    for (const lang of ['russian', 'english']) {
-      perLang[lang] = await readReqs(g.id, lang);
+  // Пул воркеров: каждый берёт следующую игру из очереди и опрашивает оба языка.
+  // Так прогон укладывается в лимит джоба, а данные получаются те же.
+  const queue = [...withId];
+  let done = 0;
+  const worker = async () => {
+    while (queue.length) {
+      const g = queue.shift();
+      const [ru, en] = await Promise.all([readReqs(g.id, 'russian'), readReqs(g.id, 'english')]);
       await sleep(delay);
-    }
 
-    const min = mergeLevel(parseRequirements(perLang.russian?.minimum), parseRequirements(perLang.english?.minimum));
-    const rec = mergeLevel(parseRequirements(perLang.russian?.recommended), parseRequirements(perLang.english?.recommended));
-    if (min || rec) {
-      collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
-      const ruHas = Boolean(perLang.russian?.minimum || perLang.russian?.recommended);
-      const enHas = Boolean(perLang.english?.minimum || perLang.english?.recommended);
-      if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
-    } else {
-      misses.push(`${g.slug} (${g.id}) ${g.title}`);
-    }
+      const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
+      const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
+      if (min || rec) {
+        collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
+        const ruHas = Boolean(ru?.minimum || ru?.recommended);
+        const enHas = Boolean(en?.minimum || en?.recommended);
+        if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
+      } else {
+        misses.push(`${g.slug} (${g.id}) ${g.title}`);
+      }
 
-    if ((index + 1) % progressEvery === 0 || index + 1 === withId.length) {
-      console.log(`прогресс ${index + 1}/${withId.length}: с требованиями ${Object.keys(collected).length}`);
+      done += 1;
+      if (done % progressEvery === 0 || done === withId.length) {
+        console.log(`прогресс ${done}/${withId.length}: с требованиями ${Object.keys(collected).length}`);
+      }
     }
-  }
+  };
+  await Promise.all(Array.from({ length: Math.min(concurrency, withId.length) }, worker));
 
-  // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала
+  // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала.
+  // Идём по ВСЕМ играм со steamId: порционный прогон не должен терять остальные.
   const merged = {};
-  for (const g of withId) {
+  for (const g of allWithId) {
     const fresh = collected[g.slug];
     const old = existing[g.slug];
     const override = overrides[g.slug];
@@ -344,9 +363,9 @@ async function main() {
 
   await writeFile(outPath, renderSysreqFile(merged));
 
-  const withoutReq = withId.filter((g) => !merged[g.slug]);
+  const withoutReq = allWithId.filter((g) => !merged[g.slug]);
   const report = [
-    `Требования к ПК: ${Object.keys(merged).length} из ${withId.length} игр со steamId`,
+    `Требования к ПК: ${Object.keys(merged).length} из ${allWithId.length} игр со steamId`,
     `Игр без steamId (данные недоступны через Store API): ${withoutId.length} — ${withoutId.map((g) => g.slug).join(', ')}`,
     `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
     `Ответы с ошибкой сети/HTTP (appid|язык|причина): ${unreadable.length}`,
