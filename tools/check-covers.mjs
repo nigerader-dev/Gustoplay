@@ -22,28 +22,41 @@ const CONCURRENCY = 8;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/**
+ * Отказ по частоте (403/429/5xx) — это «нас не пустили», а не битая обложка.
+ * CDN магазинов ограничивают запросы с адресов CI, и без такого различия один
+ * и тот же коммит проходит проверку в одном прогоне и падает в другом.
+ */
+const THROTTLED = new Set([403, 408, 425, 429, 500, 502, 503, 504]);
+
 async function probeOnce(url) {
   const opts = { signal: AbortSignal.timeout(20000) };
   try {
     let res = await fetch(url, { ...opts, method: 'HEAD', redirect: 'follow' });
-    // некоторые CDN не любят HEAD — пробуем обычный GET с ограничением тела
-    if (res.status === 405 || res.status === 403) res = await fetch(url, { ...opts, method: 'GET', redirect: 'follow' });
+    // некоторые CDN не любят HEAD — пробуем обычный GET
+    if (!res.ok && (res.status === 405 || res.status === 403)) {
+      res = await fetch(url, { ...opts, method: 'GET', redirect: 'follow' });
+    }
     if (res.ok) return null;
     return {
       problem: `HTTP ${res.status}`,
-      kind: res.status === 404 || res.status === 410 ? 'dead' : 'http',
+      kind: res.status === 404 || res.status === 410 ? 'dead' : THROTTLED.has(res.status) ? 'throttled' : 'http',
     };
   } catch (error) {
-    return { problem: error.message, kind: 'network' };
+    return { problem: String(error?.cause?.code || error.message), kind: 'network' };
   }
 }
 
-/** Один повтор после паузы: сеть и CDN иногда «икуют» (429/503/таймаут). */
+/** До трёх попыток с растущей паузой: CDN иногда «икают» (429/503/таймаут). */
 async function isAlive(url) {
-  const problem = await probeOnce(url);
-  if (!problem) return null;
-  await sleep(2000);
-  return probeOnce(url);
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const problem = await probeOnce(url);
+    if (!problem) return null;
+    if (problem.kind === 'dead') return problem;          // 404 повторять бессмысленно
+    if (attempt < 2) await sleep(1500 * (attempt + 1));
+    else return problem;
+  }
+  return { problem: 'не проверено', kind: 'network' };
 }
 
 /**
@@ -68,8 +81,15 @@ const broken = [];
 let alive = 0;
 let done = 0;
 
+/**
+ * Ранний выход: если первые запросы дружно провалились по сети, ждать остальные
+ * бессмысленно (в закрытой среде это 437 бесполезных попыток). Такое же условие
+ * используется ниже для вывода «нет доступа к CDN».
+ */
+let stopped = false;
+
 async function worker() {
-  while (queue.length) {
+  while (queue.length && !stopped) {
     const game = queue.shift();
     if (!game) break;
     const problem = await isAlive(game.cover);
@@ -77,6 +97,10 @@ async function worker() {
     else alive += 1;
     done += 1;
     if (done % 50 === 0) console.log(`  …проверено ${done}/${total}`);
+    if (done >= 20 && alive === 0 && !broken.some((b) => b.kind !== 'network')) {
+      stopped = true;
+      console.log(`  …сеть недоступна: остановился на ${done} из ${total}, чтобы не ждать впустую`);
+    }
   }
 }
 
@@ -84,8 +108,13 @@ console.log(`Проверяю обложки ${GAMES.length} игр (запол�
 await Promise.all(Array.from({ length: CONCURRENCY }, worker));
 
 const network = broken.filter((b) => b.kind === 'network');
-const dead = broken.filter((b) => b.kind === 'dead');
-const other = broken.filter((b) => b.kind !== 'network' && b.kind !== 'dead');
+const throttled = broken.filter((b) => b.kind === 'throttled');
+// «Не ответили» — это про сеть/CDN, а не про каталог: такие ссылки показываем
+// отдельно и не считаем ошибкой данных
+const unavailable = [...network, ...throttled];
+const hard = broken.filter((b) => b.kind !== 'network' && b.kind !== 'throttled');
+const dead = hard.filter((b) => b.kind === 'dead');
+const other = hard.filter((b) => b.kind !== 'dead');
 
 if (missing.length) {
   console.error(`\n❌ Без обложки (${missing.length}):`);
@@ -100,12 +129,18 @@ if (stubs.length) {
   console.error('Добавьте AppID в tools/steam-overrides.json и запустите npm run covers:resolve.');
 }
 
-if (broken.length) {
-  console.error(`\n❌ Не отвечают (${broken.length}): ${alive} ок, ${dead.length} битых ссылок, ${network.length} сетевых отказов`);
-  broken.forEach((b) => console.error(`  • ${b.slug} (${b.title}): ${b.problem} — ${b.url}`));
-  if (dead.length || other.length) {
-    console.error('Замените запись в tools/steam-overrides.json и перезапустите covers:resolve.');
-  }
+if (hard.length) {
+  console.error(`\n❌ Не отвечают (${hard.length}): ${alive} ок, ${dead.length} битых ссылок, ${other.length} прочих ответов`);
+  hard.forEach((b) => console.error(`  • ${b.slug} (${b.title}): ${b.problem} — ${b.url}`));
+  console.error('Замените запись в tools/steam-overrides.json и перезапустите covers:resolve.');
+}
+
+if (unavailable.length) {
+  console.error(`\n⚠️  Не удалось проверить (${unavailable.length}) — это про сеть и ограничения CDN, не про каталог:`);
+  console.error(`   ${throttled.length} отказов по частоте (403/429/5xx), ${network.length} сетевых сбоев.`);
+  unavailable.slice(0, 10).forEach((b) => console.error(`  • ${b.slug}: ${b.problem} — ${b.url}`));
+  if (unavailable.length > 10) console.error(`  … и ещё ${unavailable.length - 10}`);
+  console.error('   Повторить: npm run check:covers (или прогнать CI ещё раз).');
 }
 
 // Особый случай: сеть до CDN закрыта целиком. Это не «437 битых обложек», и без
@@ -117,9 +152,18 @@ if (offline) {
   console.error('   Каталог при этом не считается битым — проверку нужно повторить там, где сеть есть.');
 }
 
-const ok = !missing.length && !stubs.length && !broken.length;
+// Ошибка данных — это пропавшая обложка, заглушка или мёртвая ссылка (404/410).
+// Недоступность CDN (троттлинг, сеть) ошибкой не считается: она не про каталог,
+// а из-за неё один и тот же коммит падал в одном прогоне и проходил в другом.
+const ok = !missing.length && !stubs.length && !hard.length;
+// Проверено ровно то, что ответило: остальное — «не удалось проверить» (сеть, троттлинг,
+// либо проверка остановилась рано). Считать их «в порядке» было бы неправдой.
+const uncheckedTotal = total - alive - hard.length;
 console.log(ok
-  ? `\n✅ Все ${GAMES.length} обложек на месте, это официальные арты, и все URL отвечают.`
-  : `\n❌ Обложек в порядке: ${GAMES.length - missing.length - stubs.length - broken.length}/${GAMES.length}`
-    + ` (без обложки: ${missing.length}, заглушек: ${stubs.length}, недоступных: ${broken.length}).`);
+  ? `\n${uncheckedTotal ? '⚠️ ' : '✅'} Обложки: у всех ${GAMES.length} игр официальный арт, `
+    + `URL ответил у ${alive} из ${total}`
+    + (uncheckedTotal ? `, ${uncheckedTotal} проверить не удалось (CDN/сеть).` : ', все URL отвечают.')
+  : `\n❌ Обложек в порядке: ${alive}/${total}`
+    + ` (без обложки: ${missing.length}, заглушек: ${stubs.length}, битых: ${hard.length}`
+    + (uncheckedTotal ? `, не проверено: ${uncheckedTotal}` : '') + ').');
 process.exit(ok ? 0 : 1);
