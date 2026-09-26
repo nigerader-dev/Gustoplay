@@ -24,10 +24,6 @@ export const playersLabel = (game) => (game.players[0] === game.players[1]
   ? `${game.players[0]}`
   : `${game.players[0]}–${game.players[1]}`);
 
-export const platformIcons = (game) => game.platforms
-  .map((p) => `<span class="plat" title="${esc(tl(PLATFORMS, p))}">${icon(PLATFORMS[p]?.icon)}</span>`)
-  .join('');
-
 export const tagChips = (game, limit = 6, link = true) => game.tags.slice(0, limit)
   .map((id) => {
     const c = tagColor(id);

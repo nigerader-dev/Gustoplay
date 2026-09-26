@@ -234,7 +234,7 @@ button, input, select { font: inherit; color: inherit; }
 .empty-icon .icon { width: 44px; height: 44px; color: var(--text-muted); }
 .col-icon .icon { width: 30px; height: 30px; color: var(--accent); }
 .float .icon { width: 30px; height: 30px; }
-.cover-badge .icon, .plat .icon { width: 1em; height: 1em; }
+.cover-badge .icon { width: 1em; height: 1em; }
 .mark .icon { width: 1.2em; height: 1.2em; }
 .logo-text { display: flex; flex-direction: column; line-height: 1.12; }
 .logo-text small {
@@ -522,7 +522,6 @@ button, input, select { font: inherit; color: inherit; }
   background: var(--bg-sunken); border: 1px solid var(--surface-border); font-size: .82rem; font-weight: 550;
 }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-.plat { font-size: 1.05rem; }
 
 .chip {
   display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: var(--radius-full);
