@@ -470,20 +470,33 @@ button, input, select { font: inherit; color: inherit; }
 .card-body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
 .card-title { font-size: 1.04rem; margin: 0; overflow-wrap: break-word; }
 .card-title a { transition: color var(--dur-fast) var(--ease); }
-.card-sub { color: var(--text-muted); font-size: .82rem; overflow-wrap: break-word; }
+/* Год и студия — отдельные span'ы: переносим их целиком, а не по буквам
+   (на 360px «ConcernedApe» рвалось на «ConcernedA» и «pe»). */
+.card-sub { color: var(--text-muted); font-size: .82rem; display: flex; flex-wrap: wrap; gap: 0 5px; }
 .card-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .card-desc { color: var(--text-soft); font-size: .9rem; margin: 0; }
 /* Длинные слова и аббревиатуры («Пирамидоголовый», «PVP-ориентированная») шире
    узкой карточки на телефоне: без переноса они вылезали за край и обрезались
-   (проверка test:visual ловила обрезанный текст на 360px) */
-.card-title, .card-desc, .why li, .game-title { overflow-wrap: break-word; }
-.card-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; font-size: .86rem; }
+   (проверка test:visual ловила обрезанный текст на 360px).
+   `hyphens: auto` — перенос по слогам там, где браузер знает язык (на телефонах
+   знает): 47 описаний из 436 содержат слово шире строки на 360px, и без переносов
+   такие слова рвутся посередине без дефиса. `overflow-wrap: break-word` остаётся
+   последней страховкой — она и срабатывает в браузерах без словарей переносов. */
+.card-title, .card-desc, .why li, .game-title {
+  overflow-wrap: break-word;
+  hyphens: auto; -webkit-hyphens: auto;
+}
+/* Цена и длительность переносятся как целые группы: числа вида «50–200» и «2500 ₽»
+   раньше разрывались на узкой карточке внутри себя. */
+.card-foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 2px 8px; margin-top: auto; font-size: .86rem; }
+.card-foot > * { white-space: nowrap; }
 .len { color: var(--text-muted); display: inline-flex; align-items: center; gap: 5px; }
 .why-title { font-size: .78rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); font-weight: 700; }
 .why { margin: 0; padding-left: 18px; font-size: .88rem; color: var(--text-soft); }
 .why li { margin-bottom: 3px; }
 .why li::marker { color: var(--accent); }
 .price { font-weight: 650; }
+.price-rub { color: var(--text-muted); }
 .price-free { color: var(--success); }
 
 .badge {

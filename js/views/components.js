@@ -52,7 +52,10 @@ export const ratingPill = (game) => {
 export const priceLabel = (game) => {
   if (game.price === 'free') return `<span class="price price-free">${esc(t('game.free'))}</span>`;
   const label = tl(PRICE, game.price);
-  return `<span class="price">${esc(label)}${game.priceRub ? ` · ~${game.priceRub} ₽` : ''}</span>`;
+  // Две части одним span'ом рвались на узкой карточке: «2500 ₽ и / выше · / ~3900 ₽».
+  // Разделяем — перенос тогда идёт между частями, а не внутри числа с ценой.
+  const rub = game.priceRub ? `<span class="price-rub">· ~${game.priceRub} ₽</span>` : '';
+  return `<span class="price">${esc(label)}</span>${rub}`;
 };
 
 export const lengthLabel = (game) => {

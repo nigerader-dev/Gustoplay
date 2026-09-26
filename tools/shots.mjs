@@ -219,7 +219,8 @@ for (const width of WIDTHS) {
 
     if (SHOTS === 'all' || (SHOTS === 'key' && KEY.has(name))) {
       const { join } = await import('node:path');
-      await page.screenshot({ path: join(OUT, `${name}-${width}${TAG ? '-' + TAG : ''}.png`) });
+      // тема в имени файла: прогоны светлой и тёмной темы затирали скриншоты друг друга
+      await page.screenshot({ path: join(OUT, `${name}-${width}-${THEME}${TAG ? '-' + TAG : ''}.png`) });
     }
 
     // Свои проблемы (наш origin) и внешние (CDN обложек недоступен) считаем отдельно
@@ -603,6 +604,49 @@ if (INTERACTION) {
         else markBad(`@${width} ${name}: ${bad.join(' · ')}`);
         await page.close();
       }
+    }
+
+    /* --- З. Слова не рвутся посередине (нашёл на скриншоте каталога) --- */
+    // Студия «ConcernedApe» на 360px рвалась на «ConcernedA» и «pe», а цены
+    // («50–200», «2500 ₽ и выше») и год-студия — внутри себя. Описания исключены
+    // осознанно: там `hyphens: auto`, а браузер без словарей переносов (Chromium
+    // на Linux без RU-словаря) всё равно рвёт длинные слова — это ограничение
+    // браузера, а не вёрстки, поэтому для них считаем и печатаем отдельно.
+    const NO_BREAK = '.card-sub, .card-foot, .price, .price-rub, .len, .badge, .mark-row-status, .chip, .card-cover-meta';
+    for (const width of [360, 480]) {
+      const page = await newPage(width);
+      await goto(page, '/catalog');
+      await page.waitForSelector('.game-card', { timeout: 5000 }).catch(() => {});
+      const res = await page.evaluate((sel) => {
+        const hard = []; const soft = [];
+        const walk = (node, inSoft) => {
+          for (const n of node.childNodes) {
+            if (n.nodeType === 3) {
+              const text = n.textContent;
+              const re = /\S+/g;
+              let m;
+              while ((m = re.exec(text))) {
+                if (m[0].length < 3) continue;
+                const r = document.createRange();
+                r.setStart(n, m.index); r.setEnd(n, m.index + m[0].length);
+                const rects = [...r.getClientRects()].filter((x) => x.width > 0.5 && x.height > 0.5);
+                if (!rects.length) continue;
+                const tops = new Set(rects.map((x) => Math.round(x.top)));
+                if (tops.size > 1) (inSoft ? soft : hard).push(`${n.parentElement.className || n.parentElement.tagName}: «${m[0].slice(0, 20)}»`);
+              }
+            } else if (n.nodeType === 1) {
+              const softHere = inSoft || /card-desc|why|card-title|game-title|lead|faq/.test(String(n.className || ''));
+              walk(n, softHere);
+            }
+          }
+        };
+        document.querySelectorAll(sel).forEach((el) => walk(el, false));
+        return { hard: [...new Set(hard)].slice(0, 5), soft: [...new Set(soft)].slice(0, 5) };
+      }, NO_BREAK);
+      if (!res.hard.length) markOk(`@${width}: числа, цены и подписи не рвутся посередине`);
+      else markBad(`@${width}: слово разорвано посередине — ${res.hard.join(' · ')}`);
+      if (res.soft.length) console.log(`   ↳ @${width}: длинные слова в описаниях переносятся (${res.soft.length}): браузер без словаря переносов; с hyphens: auto на телефонах — с дефисом`);
+      await page.close();
     }
 
     /* --- Ж. Панель навигации квиза: липнет к низу и не просвечивает --- */
