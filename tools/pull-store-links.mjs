@@ -57,14 +57,30 @@ function logFromRun(runId) {
   }
   const jobs = gh(`repos/${repo}/actions/runs/${run}/jobs`);
   const parts = [];
+  // Части больших блоков: заголовок VERIFIED_JSON_PART_2_OF_3 → склеиваем в один блок.
+  const chunks = new Map();
   for (const job of jobs.jobs || []) {
     if (job.conclusion === 'skipped') continue;
     try {
       const list = gh(`repos/${repo}/check-runs/${job.id}/annotations`);
       // сообщение уже содержит маркеры блока (workflow их печатает), поэтому
       // оборачивать его второй раз нельзя — иначе парсер поймает пустое начало
-      for (const a of list) parts.push(a.message);
+      for (const a of list) {
+        const m = /^([A-Z_]+)_PART_(\d+)_OF_(\d+)$/.exec(a.title || '');
+        if (!m) { parts.push(a.message); continue; }
+        const rec = chunks.get(m[1]) || { total: Number(m[3]), parts: [] };
+        rec.parts[Number(m[2]) - 1] = a.message;
+        rec.total = Number(m[3]);
+        chunks.set(m[1], rec);
+      }
     } catch { /* у job без аннотаций запрос тоже отвечает пустым списком */ }
+  }
+  for (const [label, rec] of chunks) {
+    if (rec.parts.some((p) => p === undefined)) {
+      console.log(`⚠️  ${label}: пришло частей ${rec.parts.filter(Boolean).length} из ${rec.total} — блок пропущен`);
+      continue;
+    }
+    parts.push(`--- ${label} ---${rec.parts.join('')}--- END_${label} ---`);
   }
   console.log(`Прогон ${run}: аннотаций ${parts.length}\n`);
   return { text: parts.join('\n'), run };

@@ -136,7 +136,22 @@ jobs:
               echo "::notice title=$label::$json"
             fi
           }
-          emit "VERIFIED_JSON" /tmp/candidates.log "--- VERIFIED_JSON ---" "--- END_VERIFIED_JSON ---"
+          # GitHub режет сообщение аннотации на 4096 символах, поэтому крупные
+          # блоки (список проверенных ссылок) отдаём частями: PART_1_OF_3 и т.д.
+          # tools/pull-store-links.mjs склеивает части обратно по заголовкам.
+          emit_chunked() {
+            local label="$1" file="$2" start="$3" end="$4"
+            if [ ! -s "$file" ]; then return; fi
+            local json
+            json=$(sed -n "/$start/,/$end/p" "$file" | tr -d '\n')
+            if [ -z "$json" ]; then return; fi
+            local size=3000 total i
+            total=$(( (${#json} + size - 1) / size ))
+            for ((i = 1; i <= total; i++)); do
+              echo "::notice title=${label}_PART_${i}_OF_${total}::${json:$(( (i - 1) * size )):$size}"
+            done
+          }
+          emit_chunked "VERIFIED_JSON" /tmp/candidates.log "--- VERIFIED_JSON ---" "--- END_VERIFIED_JSON ---"
           emit "WRONG_STEAM_JSON" /tmp/links.log "--- WRONG_STEAM_JSON ---" "--- END_WRONG_STEAM_JSON ---"
           emit "REJECTED_JSON" /tmp/candidates.log "--- REJECTED_JSON ---" "--- END_REJECTED_JSON ---"
           emit "STEAM_SUGGESTIONS_JSON" /tmp/candidates.log "--- STEAM_SUGGESTIONS_JSON ---" "--- END_STEAM_SUGGESTIONS_JSON ---"
