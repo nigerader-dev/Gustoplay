@@ -1,21 +1,23 @@
-Требования к ПК: 66 из 401 игр со steamId
+Требования к ПК: 68 из 401 игр со steamId
+Состояние после прохода 3
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
-Данные не получены (нет pc_requirements или запрос не прошёл): 335
-Причины: в ответе нет pc_requirements — 293 | запрос не прошёл — 51
-Как получены: без фильтра — 106 | cc=us — 4
-DIAG left-4-dead-2 (550) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=34 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=34 → нет]
-DIAG deep-rock-galactic (548430) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG warhammer-40-000-darktide (1361210) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
-DIAG warhammer-end-times-vermintide-2 (552500) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG payday-2 (218620) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG borderlands-3 (397540) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG monster-hunter-world (582010) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG it-takes-two (1426210) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
-DIAG split-fiction (2001120) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
-DIAG overcooked-2 (728880) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG cuphead (268910) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-DIAG human-fall-flat (477160) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
-Ответы с ошибкой сети/HTTP (appid|язык|причина): 0
+Данные не получены (нет pc_requirements или запрос не прошёл): 333
+Причины: в ответе нет pc_requirements — 258 | запрос не прошёл — 76
+Как получены: повторный проход (2) — 88 | повторный проход (3) — 46
+По проходам: проход 1 — 0 игр | проход 2 — 44 игр | проход 3 — 23 игр
+DIAG deep-rock-galactic (548430) ru[HTTP 200 success=true data=object pc_requirements=есть байт=59047 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=70237 → нет]
+DIAG left-4-dead-2 (550) ru[HTTP 200 success=true data=object pc_requirements=есть байт=23223 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=23022 → нет]
+DIAG warhammer-end-times-vermintide-2 (552500) ru[HTTP 200 success=true data=object pc_requirements=есть байт=23893 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=24499 → нет]
+DIAG warhammer-40-000-darktide (1361210) ru[HTTP 200 success=true data=object pc_requirements=есть байт=33175 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=36190 → нет]
+DIAG payday-2 (218620) ru[HTTP 200 success=true data=object pc_requirements=есть байт=37691 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=37249 → нет]
+DIAG borderlands-3 (397540) ru[HTTP 200 success=true data=object pc_requirements=есть байт=22599 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=23104 → нет]
+DIAG monster-hunter-world (582010) ru[HTTP 200 success=true data=object pc_requirements=есть байт=33703 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=34272 → нет]
+DIAG it-takes-two (1426210) ru[HTTP 200 success=true data=object pc_requirements=есть байт=23582 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=23550 → нет]
+DIAG split-fiction (2001120) ru[HTTP 200 success=true data=object pc_requirements=есть байт=24283 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=23599 → нет]
+DIAG overcooked-2 (728880) ru[HTTP 200 success=true data=object pc_requirements=есть байт=29623 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=29492 → нет]
+DIAG plateup (1599600) ru[HTTP 200 success=true data=object pc_requirements=есть байт=26543 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=25032 → нет]
+DIAG cuphead (268910) ru[HTTP 200 success=true data=object pc_requirements=есть байт=15144 → нет] en[HTTP 200 success=true data=object pc_requirements=есть байт=16222 → нет]
+Запросов, которые не прошли (сеть/HTTP/разбор JSON): 76
 MISS deep-rock-galactic (548430) Deep Rock Galactic
 MISS left-4-dead-2 (550) Left 4 Dead 2
 MISS warhammer-end-times-vermintide-2 (552500) Warhammer: End Times – Vermintide 2
@@ -67,7 +69,6 @@ MISS batman-arkham-knight (208650) Batman: Arkham Knight
 MISS ghost-of-tsushima (2215430) Ghost of Tsushima
 MISS horizon-forbidden-west (2420110) Horizon Forbidden West
 MISS death-stranding (1850570) Death Stranding
-MISS control (870780) Control
 MISS resident-evil-4-remake (2050650) Resident Evil 4 Remake
 MISS resident-evil-2-remake (883710) Resident Evil 2 Remake
 MISS silent-hill-2-2024 (2124490) Silent Hill 2 (2024)
@@ -209,7 +210,6 @@ MISS max-payne-3 (204100) Max Payne 3
 MISS mafia-definitive-edition (1030840) Mafia: Definitive Edition
 MISS sleeping-dogs (202170) Sleeping Dogs
 MISS watch-dogs-2 (447040) Watch Dogs 2
-MISS far-cry-3 (220240) Far Cry 3
 MISS far-cry-5 (552520) Far Cry 5
 MISS dishonored-2 (403640) Dishonored 2
 MISS prey (480490) Prey
@@ -351,10 +351,6 @@ MISS black-desert-online (582660) Black Desert Online
 MISS star-wars-the-old-republic (1286830) Star Wars: The Old Republic
 MISS path-of-exile (238960) Path of Exile
 MISS asphalt-legends-unite (1815780) Asphalt Legends Unite
-LANG soma: язык магазина отдал данные только на en
-LANG sunkenland: язык магазина отдал данные только на en
-LANG nioh-2: язык магазина отдал данные только на ru
-LANG afk-journey: язык магазина отдал данные только на en
-Минимальные и рекомендуемые есть у: 50
+Минимальные и рекомендуемые есть у: 52
 Только минимальные: 16
 Только рекомендуемые: 0
