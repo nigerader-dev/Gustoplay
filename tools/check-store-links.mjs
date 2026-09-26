@@ -184,21 +184,62 @@ async function steamSearch(title) {
   return data.items.map((i) => ({ id: i.id, name: i.name })).slice(0, 5);
 }
 
-/** Официальная ссылка: живая и про эту игру (по <title>/og:title) */
+/**
+ * Официальная ссылка: живая и про эту игру.
+ *
+ * Магазины и сайты издателей различаются сильнее, чем Steam: одни отдают название
+ * только в og:title, другие рисуют страницу скриптами (в HTML названия нет вовсе).
+ * Поэтому название ищем в четырёх местах (<title>, og:title, twitter:title,
+ * JSON-LD name) и просим браузерный User-Agent.
+ */
+const BROWSER_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
+
+/** Все названия, которые страница о себе сообщает */
+function pageTitles(html) {
+  const out = [];
+  const push = (v) => {
+    const t = String(v || '')
+      .replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'")
+      .replace(/&lt;/g, '<').replace(/&gt;/g, '>').trim();
+    if (t && !out.includes(t)) out.push(t);
+  };
+  push(html.match(/<title[^>]*>([^<]{0,300})<\/title>/i)?.[1]);
+  for (const m of html.matchAll(/<meta[^>]+(?:property|name)=["'](?:og:title|twitter:title)["'][^>]+content=["']([^"']{0,300})["']/gi)) push(m[1]);
+  for (const m of html.matchAll(/<meta[^>]+content=["']([^"']{0,300})["'][^>]+(?:property|name)=["'](?:og:title|twitter:title)["']/gi)) push(m[1]);
+  for (const m of html.matchAll(/"name"\s*:\s*"((?:[^"\\]|\\.){0,200})"/gi)) push(m[1].replace(/\\"/g, '"'));
+  return out;
+}
+
 async function officialPage(url, title) {
   try {
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; GustoPlay-link-check)' },
+      headers: {
+        'User-Agent': BROWSER_UA,
+        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+      },
       signal: AbortSignal.timeout(25000),
       redirect: 'follow',
     });
     if (!res.ok) return { ok: false, status: res.status };
-    const html = (await res.text()).slice(0, 200000);
-    const head = html.match(/<title[^>]*>([^<]{0,200})<\/title>/i)?.[1] || '';
-    const og = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']{0,200})["']/i)?.[1] || '';
-    return { ok: true, status: res.status, score: Math.max(nameScore(title, head), nameScore(title, og)), title: (head || og).slice(0, 80) };
+    const html = (await res.text()).slice(0, 300000);
+    const titles = pageTitles(html);
+    let best = { score: 0, name: '' };
+    for (const name of titles) {
+      const score = nameScore(title, name);
+      if (score > best.score) best = { score, name };
+    }
+    // страница отрисована скриптами: названия в HTML нет, но страница живая
+    const jsRendered = best.score < 0.5 && /<div id="(root|app|__next)"|<script[^>]+type="module"/i.test(html);
+    return {
+      ok: true,
+      status: res.status,
+      score: best.score,
+      title: (best.name || titles[0] || '').slice(0, 80),
+      jsRendered,
+    };
   } catch (error) {
-    return { ok: false, status: error.message };
+    return { ok: false, status: String(error?.cause?.code || error.message) };
   }
 }
 
@@ -310,7 +351,12 @@ if (candidatesArg) {
       const page = await officialPage(c.url, game.t);
       const score = page.ok ? page.score : 0;
       if (page.ok && score >= 0.5) { accepted = { ...c, score: Number(score.toFixed(2)), pageTitle: page.title }; break; }
-      rejected.push({ slug, url: c.url, reason: page.ok ? `заголовок «${page.title}» (${score.toFixed(2)})` : `HTTP ${page.status}` });
+      const reason = !page.ok
+        ? `HTTP ${page.status}`
+        : page.jsRendered
+          ? `страница отрисована скриптами, название в HTML не найдено («${page.title}»)`
+          : `заголовок «${page.title}» (${score.toFixed(2)})`;
+      rejected.push({ slug, url: c.url, reason });
       await sleep(150);
     }
     if (accepted) {
@@ -336,6 +382,10 @@ if (candidatesArg) {
     }
     await sleep(STEAM_DELAY);
   }
+
+  console.log('\n--- REJECTED_JSON ---');
+  console.log(JSON.stringify(rejected, null, 1));
+  console.log('--- END_REJECTED_JSON ---');
 
   console.log('\n--- VERIFIED_JSON ---');
   console.log(JSON.stringify(verified, null, 2));
