@@ -53,10 +53,15 @@ Legacy of Thieves Collection — это тот же appid, что и стоит 
 
 ## Что осталось на следующий заход (честно)
 
-1. **4 найденные страницы Steam** для игр без appid — CI их нашёл
-   (блок `STEAM_SUGGESTIONS_JSON`, совпадение названия ≥0.6). Их нужно посмотреть и, если
-   подходят, добавить appid в `tools/steam-overrides.json` (обложка тянется тем же appid).
-   Список забирается так: `npm run stores:pull` (или аннотация проверки в CI).
+1. **Игры без страницы в Steam — оставляем как есть.** CI искал страницы для 16 игр без
+   appid и нашёл 4 «совпадения», но все 4 — чужие продукты:
+   `Minecraft` → Minecraft Dungeons II, `League of Legends` → CONVERGENCE: A League of Legends
+   Story, `Football Manager 2024` → FM 2024 In-game Editor (редактор, не игра),
+   `Arknights` → Arknights: Endfield (другая игра). Правило «в названии на Steam не должно быть
+   лишних слов» добавлено в проверку (`extraWords`), теперь такие пары отклоняются:
+   добавить ссылку на них значило бы повторить тот же баг, что был с Steam-ссылками.
+   Итог: у этих игр страницы в Steam нет вообще — нужна официальная (см. пункт 2).
+
 2. **16 игр без ссылки на магазин**: Minecraft, Animal Crossing, Football Manager 2024,
    Mario Kart 8 Deluxe, Genshin Impact, Honkai: Star Rail, Fortnite, Super Mario Party,
    Fire Emblem: Three Houses, Free Fire, Pokémon TCG Pocket, Whiteout Survival,

@@ -72,6 +72,19 @@ function nameScore(a, b) {
 }
 
 /**
+ * Слова, которых нет в названии игры. Для НОВОЙ ссылки (игра без appid) это главный
+ * признак чужого продукта: «Minecraft» ↔ «Minecraft Dungeons II», «Arknights» ↔
+ * «Arknights: Endfield», «Football Manager 2024» ↔ «Football Manager 2024 In-game Editor»,
+ * «League of Legends» ↔ «CONVERGENCE: A League of Legends Story» — совпадение по словам
+ * высокое, но Steam-страница про другую игру. Пустой список = название отличается только
+ * припиской издания, которую norm() уже убрал.
+ */
+function extraWords(title, steamName) {
+  const A = new Set(norm(title).split(' ').filter(Boolean));
+  return norm(steamName).split(' ').filter((w) => w && !A.has(w));
+}
+
+/**
  * Пары, где страница в Steam называется иначе по объективной причине: на ПК игра
  * выходила только в составе сборника. Такие случаи перечисляются здесь поимённо,
  * чтобы проверка не считала их ошибкой — но и не пропускала всё подряд.
@@ -234,9 +247,14 @@ for (const game of withoutSteam) {
   const best = items
     .map((it) => ({ ...it, score: nameScore(game.t, it.name) }))
     .sort((a, b) => b.score - a.score)[0];
-  if (best && best.score >= 0.6) {
+  // Для предложения мало похожего названия: в названии на Steam не должно быть
+  // лишних слов, иначе это спин-офф, DLC или редактор, а не та же игра
+  const extra = best ? extraWords(game.t, best.name) : [];
+  if (best && best.score >= 0.6 && extra.length === 0) {
     steamSuggestions.push({ slug: game.slug, title: game.t, steamId: best.id, steamName: best.name, score: Number(best.score.toFixed(2)) });
     console.log(`  ➕ ${game.slug}: «${game.t}» → Steam «${best.name}» appid=${best.id} (${best.score.toFixed(2)})`);
+  } else if (best && best.score >= 0.6) {
+    console.log(`  ⛔ ${game.slug}: «${best.name}» (${best.score.toFixed(2)}) — другой продукт: лишние слова «${extra.join(' ')}»`);
   } else {
     console.log(`  —  ${game.slug}: «${game.t}» страницы в Steam нет${best ? ` (ближайшее: ${best.name}, ${best.score.toFixed(2)})` : ''}`);
   }
