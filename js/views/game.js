@@ -6,7 +6,48 @@ import { t, tl, getLang } from '../i18n.js';
 import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
-import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, platformIcons, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
+import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
+
+/* ------------------------------------------------------------------ *
+ * Требования к ПК
+ * ------------------------------------------------------------------ */
+
+/** Порядок полей в блоке требований; подписи берутся из i18n (sysreq.*) */
+const SYSREQ_FIELDS = ['os', 'cpu', 'ram', 'gpu', 'dx', 'disk', 'sound', 'net', 'note'];
+
+/** Значение требования: строка (одинакова для ru и en) или { ru, en } — если магазин перевёл */
+const reqValue = (value, lang) => (typeof value === 'string' ? value : (value?.[lang] || value?.ru || ''));
+
+/**
+ * Блок «Требования к ПК» на месте прежних «Особенностей»: минимальные и рекомендуемые
+ * рядом. Данные — из Steam Store API (js/catalog/sysreq.js); если магазин требований
+ * не публикует, блок честно об этом говорит и ничего не выдумывает.
+ *
+ * Экспортируется для проверок: у большинства игр данных о требованиях нет, поэтому
+ * обе ветки (с данными и без) нельзя покрыть только реальными страницами.
+ */
+export function sysreqBlock(game, lang) {
+  const head = `<strong>${icon('monitor')} ${esc(t('game.sysreq'))}</strong>`;
+  const data = game.sysreq;
+  if (!data || (!data.min && !data.rec)) {
+    return `<div class="sysreq">${head}<p class="sysreq-none">${esc(t('sysreq.none'))}</p></div>`;
+  }
+  const level = (key, label) => {
+    const list = data[key];
+    if (!list) return `<div class="sysreq-col"><span class="sysreq-level">${esc(label)}</span><p class="sysreq-none">${esc(t('sysreq.levelMissing'))}</p></div>`;
+    const rows = SYSREQ_FIELDS.filter((f) => list[f])
+      .map((f) => `<div><dt>${esc(t(`sysreq.${f}`))}</dt><dd>${esc(reqValue(list[f], lang))}</dd></div>`);
+    return `<div class="sysreq-col">
+      <span class="sysreq-level">${esc(label)}</span>
+      <dl>${rows.join('')}</dl>
+      ${list.bit64 ? `<p class="sysreq-bit64">${icon('info')} ${esc(t('sysreq.bit64'))}</p>` : ''}
+    </div>`;
+  };
+  return `<div class="sysreq">${head}<div class="sysreq-cols">
+    ${level('min', t('sysreq.min'))}
+    ${level('rec', t('sysreq.rec'))}
+  </div></div>`;
+}
 
 export function render(ctx) {
   const game = byId(ctx.params.slug);
@@ -63,10 +104,7 @@ export function render(ctx) {
           <span class="dot-sep">•</span>${priceLabel(game)}
         </div>
         <p class="game-desc">${esc(aboutText)}</p>
-        ${feats.length ? `<div class="game-feats">
-          <strong>${icon('sparkles')} ${esc(t('game.features'))}</strong>
-          <ul>${feats.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>
-        </div>` : ''}
+        ${sysreqBlock(game, lang)}
 
         <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
 
@@ -91,20 +129,27 @@ export function render(ctx) {
       </div>
       <div class="detail-card">
         <h2>${esc(t('game.modes'))} · ${esc(t('game.platforms'))}</h2>
-        <div class="badges">${game.platforms.map((p) => `<span class="badge">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</span>`).join('')}</div>
+        <div class="badges">
+          ${game.modes.map((m) => `<a class="badge badge-mode" href="#/mode/${m}" data-action="nav">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</a>`).join('')}
+          ${game.platforms.map((p) => `<a class="badge" href="#/platform/${p}" data-action="nav">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</a>`).join('')}
+        </div>
       </div>
       <div class="detail-card">
         <h2>${esc(t('game.genres'))}</h2>
         <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id].icon)} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
+        ${game.moods.length ? `<h3 class="detail-sub">${esc(t('game.moods'))}</h3>
+        <div class="chips-cloud small">${game.moods.map((id) => `<a class="chip" href="#/mood/${id}" data-action="nav">${icon(MOODS[id].icon)} ${esc(tl(MOODS, id))}</a>`).join('')}</div>` : ''}
       </div>
       <div class="detail-card">
         <h2>${esc(t('game.tags'))}</h2>
         <div class="chips-cloud small">${tagChips(game, 20)}</div>
         ${meters(game)}
       </div>
-      <div class="detail-card">
-        <h2>${esc(t('game.players'))}</h2>
-        <p class="detail-note">${platformIcons(game)}</p>
+      <div class="detail-card detail-card-wide">
+        <h2>${esc(t('game.features'))}</h2>
+        ${feats.length
+          ? `<ul class="feats-wide">${feats.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>`
+          : `<p class="muted">${esc(t('game.features.none'))}</p>`}
       </div>
     </div>
 

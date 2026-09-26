@@ -6,6 +6,7 @@ import { t, tl, tp, getLang } from '../i18n.js';
 import { getProfile } from '../store.js';
 import { cardsGrid, esc, emptyState, filterGroup } from './components.js';
 import { currentPath, navigate } from '../nav.js';
+import { FEATURES } from '../config.js';
 
 const PLAYER_PRESETS = [
   { id: 2, label: '2' },
@@ -13,6 +14,21 @@ const PLAYER_PRESETS = [
   { id: 4, label: '4' },
   { id: 5, label: '5+' },
 ];
+
+/**
+ * Сколько карточек уже показано. Движок отдаёт весь подходящий пул (раньше вид
+ * резал его жёсткими 24 играми — «Показать ещё» не было вовсе, а в заголовке
+ * стояло число из выдачи), а страница показывает пул порциями, как «Результаты».
+ */
+let shownCount = FEATURES.pageSize;
+
+/** «Показать ещё»: увеличивает порцию и перерисовывает страницу (см. js/app.js) */
+export function showMore(n = FEATURES.pageSize) {
+  shownCount += n;
+}
+
+/** Сброс пагинации при входе на вкладку заново или при смене фильтров компании */
+export const reset = () => { shownCount = FEATURES.pageSize; };
 
 export function render(ctx) {
   const profile = getProfile();
@@ -26,7 +42,6 @@ export function render(ctx) {
     players,
     platforms,
     freeOnly,
-    limit: 24,
     seed: (profile.meta?.seed || 1) + players,
     lang: getLang(),
   });
@@ -39,6 +54,8 @@ export function render(ctx) {
     </div>`;
 
   const localCoop = games.filter((g) => g.modes.includes('coopLocal')).length;
+  const shown = games.slice(0, shownCount);
+  const more = Math.max(0, Math.min(FEATURES.pageSize, games.length - shown.length));
 
   return `
   <section class="section party">
@@ -51,9 +68,12 @@ export function render(ctx) {
       ${localCoop ? `<span class="dot-sep">•</span> ${esc(tp('party.coopLine', localCoop, { n: localCoop }))}` : ''}
     </h2>
     ${games.length
-      ? cardsGrid(games, { marks: getProfile().marks })
+      ? cardsGrid(shown, { marks: getProfile().marks })
       : emptyState(t('results.empty'), t('party.localHint'), `<a class="btn btn-primary" href="#/catalog?coopLocal=1" data-action="nav">${esc(tl(MODES, 'coopLocal'))}</a>`)}
-    <div class="center"><a class="btn btn-ghost" href="#/catalog" data-action="nav">${esc(t('home.cta.catalog'))}</a></div>
+    <div class="center">
+      ${more ? `<button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(tp('catalog.showMore', more))}</button>` : ''}
+      <a class="btn btn-ghost" href="#/catalog" data-action="nav">${esc(t('home.cta.catalog'))}</a>
+    </div>
   </section>`;
 }
 
@@ -65,6 +85,9 @@ export function updateParty(patch) {
     if (value === null || value === undefined || value === '' || (Array.isArray(value) && !value.length)) params.delete(key);
     else params.set(key, Array.isArray(value) ? value.join(',') : String(value));
   }
+  // Фильтры компании меняют пул целиком: показываем первые игры новой выдачи,
+  // а не «докрученную» порцию от прошлого запроса.
+  reset();
   navigate(`party${params.toString() ? `?${params}` : ''}`, { replace: true });
 }
 

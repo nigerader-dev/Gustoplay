@@ -144,10 +144,12 @@ export const cardsGrid = (games, opts = {}) => `<div class="grid">${games.map((g
  * ------------------------------------------------------------------ */
 
 export function markButtons(slug, status = null) {
+  // «Понравилось / не понравилось» — парные большие пальцы: так отметка «не понравилось»
+  // читается как оценка, а не как «удалить» (раньше там был перечёркнутый минус).
   const items = [
     { id: 'played', icon: 'controller', label: t('mark.played'), tip: t('mark.played.tip') },
-    { id: 'liked', icon: 'heart', label: t('mark.liked'), tip: t('mark.liked.tip') },
-    { id: 'disliked', icon: 'minusCircle', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
+    { id: 'liked', icon: 'thumbsUp', label: t('mark.liked'), tip: t('mark.liked.tip') },
+    { id: 'disliked', icon: 'thumbsDown', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
     { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: t('mark.wishlist.tip') },
   ];
   // title — нативная подсказка: не влияет на раскладку (кнопки не «скачут» под курсором)

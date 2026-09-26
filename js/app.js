@@ -7,7 +7,7 @@ import { setLang, getLang, t, tl } from './i18n.js';
 import { icon } from './icons.js';
 import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
-import { ADS, SITE } from './config.js';
+import { ADS, SITE, FEATURES } from './config.js';
 import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
 import { initAnalytics, track, trackPageview } from './analytics.js';
 
@@ -150,7 +150,7 @@ function footer() {
     </div>
     <div class="footer-bottom">
       <span>© ${new Date().getFullYear()} ${t('site.name')}</span>
-      <span>${SITE.email}</span>
+      <a class="footer-mail" href="mailto:${SITE.email}">${icon('mail')} ${t('common.support')}: ${SITE.email}</a>
     </div>
   </footer>`;
 }
@@ -238,6 +238,12 @@ function setHead(titleText, description) {
   }
 }
 
+/**
+ * Позиция прокрутки, которую надо вернуть после перерисовки (переход с keepScroll,
+ * например «Показать ещё»). null — обычное поведение: новая страница открывается сверху.
+ */
+let restoreScrollY = null;
+
 function render(scroll = true) {
   const parsed = parseLocation();
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
@@ -282,6 +288,13 @@ function render(scroll = true) {
   ensureAdScripts();
   lastRouteName = ctx.name;
   if (scroll) window.scrollTo({ top: 0, behavior: 'auto' });
+  // Возврат позиции для «Показать ещё»: разметка выше кнопки не меняется,
+  // поэтому человек остаётся ровно там, где нажал.
+  if (restoreScrollY !== null) {
+    const y = restoreScrollY;
+    restoreScrollY = null;
+    window.scrollTo({ top: y, behavior: 'auto' });
+  }
 }
 
 function injectJsonLd(ctx, view) {
@@ -417,11 +430,16 @@ document.addEventListener('click', (event) => {
     case 'show-more': {
       event.preventDefault();
       const more = Number(target.dataset.more) || 12;
+      // Пагинация не должна перебрасывать страницу вверх: человек остаётся там,
+      // где нажал кнопку, а новые карточки добавляются ниже (render(false) + keepScroll).
       if (currentCtx?.name === 'results') {
         results.showMore(more);
         render(false);
+      } else if (currentCtx?.name === 'party') {
+        party.showMore(more);
+        render(false);
       } else {
-        catalog.updateQuery({ page: (Number(currentCtx?.query?.page) || 12) + more });
+        catalog.updateQuery({ page: (Number(currentCtx?.query?.page) || FEATURES.pageSize) + more }, { keepScroll: true });
       }
       break;
     }
@@ -574,18 +592,22 @@ window.addEventListener('gf:rerender', () => render(false));
 
 /** Программный переход, используется квизом, фильтрами и кнопками */
 window.addEventListener('gf:navigate', (event) => {
-  const { path, replace } = event.detail || {};
+  const { path, replace, keepScroll } = event.detail || {};
   if (!path && path !== '') return;
+  // «Показать ещё»: перерисовка не должна менять позицию прокрутки. Запоминаем её
+  // здесь, а возвращаем в конце render() — в том числе когда переход идёт через
+  // hashchange (hash-режим без pushState), где рендер вызывает уже другое событие.
+  restoreScrollY = keepScroll ? window.scrollY : null;
   if (PATH_MODE) {
     // link() уже включает базовый путь и слэш стиля (важно для GitHub Pages)
     const url = link(path);
     if (replace) history.replaceState(null, '', url);
     else history.pushState(null, '', url);
-    render(true);
+    render(!keepScroll);
   } else if (location.hash !== link(path)) {
     location.hash = link(path);
   } else {
-    render(true);
+    render(!keepScroll);
   }
 });
 
