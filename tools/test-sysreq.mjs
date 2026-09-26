@@ -62,9 +62,10 @@ const GAMES = {
   100: { ru: { minimum: HTML_MIN_RU, recommended: HTML_REC_RU }, en: { minimum: HTML_MIN, recommended: HTML_REC } },
   200: { ru: { recommended: HTML_REC_RU }, en: { recommended: HTML_REC } },
   300: { ru: { minimum: HTML_MIN_RU, recommended: HTML_REC_RU }, en: { minimum: HTML_MIN_B, recommended: HTML_REC }, filterBroken: true },
-  // 500 — троттлинг: первые два запроса по языку отдают success:true с пустым data,
-  // данные появляются только с третьего (это и есть проверка повторного прохода)
-  500: { ru: { minimum: HTML_MIN_RU, recommended: HTML_REC_RU }, en: { minimum: HTML_MIN, recommended: HTML_REC }, throttleUntil: 2 },
+  // 500 — троттлинг: магазин отвечает success:true с пустым data, пока не «остынет»
+  // (первые 4 запроса). Данные появляются на третьем проходе — так проверяется,
+  // что сборщик не сдаётся после одного пустого прохода.
+  500: { ru: { minimum: HTML_MIN_RU, recommended: HTML_REC_RU }, en: { minimum: HTML_MIN, recommended: HTML_REC }, throttleHits: 4 },
   // 300 отличается от 100 отсутствием примечания — по нему и ловим второй разбор
   400: { ru: { minimum: 'Минимальные:<br><strong>ОС:</strong> Windows 7<br><strong>Оперативная память:</strong> 4 ГБ ОЗУ' }, en: { minimum: 'Minimum:<br><strong>OS:</strong> Windows 7<br><strong>Memory:</strong> 4 GB RAM' } },
 };
@@ -91,9 +92,9 @@ const server = createServer((req, res) => {
   const game = GAMES[id];
   if (!game) return json(200, { [id]: { success: false } });
   // Троттлинг: магазин отвечает success:true и пустым data, пока не «остынет»
-  if (game.throttleUntil) {
+  if (game.throttleHits) {
     hits[id] = (hits[id] || 0) + 1;
-    if (hits[id] <= game.throttleUntil * 3) return json(200, { [id]: { success: true, data: [] } });
+    if (hits[id] <= game.throttleHits) return json(200, { [id]: { success: true, data: [] } });
   }
   // Магазин понимает l=russian|english, в данных игры языки названы ru|en
   const reqs = game[lang === 'russian' ? 'ru' : 'en'] || {};
@@ -142,10 +143,14 @@ check('каждый appid запрошен на обоих языках',
   new Set(requests.filter((r) => r.lang === 'russian').map((r) => r.ids[0])).size === 5
   && new Set(requests.filter((r) => r.lang === 'english').map((r) => r.ids[0])).size === 5);
 const app300 = requests.filter((r) => r.ids[0] === '300');
-check('повтор без фильтра делается только там, где фильтр вернул пусто',
-  app300.length === 4 && app300.some((r) => r.filters) && app300.some((r) => !r.filters)
-  && requests.filter((r) => r.ids[0] === '100').length === 2,
-  `300: ${app300.length} запросов, 100: ${requests.filter((r) => r.ids[0] === '100').length}`);
+const req100 = requests.filter((r) => r.ids[0] === '100');
+check('первый проход делает один дешёвый запрос на каждый язык',
+  req100.length === 2 && req100.every((r) => r.filters)
+  && new Set(req100.map((r) => r.lang)).size === 2,
+  `100: ${req100.length} запроса (языков ${new Set(req100.map((r) => r.lang)).size})`);
+check('повторный проход запрашивает карточку без фильтра (у части игр фильтр её съедает)',
+  app300.some((r) => r.filters) && app300.some((r) => !r.filters),
+  `300: ${app300.length} запросов, без фильтра ${app300.filter((r) => !r.filters).length}`);
 
 const expectedCollected = Object.keys(GAMES).length;
 
@@ -160,13 +165,13 @@ check('игра с пустыми ответами добрана повторн
   JSON.stringify(Object.values(sysreq).map((e) => e.min?.os || e.rec?.os || null)));
 
 // Повторный проход не должен работать вечно: игра без требований остаётся без них
-check('второй проход не тратит запросы на лишние варианты (сразу карточка с витриной)',
-  requests.filter((r) => r.ids[0] === '100').length === 2,
-  `100: ${requests.filter((r) => r.ids[0] === '100').length} запросов`);
-check('повторные проходы не запрашивают уже собранные игры повторно',
-  requests.filter((r) => r.ids[0] === '100').length === 2
-  && requests.filter((r) => r.ids[0] === '500').length > 2,
-  `100: ${requests.filter((r) => r.ids[0] === '100').length}, 500: ${requests.filter((r) => r.ids[0] === '500').length}`);
+const req200 = requests.filter((r) => r.ids[0] === '200');
+check('собранная в первом проходе игра больше не опрашивается',
+  req100.length === 2 && req200.length === 2,
+  `100: ${req100.length}, 200: ${req200.length} (по два языка, без повторов)`);
+check('троттлящаяся игра опрашивается и в повторных проходах',
+  requests.filter((r) => r.ids[0] === '500').length > 2,
+  `500: ${requests.filter((r) => r.ids[0] === '500').length} запросов`);
 
 // Игры ищем по содержимому: в файле ключи отсортированы по slug, порядок запросов
 // на него не влияет (id тестовые, slug — настоящие из каталога).

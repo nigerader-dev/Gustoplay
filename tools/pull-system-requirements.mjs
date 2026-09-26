@@ -66,7 +66,10 @@ const diagLimit = Math.max(0, Number(arg('diag') || 12));
 // запросов (троттлинг): прогон 3 показал так 293 игры из 401. Повторный проход по
 // ним — с большей паузой и в один поток — обычно отдаёт данные.
 const passes = Math.max(1, Math.min(6, Number(arg('passes') || 1)));
-const TIMEOUT = 30000;
+// Таймаут запроса. 30 секунд на «залипший» запрос в сумме с ретраями съедали
+// минуты (прогон 4 упёрся в лимит джоба), поэтому 12 секунд: магазин либо отвечает
+// быстро, либо ответ приходит в следующем проходе.
+const TIMEOUT = Math.max(3000, Number(arg('timeout') || 12000));
 // Куда писать результат: по умолчанию — рабочие файлы сайта; ключи нужны проверке
 // tools/test-sysreq.mjs, которая поднимает локальную «Заглушку Steam» и не должна
 // трогать настоящий js/catalog/sysreq.js.
@@ -393,22 +396,17 @@ async function main() {
     // (фильтр и «без фильтра»): просим сразу полную карточку с явной витриной —
     // так проход по 335 недостающим играм занимает минуты, а не полчаса.
     if (pass > 1) {
-      const retry = await fetchInfo(detailsUrl(id, lang, false, cc));
+      const retry = await fetchInfo(detailsUrl(id, lang, false, cc), 2);
       const reqRetry = retry.json?.[String(id)]?.data?.pc_requirements ?? null;
       return { req: reqRetry, how: reqRetry ? `повторный проход (${pass})` : 'нет', first: retry };
     }
 
-    const first = await fetchInfo(detailsUrl(id, lang));
-    let req = first.json?.[String(id)]?.data?.pc_requirements ?? null;
-    if (req) return { req, how: 'filter', first };
-
-    const second = await fetchInfo(detailsUrl(id, lang, false));
-    req = second.json?.[String(id)]?.data?.pc_requirements ?? null;
-    if (req) return { req, how: 'без фильтра', first, second };
-
-    // Витрину (cc) пробуем только в повторных проходах: в первом третий запрос
-    // на каждую из сотен «пустых» игр — это лишние ~800 обращений к магазину.
-    return { req: null, how: 'нет', first, second };
+    // Первый проход — самый дешёвый: одна страница с фильтром. Всё, что магазин
+    // не отдал (а таких игр больше половины), доберут повторные проходы: там уже
+    // без фильтра и с явной витриной. Так прогон укладывается в лимит джоба.
+    const first = await fetchInfo(detailsUrl(id, lang), 2);
+    const req = first.json?.[String(id)]?.data?.pc_requirements ?? null;
+    return { req, how: req ? 'filter' : 'нет', first };
   }
 
   /**

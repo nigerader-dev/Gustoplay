@@ -40,8 +40,11 @@ on:
       - '.github/workflows/sysreq.yml'
 
 concurrency:
+  # Новый прогон отменяет предыдущий: сборщик идемпотентен (данные сливаются с
+  # уже стоящими в файле), а очередь из устаревших прогонов занимала час и мешала
+  # проверять свежие правки.
   group: gustoplay-sysreq
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   contents: write
@@ -51,7 +54,10 @@ jobs:
   resolve:
     name: Требования к ПК
     runs-on: ubuntu-latest
-    # ~800 запросов по одному appid в три потока: запас на медленные ответы
+    # Три прохода по 401 × 2 страницы, 4 потока, таймаут запроса 12 с:
+    # первый проход — дешёвый (одна страница с фильтром), повторные — по одному
+    # запросу без фильтра. Данные сохраняются после каждого прохода, поэтому
+    # даже обрыв по таймауту оставляет собранное в ветке.
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
@@ -69,7 +75,7 @@ jobs:
           if [ "${{ inputs.mode || 'full' }}" = "probe" ]; then
             node tools/pull-system-requirements.mjs --probe
           else
-            node tools/pull-system-requirements.mjs --delay=200 --concurrency=3 --passes=3
+            node tools/pull-system-requirements.mjs --delay=150 --concurrency=4 --passes=3 --timeout=12000
           fi
 
       - name: Диагностика прав токена
