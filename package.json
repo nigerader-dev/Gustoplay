@@ -39,7 +39,8 @@
     "backup:verify": "node tools/backup.mjs verify",
     "backup:restore": "node tools/backup.mjs restore",
     "backup:status": "node tools/backup.mjs status",
-    "commit": "node tools/backup.mjs commit"
+    "commit": "node tools/backup.mjs commit",
+    "test:sysreq": "node tools/test-sysreq.mjs"
   },
   "engines": {
     "node": ">=18"

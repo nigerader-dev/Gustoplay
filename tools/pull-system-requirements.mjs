@@ -8,9 +8,15 @@
  * (.github/workflows/sysreq.yml) — так же, как резолвер обложек.
  *
  *   npm run sysreq:pull                    # все игры каталога со steamId
- *   node tools/pull-system-requirements.mjs --probe        # один запрос + диагностика
+ *   node tools/pull-system-requirements.mjs --probe        # диагностика: один appid
  *   node tools/pull-system-requirements.mjs --limit=40     # первые 40 (быстрая проверка)
- *   node tools/pull-system-requirements.mjs --batch=20 --delay=900
+ *   node tools/pull-system-requirements.mjs --delay=250
+ *   node tools/pull-system-requirements.mjs --ids=100,200 --out=/tmp/x.js   # проверки
+ *
+ * ВАЖНО про формат запроса: Steam отвечает HTTP 400 на запрос сразу нескольких
+ * appid (проверено прогоном 26.09.2026: батчи по 20 → «батч N не получен: HTTP 400»,
+ * одиночный appid — нормальный ответ). Поэтому опрашиваем строго по одному appid
+ * за раз: 401 игра × 2 языка ≈ 800 запросов, это минуты при задержке 250 мс.
  *
  * Источник данных — только официальный Store API (appdetails → pc_requirements).
  * Ничего не выдумывается: если магазин не публикует требования, игры просто нет
@@ -21,6 +27,7 @@
  * Оверрайд применяется поверх сетевых данных и в файл попадает как есть.
  */
 import { writeFile } from 'node:fs/promises';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { PART_A } from '../js/catalog/part-a.js';
 import { PART_B } from '../js/catalog/part-b.js';
 import { PART_C } from '../js/catalog/part-c.js';
@@ -42,19 +49,33 @@ const overridesFile = new URL('./sysreq-overrides.json', import.meta.url);
 const arg = (name) => process.argv.find((x) => x.startsWith(`--${name}=`))?.split('=')[1];
 const PROBE = process.argv.includes('--probe');
 const limit = Number(arg('limit') || Infinity);
-const batchSize = Math.max(1, Number(arg('batch') || 20));
-const delay = Number(arg('delay') || 900);
+const delay = Number(arg('delay') || 250);
+const progressEvery = Math.max(1, Number(arg('progress') || 25));
 const TIMEOUT = 30000;
+// Куда писать результат: по умолчанию — рабочие файлы сайта; ключи нужны проверке
+// tools/test-sysreq.mjs, которая поднимает локальную «Заглушку Steam» и не должна
+// трогать настоящий js/catalog/sysreq.js.
+const outPath = arg('out') || fileURLToPath(outFile);
+const reviewPath = arg('review') || fileURLToPath(reviewFile);
+// Хост Store API: ключ окружения — только для проверок (см. tools/test-sysreq.mjs),
+// в бою всегда настоящий магазин.
+const API_BASE = process.env.SYSREQ_API_BASE || 'https://store.steampowered.com';
 const UA = 'Mozilla/5.0 (compatible; GustoPlay catalog resolver/1.0)';
 
 const slugify = (s) => s.toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9а-яё]+/gi, '-').replace(/^-+|-+$/g, '');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const games = PARTS.flatMap((list) => list).map((g) => ({ ...g, slug: g.slug || slugify(g.t) }));
-const withId = games
+let withId = games
   .map((g) => ({ slug: g.slug, title: g.t, id: STEAM_COVERS[g.slug]?.steamId }))
   .filter((g) => g.id)
   .slice(0, limit);
+// Ключ проверок (tools/test-sysreq.mjs): подменяет appid первых игр на тестовые,
+// чтобы прогнать сборщик против локальной заглушки магазина. В бою не используется.
+const idsOverride = (arg('ids') || '').split(',').map((x) => x.trim()).filter(Boolean);
+if (idsOverride.length) {
+  withId = withId.slice(0, idsOverride.length).map((g, i) => ({ ...g, id: idsOverride[i] }));
+}
 const withoutId = games.filter((g) => !STEAM_COVERS[g.slug]?.steamId);
 
 /* ------------------------------------------------------------------ *
@@ -76,27 +97,52 @@ async function fetchJson(url, tries = 3) {
   return null;
 }
 
-const detailsUrl = (ids, lang, filters = true) =>
-  `https://store.steampowered.com/api/appdetails?appids=${ids.join(',')}&l=${lang}${filters ? '&filters=pc_requirements' : ''}`;
+const detailsUrl = (id, lang, filters = true) =>
+  `${API_BASE}/api/appdetails?appids=${id}&l=${lang}${filters ? '&filters=pc_requirements' : ''}`;
+
+/** Диагностика одной игры: HTTP-статус, тип data и наличие pc_requirements */
+async function probeOne(id, lang, filters) {
+  const url = detailsUrl(id, lang, filters);
+  let status = 0;
+  try {
+    const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(TIMEOUT) });
+    status = res.status;
+    const app = res.ok ? (await res.json())?.[String(id)] : null;
+    const req = app?.data?.pc_requirements;
+    console.log(`::notice::sysreq-probe: ${filters ? 'фильтр' : 'без фильтра'} ${lang} HTTP ${status} success=${app?.success} data=${Array.isArray(app?.data) ? 'array' : typeof app?.data} pc_requirements=${req ? typeof req : 'нет'}`);
+    if (req) console.log(`::notice::sysreq-probe: ${JSON.stringify(req).slice(0, 700)}`);
+    return Boolean(req);
+  } catch (error) {
+    console.log(`::notice::sysreq-probe: ${filters ? 'фильтр' : 'без фильтра'} ${lang} ошибка сети: ${String(error?.message || error).slice(0, 120)}`);
+    return false;
+  }
+}
 
 /**
  * Диагностика: у appdetails есть параметр filters, но у части приложений он отдаёт
- * пустой data. Пробуем оба варианта и печатаем, что именно вернул Steam.
+ * пустой data. Пробуем оба варианта на одном appid и печатаем, что именно вернул
+ * Steam. Плюс отдельно проверяем, почему падают пакетные запросы (HTTP 400).
  */
 async function probe() {
   const sample = withId.find((g) => g.slug === 'deep-rock-galactic') || withId[0];
   console.log(`Проверка appid ${sample.id} (${sample.title})`);
+  await probeOne(sample.id, 'russian', true);
+  await probeOne(sample.id, 'russian', false);
+  await probeOne(sample.id, 'english', false);
+  // Пакетный запрос — чтобы в отчёте была видна причина прошлых HTTP 400
+  const group = withId.slice(0, 5).map((g) => g.id);
   for (const [label, url] of [
-    ['фильтр pc_requirements', detailsUrl([sample.id], 'russian')],
-    ['без фильтра', detailsUrl([sample.id], 'russian', false)],
+    ['5 appid без фильтра', `${API_BASE}/api/appdetails?appids=${group.join(',')}&l=english`],
+    ['20 appid с фильтром', `${API_BASE}/api/appdetails?appids=${withId.slice(0, 20).map((g) => g.id).join(',')}&l=english&filters=pc_requirements`],
   ]) {
-    const data = await fetchJson(url);
-    const app = data && data[String(sample.id)];
-    const req = app?.data?.pc_requirements;
-    console.log(`\n— ${label}: success=${app?.success} dataType=${Array.isArray(app?.data) ? 'array' : typeof app?.data} pc_requirements=${req ? typeof req : 'нет'}`);
-    if (req) console.log(JSON.stringify(req).slice(0, 900));
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(TIMEOUT) });
+      const len = (await res.text()).length;
+      console.log(`::notice::sysreq-probe: ${label} HTTP ${res.status}, тело ${len} символов`);
+    } catch (error) {
+      console.log(`::notice::sysreq-probe: ${label} ошибка сети: ${String(error?.message || error).slice(0, 120)}`);
+    }
   }
-  return sample;
 }
 
 /* ------------------------------------------------------------------ *
@@ -151,9 +197,12 @@ export function parseRequirements(html) {
   for (const line of lines) {
     if (/^(minimum|recommended|минимальные|рекомендуемые|минимум|рекомендуется)\s*:?$/i.test(line)) continue;
     if (REQUIRE_64.some((re) => re.test(line))) { out.bit64 = true; continue; }
-    const match = FIELD_LABELS.map(([re, key]) => [line.match(re), key]).find(([m]) => m);
-    if (match) {
-      const [, m, key] = match;
+    // Пара «найденное совпадение + ключ поля»: раньше здесь стояла деструктуризация
+    // [, m, key] — она давала key = undefined (в паре всего два элемента), и все поля
+    // уезжали в свойство «undefined»: файл заполнялся мусором.
+    const found = FIELD_LABELS.map(([re, key]) => [line.match(re), key]).find(([m]) => m);
+    if (found) {
+      const [m, key] = found;
       const value = clean(line.slice(m[0].length));
       if (value) { out[key] = out[key] ? `${out[key]} ${value}` : value; current = key; }
       continue;
@@ -170,10 +219,29 @@ const normalizeDx = (value) => {
   return m ? m[1] : clean(value);
 };
 
-/** «8 ГБ» → «8 GB»: единицы измерения одинаковы в обоих языках, а строки — нет */
-const unifyUnits = (value) => (value
-  ? clean(value).replace(/ГБ\b/g, 'GB').replace(/МБ\b/g, 'MB').replace(/Гб\b/g, 'GB').replace(/Мб\b/g, 'MB').replace(/[\s-]*и более$/i, '')
-  : undefined);
+/**
+ * Приводит значение требования к общему виду, чтобы русская и английская страницы
+ * магазина давали одинаковую строку и она не превращалась в пару { ru, en }.
+ * «8 ГБ ОЗУ» и «8 GB RAM» — одно и то же требование; «30 ГБ» и «30 GB available
+ * space» — тоже. Единицы и служебные слова («ОЗУ», «available space», «и более»)
+ * убираем, смысл значения (число и слово-объём) остаётся.
+ */
+const NOISE_WORDS = [
+  /\bavailable space\b/gi, /\bspace available\b/gi, /\bor more\b/gi, /\bRAM\b/g,
+  /доступного места/gi, /доступное место/gi, /свободного места/gi, /свободное место/gi,
+  /и более/gi, /ОЗУ/g,
+];
+const unifyUnits = (value) => {
+  if (!value) return undefined;
+  // Кириллические единицы: \b в JavaScript считается по ASCII-слову и рядом с «ГБ»
+  // не срабатывает, поэтому проверяем, что следом не идёт буква.
+  let out = clean(value)
+    .replace(/ГБ(?!\p{L})/gu, 'GB').replace(/Гб(?!\p{L})/gu, 'GB')
+    .replace(/МБ(?!\p{L})/gu, 'MB').replace(/Мб(?!\p{L})/gu, 'MB')
+    .replace(/ГГц(?!\p{L})/gu, 'GHz').replace(/МГц(?!\p{L})/gu, 'MHz');
+  for (const re of NOISE_WORDS) out = out.replace(re, ' ');
+  return clean(out);
+};
 
 const FIELDS = ['os', 'cpu', 'ram', 'gpu', 'dx', 'disk', 'sound', 'net', 'note'];
 
@@ -218,45 +286,50 @@ async function main() {
   const collected = {};
   const misses = [];
   const mismatches = [];
-  const batches = [];
-  for (let i = 0; i < withId.length; i += batchSize) batches.push(withId.slice(i, i + batchSize));
+  const unreadable = [];
 
-  console.log(`Игр со steamId: ${withId.length}; запросов: ${batches.length} × 2 языка (batch=${batchSize}, delay=${delay}мс)`);
+  console.log(`Игр со steamId: ${withId.length}; запросов: ${withId.length * 2} (по одному appid, 2 языка, delay=${delay}мс)`);
 
-  for (const [index, batch] of batches.entries()) {
-    const ids = batch.map((g) => g.id);
+  /** Один appid, один язык: сначала с фильтром, пусто — повторяем без фильтра */
+  async function readReqs(id, lang) {
+    let app = null;
+    try {
+      app = (await fetchJson(detailsUrl(id, lang))) ?? null;
+    } catch (error) {
+      console.log(`::warning::appid ${id} (${lang}) не получен: ${String(error?.message || error).slice(0, 120)}`);
+      unreadable.push(`${id}|${lang}|${String(error?.message || error).slice(0, 60)}`);
+    }
+    let req = app?.[String(id)]?.data?.pc_requirements ?? null;
+    if (!req) {
+      try {
+        const full = (await fetchJson(detailsUrl(id, lang, false))) ?? null;
+        req = full?.[String(id)]?.data?.pc_requirements ?? null;
+      } catch { /* останется «нет данных» */ }
+    }
+    return req;
+  }
+
+  for (const [index, g] of withId.entries()) {
     const perLang = {};
     for (const lang of ['russian', 'english']) {
-      let data = null;
-      try { data = await fetchJson(detailsUrl(ids, lang)); } catch (error) {
-        console.log(`::warning::батч ${index + 1} (${lang}) не получен: ${String(error?.message || error).slice(0, 120)}`);
-      }
-      // Пустой ответ с фильтром — пробуем без фильтра (у части приложений иначе пусто)
-      if (!data || !batch.some((g) => data[String(g.id)]?.data?.pc_requirements)) {
-        try {
-          const full = await fetchJson(detailsUrl(ids, lang, false));
-          if (full) data = full;
-        } catch { /* ниже отметим как «нет данных» */ }
-      }
-      for (const g of batch) perLang[`${g.slug}|${lang}`] = data?.[String(g.id)]?.data?.pc_requirements ?? null;
+      perLang[lang] = await readReqs(g.id, lang);
       await sleep(delay);
     }
 
-    for (const g of batch) {
-      const ru = perLang[`${g.slug}|russian`];
-      const en = perLang[`${g.slug}|english`];
-      const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
-      const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
-      if (min || rec) {
-        collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
-        const ruHas = Boolean(parseRequirements(ru?.minimum) || parseRequirements(ru?.recommended));
-        const enHas = Boolean(parseRequirements(en?.minimum) || parseRequirements(en?.recommended));
-        if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
-      } else {
-        misses.push(`${g.slug} (${g.id}) ${g.title}`);
-      }
+    const min = mergeLevel(parseRequirements(perLang.russian?.minimum), parseRequirements(perLang.english?.minimum));
+    const rec = mergeLevel(parseRequirements(perLang.russian?.recommended), parseRequirements(perLang.english?.recommended));
+    if (min || rec) {
+      collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
+      const ruHas = Boolean(perLang.russian?.minimum || perLang.russian?.recommended);
+      const enHas = Boolean(perLang.english?.minimum || perLang.english?.recommended);
+      if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
+    } else {
+      misses.push(`${g.slug} (${g.id}) ${g.title}`);
     }
-    console.log(`батч ${index + 1}/${batches.length}: всего с данными ${Object.keys(collected).length}`);
+
+    if ((index + 1) % progressEvery === 0 || index + 1 === withId.length) {
+      console.log(`прогресс ${index + 1}/${withId.length}: с требованиями ${Object.keys(collected).length}`);
+    }
   }
 
   // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала
@@ -269,24 +342,32 @@ async function main() {
     if (entry) merged[g.slug] = entry;
   }
 
-  await writeFile(outFile, renderSysreqFile(merged));
+  await writeFile(outPath, renderSysreqFile(merged));
 
   const withoutReq = withId.filter((g) => !merged[g.slug]);
   const report = [
     `Требования к ПК: ${Object.keys(merged).length} из ${withId.length} игр со steamId`,
     `Игр без steamId (данные недоступны через Store API): ${withoutId.length} — ${withoutId.map((g) => g.slug).join(', ')}`,
     `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
+    `Ответы с ошибкой сети/HTTP (appid|язык|причина): ${unreadable.length}`,
+    ...unreadable.slice(0, 40).map((u) => `ERR ${u}`),
     ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
     ...mismatches.map((m) => `LANG ${m}`),
     'Минимальные и рекомендуемые есть у: ' + Object.values(merged).filter((e) => e.min && e.rec).length,
     'Только минимальные: ' + Object.values(merged).filter((e) => e.min && !e.rec).length,
     'Только рекомендуемые: ' + Object.values(merged).filter((e) => !e.min && e.rec).length,
   ].join('\n');
-  await writeFile(reviewFile, `${report}\n`);
+  await writeFile(reviewPath, `${report}\n`);
   console.log(`\n${report.split('\n').slice(0, 8).join('\n')}`);
 }
 
-main().catch((error) => {
-  console.error(`Ошибка: ${error?.stack || error}`);
-  process.exit(1);
-});
+// Импорт модуля не должен ходить в сеть: main() запускается только при прямом вызове,
+// иначе проверка tools/test-sysreq.mjs не смогла бы переиспользовать парсер.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((error) => {
+    console.error(`Ошибка: ${error?.stack || error}`);
+    process.exit(1);
+  });
+}
+
+export { parseRequirements as parseSteamRequirements };

@@ -38,6 +38,9 @@ jobs:
       - name: Тексты — орфография и типографика RU/EN
         run: npm run check:text
 
+      - name: Требования к ПК — сборщик против заглушки магазина (без сети)
+        run: npm run test:sysreq
+
       - name: Поведение интерфейса (jsdom)
         run: npm run test:functional
 

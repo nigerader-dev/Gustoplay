@@ -4,6 +4,11 @@ name: GustoPlay — требования к ПК
 # js/catalog/sysreq.js в ветку. В песочнице разработки сети к Steam нет (ответ 000),
 # поэтому шаг живёт в Actions — так же, как резолвер обложек (covers.yml).
 #
+# Формат запроса: строго по одному appid за раз. Steam отвечает HTTP 400 на запрос
+# сразу нескольких appid — первый прогон 26.09.2026 собрал 0 игр именно поэтому
+# (батчи по 20 → «батч N не получен: HTTP 400»). Разбор ошибок того прогона и
+# исправленный сборщик проверяются локально: npm run test:sysreq (заглушка магазина).
+#
 # Триггеры:
 #   • правка инструмента, формата или оверрайдов требований;
 #   • ручной запуск: Actions → «GustoPlay — требования к ПК» → Run workflow
@@ -41,7 +46,8 @@ jobs:
   resolve:
     name: Требования к ПК
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # ~800 запросов по одному appid с задержкой 250 мс: около 5–8 минут
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
         with:
@@ -58,7 +64,7 @@ jobs:
           if [ "${{ inputs.mode || 'full' }}" = "probe" ]; then
             node tools/pull-system-requirements.mjs --probe
           else
-            node tools/pull-system-requirements.mjs --batch=20 --delay=900
+            node tools/pull-system-requirements.mjs --delay=250
           fi
 
       - name: Диагностика прав токена

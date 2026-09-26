@@ -14,8 +14,13 @@ import { PART_F } from '../js/catalog/part-f.js';
 import { PART_G } from '../js/catalog/part-g.js';
 import { PART_H } from '../js/catalog/part-h.js';
 import { PART_I } from '../js/catalog/part-i.js';
+import { SYSREQ } from '../js/catalog/sysreq.js';
 
 const raw = [...PART_A, ...PART_B, ...PART_C, ...PART_D, ...PART_E, ...PART_F, ...PART_G, ...PART_H, ...PART_I];
+
+// Проблемы начинаем собирать здесь, а не после проверок: раньше `problems` объявлялся
+// ниже цикла типов, и первая же найденная ошибка типа роняла скрипт ReferenceError.
+const problems = [...validate()];
 
 // проверка типов: сдвиг позиционных аргументов в dsl.js ловится здесь
 const numberKeys = ['y', 'pv', 'dif', 'pace', 'rat', 'coopQ'];
@@ -31,7 +36,6 @@ for (const game of raw) {
   if (!Array.isArray(game.mood)) problems.push(`${game.t}: mood должен быть массивом`);
   if (Array.isArray(game.pl) === false) problems.push(`${game.t}: pl должен быть массивом`);
 }
-const problems = [...validate()];
 
 for (const g of raw) {
   const check = (list, dict, name) => {
@@ -48,6 +52,32 @@ for (const g of raw) {
   if (g.pr && !PRICE[g.pr]) problems.push(`${g.t}: неизвестная цена «${g.pr}»`);
   if (!g.mood || !g.mood.length) problems.push(`${g.t}: не указано ни одного настроения`);
   if (!g.desc || !g.desc.ru || !g.desc.en) problems.push(`${g.t}: неполное описание ru/en`);
+}
+
+// Требования к ПК (js/catalog/sysreq.js): структура, допустимые поля и значения.
+// Данные приходят из Steam Store API, поэтому важно ловить и «мусор» — HTML-теги,
+// пустые строки, лишние ключи, уровни не из min/rec.
+const SYSREQ_LEVELS = ['min', 'rec'];
+const SYSREQ_FIELDS = ['os', 'cpu', 'ram', 'gpu', 'dx', 'disk', 'sound', 'net', 'note'];
+const slugs = new Set(GAMES.map((g) => g.slug));
+for (const [slug, entry] of Object.entries(SYSREQ)) {
+  if (!slugs.has(slug)) problems.push(`sysreq: неизвестный slug «${slug}»`);
+  if (!entry || typeof entry !== 'object') { problems.push(`sysreq:${slug}: запись должна быть объектом`); continue; }
+  if (!entry.min && !entry.rec) problems.push(`sysreq:${slug}: нет ни минимальных, ни рекомендуемых требований`);
+  for (const [level, data] of Object.entries(entry)) {
+    if (!SYSREQ_LEVELS.includes(level)) { problems.push(`sysreq:${slug}: неизвестный уровень «${level}»`); continue; }
+    if (!data || typeof data !== 'object') { problems.push(`sysreq:${slug}: уровень ${level} должен быть объектом`); continue; }
+    for (const [key, value] of Object.entries(data)) {
+      if (key === 'bit64') {
+        if (value !== true) problems.push(`sysreq:${slug}: bit64 бывает только true`);
+        continue;
+      }
+      if (!SYSREQ_FIELDS.includes(key)) problems.push(`sysreq:${slug}: неизвестное поле «${key}»`);
+      const values = typeof value === 'string' ? [value] : [value?.ru, value?.en];
+      if (!values.every((v) => typeof v === 'string' && v.trim())) problems.push(`sysreq:${slug}: пустое значение ${level}.${key}`);
+      if (values.some((v) => /<|>/.test(v))) problems.push(`sysreq:${slug}: HTML в значении ${level}.${key}`);
+    }
+  }
 }
 
 // неиспользуемые справочники — просто информация

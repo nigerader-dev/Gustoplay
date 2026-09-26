@@ -36,6 +36,7 @@ import { PART_H } from './part-h.js';
 import { PART_I } from './part-i.js';
 import { STEAM_COVERS } from './steam-covers.js';
 import { STORE_LINKS } from './store-links.js';
+import { SYSREQ } from './sysreq.js';
 
 const slugify = (s) =>
   s
@@ -85,6 +86,9 @@ function normalize(g) {
     // полное описание и буллеты: появятся у всех игр; пока поле может отсутствовать
     about: g.about || null,
     feats: { ru: g.feats?.ru || [], en: g.feats?.en || [] },
+    // требования к ПК: собраны из Steam Store API (js/catalog/sysreq.js).
+    // null — магазин их не публикует; выдумывать значения нельзя, страница честно об этом скажет.
+    sysreq: g.req || SYSREQ[slug] || null,
     coopQ: g.coopQ ?? (modes.includes('coopOnline') || modes.includes('coopLocal') ? 6 : 0),
     // теги, которые генерируются автоматически (пригодятся для SEO-страниц и фильтров)
     allTags: [
