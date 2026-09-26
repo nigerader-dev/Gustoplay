@@ -309,6 +309,12 @@ console.log(`Проблемных официальных ссылок: ${badOffi
 console.log(`Игр без ссылки: ${noLink.length}`);
 
 if (suggest) {
+  // Список «Steam называет игру иначе» — без него в логе видно только число,
+  // а сами пары (slug → название на Steam) нужны для правки данных
+  console.log('\n--- WRONG_STEAM_JSON ---');
+  console.log(JSON.stringify(wrongSteam.map((w) => ({ slug: w.slug, title: w.title, appid: w.id, steamName: w.steamName, score: w.score })), null, 1));
+  console.log('--- END_WRONG_STEAM_JSON ---');
+
   console.log('\n--- STEAM_SUGGESTIONS_JSON ---');
   console.log(JSON.stringify(steamSuggestions, null, 1));
   console.log('--- END_STEAM_SUGGESTIONS_JSON ---');
