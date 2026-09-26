@@ -210,7 +210,7 @@ function pageTitles(html) {
   return out;
 }
 
-async function officialPage(url, title) {
+async function officialPage(url, title, attempt = 0) {
   try {
     const res = await fetch(url, {
       headers: {
@@ -221,7 +221,15 @@ async function officialPage(url, title) {
       signal: AbortSignal.timeout(25000),
       redirect: 'follow',
     });
-    if (!res.ok) return { ok: false, status: res.status };
+    if (!res.ok) {
+      // 403/429 у магазинов — часто защита от роботов, а не отсутствие страницы:
+      // одна повторная попытка заметно снижает ложные «страница не открывается»
+      if ((res.status === 403 || res.status === 429) && attempt < 1) {
+        await sleep(4000);
+        return officialPage(url, title, attempt + 1);
+      }
+      return { ok: false, status: res.status };
+    }
     const html = (await res.text()).slice(0, 300000);
     const titles = pageTitles(html);
     let best = { score: 0, name: '' };

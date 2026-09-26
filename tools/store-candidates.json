@@ -69,7 +69,11 @@
         "label": "game.storeOfficial"
       },
       {
-        "url": "https://www.footballmanager.com/",
+        "url": "https://www.footballmanager.com/games/football-manager-2024/",
+        "label": "game.storeOfficial"
+      },
+      {
+        "url": "https://www.footballmanager.com/games",
         "label": "game.storeOfficial"
       }
     ],
@@ -109,11 +113,11 @@
     ],
     "fortnite": [
       {
-        "url": "https://store.epicgames.com/en-US/p/fortnite",
-        "label": "game.storeEpic"
+        "url": "https://www.xbox.com/en-US/games/store/fortnite/bt5p2x999vh2",
+        "label": "game.storeXbox"
       },
       {
-        "url": "https://store.epicgames.com/p/fortnite",
+        "url": "https://store.epicgames.com/en-US/p/fortnite",
         "label": "game.storeEpic"
       }
     ],
@@ -229,32 +233,32 @@
     ],
     "pubg-mobile": [
       {
-        "url": "https://www.pubgmobile.com/en-US/m/index.shtml",
-        "label": "game.storeOfficial"
+        "url": "https://apps.apple.com/us/app/pubg-mobile/id1330123889",
+        "label": "game.storeAppStore"
       },
       {
-        "url": "https://play.google.com/store/apps/details?id=com.tencent.ig",
-        "label": "game.storeGooglePlay"
+        "url": "https://www.pubgmobile.com/en-US/m/index.shtml",
+        "label": "game.storeOfficial"
       }
     ],
     "pok-mon-tcg-pocket": [
       {
-        "url": "https://tcgpocket.pokemon.com/",
-        "label": "game.storeOfficial"
+        "url": "https://apps.apple.com/us/app/pok%C3%A9mon-tcg-pocket/id6479970832",
+        "label": "game.storeAppStore"
       },
       {
-        "url": "https://play.google.com/store/apps/details?id=jp.pokemon.pokemontcgp",
-        "label": "game.storeGooglePlay"
+        "url": "https://tcgpocket.pokemon.com/",
+        "label": "game.storeOfficial"
       }
     ],
     "whiteout-survival": [
       {
-        "url": "https://whiteoutsurvival.centurygames.com/",
-        "label": "game.storeOfficial"
+        "url": "https://apps.apple.com/us/app/whiteout-survival/id6443575749",
+        "label": "game.storeAppStore"
       },
       {
-        "url": "https://play.google.com/store/apps/details?id=com.gof.global",
-        "label": "game.storeGooglePlay"
+        "url": "https://whiteoutsurvival.centurygames.com/",
+        "label": "game.storeOfficial"
       }
     ],
     "project-sekai-colorful-stage": [
