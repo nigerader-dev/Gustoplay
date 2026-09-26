@@ -17,11 +17,12 @@
  * Ожидание — domcontentloaded + явный признак отрисовки (#app .header): сеть затихнуть
  * может и не дать, а вот неотрисованное приложение — настоящий провал.
  */
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
+import { browserOptions, browserSource } from './qa-browser.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -39,28 +40,6 @@ try {
   console.log('SKIP test:visual — puppeteer не установлен (нужен Chrome; см. шапку файла)');
   process.exit(0);
 }
-
-/**
- * Где взять браузер. Обычный случай — Chrome, скачанный самим puppeteer. Но в песочнице
- * разработки скачать его нельзя, и его кладёт tools/chromium-offline.mjs в /tmp. Раньше
- * для этого нужно было вручную задавать LD_LIBRARY_PATH и PUPPETEER_EXECUTABLE_PATH при
- * каждом запуске (легко забыть — тест «молча» уходил в SKIP). Теперь путь подхватывается
- * сам, если переменные не заданы и скачанного Chrome нет.
- */
-const QA_BROWSER = '/tmp/gustoplay-qa-bin/chromium';
-const QA_LIBS = '/tmp/gustoplay-qa-lib/lib';
-const browserOptions = () => {
-  const opts = { headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] };
-  const explicit = process.env.PUPPETEER_EXECUTABLE_PATH;
-  if (explicit) return opts;
-  if (existsSync(QA_BROWSER)) {
-    opts.executablePath = QA_BROWSER;
-    opts.env = { ...process.env, ...(existsSync(QA_LIBS) ? { LD_LIBRARY_PATH: QA_LIBS } : {}) };
-  }
-  return opts;
-};
-const BROWSER_ENV_NOTE = process.env.PUPPETEER_EXECUTABLE_PATH ? ''
-  : (existsSync(QA_BROWSER) ? ` (браузер из ${QA_BROWSER})` : '');
 
 const WIDTHS = String(args.widths || '360,768,1024,1440,1920').split(',').map(Number);
 const THEME = args.theme || 'light';
@@ -288,15 +267,9 @@ if (INTERACTION) {
   console.log('\n=== Интерактивные проверки (hover, шторка, сдвиги) ===');
   let ib = null;
   try {
-    ib = await puppeteer.launch({
-      ...browserOptions(),
-      args: [
-        ...browserOptions().args,
-        // «есть мышь и она умеет hover» + «точный указатель» — без этого медиазапросы
-        // hover/pointer ведут себя как на тачскрине и баг не ловится
-        '--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4',
-      ],
-    });
+    // hover:true добавляет ключи «есть мышь и она умеет hover» + «точный указатель»:
+    // без них медиазапросы hover/pointer ведут себя как на тачскрине и баг не ловится
+    ib = await puppeteer.launch(browserOptions({ hover: true }));
   } catch (e) {
     console.log(`  SKIP интерактивных проверок — браузер недоступен (${String(e.message || e).slice(0, 100)})`);
   }
