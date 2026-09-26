@@ -1,28 +1,19 @@
-Требования к ПК: 398 из 401 игр со steamId
+Требования к ПК: 401 из 401 игр со steamId
 Состояние после прохода 3
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
-Данные не получены (нет pc_requirements или запрос не прошёл): 3
-Причины: требования пришли, но не разобрались — 3
-Как получены: первый проход — 463 | повторный проход (2) — 225 | повторный проход (3) — 74
-По проходам: проход 1 — 247 игр | проход 2 — 114 игр | проход 3 — 37 игр
-DIAG half-life (70) ru[HTTP 200 success=true data=object pc_requirements=объектом найдено=steam_appid в карточке байт=9076 → повторный проход (3)] en[HTTP 200 success=true data=object pc_requirements=объектом найдено=steam_appid в карточке байт=8863 → повторный проход (3)]
-DIAG sid-meiers-civilization-iv (3900) ru[HTTP 200 success=true data=object pc_requirements=объектом найдено=ключ appid байт=9187 → повторный проход (3)] en[HTTP 200 success=true data=object pc_requirements=объектом найдено=ключ appid байт=8628 → повторный проход (3)]
-DIAG hitman-blood-money (6860) ru[HTTP 200 success=true data=object pc_requirements=объектом найдено=ключ appid байт=12045 → повторный проход (3)] en[HTTP 200 success=true data=object pc_requirements=объектом найдено=ключ appid байт=11831 → повторный проход (3)]
+Данные не получены (нет pc_requirements или запрос не прошёл): 0
+Причины: нет
+Как получены: первый проход — 469 | повторный проход (2) — 219 | повторный проход (3) — 82
+По проходам: проход 1 — 250 игр | проход 2 — 110 игр | проход 3 — 41 игр
 Запросов, которые не прошли (сеть/HTTP/разбор JSON): 0
-MISS half-life (70) Half-Life
-MISS sid-meiers-civilization-iv (3900) Sid Meier’s Civilization IV
-MISS hitman-blood-money (6860) Hitman: Blood Money
+LANG dead-by-daylight: язык магазина отдал данные только на en
 LANG cyberpunk-2077: язык магазина отдал данные только на en
 LANG grand-theft-auto-v: язык магазина отдал данные только на en
-LANG total-war-warhammer-iii: язык магазина отдал данные только на en
 LANG the-sims-4: язык магазина отдал данные только на en
+LANG farming-simulator-25: язык магазина отдал данные только на en
 LANG forza-horizon-5: язык магазина отдал данные только на en
-LANG minecraft-dungeons: язык магазина отдал данные только на ru
-LANG dune-awakening: язык магазина отдал данные только на en
-LANG hollow-knight-silksong: язык магазина отдал данные только на ru
 LANG warhammer-40-000-space-marine-2: язык магазина отдал данные только на ru
 LANG peak: язык магазина отдал данные только на ru
-LANG schedule-i: язык магазина отдал данные только на en
 LANG marvel-rivals: язык магазина отдал данные только на en
 LANG escape-from-tarkov: язык магазина отдал данные только на ru
 LANG hunt-showdown-1896: язык магазина отдал данные только на ru
@@ -30,22 +21,23 @@ LANG ready-or-not: язык магазина отдал данные тольк�
 LANG risk-of-rain-2: язык магазина отдал данные только на ru
 LANG fallout-4: язык магазина отдал данные только на en
 LANG fallout-76: язык магазина отдал данные только на en
-LANG beat-saber: язык магазина отдал данные только на en
-LANG efootball: язык магазина отдал данные только на en
-LANG sons-of-the-forest: язык магазина отдал данные только на ru
-LANG devour: язык магазина отдал данные только на ru
-LANG space-engineers: язык магазина отдал данные только на en
-LANG no-mans-sky: язык магазина отдал данные только на en
-LANG brotato: язык магазина отдал данные только на en
+LANG dying-light-2-stay-human: язык магазина отдал данные только на en
+LANG enshrouded: язык магазина отдал данные только на en
+LANG icarus: язык магазина отдал данные только на en
+LANG core-keeper: язык магазина отдал данные только на en
+LANG escape-simulator: язык магазина отдал данные только на en
 LANG watch-dogs-2: язык магазина отдал данные только на en
-LANG wuthering-waves: язык магазина отдал данные только на en
+LANG five-nights-at-freddys-security-breach: язык магазина отдал данные только на en
+LANG the-mortuary-assistant: язык магазина отдал данные только на en
+LANG fields-of-mistria: язык магазина отдал данные только на en
+LANG half-life: язык магазина отдал данные только на ru
+LANG heroes-of-might-and-magic-iii: язык магазина отдал данные только на ru
 LANG beamng-drive: язык магазина отдал данные только на ru
 LANG cookie-clicker: язык магазина отдал данные только на en
 LANG tabletop-simulator: язык магазина отдал данные только на en
+LANG black-desert-online: язык магазина отдал данные только на ru
 LANG path-of-exile: язык магазина отдал данные только на en
 LANG afterimage: язык магазина отдал данные только на en
-LANG tony-hawks-pro-skater-1-2: язык магазина отдал данные только на ru
-LANG ticket-to-ride: язык магазина отдал данные только на ru
-Минимальные и рекомендуемые есть у: 343
-Только минимальные: 55
+Минимальные и рекомендуемые есть у: 347
+Только минимальные: 54
 Только рекомендуемые: 0
