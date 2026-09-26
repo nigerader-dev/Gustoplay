@@ -9,6 +9,11 @@ name: GustoPlay — требования к ПК
 # (батчи по 20 → «батч N не получен: HTTP 400»). Разбор ошибок того прогона и
 # исправленный сборщик проверяются локально: npm run test:sysreq (заглушка магазина).
 #
+# Проходы (--passes=3). Значительная часть ответов магазина — троттлинг:
+# success: true, data: [] (прогон 3: 293 игры из 401). Поэтому после первого прохода
+# недостающие игры опрашиваются ещё раз, медленнее и по одной карточке — так они
+# и добираются. Третий проход запускается только если второй добавил данные.
+#
 # Триггеры:
 #   • правка инструмента, формата или оверрайдов требований;
 #   • ручной запуск: Actions → «GustoPlay — требования к ПК» → Run workflow
@@ -64,7 +69,7 @@ jobs:
           if [ "${{ inputs.mode || 'full' }}" = "probe" ]; then
             node tools/pull-system-requirements.mjs --probe
           else
-            node tools/pull-system-requirements.mjs --delay=200 --concurrency=3
+            node tools/pull-system-requirements.mjs --delay=200 --concurrency=3 --passes=3
           fi
 
       - name: Диагностика прав токена

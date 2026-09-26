@@ -62,6 +62,10 @@ const progressEvery = Math.max(1, Number(arg('progress') || 25));
 // страной (например, возрастной фильтр). Пустая строка отключает попытку.
 const cc = arg('cc') === undefined ? 'us' : String(arg('cc'));
 const diagLimit = Math.max(0, Number(arg('diag') || 12));
+// Проходы по недостающим играм. Магазин отвечает `success: true, data: []` на часть
+// запросов (троттлинг): прогон 3 показал так 293 игры из 401. Повторный проход по
+// ним — с большей паузой и в один поток — обычно отдаёт данные.
+const passes = Math.max(1, Math.min(6, Number(arg('passes') || 1)));
 const TIMEOUT = 30000;
 // Куда писать результат: по умолчанию — рабочие файлы сайта; ключи нужны проверке
 // tools/test-sysreq.mjs, которая поднимает локальную «Заглушку Steam» и не должна
@@ -373,6 +377,7 @@ async function main() {
   const diagnostics = [];
   const reasons = {};
   const how = {};
+  const lastPass = {};
 
   console.log(`Игр со steamId: ${allWithId.length}; в этой порции: ${withId.length}`
     + `${offset ? ` (с ${offset + 1}-й)` : ''}; потоков: ${concurrency}, delay=${delay}мс`);
@@ -383,7 +388,16 @@ async function main() {
    * с явной витриной (cc): так магазин отвечает на возрастные игры.
    * Возвращает и сам ответ — по нему в отчёте видно причину «нет данных».
    */
-  async function readReqs(id, lang) {
+  async function readReqs(id, lang, pass = 1) {
+    // Повторные проходы не тратят запросы на варианты, которые уже дали пусто
+    // (фильтр и «без фильтра»): просим сразу полную карточку с явной витриной —
+    // так проход по 335 недостающим играм занимает минуты, а не полчаса.
+    if (pass > 1) {
+      const retry = await fetchInfo(detailsUrl(id, lang, false, cc));
+      const reqRetry = retry.json?.[String(id)]?.data?.pc_requirements ?? null;
+      return { req: reqRetry, how: reqRetry ? `повторный проход (${pass})` : 'нет', first: retry };
+    }
+
     const first = await fetchInfo(detailsUrl(id, lang));
     let req = first.json?.[String(id)]?.data?.pc_requirements ?? null;
     if (req) return { req, how: 'filter', first };
@@ -399,47 +413,75 @@ async function main() {
     return { req, how: req ? `cc=${cc}` : 'нет', first, second, third };
   }
 
-  // Пул воркеров: каждый берёт следующую игру из очереди и опрашивает оба языка.
-  // Так прогон укладывается в лимит джоба, а данные получаются те же.
-  const queue = [...withId];
-  let done = 0;
-  const worker = async () => {
-    while (queue.length) {
-      const g = queue.shift();
-      const [ruRes, enRes] = await Promise.all([readReqs(g.id, 'russian'), readReqs(g.id, 'english')]);
-      await sleep(delay);
-      const ru = ruRes.req;
-      const en = enRes.req;
+  /**
+   * Один проход по очереди игр: пул воркеров опрашивает по две страницы (ru и en)
+   * на игру. Так прогон укладывается в лимит джоба, а данные получаются те же.
+   * Возвращает число игр, у которых появились требования.
+   */
+  async function collectPass(list, { pass, passDelay, passConcurrency }) {
+    const queue = [...list];
+    let done = 0;
+    let added = 0;
+    const worker = async () => {
+      while (queue.length) {
+        const g = queue.shift();
+        const [ruRes, enRes] = await Promise.all([readReqs(g.id, 'russian', pass), readReqs(g.id, 'english', pass)]);
+        await sleep(passDelay);
+        const ru = ruRes.req;
+        const en = enRes.req;
 
-      const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
-      const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
-      if (min || rec) {
-        collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
-        const ruHas = Boolean(ru?.minimum || ru?.recommended);
-        const enHas = Boolean(en?.minimum || en?.recommended);
-        if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
-        for (const [lang, res] of [['ru', ruRes], ['en', enRes]]) {
-          if (res.req) how[res.how] = (how[res.how] || 0) + 1;
+        const min = mergeLevel(parseRequirements(ru?.minimum), parseRequirements(en?.minimum));
+        const rec = mergeLevel(parseRequirements(ru?.recommended), parseRequirements(en?.recommended));
+        if (min || rec) {
+          collected[g.slug] = { ...(min ? { min } : {}), ...(rec ? { rec } : {}) };
+          added += 1;
+          if (pass > 1) lastPass[g.slug] = pass;
+          const ruHas = Boolean(ru?.minimum || ru?.recommended);
+          const enHas = Boolean(en?.minimum || en?.recommended);
+          if (ruHas !== enHas) mismatches.push(`${g.slug}: язык магазина отдал данные только на ${ruHas ? 'ru' : 'en'}`);
+          for (const res of [ruRes, enRes]) {
+            if (res.req) how[res.how] = (how[res.how] || 0) + 1;
+          }
+        } else {
+          // Почему нет данных: без этого отчёта «MISS» ничего не объясняет
+          const reason = /HTTP 4\d\d|HTTP 5\d\d|разбор JSON|сеть:/.test(describeAnswer(ruRes.first)) ? 'запрос не прошёл'
+            : (ruRes.first.json?.[String(g.id)]?.success === false || enRes.first.json?.[String(g.id)]?.success === false ? 'магазин ответил success=false'
+              : 'в ответе нет pc_requirements');
+          if (pass === passes) {
+            misses.push(`${g.slug} (${g.id}) ${g.title}`);
+            reasons[reason] = (reasons[reason] || 0) + 1;
+            if (diagnostics.length < diagLimit) {
+              diagnostics.push(`DIAG ${g.slug} (${g.id}) ru[${describeAnswer(ruRes.first)} → ${ruRes.how}] en[${describeAnswer(enRes.first)} → ${enRes.how}]`);
+            }
+          }
         }
-      } else {
-        misses.push(`${g.slug} (${g.id}) ${g.title}`);
-        // Почему нет данных: без этого отчёта «MISS» ничего не объясняет
-        const reason = /HTTP 4\d\d|HTTP 5\d\d|разбор JSON|сеть:/.test(describeAnswer(ruRes.first)) ? 'запрос не прошёл'
-          : (ruRes.first.json?.[String(g.id)]?.success === false || enRes.first.json?.[String(g.id)]?.success === false ? 'магазин ответил success=false'
-            : 'в ответе нет pc_requirements');
-        reasons[reason] = (reasons[reason] || 0) + 1;
-        if (diagnostics.length < diagLimit) {
-          diagnostics.push(`DIAG ${g.slug} (${g.id}) ru[${describeAnswer(ruRes.first)} → ${ruRes.how}] en[${describeAnswer(enRes.first)} → ${enRes.how}]`);
+
+        done += 1;
+        if (done % progressEvery === 0 || done === list.length) {
+          console.log(`проход ${pass}/${passes}: ${done}/${list.length}, всего с требованиями ${Object.keys(collected).length}`);
         }
       }
+    };
+    await Promise.all(Array.from({ length: Math.min(passConcurrency, list.length || 1) }, worker));
+    return added;
+  }
 
-      done += 1;
-      if (done % progressEvery === 0 || done === withId.length) {
-        console.log(`прогресс ${done}/${withId.length}: с требованиями ${Object.keys(collected).length}`);
-      }
+  // Проход 1 — как настроено (потоки + задержка). Дальше — только недостающие игры,
+  // медленнее и в один поток: пустой ответ магазина почти всегда снимается паузой.
+  let pending = [...withId];
+  const addedByPass = {};
+  for (let pass = 1; pass <= passes && pending.length; pass += 1) {
+    const passDelay = pass === 1 ? delay : Math.max(600, delay * 3 * pass);
+    const passConcurrency = pass === 1 ? concurrency : Math.max(1, Math.min(2, concurrency));
+    console.log(`\nПроход ${pass}/${passes}: игр ${pending.length}, потоков ${passConcurrency}, пауза ${passDelay}мс`);
+    const added = await collectPass(pending, { pass, passDelay, passConcurrency });
+    addedByPass[pass] = added;
+    if (pass > 1 && added === 0) {
+      console.log(`проход ${pass} не добавил данных — дальше повторять нечего`);
+      break;
     }
-  };
-  await Promise.all(Array.from({ length: Math.min(concurrency, withId.length) }, worker));
+    pending = pending.filter((g) => !collected[g.slug]);
+  }
 
   // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала.
   // Идём по ВСЕМ играм со steamId: порционный прогон не должен терять остальные.
@@ -461,6 +503,7 @@ async function main() {
     `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
     'Причины: ' + (Object.entries(reasons).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
     'Как получены: ' + (Object.entries(how).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
+    'По проходам: ' + (Object.entries(addedByPass).map(([p, n]) => `проход ${p} — ${n} игр`).join(' | ') || 'нет'),
     ...diagnostics,
     `Запросов, которые не прошли (сеть/HTTP/разбор JSON): ${reasons['запрос не прошёл'] || 0}`,
     ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
