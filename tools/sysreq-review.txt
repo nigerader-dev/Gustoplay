@@ -1,6 +1,20 @@
 Требования к ПК: 66 из 401 игр со steamId
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
 Данные не получены (нет pc_requirements или запрос не прошёл): 335
+Причины: в ответе нет pc_requirements — 293 | запрос не прошёл — 51
+Как получены: без фильтра — 106 | cc=us — 4
+DIAG left-4-dead-2 (550) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=34 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=34 → нет]
+DIAG deep-rock-galactic (548430) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG warhammer-40-000-darktide (1361210) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
+DIAG warhammer-end-times-vermintide-2 (552500) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG payday-2 (218620) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG borderlands-3 (397540) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG monster-hunter-world (582010) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG it-takes-two (1426210) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
+DIAG split-fiction (2001120) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=38 → нет]
+DIAG overcooked-2 (728880) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG cuphead (268910) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
+DIAG human-fall-flat (477160) ru[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет] en[HTTP 200 success=true data=array(0) pc_requirements=нет байт=37 → нет]
 Ответы с ошибкой сети/HTTP (appid|язык|причина): 0
 MISS deep-rock-galactic (548430) Deep Rock Galactic
 MISS left-4-dead-2 (550) Left 4 Dead 2
@@ -49,12 +63,11 @@ MISS lies-of-p (1627720) Lies of P
 MISS black-myth-wukong (2358720) Black Myth: Wukong
 MISS god-of-war-ragnar-k (2322010) God of War Ragnarök
 MISS the-last-of-us-part-i (1888930) The Last of Us Part I
-MISS red-dead-redemption-2 (1174180) Red Dead Redemption 2
-MISS uncharted-4-a-thiefs-end (1659420) Uncharted 4: A Thief’s End
 MISS batman-arkham-knight (208650) Batman: Arkham Knight
 MISS ghost-of-tsushima (2215430) Ghost of Tsushima
 MISS horizon-forbidden-west (2420110) Horizon Forbidden West
 MISS death-stranding (1850570) Death Stranding
+MISS control (870780) Control
 MISS resident-evil-4-remake (2050650) Resident Evil 4 Remake
 MISS resident-evil-2-remake (883710) Resident Evil 2 Remake
 MISS silent-hill-2-2024 (2124490) Silent Hill 2 (2024)
@@ -196,6 +209,7 @@ MISS max-payne-3 (204100) Max Payne 3
 MISS mafia-definitive-edition (1030840) Mafia: Definitive Edition
 MISS sleeping-dogs (202170) Sleeping Dogs
 MISS watch-dogs-2 (447040) Watch Dogs 2
+MISS far-cry-3 (220240) Far Cry 3
 MISS far-cry-5 (552520) Far Cry 5
 MISS dishonored-2 (403640) Dishonored 2
 MISS prey (480490) Prey
@@ -337,10 +351,10 @@ MISS black-desert-online (582660) Black Desert Online
 MISS star-wars-the-old-republic (1286830) Star Wars: The Old Republic
 MISS path-of-exile (238960) Path of Exile
 MISS asphalt-legends-unite (1815780) Asphalt Legends Unite
-LANG grand-theft-auto-v: язык магазина отдал данные только на en
-LANG marvels-spider-man-2: язык магазина отдал данные только на en
-LANG nioh-2: язык магазина отдал данные только на en
-LANG brothers-a-tale-of-two-sons: язык магазина отдал данные только на en
+LANG soma: язык магазина отдал данные только на en
+LANG sunkenland: язык магазина отдал данные только на en
+LANG nioh-2: язык магазина отдал данные только на ru
+LANG afk-journey: язык магазина отдал данные только на en
 Минимальные и рекомендуемые есть у: 50
 Только минимальные: 16
 Только рекомендуемые: 0
