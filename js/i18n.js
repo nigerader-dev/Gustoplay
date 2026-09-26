@@ -231,6 +231,7 @@ export const STRINGS = {
     // подписи для магазинов игр без страницы в Steam (js/catalog/store-links.js)
     'game.storeOfficial': 'Официальный сайт',
     'game.storeBattleNet': 'Открыть в Battle.net',
+    'game.storeEpic': 'Открыть в Epic Games Store',
     'game.storeNintendo': 'Открыть в Nintendo eShop',
     'game.storePlaystation': 'Открыть в PlayStation Store',
     'game.storeGooglePlay': 'Открыть в Google Play',
@@ -559,6 +560,7 @@ export const STRINGS = {
     'game.official': 'Official website',
     'game.storeOfficial': 'Official website',
     'game.storeBattleNet': 'Open in Battle.net',
+    'game.storeEpic': 'Open in Epic Games Store',
     'game.storeNintendo': 'Open in Nintendo eShop',
     'game.storePlaystation': 'Open in PlayStation Store',
     'game.storeGooglePlay': 'Open in Google Play',
