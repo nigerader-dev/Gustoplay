@@ -75,7 +75,11 @@ for (const [slug, entry] of Object.entries(SYSREQ)) {
       if (!SYSREQ_FIELDS.includes(key)) problems.push(`sysreq:${slug}: неизвестное поле «${key}»`);
       const values = typeof value === 'string' ? [value] : [value?.ru, value?.en];
       if (!values.every((v) => typeof v === 'string' && v.trim())) problems.push(`sysreq:${slug}: пустое значение ${level}.${key}`);
-      if (values.some((v) => /<|>/.test(v))) problems.push(`sysreq:${slug}: HTML в значении ${level}.${key}`);
+      // Ищем именно разметку, а не любой «<»/«>»: в требованиях встречается обычный текст
+      // («Options > Graphics» у Resident Evil 2), и это не повод считать данные грязными.
+      if (values.some((v) => /<\/?[a-z][a-z0-9]*(\s[^>]*)?>/i.test(v) || /&(nbsp|amp|lt|gt|quot|apos|#\d+|#x[\da-f]+);/i.test(v))) {
+        problems.push(`sysreq:${slug}: HTML в значении ${level}.${key}`);
+      }
     }
   }
 }

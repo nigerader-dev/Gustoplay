@@ -60,6 +60,13 @@ const HTML_MIN_STR = 'Minimum:<br><strong>OS:</strong> Windows 8.1<br><strong>Pr
 const HTML_MIN_STR_RU = 'Минимальные:<br><strong>ОС:</strong> Windows 8.1<br><strong>Процессор:</strong> Intel Core i3<br>';
 const withOs = (html, os) => html.replace(/Windows 10 64-bit/, os);
 
+// Требования «одной строкой»: так их публикуют старые приложения (например, Half-Life) —
+// меток полей нет, а обе части (Minimum и Recommended) лежат в одном поле minimum
+const PROSE_REQ_EN = '\n\t\t\tMinimum:</strong> 500 mhz processor, 96mb ram, 16mb video card, Windows XP, Mouse, Keyboard, Internet Connection</p>'
+  + '\n\t\t\tRecommended:</strong> 800 mhz processor, 128mb ram, 32mb+ video card, Windows XP, Mouse, Keyboard, Internet Connection</p>\n\t\t\t';
+const PROSE_REQ_RU = '\n\t\t\tМинимальные:</strong> 500 мгц процессор, 96 мб ОЗУ, 16 мб видеокарта, Windows XP, мышь, клавиатура</p>'
+  + '\n\t\t\tРекомендуемые:</strong> 800 мгц процессор, 128 мб ОЗУ, 32 мб видеокарта, Windows XP, мышь, клавиатура</p>\n\t\t\t';
+
 const HTML_REC_RU = 'Рекомендуемые:<br><strong>ОС:</strong> Windows 11<br>'
   + '<strong>Процессор:</strong> Ryzen 5 3600<br><strong>Оперативная память:</strong> 16 ГБ ОЗУ<br>'
   + '<strong>Видеокарта:</strong> RTX 2060<br><strong>Место на диске:</strong> 50 ГБ';
@@ -74,6 +81,7 @@ const HTML_REC_RU = 'Рекомендуемые:<br><strong>ОС:</strong> Windo
  *   600 — success:false                                      → причины: «success=false»
  *   700 — pc_requirements строкой HTML (старые приложения)   → должен собраться
  *   800 — пустой data всегда                                 → «пустая карточка (троттлинг)»
+ *   900 — требования одной строкой без меток (старые игры)    → должны попасть в примечания
  */
 const GAMES = {
   100: { ru: { minimum: HTML_MIN_RU, recommended: HTML_REC_RU }, en: { minimum: HTML_MIN, recommended: HTML_REC } },
@@ -84,6 +92,7 @@ const GAMES = {
   600: { successFalse: true },
   700: { ru: HTML_MIN_STR_RU, en: HTML_MIN_STR, stringRequirements: true },
   800: { alwaysEmpty: true },
+  900: { ru: PROSE_REQ_RU, en: PROSE_REQ_EN, proseRequirements: true },
 };
 
 const requests = [];
@@ -126,11 +135,15 @@ const server = createServer((req, res) => {
   // Магазин понимает l=russian|english, в данных игры языки названы ru|en
   const raw = game[lang === 'russian' ? 'ru' : 'en'];
   if (!raw) return json(200, { [id]: { success: true, data: [] } });
+  // Ключ ответа бывает ЧУЖИМ: так настоящий Steam отдал appids=548430 под ключом 4207930
+  const cardKey = game.foreignKey ? String(Number(id) * 1000 + 1) : id;
+  // Старые приложения кладут обе части требований в одно поле minimum, без меток полей
+  if (game.proseRequirements) {
+    return json(200, { [cardKey]: { success: true, data: { type: 'game', name: `Game ${id}`, steam_appid: Number(id), pc_requirements: { minimum: raw } } } });
+  }
   // У части приложений требования приходят строкой HTML, а не парой minimum/recommended
   const pc = game.stringRequirements ? raw : ((raw.minimum || raw.recommended) ? raw : null);
   if (!pc) return json(200, { [id]: { success: true, data: [] } });
-  // Ключ ответа бывает ЧУЖИМ: так настоящий Steam отдал appids=548430 под ключом 4207930
-  const cardKey = game.foreignKey ? String(Number(id) * 1000 + 1) : id;
   return json(200, { [cardKey]: { success: true, data: { type: 'game', name: `Game ${id}`, steam_appid: Number(id), pc_requirements: pc } } });
 });
 
@@ -190,7 +203,7 @@ check('повторный проход не повторяет собранну�
 check('троттлящаяся игра опрашивается и в повторных проходах',
   perGame('500').length > 2, `500: ${perGame('500').length} запросов`);
 
-const expectedCollected = 5; // 100, 200, 300, 500, 700
+const expectedCollected = 6; // 100, 200, 300, 500, 700, 900
 
 console.log('\n2. Разбор и запись файла');
 const file = await readFile(out, 'utf8');
@@ -229,6 +242,19 @@ check('карточка под чужим ключом всё равно про�
   JSON.stringify(foreignKey.min).slice(0, 140));
 check('требования, пришедшие строкой HTML, не теряются',
   Boolean(stringReq), stringReq ? JSON.stringify(stringReq.min).slice(0, 120) : 'игры нет в файле');
+
+// Значение поля бывает строкой (одинаково ru/en) или парой { ru, en }
+const noteText = (v) => (typeof v === 'string' ? v : `${v?.ru || ''} ${v?.en || ''}`);
+const prose = entries.find((e) => e.min?.note && /500/.test(noteText(e.min.note)));
+check('требования одной строкой (старые игры) не теряются',
+  Boolean(prose) && /500/.test(noteText(prose.min.note)) && /800/.test(noteText(prose.rec?.note)),
+  prose ? noteText(prose.min.note).slice(0, 90) : 'игры нет в файле');
+check('в требованиях одной строкой не остаётся пробела перед запятой',
+  Boolean(prose) && !/\s,/.test(`${noteText(prose.min.note)} ${noteText(prose.rec?.note || '')}`),
+  prose ? noteText(prose.min.note).slice(0, 80) : '—');
+check('у требований одной строкой снят служебный префикс Minimum/Recommended',
+  Boolean(prose) && !/minimum|recommended|минимальные|рекомендуемые/i.test(`${noteText(prose.min.note)} ${noteText(prose.rec?.note || '')}`),
+  prose ? noteText(prose.min.note).slice(0, 60) : '—');
 check('в файле нет HTML-тегов', !/<br|<strong|<li/i.test(file));
 
 console.log('\n3. Отчёт сборщика');
@@ -279,6 +305,12 @@ check('неизвестная метка не приклеивается к пр
   messy.disk === '60 GB' && !/VR|better/.test(JSON.stringify(messy)), JSON.stringify(messy));
 check('значение из одного разделителя («/») не попадает в данные',
   messy.note === undefined && messy.sound === undefined);
+const proseUnit = parseSteamRequirements(PROSE_REQ_EN);
+check('прозаичные требования старых игр попадают в примечания',
+  Boolean(proseUnit) && /500 mhz/.test(String(proseUnit.note)) && !/minimum/i.test(String(proseUnit.note)),
+  JSON.stringify(proseUnit));
+check('разделитель-мусор не считается прозаичными требованиями',
+  parseSteamRequirements('Minimum: <br>/') === null && parseSteamRequirements('Minimum: Windows') === null);
 check('русские метки со звёздочкой тоже распознаются',
   parseSteamRequirements('ОС *: Windows 10<br>Поддержка VR: 10 ГБ<br>Оперативная память: 8 ГБ ОЗУ').ram === '8 ГБ ОЗУ');
 

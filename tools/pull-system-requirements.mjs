@@ -167,11 +167,27 @@ function readCard(json, id) {
  */
 function reqLevels(pc) {
   if (!pc) return {};
-  if (typeof pc === 'string') return { minimum: pc };
-  return {
+  const raw = typeof pc === 'string' ? { minimum: pc } : {
     minimum: typeof pc.minimum === 'string' && pc.minimum ? pc.minimum : undefined,
     recommended: typeof pc.recommended === 'string' && pc.recommended ? pc.recommended : undefined,
   };
+  // У старых приложений обе части лежат в одном поле minimum
+  // («Minimum: … Recommended: …») — разделяем, иначе рекомендуемые теряются.
+  if (raw.minimum && !raw.recommended) {
+    const cut = splitRecommended(raw.minimum);
+    if (cut) return cut;
+  }
+  return raw;
+}
+
+/** Делит строку «Minimum: … Recommended: …» на два уровня (так пишут старые игры) */
+function splitRecommended(html) {
+  // Без \b: он в JavaScript считается по ASCII-слову и перед кириллицей не срабатывает
+  const m = String(html).match(/(recommended|рекомендуемые|рекомендуется)\s*:/i);
+  if (!m || m.index < 10) return null;
+  const head = html.slice(0, m.index);
+  const tail = html.slice(m.index + m[0].length);
+  return tail.trim().length > 10 ? { minimum: head, recommended: tail } : null;
 }
 
 /** Короткое описание ответа магазина — для отчёта и аннотаций */
@@ -346,7 +362,14 @@ export function parseRequirements(html) {
     const cont = cleanValue(line);
     if (cont && current && out[current] && out[current].length < 200) out[current] = `${out[current]} ${cont}`;
   }
-  return Object.keys(out).length ? out : null;
+  if (Object.keys(out).length) return out;
+
+  // Требования одной строкой без меток: «Minimum: 500 mhz processor, 96mb ram, 16mb
+  // video card, Windows XP, Mouse, Keyboard, Internet Connection» — так их публикуют
+  // старые приложения (Half-Life, Civilization IV). По полям такое не разложить, но и
+  // терять нельзя: иначе игра выглядит так, будто магазин требований не публикует.
+  const prose = cleanValue(lines.join(' ').replace(/^(minimum|recommended|минимальные|рекомендуемые|минимум|рекомендуется)\s*:?\s*/i, ''));
+  return prose && prose.length >= 25 && /\d/.test(prose) ? { note: prose.slice(0, 400) } : null;
 }
 
 /** DirectX храним коротко («11», «9.0c»), чтобы это не зависело от языка магазина */
@@ -377,7 +400,9 @@ const unifyUnits = (value) => {
     .replace(/МБ(?!\p{L})/gu, 'MB').replace(/Мб(?!\p{L})/gu, 'MB')
     .replace(/ГГц(?!\p{L})/gu, 'GHz').replace(/МГц(?!\p{L})/gu, 'MHz');
   for (const re of NOISE_WORDS) out = out.replace(re, ' ');
-  return clean(out);
+  // После удаления служебных слов («ОЗУ», «и более») перед знаком препинания остаётся
+  // пробел: «96 мб ОЗУ, мышь» → «96 мб , мышь». Такой пробел убираем.
+  return clean(out.replace(/\s+([,.;:])/g, '$1'));
 };
 
 const FIELDS = ['os', 'cpu', 'ram', 'gpu', 'dx', 'disk', 'sound', 'net', 'note'];
