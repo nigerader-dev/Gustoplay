@@ -19,6 +19,8 @@ export const STRINGS = {
 
     'home.hero.lead': 'Ответьте на короткие вопросы — это займёт пару минут — и получите список игр с объяснением, почему каждая подходит именно вам. Отмечайте то, во что уже играли: список пересчитается на ходу.',
     'home.cta.start': 'Пройти подбор',
+    'home.continue.partial': 'Вы ответили на {n}% вопросов — можно продолжить с того же места.',
+    'home.continue.done': 'Подбор готов — ваши игры ждут на отдельной странице.',
     'home.cta.company': 'Во что играть с друзьями',
     'home.cta.catalog': 'Открыть каталог',
     'home.hero.title': 'подбор игр по вкусу',
@@ -189,7 +191,7 @@ export const STRINGS = {
     'results.why': 'Почему подходит',
     'results.more': 'Показать ещё',
     'results.reshuffle': 'Обновить подбор',
-    'results.recount': 'Показать обновлённый подбор',
+    'results.updated': 'Подбор обновлён',
     'results.filters': 'Фильтры',
     'results.showPlayed': 'Показывать пройденные',
     'results.mark': 'Отметить',
@@ -300,6 +302,8 @@ export const STRINGS = {
     'profile.reset.confirm': 'Удалить ответы, отметки и все данные? Это нельзя отменить.',
     'profile.stats': '{liked} понравилось · {played} пройдено · {wishlist} хочу сыграть · {disliked} не зашло',
     'profile.importPrompt': 'Вставьте сюда ранее скопированные данные:',
+    'profile.importMerged': 'Данные объединены с текущими · отметок: {n}',
+    'profile.importBroken': 'Не удалось прочитать данные',
     'profile.restartQuiz': 'Изменить ответы',
 
     'about.title': 'Как это работает',
@@ -316,6 +320,11 @@ export const STRINGS = {
 
     'consent.text': 'Мы показываем рекламу, чтобы сайт оставался бесплатным. Согласны на использование cookie рекламных сетей?',
     'consent.accept': 'Согласен',
+    'consent.change': 'Настройки cookie',
+    'storage.warning': 'Браузер не сохраняет данные (приватный режим или переполнено хранилище) — отметки исчезнут после перезагрузки страницы.',
+    'sync.warning': 'Профиль не сохраняется в аккаунте:',
+    'account.noSessions': 'Других активных сессий нет — вы вошли только в этом браузере.',
+    'marks.limit': 'Достигнут предел отметок в профиле — снимите лишние, чтобы добавить новые. Лимит:',
     'consent.decline': 'Только необходимые',
     'consent.policy': 'Подробнее',
 
@@ -355,6 +364,8 @@ export const STRINGS = {
 
     'home.hero.lead': 'Answer a few short questions — it takes a couple of minutes — and get a list with reasons why each game suits you. Mark what you already played — the list recalculates instantly.',
     'home.cta.start': 'Start matching',
+    'home.continue.partial': 'You have answered {n}% of the questions — you can continue where you left off.',
+    'home.continue.done': 'Your matches are ready — see them on a dedicated page.',
     'home.cta.company': 'What to play with friends',
     'home.cta.catalog': 'Browse catalog',
     'home.hero.title': 'game matching done right',
@@ -524,7 +535,7 @@ export const STRINGS = {
     'results.why': 'Why it fits',
     'results.more': 'Show more',
     'results.reshuffle': 'Refresh results',
-    'results.recount': 'Show updated results',
+    'results.updated': 'Results updated',
     'results.filters': 'Filters',
     'results.showPlayed': 'Show played games',
     'results.mark': 'Mark',
@@ -625,6 +636,8 @@ export const STRINGS = {
     'profile.reset.confirm': 'Delete your answers, marks and all data? This cannot be undone.',
     'profile.stats': '{liked} liked · {played} played · {wishlist} wishlisted · {disliked} disliked',
     'profile.importPrompt': 'Paste the data you copied earlier:',
+    'profile.importMerged': 'Merged with your current data · marks: {n}',
+    'profile.importBroken': 'Could not read the data',
     'profile.restartQuiz': 'Change answers',
 
     'about.title': 'How it works',
@@ -641,6 +654,11 @@ export const STRINGS = {
 
     'consent.text': 'We show ads to keep this site free. Do you agree to ad network cookies?',
     'consent.accept': 'Agree',
+    'consent.change': 'Cookie settings',
+    'storage.warning': 'This browser is not saving data (private mode or full storage) — your marks will disappear after a page reload.',
+    'sync.warning': 'Your profile is not being saved to the account:',
+    'account.noSessions': 'No other active sessions — you are signed in only in this browser.',
+    'marks.limit': 'You have reached the mark limit — remove some to add new ones. Limit:',
     'consent.decline': 'Necessary only',
     'consent.policy': 'Learn more',
 

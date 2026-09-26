@@ -46,7 +46,7 @@ export class ApiError extends Error {
   }
 }
 
-async function request(path, { method = 'GET', body, auth = true, timeout = 12000 } = {}) {
+async function request(path, { method = 'GET', body, auth = true, timeout = 12000, keepalive = false } = {}) {
   const base = apiBase();
   if (!base) throw new ApiError('API не настроен: укажите apiBase в js/config.js', 0, 'no_api');
 
@@ -63,6 +63,9 @@ async function request(path, { method = 'GET', body, auth = true, timeout = 1200
       credentials: 'include',
       body: body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
+      // keepalive — для отправки профиля в момент ухода со страницы (pagehide):
+      // обычный fetch в этот момент браузер может не успеть отправить.
+      keepalive,
     });
 
     // 401 на запросе с нашим токеном = сессия истекла: чистим и просим войти заново.
@@ -143,8 +146,13 @@ export async function pullProfile() {
   return data.profile;
 }
 
-export async function pushProfile(profile) {
-  const data = await request('/me/profile', { method: 'PUT', body: { profile } });
+/**
+ * Отправить профиль на сервер.
+ * keepalive нужен при уходе со страницы: без него браузер прерывает запрос,
+ * и последние отметки не доезжают до сервера.
+ */
+export async function pushProfile(profile, { keepalive = false } = {}) {
+  const data = await request('/me/profile', { method: 'PUT', body: { profile }, keepalive });
   return data.updatedAt;
 }
 

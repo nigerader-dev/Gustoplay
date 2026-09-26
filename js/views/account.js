@@ -3,7 +3,7 @@ import { t, getLang } from '../i18n.js';
 import { icon } from '../icons.js';
 import { AUTH, SECURITY, SITE } from '../config.js';
 import { esc, emptyState } from './components.js';
-import { getProfile, replaceProfile } from '../store.js';
+import { getProfile, adoptRemote, flushSync } from '../store.js';
 import {
   apiReady, apiBase, isLoggedIn, getUser, register, login, loginWithGoogle, logout,
   me, pullProfile, pushProfile, listSessions, revokeSession, deleteAccount,
@@ -18,6 +18,7 @@ const state = {
   error: '',
   notice: '',
   sessions: [],
+  sessionsLoaded: false,
 };
 
 const T = {
@@ -152,7 +153,7 @@ function formBlock(L) {
   if (isForgot) {
     return `
     <div class="auth-card">
-      <h2 class="h-lg">${esc(L.forgotTitle)}</h3>
+      <h2 class="h-lg">${esc(L.forgotTitle)}</h2>
       <p class="muted">${esc(L.forgotText)}</p>
       <form id="forgot-form" class="auth-form" novalidate>
         <label class="field">
@@ -169,7 +170,7 @@ function formBlock(L) {
   if (isReset) {
     return `
     <div class="auth-card">
-      <h2 class="h-lg">${esc(L.resetTitle)}</h3>
+      <h2 class="h-lg">${esc(L.resetTitle)}</h2>
       <p class="muted">${esc(state.resetToken ? L.resetText : L.resetBadToken)}</p>
       ${state.resetToken ? `
       <form id="reset-form" class="auth-form" novalidate>
@@ -237,7 +238,7 @@ function authBlock(user, L) {
     </div>
 
     <div class="panel">
-      <h2 class="h-lg">${esc(L.syncTitle)}</h3>
+      <h2 class="h-lg">${esc(L.syncTitle)}</h2>
       <p class="muted">${esc(L.syncText)}</p>
       <p class="muted">${esc(t('profile.stats', {
         liked: countMarks('liked'), played: countMarks('played'),
@@ -249,8 +250,8 @@ function authBlock(user, L) {
       </div>
     </div>
 
-    <div class="panel">
-      <h2 class="h-lg">${esc(L.sessions)}</h3>
+    ${AUTH.sessionsList ? `<div class="panel">
+      <h2 class="h-lg">${esc(L.sessions)}</h2>
       <div class="sessions" id="sessions-list">
         ${state.sessions.length
           ? state.sessions.map((item) => `<div class="session-row">
@@ -258,10 +259,9 @@ function authBlock(user, L) {
               <span class="muted">${esc(item.createdAt || '')}</span>
               <button type="button" class="btn btn-ghost btn-sm" data-action="session-revoke" data-id="${esc(item.id)}">${esc(L.revoke)}</button>
             </div>`).join('')
-          : `<p class="muted">${esc(t('common.loading'))}</p>`}
+          : `<p class="muted">${esc(state.sessionsLoaded ? t('account.noSessions') : t('common.loading'))}</p>`}
       </div>
-      ${AUTH.sessionsList ? '' : ''}
-    </div>
+    </div>` : ''}
 
     <div class="panel">
       <h2 class="h-lg">${esc(t('about.privacy.title'))}</h2>
@@ -395,6 +395,9 @@ export function mount(root) {
   if (turnstileSlot) renderTurnstile(turnstileSlot);
 
   root.querySelector('[data-action="auth-logout"]')?.addEventListener('click', async () => {
+    // Сначала дошлём профиль: после выхода токен стёрт, и отправлять будет нечем —
+    // последние отметки, сделанные минуту назад, остались бы только в этом браузере.
+    await flushSync();
     await logout();
     // после выхода возвращаем форму в режим входа: заново регистрироваться незачем
     state.mode = 'login';
@@ -417,7 +420,10 @@ export function mount(root) {
     try {
       const remote = await pullProfile();
       if (remote) {
-        replaceProfile(remote);
+        // слияние, а не замена: локальные отметки, которых нет на сервере, остаются,
+        // и объединённый профиль уходит обратно
+        const merged = adoptRemote(remote);
+        await pushProfile(merged).catch(() => {});
         state.notice = `${s().synced} · ${getLang() === 'ru' ? 'загружено с сервера' : 'pulled from server'}`;
       } else {
         state.notice = getLang() === 'ru' ? 'На сервере пока нет профиля — отправьте свой' : 'No profile on the server yet — push yours';
@@ -448,20 +454,23 @@ export function mount(root) {
     try {
       await revokeSession(btn.dataset.id);
       state.sessions = await listSessions();
+      state.sessionsLoaded = true;
     } catch (error) { fail(error.message); return; }
     window.dispatchEvent(new CustomEvent('gf:rerender'));
   });
 
-  if (isLoggedIn()) {
+  if (isLoggedIn() && AUTH.sessionsList) {
     listSessions().then((items) => {
       state.sessions = items;
+      state.sessionsLoaded = true;
       const list = app$('#sessions-list');
-      if (list) list.innerHTML = items.map((item) => `<div class="session-row">
+      if (list && !items.length) list.innerHTML = `<p class="muted">${esc(t('account.noSessions'))}</p>`;
+      else if (list) list.innerHTML = items.map((item) => `<div class="session-row">
         <span>${esc(item.device || 'Браузер')}</span>
         <span class="muted">${esc(item.createdAt || '')}</span>
         <button type="button" class="btn btn-ghost btn-sm" data-action="session-revoke" data-id="${esc(item.id)}">${esc(s().revoke)}</button>
       </div>`).join('');
-    }).catch(() => {});
+    }).catch(() => { state.sessionsLoaded = true; });
   }
 }
 
@@ -481,7 +490,10 @@ async function afterAuth(user, { upload = false } = {}) {
       await pushProfile(getProfile());
     } else {
       const remote = await pullProfile();
-      if (remote) replaceProfile(remote);
+      // Вход не должен «обнулять» то, что отмечено в этом браузере: сливаем профили
+      // (отметки — по более свежей дате) и отправляем объединённый на сервер.
+      const merged = adoptRemote(remote);
+      if (remote) await pushProfile(merged);
       else await pushProfile(getProfile());
     }
     state.notice = s().synced;

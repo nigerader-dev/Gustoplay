@@ -186,6 +186,29 @@ check('возврат в квиз продолжает с players, а не сн�
     (window.document.querySelector('#quiz-progress-label')?.textContent || '').includes('0'));
 }
 
+/* ---------------- 4b. Главная: возврат к своим результатам ---------------- */
+store.resetProfile();
+await navigate('');
+check('на пустом профиле главная не показывает блок «продолжить»',
+  count('.continue') === 0 && count('.hero') === 1);
+store.setAnswers({ mood: ['relax'], modes: ['solo'], players: 1 });
+await navigate('quiz');
+await navigate('');
+check('после частичных ответов главная предлагает продолжить подбор',
+  count('.continue') === 1 && /продолжить/i.test(text()), text().replace(/\s+/g, ' ').slice(0, 90));
+store.setAnswers({
+  mood: ['relax'], modes: ['solo'], players: 1, platforms: ['pc'], time: 'short',
+  difficulty: ['normal'], genres: ['rpg'], vibes: ['cozy'], priority: ['story'],
+  novelty: 'new', price: 'free', avoid: ['grind'], seed: ['balatro'],
+});
+store.setMeta({ completedAt: Date.now() });
+await navigate('quiz');
+await navigate('');
+check('после пройденного квиза главная ведёт к результатам',
+  count('.continue') === 1 && /готов/i.test(text()),
+  text().replace(/\s+/g, ' ').slice(0, 90));
+store.resetProfile();
+
 /* ============================ 5. Результаты ============================ */
 console.log('\n5. Результаты: отметки, переключатели, пересчёт');
 store.resetProfile();
@@ -220,11 +243,22 @@ click('[data-action="show-more"]');
 await wait(40);
 check('«показать ещё» догружает карточки', count('.game-card') > cardsBefore,
   `${cardsBefore} → ${count('.game-card')}`);
-// отметка на странице результатов → плашка пересчёта
-window.document.querySelector('[data-action="mark"][data-status="liked"]')
+// отметка на странице результатов → список пересчитывается сразу
+const topBefore = [...window.document.querySelectorAll('.game-card')].map((c) => c.dataset.slug).slice(0, 6).join(',');
+const markedSlug = window.document.querySelector('[data-action="mark"][data-status="liked"]')?.dataset.slug;
+window.document.querySelector(`[data-action="mark"][data-status="liked"][data-slug="${markedSlug}"]`)
   ?.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
-await wait(30);
-check('отметка вызывает плашку «пересчитать»', count('.refresh-pill') === 1);
+await wait(40);
+const topAfter = [...window.document.querySelectorAll('.game-card')].map((c) => c.dataset.slug).slice(0, 6).join(',');
+check('отметка на странице подбора пересчитывает список на ходу', topBefore !== topAfter,
+  `${topBefore} → ${topAfter}`);
+check('пересчёт подтверждается сообщением', count('.refresh-pill') === 1);
+check('сообщение о пересчёте не перехватывает клики', (() => {
+  const pill = window.document.querySelector('.refresh-pill');
+  return Boolean(pill) && pill.getAttribute('role') === 'status';
+})());
+await wait(2800);
+check('сообщение само убирается и не залипает', count('.refresh-pill') === 0);
 
 /* ============================ 6. Каталог ============================ */
 console.log('\n6. Каталог: фильтры, поиск, сортировка, пагинация');
@@ -313,8 +347,19 @@ check('экспорт — валидный JSON с отметками',
 store.resetProfile();
 check('импорт битого JSON отклоняется и не трёт данные',
   store.importProfile('{oops') === false && Object.keys(store.getProfile().marks).length === 0);
-check('импорт восстанавливает профиль', store.importProfile(exported) === true
+check('импорт восстанавливает профиль', store.importProfile(exported)?.ok === true
   && store.getMark('balatro') === 'liked');
+check('импорт не стирает отметки, уже стоящие в браузере', (() => {
+  store.markGame('celeste', 'played');
+  const res = store.importProfile(JSON.stringify({ marks: { hades: { status: 'liked', ts: Date.now() } }, meta: {} }));
+  return res?.ok === true && store.getMark('celeste') === 'played'
+    && store.getMark('hades') === 'liked' && store.getMark('balatro') === 'liked';
+})());
+check('старый формат импорта (без полей) не ломает профиль', (() => {
+  const res = store.importProfile(JSON.stringify({ marks: {} }));
+  return res?.ok === true && store.getMark('balatro') === 'liked';
+})());
+store.resetProfile();
 await navigate('profile');
 click('[data-action="mark-remove"]');
 await wait(40);
@@ -706,7 +751,8 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
     emojiInPage.slice(0, 2).join(' | ') || '8 маршрутов');
 
   // 4) иконки в разметке — это SVG из icons.js, а не текстовые символы
-  await navigate('home');
+  // (главная — пустой путь: 'home' роутером не разбирается и давал страницу «не найдено»)
+  await navigate('');
   const icons = [...window.document.querySelectorAll('svg.icon')];
   check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
   check('у SVG-иконок нет текстовых эмодзи внутри',
