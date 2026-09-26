@@ -13,9 +13,10 @@
  *                                                      (зеркало на GitHub Pages: canonical и
  *                                                       ссылки на адрес зеркала, база /repo)
  */
-import { mkdirSync, writeFileSync, cpSync, rmSync, existsSync, readFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync, cpSync, rmSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 import { GAMES } from '../js/catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from '../js/taxonomy.js';
@@ -126,6 +127,81 @@ for (const dir of ['css', 'js']) cpSync(join(root, dir), join(dist, dir), { recu
 }
 for (const file of ['manifest.webmanifest']) {
   if (existsSync(join(root, file))) cpSync(join(root, file), join(dist, file));
+}
+
+/* ------------------------------------------------------------------ *
+ * 2б. Минификация CSS и JS
+ *
+ * Аудит Lighthouse на собранном сайте показал 21 КиБ лишнего в CSS и 70 КиБ
+ * в JS — файлы уезжали на хостинг как есть. CSS сжимаем уже имеющимся пакетом
+ * `css` (с проверкой: результат должен разбираться и давать те же правила),
+ * JS — esbuild, если он установлен (devDependency). Без esbuild сборка
+ * не падает: файлы просто копируются как раньше, с предупреждением.
+ * ------------------------------------------------------------------ */
+{
+  const cssPkg = createRequire(import.meta.url)('css');
+  const files = readdirSync(join(dist, 'css')).filter((f) => f.endsWith('.css'));
+  let savedCss = 0;
+  let savedJs = 0;
+
+  for (const f of files) {
+    const file = join(dist, 'css', f);
+    const src = readFileSync(file, 'utf8');
+    const before = astCount(cssPkg, src);
+    const out = cssPkg.stringify(cssPkg.parse(src), { compress: true });
+    // страховка: сжатый файл обязан разбираться и содержать те же правила,
+    // иначе минификация «съела» бы часть стилей и сайт поехал
+    if (astCount(cssPkg, out) !== before || !out.length) {
+      console.warn(`⚠️  ${f}: минификация CSS изменила число объявлений (${before} → ${astCount(cssPkg, out)}) — оставляю исходник`);
+      continue;
+    }
+    writeFileSync(file, out);
+    savedCss += src.length - out.length;
+  }
+
+  let esbuild = null;
+  try { esbuild = await import('esbuild'); } catch { /* необязательная зависимость */ }
+  const jsFiles = [];
+  const walkJs = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walkJs(full);
+      else if (entry.name.endsWith('.js')) jsFiles.push(full);
+    }
+  };
+  walkJs(join(dist, 'js'));
+  if (esbuild) {
+    for (const file of jsFiles) {
+      const src = readFileSync(file, 'utf8');
+      // charset: 'utf8' — без него esbuild экранирует кириллицу в \uXXXX и файл
+      // с описаниями игр вырастает вдвое вместо того, чтобы сжаться
+      const out = (await esbuild.transform(src, { loader: 'js', format: 'esm', target: 'es2020', minify: true, charset: 'utf8' })).code;
+      if (out.length) { writeFileSync(file, out); savedJs += src.length - out.length; }
+    }
+  } else {
+    console.warn('⚠️  esbuild не установлен — JS уезжает без минификации (npm i -D esbuild)');
+  }
+  console.log(`   минификация: CSS −${Math.round(savedCss / 1024)} КиБ, JS −${Math.round(savedJs / 1024)} КиБ`
+    + (esbuild ? '' : ' (JS пропущен)'));
+}
+
+/**
+ * Сколько объявлений в CSS — страховка минификации: сжатие может выбросить
+ * комментарии (это нормально), но не должно терять свойства и селекторы.
+ */
+function astCount(cssPkg, text) {
+  try {
+    let n = 0;
+    const walk = (rules) => {
+      for (const r of rules || []) {
+        if (r.type === 'rule') n += (r.declarations || []).filter((d) => d.type === 'declaration').length;
+        else if (r.type === 'media' || r.type === 'supports' || r.type === 'document') walk(r.rules);
+        else if (r.type === 'keyframes') n += (r.keyframes || []).length;
+      }
+    };
+    walk(cssPkg.parse(text).stylesheet.rules);
+    return n;
+  } catch { return -1; }
 }
 
 // Service worker: версия кэша = дата сборки, чтобы браузеры подхватывали обновления

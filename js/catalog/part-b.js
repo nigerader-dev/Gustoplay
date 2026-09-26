@@ -69,7 +69,7 @@ export const PART_B = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [30, 60], dif: 5, pace: 4, rat: 82, mood: ['adrenaline', 'story'], gp: 1,
     desc: { ru: 'Пиноккио-соулслайк в стиле Belle Époque: красиво, жёстко и с отличными боссами.', en: 'A Pinocchio soulslike in Belle Époque style: gorgeous, brutal and full of great bosses.' },
-    about: {"ru":"Соулслайк по мотивам Пиноккио: механический мальчик идёт через Белль-эток, поражённый безумием марионеток, и учится лгать — каждая ложня меняет его человечность. Бой собран из парирований, идеальных уклонений и сменного оружия.","en":"A Pinocchio-inspired soulslike: a mechanical boy crosses the plague-mad city of Krat, where puppets have gone feral, and learns to lie — each lie shaping his humanity. Combat mixes parries, perfect dodges and swappable weapons."},
+    about: {"ru":"Соулслайк по мотивам Пиноккио: механический мальчик идёт через Белль-эток, поражённый безумием марионеток, и учится лгать — каждая ложь меняет его человечность. Бой собран из парирований, идеальных уклонений и сменного оружия.","en":"A Pinocchio-inspired soulslike: a mechanical boy crosses the plague-mad city of Krat, where puppets have gone feral, and learns to lie — each lie shaping his humanity. Combat mixes parries, perfect dodges and swappable weapons."},
     feats: {"ru":["Одна из самых красивых соулслайк-игр","Система лжи влияет на финал","Сборка оружия из клинка и рукояти"],"en":["One of the most beautiful soulslikes","A lie system that shapes the ending","Weapon assembly from blade and handle parts"]},
   },
   {
@@ -348,7 +348,7 @@ export const PART_B = [
     md: ['solo', 'coopLocal'], pl: [1, 2], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'mid', pv: 1500,
     len: [20, 200], dif: 4, pace: 5, rat: 89, mood: ['adrenaline', 'progress'], coopQ: 6,
     desc: { ru: 'Метроидвания-рогалик с лучшим ощущением от боя: умирать приятно, потому что растёшь.', en: 'A metroidvania roguelike with the best combat feel: dying is fine because you keep growing.' },
-    about: {"ru":"Рогалевания в замке, который перестраивается после каждой смерти: стремительный бой десятками видов оружия, мутации и бесконечные петли прокачки. Темп такой, что пауза между забегами длится секунды.","en":"A roguelitevania in a castle that rebuilds itself after every death: frantic combat with dozens of weapons, mutations and endless progression loops. The pace is such that breaks between runs last seconds."},
+    about: {"ru":"Рогалик-метроидвания в замке, который перестраивается после каждой смерти: стремительный бой десятками видов оружия, мутации и бесконечные петли прокачки. Темп такой, что пауза между забегами длится секунды.","en":"A roguelike metroidvania in a castle that rebuilds itself after every death: frantic combat with dozens of weapons, mutations and endless progression loops. The pace is such that breaks between runs last seconds."},
     feats: {"ru":["Один из самых быстрых боёвок в жанре","Ежедневные испытания и режимы для ветеранов","Годы бесплатных обновлений и кроссоверов"],"en":["One of the fastest-feeling combat systems in the genre","Daily challenges and modes for veterans","Years of free updates and crossovers"]},
   },
   {
@@ -366,7 +366,7 @@ export const PART_B = [
     md: ['solo'], pl: [1, 1], pf: ['pc', 'ps', 'xbox', 'switch', 'mobile'], pr: 'cheap', pv: 800,
     len: [10, 500], dif: 3, pace: 2, rat: 92, mood: ['think', 'progress', 'relax'],
     desc: { ru: 'Покер плюс джокеры: одна партия — минута, но остановиться невозможно.', en: 'Poker plus jokers: one run takes a minute, but stopping is impossible.' },
-    about: {"ru":"Покерный рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.","en":"A poker roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions."},
+    about: {"ru":"Рогалик, в котором правила покера — только отправная точка: джокеры ломают подсчёт очков, планеты прокачивают комбинации, а цель — докрутить ставки до невозможных величин. Феномен 2024 года, идеален для коротких сессий.","en":"A roguelike where poker rules are only the starting point: Jokers break the scoring, Planets level up your hands, and the goal is pushing stakes to impossible numbers. The 2024 phenomenon, perfect for short sessions."},
     feats: {"ru":["«Ещё один забег» в чистом виде","Простые правила с бездонной глубиной сборок","Лучшая игра года по мнению десятков изданий"],"en":["“One more run” in its purest form","Simple rules, bottomless build depth","Named game of the year by dozens of outlets"]},
   },
   {
@@ -375,7 +375,7 @@ export const PART_B = [
     md: ['solo', 'coopLocal'], pl: [1, 4], pf: ['pc', 'ps', 'xbox', 'switch'], pr: 'mid', pv: 1900,
     len: [30, 1000], dif: 5, pace: 4, rat: 87, mood: ['progress', 'escape', 'adrenaline'], coopQ: 6,
     desc: { ru: 'Слёзы младенца против библейских кошмаров: сотни предметов и тысячи часов на 100%.', en: 'A baby\u2019s tears against biblical nightmares: hundreds of items and thousands of hours to 100%.' },
-    about: {"ru":"Рогалик про Айзека, сбегающего в подвал от фанатичной матери: случайные комнаты, сотни предметов и синергии, которые превщают слёзы героя в рельсотрон или рой мух. Версия Repentance собрала весь контент десяти лет разработки.","en":"A roguelike about Isaac, fleeing into the basement from a fanatical mother: random rooms, hundreds of items and synergies that turn the hero’s tears into a railgun or a swarm of flies. Repentance gathers a decade of content."},
+    about: {"ru":"Рогалик про Айзека, сбегающего в подвал от фанатичной матери: случайные комнаты, сотни предметов и синергии, которые превращают слёзы героя в рельсотрон или рой мух. Версия Repentance собрала весь контент десяти лет разработки.","en":"A roguelike about Isaac, fleeing into the basement from a fanatical mother: random rooms, hundreds of items and synergies that turn the hero’s tears into a railgun or a swarm of flies. Repentance gathers a decade of content."},
     feats: {"ru":["Сотни предметов и тысячи синергий","Каждый забег может сломаться в лучшую сторону","Десятки часов до первого полного прохождения"],"en":["Hundreds of items, thousands of synergies","Every run can break in the best possible way","Dozens of hours before your first full clear"]},
   },
   {

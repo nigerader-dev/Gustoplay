@@ -197,10 +197,72 @@ check('профиль вкуса подтянулся из базы', JSON.parse
 check('на сервере создана новая сессия', db.prepare('SELECT COUNT(*) AS n FROM sessions').get().n === 1);
 
 /* ------------------------------------------------------------------ *
+ * 5. Слияние профилей: отметки и настройки не пропадают
+ * ------------------------------------------------------------------ */
+
+console.log('\n4. Слияние профилей (отметки и тема не пропадают)');
+
+// Чистая логика: чем свежее отметка, тем она главнее — в обе стороны
+const merged1 = store.mergeProfiles(
+  { marks: { a: { status: 'liked', ts: 200 }, b: { status: 'played', ts: 10 } }, meta: { theme: 'dark' } },
+  { marks: { a: { status: 'disliked', ts: 100 }, c: { status: 'wishlist', ts: 50 } }, meta: { theme: 'light', completedAt: 1 } },
+);
+check('новая локальная отметка не стирается серверной', merged1.marks.a.status === 'liked' && merged1.marks.a.ts === 200);
+check('отметка, которой нет локально, приезжает с сервера', merged1.marks.c?.status === 'wishlist');
+check('локальная отметка, которой нет на сервере, остаётся', merged1.marks.b?.status === 'played');
+check('тема этого устройства не сбрасывается', merged1.meta.theme === 'dark');
+check('более новая серверная отметка побеждает', store.mergeProfiles(
+  { marks: { a: { status: 'liked', ts: 100 } }, meta: {} },
+  { marks: { a: { status: 'disliked', ts: 300 } }, meta: {} },
+).marks.a.status === 'disliked');
+check('ответы квиза объединяются, свежие главнее', (() => {
+  const m = store.mergeProfiles(
+    { answers: { mood: ['relax'], genres: ['rpg'] }, meta: { completedAt: 10 } },
+    { answers: { mood: ['challenge'] }, meta: { completedAt: 99 } },
+  );
+  return m.answers.mood[0] === 'challenge' && m.answers.genres[0] === 'rpg';
+})());
+check('показы не теряются при слиянии', (() => {
+  const m = store.mergeProfiles(
+    { impressions: { a: { n: 5, ts: 20 } }, meta: {} },
+    { impressions: { a: { n: 2, ts: 10 }, b: { n: 1, ts: 30 } }, meta: {} },
+  );
+  return m.impressions.a.n === 5 && m.impressions.b.n === 1;
+})());
+
+// Импорт копии профиля: раньше стирал текущие отметки, теперь объединяет
+store.markGame('hades', 'liked');
+const beforeImport = store.countMarks(store.getProfile());
+const importResult = store.importProfile(JSON.stringify({ marks: { celeste: { status: 'played', ts: Date.now() } }, meta: {} }));
+check('импорт копии объединяет данные, а не заменяет', importResult?.ok === true
+  && store.getMark('hades') === 'liked' && store.getMark('celeste') === 'played',
+  `было ${beforeImport} → стало ${importResult?.marks}`);
+check('битый файл импорта ничего не портит', store.importProfile('не json') === false && store.getMark('hades') === 'liked');
+
+// Путь страницы при перезагрузке с входом: серверный профиль старше локальных правок
+store.setMeta({ theme: 'dark' });
+const staleRemote = await (await import('../js/api.js')).pullProfile();
+const pushNeeded = store.needsPush(store.getProfile(), staleRemote);
+store.adoptRemote(staleRemote);
+check('после перезагрузки локальные отметки на месте', store.getMark('hades') === 'liked' && store.getMark('celeste') === 'played');
+check('тема после перезагрузки не сброшена на светлую', store.getProfile().meta.theme === 'dark',
+  `theme=${store.getProfile().meta.theme}`);
+check('есть что отправить на сервер — данные не останутся только локально', pushNeeded === true);
+check('лишних отправок нет, когда профили совпадают', store.needsPush(store.getProfile(), store.getProfile()) === false);
+
+// Уход со страницы: профиль должен уехать сразу, не дожидаясь таймера автоотправки
+store.markGame('wreckfest', 'disliked');
+const flushed = await store.flushSync({ keepalive: false });
+const afterFlush = JSON.parse(db.prepare('SELECT profile FROM profiles LIMIT 1').get().profile);
+check('уход со страницы отправляет профиль сразу, без ожидания таймера',
+  flushed === true && afterFlush.marks?.wreckfest?.status === 'disliked',
+  `flushed=${flushed}, на сервере ${Object.keys(afterFlush.marks || {}).length} отметок`);
+
+/* ------------------------------------------------------------------ *
  * 6. «Другое устройство»
  * ------------------------------------------------------------------ */
 
-console.log('\n4. Другое устройство (чистый браузер)');
+console.log('\n5. Другое устройство (чистый браузер)');
 window.localStorage.removeItem('gf.profile.v1');
 const token = window.localStorage.getItem('pn.token.v1');
 const { pullProfile, me } = await import('../js/api.js');

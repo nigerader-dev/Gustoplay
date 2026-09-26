@@ -49,11 +49,11 @@ export function render() {
     </header>
 
     <div class="panel legal">
-      ${rows.map(([q, a]) => `<h4>${esc(q)}</h4><p>${esc(a)}</p>`).join('')}
+      ${rows.map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
     </div>
 
     <div class="panel">
-      <h3>${esc(lang === 'ru' ? 'Ещё документы' : 'More documents')}</h3>
+      <h2 class="h-lg">${esc(lang === 'ru' ? 'Ещё документы' : 'More documents')}</h2>
       <p class="muted">${esc(lang === 'ru'
         ? 'Как мы обращаемся с данными — в политике конфиденциальности. Как устроен подбор — в разделе «Как это работает».'
         : 'How we handle data is in the privacy policy. How matching works is explained on the How it works page.')}</p>

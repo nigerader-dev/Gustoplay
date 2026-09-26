@@ -101,23 +101,57 @@ jobs:
       - name: Развёртывание
         run: npm run deploy
 
-      - name: Проверка продакшена (версия сборки)
+      # Версия сборки — единственный надёжный признак «новый сайт уже отдаётся»:
+      # старая версия проходит любую проверку на слово «gustoplay» в HTML.
+      # Раньше сравнивался только apex, а релиз как раз разъезжался между хостами
+      # (www и pages.dev — новый сайт, gustoplay.ru — старый из-за edge-кэша).
+      - name: Проверка продакшена (версия сборки на всех хостах)
         run: |
           expected=$(sed -n "s/.*const CACHE_VERSION = '\([^']*\)'.*/\1/p" dist/sw.js)
           test -n "$expected" || { echo '::error::В dist/sw.js нет CACHE_VERSION'; exit 1; }
           echo "Ожидаемая версия сборки: $expected"
+
+          live_version() {
+            curl -s --max-time 20 -L "$1/sw.js" | sed -n "s/.*const CACHE_VERSION = '\([^']*\)'.*/\1/p"
+          }
+
+          # 1. Apex — обязательный хост: именно он отдавал старый релиз при залепшем кэше.
           for i in 1 2 3 4 5 6; do
-            code=$(curl -s -o /tmp/live.html -w '%{http_code}' --max-time 20 -L https://gustoplay.ru || true)
-            live_version=$(curl -s --max-time 20 https://gustoplay.ru/sw.js | sed -n "s/.*const CACHE_VERSION = '\([^']*\)'.*/\1/p")
-            if [ "$code" = "200" ] && [ "$live_version" = "$expected" ]; then
-              echo "✅ gustoplay.ru отвечает HTTP 200 и содержит актуальную версию $expected"
-              exit 0
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 -L https://gustoplay.ru || true)
+            got=$(live_version https://gustoplay.ru)
+            if [ "$code" = "200" ] && [ "$got" = "$expected" ]; then
+              echo "✅ gustoplay.ru — HTTP 200, версия $expected"
+              apex_ok=1
+              break
             fi
-            echo "Попытка $i: HTTP ${code:-нет ответа}, live=${live_version:-нет версии} — жду 10 секунд"
+            echo "Попытка $i: HTTP ${code:-нет ответа}, live=${got:-нет версии} — жду 10 секунд"
             sleep 10
           done
-          echo "::error::gustoplay.ru не отдал ожидаемую версию $expected (возможен DNS/кэш или незавершённый deploy)."
-          exit 1
+          if [ "${apex_ok:-0}" != "1" ]; then
+            echo "::error::gustoplay.ru не отдал ожидаемую версию $expected (возможен DNS, edge-кэш или незавершённый deploy)."
+            exit 1
+          fi
+
+          # 2. Остальные публичные хосты: расхождение версий — это тот же баг, что был с apex.
+          #    Недоступный хост (например, www ещё не подключён) деплой не роняет.
+          drift=0
+          for host in https://www.gustoplay.ru "${PAGES_URL:-https://gustoplay.pages.dev}"; do
+            got=$(live_version "$host")
+            if [ "$got" = "$expected" ]; then
+              echo "✅ $host — версия $expected"
+            elif [ -z "$got" ]; then
+              echo "::notice::$host не отдал версию сборки (не подключён или недоступен) — пропускаю"
+            else
+              drift=1
+              echo "::warning::$host отдаёт версию $got вместо $expected — проверьте домен и кэш этого хоста"
+            fi
+          done
+          if [ "$drift" = "1" ]; then
+            echo "### ⚠️ Хосты разъехались по версии" >> "$GITHUB_STEP_SUMMARY"
+            echo "apex отдаёт $expected, часть хостов — другую версию. Кэш зоны чистится в tools/deploy-cloudflare.mjs только с правом Zone → Cache Purge (см. docs/DEPLOY.md)." >> "$GITHUB_STEP_SUMMARY"
+            # 3. Повторная очистка кэша зоны — если у токена есть право, она закрывает расхождение.
+            npm run deploy:purge || echo "::warning::повторный purge не выполнен (нет права Zone → Cache Purge?)"
+          fi
 
       - name: Итог
         run: |

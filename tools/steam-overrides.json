@@ -365,11 +365,6 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/447530/library_600x900_2x.jpg",
     "src": "steam"
   },
-  "va-11-hall-a-second-round": {
-    "steamId": 914210,
-    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/914210/library_600x900_2x.jpg",
-    "src": "steam"
-  },
   "valorant": {
     "cover": "https://cmsassets.rgpub.io/sanity/images/dsfx7636/news/1d62a3751be9d7abfce84da8ca89be7d79f07fed-1232x1232.png",
     "src": "riot"

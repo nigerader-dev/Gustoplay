@@ -5,6 +5,8 @@
  * Существующие данные не трогаются — поля дописываются в конец записи.
  *
  *   node tools/apply-content.mjs a
+ *   node tools/apply-content.mjs a --force   # перезаписать существующие about/feats
+ *                                           # значениями из файла контента (для правок текста)
  *
  * Поддерживает оба формата: объектные записи (part-a..d) и однострочные
  * вызовы g(...) (part-e..i, с объектом доп. полей и без него).
@@ -13,6 +15,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 
 const letter = process.argv[2];
+const FORCE = process.argv.includes('--force');
 if (!letter || !/^[a-i]$/.test(letter)) {
   console.error('Использование: node tools/apply-content.mjs <a..i>');
   process.exit(1);
@@ -27,6 +30,50 @@ let src = await readFile(partPath, 'utf8');
 const js = (v) => JSON.stringify(v);
 let applied = 0;
 const problems = [];
+
+
+/**
+ * Границы значения поля в исходнике записи: `about: {…}` / `feats: {…}`.
+ * Считаем вложенность скобок и не трогаем то, что внутри строк — иначе описание
+ * с фигурной скобкой в тексте ломало бы разбор.
+ */
+function fieldRange(text, field) {
+  const key = text.indexOf(`${field}: `);
+  if (key < 0) return null;
+  let i = key + field.length + 2;
+  while (i < text.length && /\s/.test(text[i])) i++;
+  const open = text[i];
+  if (open !== '{' && open !== '[') return null;
+  const close = open === '{' ? '}' : ']';
+  let depth = 0; let inStr = false; let quote = ''; let esc = false;
+  for (let j = i; j < text.length; j++) {
+    const c = text[j];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === quote) inStr = false;
+      continue;
+    }
+    if (c === '"' || c === "'" || c === '`') { inStr = true; quote = c; continue; }
+    if (c === open) depth += 1;
+    else if (c === close) {
+      depth -= 1;
+      if (!depth) return { start: i, end: j + 1 };
+    }
+  }
+  return null;
+}
+
+/** Перезаписать about/feats значениями из файла контента (режим --force) */
+function overwrite(region, entry) {
+  let out = region;
+  for (const [field, value] of [['about', js(entry.about)], ['feats', js(entry.feats)]]) {
+    const range = fieldRange(out, field);
+    if (!range) return null;
+    out = out.slice(0, range.start) + value + out.slice(range.end);
+  }
+  return out;
+}
 
 for (const entry of content) {
   if (!entry.title || !entry.about?.ru || !entry.about?.en || !entry.feats?.ru?.length || !entry.feats?.en?.length) {
@@ -43,7 +90,13 @@ for (const entry of content) {
   if (tIdx >= 0) {
     const endIdx = src.indexOf('\n  },', tIdx);
     if (endIdx < 0) { problems.push(`${entry.slug}: не найден конец записи`); continue; }
-    if (!src.slice(tIdx, endIdx).includes('about:')) {
+    const region = src.slice(tIdx, endIdx);
+    if (FORCE && region.includes('about:')) {
+      const updated = overwrite(region, entry);
+      if (!updated) { problems.push(`${entry.slug}: не удалось разобрать about/feats`); continue; }
+      src = src.slice(0, tIdx) + updated + src.slice(endIdx);
+      applied += 1;
+    } else if (!region.includes('about:')) {
       src = src.slice(0, endIdx) + `\n    about: ${A},\n    feats: ${F},` + src.slice(endIdx);
       applied += 1;
     }
@@ -59,7 +112,14 @@ for (const entry of content) {
   const lineEnd = src.indexOf('\n', gIdx);
   const lineStart = src.lastIndexOf('\n', gIdx) + 1;
   const line = src.slice(lineStart, lineEnd);
-  if (line.includes('about:')) continue; // уже заполнено
+  if (line.includes('about:')) {
+    if (!FORCE) continue;                     // уже заполнено
+    const updated = overwrite(line, entry);
+    if (!updated) { problems.push(`${entry.slug}: не удалось разобрать about/feats`); continue; }
+    src = src.slice(0, lineStart) + updated + src.slice(lineEnd);
+    applied += 1;
+    continue;
+  }
 
   let newLine;
   if (/}, \{/.test(line)) {
@@ -75,7 +135,7 @@ for (const entry of content) {
 }
 
 await writeFile(partPath, src);
-console.log(`part-${letter}: добавлено описаний ${applied} (в батче ${content.length})`);
+console.log(`part-${letter}: ${FORCE ? 'перезаписано' : 'добавлено'} описаний ${applied} (в батче ${content.length})`);
 if (problems.length) {
   console.warn('Проблемы:');
   problems.forEach((m) => console.warn(`  • ${m}`));

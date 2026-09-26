@@ -87,7 +87,7 @@ export const PART_A = [
     md: ['coopOnline', 'coopLocal'], pl: [2, 2], pf: ['pc', 'ps', 'xbox'], pr: 'full', pv: 3990,
     len: [14, 20], dif: 3, pace: 4, rat: 90, mood: ['laugh', 'adrenaline', 'story'], coopQ: 10,
     desc: { ru: 'Две писательницы застревают в своих же мирах — sci-fi и фэнтези переключаются каждые десять минут.', en: 'Two writers trapped in their own worlds, flipping between sci-fi and fantasy every ten minutes.' },
-    about: {"ru":"Кооперативное приключение от создателей It Takes Two: две писательницы — фантастка и фэнтезистка — застревают внутри собственных историй и сбегают из них, чередуя научную фантастику и фэнтези. Игра строго для двоих, с постоянным обменом способностями.","en":"A co-op adventure from the creators of It Takes Two: two writers — one sci-fi, one fantasy — get trapped inside their own stories and escape by leaping between genres. Strictly two players, with constant ability-swapping."},
+    about: {"ru":"Кооперативное приключение от создателей It Takes Two: две писательницы — автор научной фантастики и автор фэнтези — застревают внутри собственных историй и сбегают из них, чередуя научную фантастику и фэнтези. Игра строго для двоих, с постоянным обменом способностями.","en":"A co-op adventure from the creators of It Takes Two: two writers — one sci-fi, one fantasy — get trapped inside their own stories and escape by leaping between genres. Strictly two players, with constant ability-swapping."},
     feats: {"ru":["Новая игра студии Hazelight после It Takes Two и A Way Out","Два переплетающихся жанра: фантастика и фэнтези","Кооп строится на взаимодействии, а не на одинаковых действиях"],"en":["The next game from Hazelight after It Takes Two and A Way Out","Two interwoven genres: sci-fi and fantasy","Co-op built on interaction, not mirrored actions"]},
   },
   {
@@ -114,8 +114,8 @@ export const PART_A = [
     md: ['solo', 'coopOnline', 'coopLocal'], pl: [1, 4], pf: ['pc', 'switch', 'ps', 'xbox'], pr: 'cheap', pv: 800,
     len: [10, 100], dif: 3, pace: 5, rat: 85, mood: ['laugh', 'progress'], coopQ: 9,
     desc: { ru: 'Рогалик-ресторан: 15 дней, растущее меню и автоматизация, которую вы строите вместе.', en: 'A roguelike restaurant: 15 days, a growing menu and automation you build together.' },
-    about: {"ru":"Рогалайк про ресторан: компания готовит блюда, обслуживает гостей и обставляет кухню техникой, а между сменами прокачивает заведение по случайным апгрейдам. Каждый заход уникален — от меню до планировки зала.","en":"A restaurant roguelite: a crew cooks dishes, serves guests and rigs the kitchen with gadgets, choosing random upgrades between shifts. Every run is different, from the menu to the dining-room layout."},
-    feats: {"ru":["Смесь Overcooked и рогалайка: каждая смена не похожа на прошлую","Автоматизация кухни — от блендеров до конвейеров","Кооператив до четырёх человек"],"en":["Overcooked meets roguelite: no two shifts alike","Kitchen automation, from blenders to conveyor belts","Co-op for up to four players"]},
+    about: {"ru":"Рогалик про ресторан: компания готовит блюда, обслуживает гостей и обставляет кухню техникой, а между сменами прокачивает заведение по случайным апгрейдам. Каждый заход уникален — от меню до планировки зала.","en":"A restaurant roguelite: a crew cooks dishes, serves guests and rigs the kitchen with gadgets, choosing random upgrades between shifts. Every run is different, from the menu to the dining-room layout."},
+    feats: {"ru":["Смесь Overcooked и рогалика: каждая смена не похожа на прошлую","Автоматизация кухни — от блендеров до конвейеров","Кооператив до четырёх человек"],"en":["Overcooked meets roguelite: no two shifts alike","Kitchen automation, from blenders to conveyor belts","Co-op for up to four players"]},
   },
   {
     t: 'Cuphead', y: 2017, dev: 'Studio MDHR', gr: ['platformer', 'action'],
@@ -285,7 +285,7 @@ export const PART_A = [
     md: ['solo', 'coopOnline'], pl: [1, 4], pf: ['pc'], pr: 'cheap', pv: 400,
     len: [5, 200], dif: 4, pace: 3, rat: 88, mood: ['laugh', 'scare'], coopQ: 10,
     desc: { ru: 'Сбор металлолома на проклятых планетах: крик в микрофон — это 50% геймплея.', en: 'Scrap collecting on cursed moons where screaming into your mic is 50% of the gameplay.' },
-    about: {"ru":"Кооперативный хоррор-рогалайк о сборщиках металлолома на заброшенных лунах: команда выносит хлам с предприятий, набитых монстрами, и сдаёт его Компании ради плана. Голосовой чат с затуханием по дистанции превращает каждую вылазку в триллер.","en":"A co-op horror roguelike about scrap collectors on abandoned moons: the crew hauls junk out of monster-infested facilities to meet the Company’s quota. Proximity voice chat turns every expedition into a thriller."},
+    about: {"ru":"Кооперативный хоррор-рогалик о сборщиках металлолома на заброшенных лунах: команда выносит хлам с предприятий, набитых монстрами, и сдаёт его Компании ради плана. Голосовой чат с затуханием по дистанции превращает каждую вылазку в триллер.","en":"A co-op horror roguelike about scrap collectors on abandoned moons: the crew hauls junk out of monster-infested facilities to meet the Company’s quota. Proximity voice chat turns every expedition into a thriller."},
     feats: {"ru":["Смешно и страшно одновременно — фирменный тон игры","Голос рядом/далеко создаёт ситуации, которые невозможно срежиссировать","Каждая вылазка короткая, но незабываемая"],"en":["Funny and terrifying at once — the game’s signature tone","Proximity voice creates moments no one could script","Every expedition is short but unforgettable"]},
   },
   {

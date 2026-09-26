@@ -1,0 +1,179 @@
+name: GustoPlay — ссылки на магазины
+
+# Каждая игра должна вести на конкретную страницу игры (Steam или официальный магазин
+# издателя), а не на поиск по названию. Проверка ходит в интернет, поэтому вынесена из
+# основного ci.yml: она идёт по расписанию, при правках каталога, вручную и на PR.
+#
+# Вручную (например, после добавления кандидатов в tools/store-candidates.json):
+#   gh workflow run links.yml -f candidates=tools/store-candidates.json
+# В логе и в сводке прогона появятся блоки STEAM_SUGGESTIONS_JSON / VERIFIED_JSON —
+# это проверенные ссылки, готовые к переносу в данные. Ничего не применяется автоматически.
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidates:
+        description: 'Файл с кандидатами (пусто — проверить текущие данные)'
+        required: false
+        default: ''
+  pull_request:
+    paths:
+      - 'js/catalog/**'
+      - 'tools/store-candidates.json'
+      - 'tools/check-store-links.mjs'
+      - '.github/workflows/links.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'js/catalog/**'
+      - 'tools/store-candidates.json'
+      - 'tools/check-store-links.mjs'
+      - '.github/workflows/links.yml'
+  schedule:
+    - cron: '0 6 * * 1'   # каждый понедельник, 06:00 UTC
+
+jobs:
+  # Строгая проверка: мёртвая ссылка, чужой appid или игра без ссылки — провал.
+  # На PR не запускается, чтобы незаполненные кандидаты не красили пул-реквест.
+  links:
+    if: github.event_name != 'pull_request'
+    name: Ссылки на страницы игр
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+
+      - name: Проверка ссылок
+        env:
+          CANDIDATES: ${{ inputs.candidates }}
+        run: |
+          if [ -n "$CANDIDATES" ]; then
+            node tools/check-store-links.mjs --suggest --candidates="$CANDIDATES" 2>&1 | tee /tmp/links.log
+          else
+            node tools/check-store-links.mjs --suggest 2>&1 | tee /tmp/links.log
+          fi
+          {
+            echo "### Ссылки на магазины"
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Проблемных|Игр без ссылки|✅|❌)' /tmp/links.log | head -40
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  # На PR: проверяем, что все ссылки в данных ведут на конкретные страницы, и отдельно
+  # проверяем заготовленные адреса для игр без Steam (результат — в сводке прогона).
+  candidates:
+    if: github.event_name == 'pull_request'
+    name: Кандидаты магазинов (проверка)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - run: npm ci
+
+      - name: Проверка текущих ссылок
+        continue-on-error: true
+        run: node tools/check-store-links.mjs 2>&1 | tee /tmp/links.log
+
+      - name: Проверка кандидатов
+        continue-on-error: true
+        run: node tools/check-store-links.mjs --candidates=tools/store-candidates.json --suggest 2>&1 | tee /tmp/candidates.log
+
+      - name: Результат в PR (комментарием — логи и артефакты из закрытых сред недоступны)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### Проверка ссылок на магазины (авто)"
+            echo
+            echo '**Текущие данные**'
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Не проверено|Проблемных|Игр без ссылки)' /tmp/links.log || true
+            echo '```'
+            if grep -q 'VERIFIED_JSON' /tmp/candidates.log 2>/dev/null; then
+              echo '<details><summary>Проверенные кандидаты (готовы к переносу в js/catalog/store-links.js)</summary>'
+              echo
+              echo '```json'
+              sed -n '/--- VERIFIED_JSON ---/,/--- END_VERIFIED_JSON ---/p' /tmp/candidates.log
+              echo '```'
+              echo '</details>'
+            fi
+            if grep -q 'STEAM_SUGGESTIONS_JSON' /tmp/candidates.log 2>/dev/null; then
+              echo '<details><summary>Страницы Steam, которых нет в данных</summary>'
+              echo
+              echo '```json'
+              sed -n '/--- STEAM_SUGGESTIONS_JSON ---/,/--- END_STEAM_SUGGESTIONS_JSON ---/p' /tmp/candidates.log
+              echo '```'
+              echo '</details>'
+            fi
+          } > /tmp/comment.md
+          if [ -s /tmp/comment.md ] && [ -n "${{ github.event.number }}" ]; then
+            gh pr comment "${{ github.event.number }}" --body-file /tmp/comment.md || true
+          fi
+
+      - name: Результат в аннотациях проверки
+        if: always()
+        run: |
+          # Аннотации видны через API проверки даже когда логи и артефакты прогона
+          # лежат в недоступном из закрытых сред хранилище.
+          emit() {
+            local label="$1" file="$2" start="$3" end="$4"
+            if [ ! -s "$file" ]; then return; fi
+            local json
+            json=$(sed -n "/$start/,/$end/p" "$file" | tr -d '\n')
+            if [ -n "$json" ]; then
+              echo "::notice title=$label::$json"
+            fi
+          }
+          # GitHub режет сообщение аннотации на 4096 символах, поэтому крупные
+          # блоки (список проверенных ссылок) отдаём частями: PART_1_OF_3 и т.д.
+          # tools/pull-store-links.mjs склеивает части обратно по заголовкам.
+          emit_chunked() {
+            local label="$1" file="$2" start="$3" end="$4"
+            if [ ! -s "$file" ]; then return; fi
+            local json
+            # маркеры блока в части не кладём: клиент склеивает части и оборачивает
+            # их сам, иначе внутри JSON остаются строки «--- VERIFIED_JSON ---»
+            json=$(sed -n "/$start/,/$end/p" "$file" | sed '1d;$d' | tr -d '\n')
+            if [ -z "$json" ]; then return; fi
+            local size=3000 total i
+            total=$(( (${#json} + size - 1) / size ))
+            for ((i = 1; i <= total; i++)); do
+              echo "::notice title=${label}_PART_${i}_OF_${total}::${json:$(( (i - 1) * size )):$size}"
+            done
+          }
+          emit_chunked "VERIFIED_JSON" /tmp/candidates.log "--- VERIFIED_JSON ---" "--- END_VERIFIED_JSON ---"
+          emit "WRONG_STEAM_JSON" /tmp/links.log "--- WRONG_STEAM_JSON ---" "--- END_WRONG_STEAM_JSON ---"
+          emit "REJECTED_JSON" /tmp/candidates.log "--- REJECTED_JSON ---" "--- END_REJECTED_JSON ---"
+          emit "STEAM_SUGGESTIONS_JSON" /tmp/candidates.log "--- STEAM_SUGGESTIONS_JSON ---" "--- END_STEAM_SUGGESTIONS_JSON ---"
+          if [ -s /tmp/links.log ]; then
+            echo "::notice title=LINK_TOTALS::$(grep -aE '^(Мёртвых|Подозрительных|Предложений|Не проверено|Проблемных|Игр без ссылки)' /tmp/links.log | tr '\n' '|')"
+          fi
+
+      - name: Сводка
+        run: |
+          {
+            echo "### Текущие ссылки"
+            echo '```'
+            grep -E '^(Мёртвых|Подозрительных|Предложений|Не проверено|Проблемных|Игр без ссылки)' /tmp/links.log || true
+            echo '```'
+            echo "### Проверенные кандидаты (готовы к переносу в данные)"
+            echo '```json'
+            sed -n '/VERIFIED_JSON/,/END_VERIFIED_JSON/p' /tmp/candidates.log || true
+            echo '```'
+            echo "### Страницы Steam, которых нет в данных"
+            echo '```json'
+            sed -n '/STEAM_SUGGESTIONS_JSON/,/END_STEAM_SUGGESTIONS_JSON/p' /tmp/candidates.log || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

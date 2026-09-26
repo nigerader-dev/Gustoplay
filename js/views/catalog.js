@@ -184,7 +184,7 @@ export function render(ctx) {
 
       <div class="catalog-main">
         <div class="catalog-topbar">
-          <strong id="catalog-found">${esc(tp('catalog.found', found.length))}</strong>
+          <h2 id="catalog-found" class="h-base">${esc(tp('catalog.found', found.length))}</h2>
           ${activeChips.length ? `<div class="chips-cloud small">${activeChips.map(chipHtml).join('')}</div>` : ''}
         </div>
 

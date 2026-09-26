@@ -115,7 +115,7 @@ export default [
   {
     slug: 'split-fiction', title: 'Split Fiction',
     about: {
-      ru: 'Кооперативное приключение от создателей It Takes Two: две писательницы — фантастка и фэнтезистка — застревают внутри собственных историй и сбегают из них, чередуя научную фантастику и фэнтези. Игра строго для двоих, с постоянным обменом способностями.',
+      ru: 'Кооперативное приключение от создателей It Takes Two: две писательницы — автор научной фантастики и автор фэнтези — застревают внутри собственных историй и сбегают из них, чередуя научную фантастику и фэнтези. Игра строго для двоих, с постоянным обменом способностями.',
       en: 'A co-op adventure from the creators of It Takes Two: two writers — one sci-fi, one fantasy — get trapped inside their own stories and escape by leaping between genres. Strictly two players, with constant ability-swapping.',
     },
     feats: {
@@ -148,11 +148,11 @@ export default [
   {
     slug: 'plateup', title: 'PlateUp!',
     about: {
-      ru: 'Рогалайк про ресторан: компания готовит блюда, обслуживает гостей и обставляет кухню техникой, а между сменами прокачивает заведение по случайным апгрейдам. Каждый заход уникален — от меню до планировки зала.',
+      ru: 'Рогалик про ресторан: компания готовит блюда, обслуживает гостей и обставляет кухню техникой, а между сменами прокачивает заведение по случайным апгрейдам. Каждый заход уникален — от меню до планировки зала.',
       en: 'A restaurant roguelite: a crew cooks dishes, serves guests and rigs the kitchen with gadgets, choosing random upgrades between shifts. Every run is different, from the menu to the dining-room layout.',
     },
     feats: {
-      ru: ['Смесь Overcooked и рогалайка: каждая смена не похожа на прошлую', 'Автоматизация кухни — от блендеров до конвейеров', 'Кооператив до четырёх человек'],
+      ru: ['Смесь Overcooked и рогалика: каждая смена не похожа на прошлую', 'Автоматизация кухни — от блендеров до конвейеров', 'Кооператив до четырёх человек'],
       en: ['Overcooked meets roguelite: no two shifts alike', 'Kitchen automation, from blenders to conveyor belts', 'Co-op for up to four players'],
     },
   },
@@ -346,7 +346,7 @@ export default [
   {
     slug: 'lethal-company', title: 'Lethal Company',
     about: {
-      ru: 'Кооперативный хоррор-рогалайк о сборщиках металлолома на заброшенных лунах: команда выносит хлам с предприятий, набитых монстрами, и сдаёт его Компании ради плана. Голосовой чат с затуханием по дистанции превращает каждую вылазку в триллер.',
+      ru: 'Кооперативный хоррор-рогалик о сборщиках металлолома на заброшенных лунах: команда выносит хлам с предприятий, набитых монстрами, и сдаёт его Компании ради плана. Голосовой чат с затуханием по дистанции превращает каждую вылазку в триллер.',
       en: 'A co-op horror roguelike about scrap collectors on abandoned moons: the crew hauls junk out of monster-infested facilities to meet the Company’s quota. Proximity voice chat turns every expedition into a thriller.',
     },
     feats: {

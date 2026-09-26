@@ -18,7 +18,7 @@
  *   CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... npm run deploy
  *   npm run deploy:check        # проверка готовности: без сети и без публикации
  *
- * Флаги: --check, --no-build (не пересобирать сайт), --skip-turnstile.
+ * Флаги: --check, --purge (только очистить edge-кэш зоны), --no-build (не пересобирать сайт), --skip-turnstile.
  *
  * Токен: панель Cloudflare → My Profile → API Tokens → Create Token.
  * Нужны права: Account → Workers Scripts → Edit, Account → D1 → Edit,
@@ -37,6 +37,7 @@ const tomlPath = join(workerDir, 'wrangler.toml');
 const devVarsPath = join(workerDir, '.dev.vars');
 
 const checkOnly = process.argv.includes('--check');
+const purgeOnly = process.argv.includes('--purge');
 const skipBuild = process.argv.includes('--no-build');
 const skipTurnstile = process.argv.includes('--skip-turnstile');
 
@@ -213,6 +214,43 @@ if (checkOnly) {
     notes.forEach((n) => console.log(`   • ${n}`));
   }
   console.log(problems.length ? `\n❌ Проблем: ${problems.length}\n` : '\n✅ Проверка пройдена — можно запускать npm run deploy\n');
+  process.exit(problems.length ? 1 : 0);
+}
+
+/* ------------------------------------------------------------------ *
+ * Только очистка кэша: npm run deploy:purge
+ * ------------------------------------------------------------------ *
+ * Нужна, когда сайт уже опубликован, но какой-то хост держит старую версию —
+ * ровно тот баг, из-за которого apex отдавал прошлый релиз. Требует право
+ * Zone → Cache Purge (docs/DEPLOY.md).
+ */
+if (purgeOnly) {
+  step('Очищаю edge-кэш зоны');
+  if (!DOMAIN) bad('домен не задан в js/config.js — очищать нечего');
+  if (!token) bad('нужна переменная CLOUDFLARE_API_TOKEN');
+  if (!/^[0-9a-f-]{32,36}$/i.test(accountId)) bad('нужна переменная CLOUDFLARE_ACCOUNT_ID (Account ID из панели)');
+
+  if (problems.length) {
+    problems.forEach((p) => console.log(`   • ${p}`));
+    process.exit(1);
+  }
+
+  const zones = await cfZone(`/zones?name=${encodeURIComponent(DOMAIN)}`);
+  const zone = zones.result?.[0];
+  if (!zone) {
+    bad(`зона ${DOMAIN} не найдена в аккаунте — домен обслуживается другим аккаунтом?`);
+  } else {
+    const purged = await cfZone(`/zones/${zone.id}/purge_cache`, {
+      method: 'POST',
+      body: { purge_everything: true },
+    });
+    if (purged.ok) ok(`кэш зоны ${DOMAIN} очищен — новые запросы идут в Pages`);
+    else bad(`не удалось очистить кэш: ${purged.errors?.[0]?.message || `HTTP ${purged.status}`}`);
+  }
+
+  console.log(problems.length
+    ? '\n❌ Не получилось. Проверьте право Zone → Cache Purge у токена (docs/DEPLOY.md)\n'
+    : `\n✅ Готово. Проверьте версию сборки: curl -s https://${DOMAIN}/sw.js | grep CACHE_VERSION\n`);
   process.exit(problems.length ? 1 : 0);
 }
 

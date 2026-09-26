@@ -9,17 +9,17 @@ import { SITE } from '../config.js';
 const FAQ = {
   ru: [
     ['Почему вы предлагаете именно эти игры?', 'Каждая игра получает скор из совпадений по настроению, жанрам, тегам и режимам, плюс качество, длина и цена. Отдельные веса у ваших отметок «играл / понравилось / не понравилось». Логика полностью видна в карточке — блок «Почему подходит».'],
-    ['Как работают отметки игр?', '«Понравилось» усиливает теги, жанры и настроения этой игры, а «не понравилось» — ослабляет. Отметка «играл» просто убирает игру из выдачи, «хочу сыграть» поднимает в начало. Пересчёт мгновенный и обратимы — можно снять отметку.'],
+    ['Как работают отметки игр?', '«Понравилось» усиливает теги, жанры и настроения этой игры, а «не понравилось» — ослабляет. Отметка «играл» убирает игру из выдачи, «хочу сыграть» поднимает её в начало. Пересчёт мгновенный, и его всегда можно отменить — достаточно снять отметку.'],
     ['Нужна ли регистрация?', 'Нет. Профиль вкуса хранится в localStorage браузера. На другом устройстве можно выгрузить профиль в JSON и вставить его там же.'],
     ['Как часто обновляется каталог?', 'Мы добавляем новые игры и правим теги каждую неделю. Если игры не хватает — напишите нам, мы поставим её в приоритет.'],
-    ['Вы получаете деньги за рекомендации?', 'Нет. Рекомендации строит алгоритм, рекламные блоки помечены и не влияют на выдачу. Магазины мы показываем нейтрально: обычные ссылки на поиск, без накрутки позиций.'],
+    ['Вы получаете деньги за рекомендации?', 'Нет. Рекомендации строит алгоритм, рекламные блоки помечены и не влияют на выдачу. В блоке покупки — только прямые ссылки: страница игры в Steam или официальный магазин издателя, без перепродавцов и накрутки позиций.'],
   ],
   en: [
     ['Why are these games recommended?', 'Each game gets a score from mood, genre, tag and mode matches plus quality, length and price. Your marks carry separate weights. Everything is visible in the "Why it fits" block.'],
     ['How do marks work?', 'Liked strengthens that game\u2019s tags, genres and moods; disliked weakens them. Played hides a game, wishlist pushes it up. Recalculation is instant and reversible.'],
     ['Do I need an account?', 'No. Your taste profile lives in browser localStorage and can be exported as JSON to move to another device.'],
     ['How often is the catalog updated?', 'We add games and fix tags weekly. Missing a game? Tell us and we will prioritise it.'],
-    ['Do you get paid for recommendations?', 'No. Recommendations are algorithmic, ad blocks are labelled and do not affect results. Store links are neutral search links.'],
+    ['Do you get paid for recommendations?', 'No. Recommendations are algorithmic, ad blocks are labelled and do not affect results. The buy block shows direct links only: the game’s page in Steam or the publisher’s official store — no resellers, no paid placement.'],
   ],
 };
 
@@ -66,13 +66,13 @@ export function render(ctx) {
     <div class="cols-2">
       ${blocks.map(([key, iconName]) => `<div class="col">
         <div class="col-icon">${icon(iconName)}</div>
-        <h3>${esc(t(`${key}.title`))}</h3>
+        <h2 class="h-lg">${esc(t(`${key}.title`))}</h2>
         <p>${esc(t(`${key}.text`))}</p>
       </div>`).join('')}
     </div>
 
     <div class="panel">
-      <h3>${lang === 'ru' ? 'Частые вопросы' : 'FAQ'}</h3>
+      <h2 class="h-lg">${lang === 'ru' ? 'Частые вопросы' : 'FAQ'}</h2>
       <div class="faq">
         ${(FAQ[lang] || FAQ.ru).map(([q, a]) => `<details>
           <summary>${esc(q)}</summary>
@@ -82,7 +82,7 @@ export function render(ctx) {
     </div>
 
     <div class="panel">
-      <h3>${esc(t('about.missing.title'))}</h3>
+      <h2 class="h-lg">${esc(t('about.missing.title'))}</h2>
       <p>${esc(t('about.missing.text'))}</p>
       <p class="muted">${(Object.keys(GENRES).length)} ${lang === 'ru' ? 'жанров' : 'genres'} · ${Object.keys(TAGS).length} ${lang === 'ru' ? 'тегов' : 'tags'} · ${Object.keys(MOODS).length} ${lang === 'ru' ? 'настроений' : 'moods'}</p>
     </div>
@@ -91,8 +91,8 @@ export function render(ctx) {
     ${houseAd()}
 
     <div class="panel legal" id="privacy">
-      <h3>${lang === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}</h3>
-      ${PRIVACY[lang].map(([q, a]) => `<h4>${esc(q)}</h4><p>${esc(a)}</p>`).join('')}
+      <h2 class="h-lg">${lang === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}</h2>
+      ${PRIVACY[lang].map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
     </div>
 
     <section class="section">
@@ -124,7 +124,7 @@ function renderPrivacy(lang) {
       <p class="muted">${esc(SITE.name)} · ${esc(SITE.email)}</p>
     </header>
     <div class="panel legal" id="privacy">
-      ${PRIVACY[lang].map(([q, a]) => `<h4>${esc(q)}</h4><p>${esc(a)}</p>`).join('')}
+      ${PRIVACY[lang].map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
     </div>
     <p class="muted">${esc(tail)}</p>
     ${houseAd()}

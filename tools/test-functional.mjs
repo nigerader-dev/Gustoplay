@@ -47,6 +47,7 @@ const quizDef = await import('../js/quiz.js');
 const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
+const { GAMES } = await import('../js/catalog/index.js');
 await import('../js/app.js');
 
 async function navigate(route) {
@@ -130,7 +131,9 @@ console.log('\n3. Квиз: живой счётчик и проход до ре�
 store.resetProfile();
 await navigate('quiz');
 const pool0 = poolNum();
-check('счётчик пула показывает весь каталог', pool0 === 437, String(pool0));
+// число игр берём из каталога, а не константой: каталог меняется (одна выдуманная
+// запись удалена — см. docs/FIX-PLAN.md), и тест не должен падать из-за этого
+check('счётчик пула показывает весь каталог', pool0 === GAMES.length, `${pool0} при каталоге ${GAMES.length}`);
 clickAll('.opt', 2); await wait(15);
 check('счётчик пересчитался после ответов', poolNum() >= 0 && poolNum() <= pool0, String(poolNum()));
 // отвечаем на всё подряд и доходим до результатов
@@ -183,6 +186,29 @@ check('возврат в квиз продолжает с players, а не сн�
     (window.document.querySelector('#quiz-progress-label')?.textContent || '').includes('0'));
 }
 
+/* ---------------- 4b. Главная: возврат к своим результатам ---------------- */
+store.resetProfile();
+await navigate('');
+check('на пустом профиле главная не показывает блок «продолжить»',
+  count('.continue') === 0 && count('.hero') === 1);
+store.setAnswers({ mood: ['relax'], modes: ['solo'], players: 1 });
+await navigate('quiz');
+await navigate('');
+check('после частичных ответов главная предлагает продолжить подбор',
+  count('.continue') === 1 && /продолжить/i.test(text()), text().replace(/\s+/g, ' ').slice(0, 90));
+store.setAnswers({
+  mood: ['relax'], modes: ['solo'], players: 1, platforms: ['pc'], time: 'short',
+  difficulty: ['normal'], genres: ['rpg'], vibes: ['cozy'], priority: ['story'],
+  novelty: 'new', price: 'free', avoid: ['grind'], seed: ['balatro'],
+});
+store.setMeta({ completedAt: Date.now() });
+await navigate('quiz');
+await navigate('');
+check('после пройденного квиза главная ведёт к результатам',
+  count('.continue') === 1 && /готов/i.test(text()),
+  text().replace(/\s+/g, ' ').slice(0, 90));
+store.resetProfile();
+
 /* ============================ 5. Результаты ============================ */
 console.log('\n5. Результаты: отметки, переключатели, пересчёт');
 store.resetProfile();
@@ -217,11 +243,22 @@ click('[data-action="show-more"]');
 await wait(40);
 check('«показать ещё» догружает карточки', count('.game-card') > cardsBefore,
   `${cardsBefore} → ${count('.game-card')}`);
-// отметка на странице результатов → плашка пересчёта
-window.document.querySelector('[data-action="mark"][data-status="liked"]')
+// отметка на странице результатов → список пересчитывается сразу
+const topBefore = [...window.document.querySelectorAll('.game-card')].map((c) => c.dataset.slug).slice(0, 6).join(',');
+const markedSlug = window.document.querySelector('[data-action="mark"][data-status="liked"]')?.dataset.slug;
+window.document.querySelector(`[data-action="mark"][data-status="liked"][data-slug="${markedSlug}"]`)
   ?.dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
-await wait(30);
-check('отметка вызывает плашку «пересчитать»', count('.refresh-pill') === 1);
+await wait(40);
+const topAfter = [...window.document.querySelectorAll('.game-card')].map((c) => c.dataset.slug).slice(0, 6).join(',');
+check('отметка на странице подбора пересчитывает список на ходу', topBefore !== topAfter,
+  `${topBefore} → ${topAfter}`);
+check('пересчёт подтверждается сообщением', count('.refresh-pill') === 1);
+check('сообщение о пересчёте не перехватывает клики', (() => {
+  const pill = window.document.querySelector('.refresh-pill');
+  return Boolean(pill) && pill.getAttribute('role') === 'status';
+})());
+await wait(2800);
+check('сообщение само убирается и не залипает', count('.refresh-pill') === 0);
 
 /* ============================ 6. Каталог ============================ */
 console.log('\n6. Каталог: фильтры, поиск, сортировка, пагинация');
@@ -310,8 +347,19 @@ check('экспорт — валидный JSON с отметками',
 store.resetProfile();
 check('импорт битого JSON отклоняется и не трёт данные',
   store.importProfile('{oops') === false && Object.keys(store.getProfile().marks).length === 0);
-check('импорт восстанавливает профиль', store.importProfile(exported) === true
+check('импорт восстанавливает профиль', store.importProfile(exported)?.ok === true
   && store.getMark('balatro') === 'liked');
+check('импорт не стирает отметки, уже стоящие в браузере', (() => {
+  store.markGame('celeste', 'played');
+  const res = store.importProfile(JSON.stringify({ marks: { hades: { status: 'liked', ts: Date.now() } }, meta: {} }));
+  return res?.ok === true && store.getMark('celeste') === 'played'
+    && store.getMark('hades') === 'liked' && store.getMark('balatro') === 'liked';
+})());
+check('старый формат импорта (без полей) не ломает профиль', (() => {
+  const res = store.importProfile(JSON.stringify({ marks: {} }));
+  return res?.ok === true && store.getMark('balatro') === 'liked';
+})());
+store.resetProfile();
 await navigate('profile');
 click('[data-action="mark-remove"]');
 await wait(40);
@@ -533,9 +581,9 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
   check('другой seed → другие баллы',
     r1.list.map((x) => x.score.toFixed(3)).join(',') !== r3.list.map((x) => x.score.toFixed(3)).join(','));
   check('у топа есть объяснения «почему»', r1.list[0]?.why?.length > 0);
-  check('пул меньше каталога при фильтрах', r1.poolSize > 0 && r1.poolSize < 437, String(r1.poolSize));
+  check('пул меньше каталога при фильтрах', r1.poolSize > 0 && r1.poolSize < GAMES.length, String(r1.poolSize));
   const empty = eng.recommend({ answers: {}, marks: {}, impressions: {} }, { limit: 12, seed: 1 });
-  check('пустой профиль даёт полный пул без падений', empty.poolSize === 437 && empty.list.length > 0);
+  check('пустой профиль даёт полный пул без падений', empty.poolSize === GAMES.length && empty.list.length > 0);
   const weird = eng.recommend(
     { answers: { modes: ['mmo'], players: 8, time: 'tiny', price: 'free' }, marks: { 'no-such-game': { status: 'liked', ts: 1 } }, impressions: {} },
     { limit: 12, seed: 1 },
@@ -605,6 +653,110 @@ console.log('\n13. Мобильный UI: бургер-меню и панель 
   await navigate('genre/rpg');
   check('пресетный чип без крестика (снять его нельзя)',
     count('[data-action="f-remove"]') === 0 && count('.chip-active') >= 1);
+}
+
+/* ============ 14. Устойчивость: профиль из localStorage со скалярами ============ */
+console.log('\n14. Битый профиль (строки вместо массивов) не роняет страницы');
+{
+  const legacy = {
+    answers: { modes: 'coop', mood: 'relax', platforms: 'pc', genres: ['rpg'], avoid: 'endless', difficulty: 'easy' },
+    marks: {}, impressions: {},
+  };
+
+  const list = quizDef.answerList('coop');
+  check('answerList превращает скаляр в массив', Array.isArray(list) && list[0] === 'coop');
+  check('answerList оставляет пустоту пустой',
+    quizDef.answerList(undefined).length === 0 && quizDef.answerList(null).length === 0 && quizDef.answerList('').length === 0);
+  check('MULTI_KEYS покрывает все мульти-вопросы квиза',
+    quizDef.MULTI_KEYS.length === quizDef.QUESTIONS.filter((q) => q.type === 'multi').length
+    && quizDef.MULTI_KEYS.includes('modes') && quizDef.MULTI_KEYS.includes('genres'));
+  const normalized = quizDef.normalizeAnswers(legacy.answers);
+  check('normalizeAnswers приводит все мульти-ответы к массивам',
+    Array.isArray(normalized.modes) && Array.isArray(normalized.mood) && Array.isArray(normalized.avoid)
+    && Array.isArray(normalized.platforms) && Array.isArray(normalized.difficulty),
+    JSON.stringify(normalized.modes));
+
+  const r = eng.recommend(legacy, { limit: 12, seed: 3 });
+  check('движок считает подбор по такому профилю', Array.isArray(r.list) && r.list.length > 0, `пул: ${r.poolSize}`);
+  check('жёсткие фильтры не падают на строках', eng.hardFilter(GAMES[0], legacy) === true || eng.hardFilter(GAMES[0], legacy) === false);
+  check('строковые ответы всё ещё фильтруют (coop отсекает соло-игры)',
+    eng.hardFilter(GAMES.find((g) => g.modes.includes('solo') && !g.modes.some((m) => m.startsWith('coop'))), legacy) === false);
+  check('веса считаются по строкам', Object.keys(eng.computeWeights(legacy).mood).length > 0);
+  check('«Мой вкус» рисует строковые ответы', quizDef.summarize(legacy.answers).length >= 4);
+  check('ветвление квиза терпит строковый modes',
+    quizDef.visibleQuestions({ modes: 'coop', players: 2 }).some((q) => q.id === 'company'));
+
+  // тот же путь, которым профиль попадает из localStorage: свежий модуль store
+  const raw = JSON.stringify(legacy);
+  window.localStorage.setItem('gf.profile.v1', raw);
+  const fresh = await import('../js/store.js?legacy=1');
+  check('store нормализует профиль, прочитанный из localStorage',
+    Array.isArray(fresh.getProfile().answers.modes) && fresh.getProfile().answers.modes[0] === 'coop');
+
+  // и рендер страниц: раньше здесь был белый экран с TypeError
+  // (для страницы «Мой вкус» нужен пройденный квиз: иначе она честно показывает пустое состояние)
+  store.replaceProfile({ ...legacy, meta: { completedAt: 1 } });
+  await navigate('results');
+  check('страница «Результаты» открывается с битым профилем',
+    count('#app .header') === 1 && count('.game-card') > 0, `карточек: ${count('.game-card')}`);
+  await navigate('profile');
+  check('страница «Мой вкус» открывается с битым профилем',
+    count('#app .header') === 1 && text().includes('Вместе с друзьями'), '');
+  await navigate('quiz');
+  check('квиз открывается с битым профилем', count('.quiz-card') === 1 && count('.opt') > 0);
+  store.resetProfile();
+}
+
+/* ============ 15. Эмодзи в интерфейсе: только иконки из icons.js ============ */
+console.log('\n15. Иконки вместо эмодзи в интерфейсе');
+{
+  // Пиктографические эмодзи в тексте интерфейса запрещены: иконки — только контурные SVG
+  // из js/icons.js. Типографика (©, ®, ™, стрелки, средняя точка) под правило не попадает:
+  // это знаки оформления, а не эмодзи, и они используются в подвале и текстах.
+  const TYPO = new Set(['©', '®', '™']);
+  const EMOJI = /\p{Extended_Pictographic}/u;
+  const firstEmoji = (text) => [...text].find((ch) => EMOJI.test(ch) && !TYPO.has(ch)) || null;
+  const found = [];
+  const scan = (where, value) => {
+    if (typeof value !== 'string') return;
+    const ch = firstEmoji(value);
+    if (ch) found.push(`${where}: «${value.slice(0, 60)}» (${ch})`);
+  };
+
+  // 1) строки интерфейса в обоих языках
+  for (const [lang, dict] of Object.entries(i18n.STRINGS)) {
+    for (const [key, value] of Object.entries(dict)) scan(`i18n.${lang}.${key}`, value);
+  }
+  // 2) контент каталога, который видит пользователь
+  for (const g of GAMES) {
+    scan(`catalog.${g.slug}.desc`, g.desc?.ru);
+    scan(`catalog.${g.slug}.desc`, g.desc?.en);
+    scan(`catalog.${g.slug}.about`, g.about?.ru);
+    scan(`catalog.${g.slug}.about`, g.about?.en);
+    for (const f of g.feats?.ru || []) scan(`catalog.${g.slug}.feats`, f);
+    for (const f of g.feats?.en || []) scan(`catalog.${g.slug}.feats`, f);
+  }
+  check('в строках i18n и контенте каталога нет эмодзи', found.length === 0,
+    found.slice(0, 3).join(' | ') || `${Object.keys(i18n.STRINGS).length} языка, ${GAMES.length} игр`);
+
+  // 3) отрисованные страницы: эмодзи не должны появляться и после подстановок
+  const emojiInPage = [];
+  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms']) {
+    await navigate(route);
+    const text = window.document.body.textContent || '';
+    const ch = firstEmoji(text);
+    if (ch) emojiInPage.push(`${route || 'home'} → «${text.slice(0, 40).trim()}…» (${ch})`);
+  }
+  check('на отрисованных страницах нет эмодзи', emojiInPage.length === 0,
+    emojiInPage.slice(0, 2).join(' | ') || '8 маршрутов');
+
+  // 4) иконки в разметке — это SVG из icons.js, а не текстовые символы
+  // (главная — пустой путь: 'home' роутером не разбирается и давал страницу «не найдено»)
+  await navigate('');
+  const icons = [...window.document.querySelectorAll('svg.icon')];
+  check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
+  check('у SVG-иконок нет текстовых эмодзи внутри',
+    icons.every((svg) => !firstEmoji(svg.textContent || '')));
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);

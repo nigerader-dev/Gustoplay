@@ -6,7 +6,7 @@
  * Запуск: npm run test:a11y
  */
 import { JSDOM } from 'jsdom';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -67,6 +67,32 @@ for (const r of routes) {
   if (h1 !== 1) h1bad.push(`${r || '/'}:${h1}`);
 }
 check('ровно один h1 на каждой странице', h1bad.length === 0, h1bad.join(' ') || `${routes.length} маршрутов`);
+// Порядок заголовков: уровни не должны перескакивать (Lighthouse heading-order).
+// Раньше на каждой странице было h1 → h3 (карточки) и h2 → h4 (подвал).
+const orderBad = [];
+for (const r of routes) {
+  await navigate(r);
+  const levels = [...window.document.querySelectorAll('#app h1, #app h2, #app h3, #app h4, #app h5, #app h6')]
+    .map((h) => Number(h.tagName[1]));
+  let prev = 0;
+  for (const l of levels) {
+    if (prev && l > prev + 1) { orderBad.push(`${r || '/'}:${prev}→${l}`); break; }
+    prev = l;
+  }
+}
+check('уровни заголовков не перескакивают на всех страницах', orderBad.length === 0,
+  orderBad.join(' ') || `${routes.length} маршрутов`);
+// Имя ссылки-обложки должно содержать видимый текст (WCAG 2.5.3 Label in Name):
+// внутри ссылки оценки и число игроков, а aria-label был только с названием игры.
+await navigate('catalog');
+const cover = window.document.querySelector('.card-cover');
+const coverName = cover?.getAttribute('aria-label') || '';
+const coverVisible = cover?.textContent.replace(/\s+/g, ' ').trim() || '';
+const visibleParts = coverVisible.match(/\d+|\d+–\d+/g) || [];
+check('имя ссылки-обложки включает видимый текст',
+  !cover || visibleParts.every((part) => coverName.includes(part)),
+  cover ? `aria-label «${coverName.slice(0, 60)}»` : 'нет карточек');
+
 await navigate('/');
 check('html lang соответствует языку', window.document.documentElement.lang === 'ru');
 check('skip-link на месте', count('a.skip[href="#main"]') === 1);
@@ -150,6 +176,8 @@ const pairs = [
   ['--text-muted', '--bg-elevated'], ['--accent', '--bg'], ['--accent', '--accent-soft'],
   ['--accent-text', '--accent'], ['--warn', '--warn-soft'], ['--danger', '--danger-soft'],
   ['--danger', '--bg-elevated'], ['--success', '--bg-elevated'], ['--success', '--success-soft'],
+  // блок рекламы: подпись и текст на «утопленном» фоне (Lighthouse нашёл 4.24 при пороге 4.5)
+  ['--text-soft', '--bg-sunken'], ['--text-muted', '--bg-sunken'],
 ];
 for (const theme of ['light', 'dark']) {
   const bad = [];
@@ -158,6 +186,29 @@ for (const theme of ['light', 'dark']) {
     if (r < 4.5) bad.push(`${fg.replace('--', '')}/${bg.replace('--', '')}=${r.toFixed(2)}`);
   }
   check(`контрасты темы ${theme}`, bad.length === 0, bad.join(' ') || `${pairs.length} пар`);
+}
+
+/* ------------------------------------------------------------------ *
+ * Заголовки в исходниках: открывающий и закрывающий теги одного уровня
+ * ------------------------------------------------------------------ */
+
+// Регресс: в кабинете было <h2 ...>…</h3> — браузер «чинил» разметку сам,
+// и уровень заголовка на странице отличался от задуманного.
+{
+  const files = ['js/app.js', ...readdirSync(resolve(root, 'js/views')).map((f) => `js/views/${f}`)];
+  const broken = [];
+  for (const file of files) {
+    const text = readFileSync(resolve(root, file), 'utf8');
+    const re = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h([1-6])>/g;
+    let match;
+    while ((match = re.exec(text))) {
+      if (match[1] !== match[3]) {
+        const line = text.slice(0, match.index).split('\n').length;
+        broken.push(`${file}:${line} h${match[1]}→h${match[3]}`);
+      }
+    }
+  }
+  check('уровень заголовка совпадает с закрывающим тегом', broken.length === 0, broken.join(', '));
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);

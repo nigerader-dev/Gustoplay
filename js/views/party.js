@@ -47,9 +47,9 @@ export function render(ctx) {
       <p>${esc(t('party.subtitle'))}</p>
     </header>
     ${form}
-    <div class="notice">${icon('target')} ${esc(tp('party.result', games.length, { n: players, m: games.length }))}
-      ${localCoop ? `<span class="dot-sep">•</span> ${localCoop} ${esc(tl(MODES, 'coopLocal')).toLowerCase()}` : ''}
-    </div>
+    <h2 class="notice h-base">${icon('target')} ${esc(tp('party.result', games.length, { n: players, m: games.length }))}
+      ${localCoop ? `<span class="dot-sep">•</span> ${esc(tp('party.coopLine', localCoop, { n: localCoop }))}` : ''}
+    </h2>
     ${games.length
       ? cardsGrid(games, { marks: getProfile().marks })
       : emptyState(t('results.empty'), t('party.localHint'), `<a class="btn btn-primary" href="#/catalog?coopLocal=1" data-action="nav">${esc(tl(MODES, 'coopLocal'))}</a>`)}

@@ -145,7 +145,14 @@ console.log('\n6. Страница игры');
 await navigate('game/it-takes-two');
 check('заголовок игры на месте', text().includes('It Takes Two'));
 check('есть блок похожих игр', text().includes('Похожие игры'));
-check('есть ссылки в магазины', count('.stores a') >= 2);
+// Регресс: кнопка «Открыть в Steam» раньше вела на поиск по названию,
+// потому что каталог читал appid из сырой записи (он там отсутствует — приходит из steam-covers.js)
+const storeHrefs = [...window.document.querySelectorAll('.stores a')].map((a) => a.getAttribute('href'));
+check('есть ссылка в магазин', storeHrefs.length >= 1, storeHrefs.length ? storeHrefs[0] : 'нет ссылок');
+check('нет поисковых ссылок-заглушек', !storeHrefs.some((h) => /\/search\?/.test(h || '')), storeHrefs.join(' '));
+check('ссылка в Steam ведёт на страницу игры',
+  !storeHrefs.some((h) => /store\.steampowered\.com/.test(h || '') && !/\/app\/\d+\/?$/.test(h || '')),
+  storeHrefs.find((h) => /store\.steampowered\.com/.test(h || '')) || 'ссылки в Steam нет');
 check('есть JSON-LD для поисковиков', !!window.document.head.querySelector('script[data-gf-jsonld]'));
 
 console.log('\n7. Компания');

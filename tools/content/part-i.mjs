@@ -200,18 +200,7 @@ export default [
       en: ['A gothic plot spanning eras', 'Themes of acceptance and compassion', 'Top ratings from players on every platform'],
     },
   },
-  {
-    slug: 'va-11-hall-a-second-round', title: 'Va-11 Hall-A: Second Round',
-    about: {
-      ru: 'Продолжение новеллы о баре Валхалла: барменша Джилл снова смешивает напитки и слушает истории жителей киберпанк-города. Та же тёплая подача, те же разговоры, что важнее любых выборов.',
-      en: 'A sequel to the VA-11 HALL-A novel: bartender Jill again mixes drinks and listens to the stories of the cyberpunk city’s residents. The same warm tone, the same conversations that matter more than any choice.',
-    },
-    feats: {
-      ru: ['Возвращение любимого бара и героев', 'Диалоги важнее любых выборов', 'Атмосфера киберпанка без насилия'],
-      en: ['The return of the beloved bar and cast', 'Dialogue over any choice', 'Cyberpunk atmosphere without violence'],
-    },
-  },
-  {
+    {
     slug: 'project-sekai-colorful-stage', title: 'Project Sekai: Colorful Stage!',
     about: {
       ru: 'Ритм-игра с песнями вокалоидов и живыми группами: пять ансамблей со своими историями и десятки треков разной сложности. От авторов Хатсунэ Мику — с кооперативом и событиями.',

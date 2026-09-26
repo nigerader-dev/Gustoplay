@@ -52,7 +52,10 @@ export const ratingPill = (game) => {
 export const priceLabel = (game) => {
   if (game.price === 'free') return `<span class="price price-free">${esc(t('game.free'))}</span>`;
   const label = tl(PRICE, game.price);
-  return `<span class="price">${esc(label)}${game.priceRub ? ` · ~${game.priceRub} ₽` : ''}</span>`;
+  // Две части одним span'ом рвались на узкой карточке: «2500 ₽ и / выше · / ~3900 ₽».
+  // Разделяем — перенос тогда идёт между частями, а не внутри числа с ценой.
+  const rub = game.priceRub ? `<span class="price-rub">· ~${game.priceRub} ₽</span>` : '';
+  return `<span class="price">${esc(label)}</span>${rub}`;
 };
 
 export const lengthLabel = (game) => {
@@ -77,12 +80,18 @@ export const meters = (game) => `
 
 export function coverImage(game, cls = 'cover-img') {
   const generated = coverDataUri(game);
-  // Основной источник — официальный арт магазина (сопоставление в js/catalog/steam-covers.js).
-  // Если владелец положил локальные арты в /covers/<slug>.jpg (FEATURES.realCovers),
-  // они в приоритете. Сгенерированная обложка — запасная: битая ссылка, офлайн, игра без арта.
-  const src = game.cover || (FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated);
-  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900"
-    onerror="this.onerror=null;this.src=this.dataset.fallback">`;
+  // Порядок источников обложки:
+  //   1) официальный арт магазина (сопоставление в js/catalog/steam-covers.js);
+  //   2) если включён FEATURES.realCovers — файл владельца /covers/<slug>.jpg идёт первым,
+  //      а арт магазина остаётся первой ступенью отката;
+  //   3) сгенерированная обложка — последняя ступень (битая ссылка, офлайн, игра без арта).
+  // Если файла владельца нет, картинка тихо откатывается на арт магазина и генерацию:
+  // раньше в этом случае показывался сломанный значок изображения.
+  const shop = game.cover || '';
+  const local = `covers/${game.slug}.jpg`;
+  const src = FEATURES.realCovers ? local : (shop || generated);
+  const fallback = FEATURES.realCovers ? (shop || generated) : generated;
+  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -98,21 +107,23 @@ export function gameCard(game, opts = {}) {
 
   return `
   <article class="card game-card" data-slug="${game.slug}">
-    <a class="card-cover" href="#/game/${game.slug}" data-action="nav" aria-label="${esc(game.t)}">
-      ${coverImage(game)}
+    <div class="card-cover-wrap">
+      <a class="card-cover" href="#/game/${game.slug}" data-action="nav" aria-label="${esc(game.t)}">
+        ${coverImage(game)}
+      </a>
       ${ratingPill(game)}
       <div class="card-cover-meta">
         <span class="cover-badge">${icon(MODES[game.modes[0]]?.icon)} ${playersLabel(game)}</span>
       </div>
-    </a>
+    </div>
     <div class="card-body">
       <h3 class="card-title"><a href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a></h3>
       <div class="card-sub">
         <span>${game.y}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
       </div>
       <div class="card-chips">${genreChips(game, 2)}${tagChips(game, 2)}</div>
-      ${why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
-      ${whyHtml}
+      ${FEATURES.scoreDebug && why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
+      ${FEATURES.scoreDebug ? whyHtml : ''}
       <div class="card-foot">
         ${priceLabel(game)}
         <span class="len">${icon('clock')} ${lengthLabel(game)}</span>
@@ -137,12 +148,15 @@ export function markButtons(slug, status = null) {
     { id: 'played', icon: 'controller', label: t('mark.played'), tip: t('mark.played.tip') },
     { id: 'liked', icon: 'heart', label: t('mark.liked'), tip: t('mark.liked.tip') },
     { id: 'disliked', icon: 'minusCircle', label: t('mark.disliked'), tip: t('mark.disliked.tip') },
-    { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: '' },
+    { id: 'wishlist', icon: 'bookmark', label: t('mark.wishlist'), tip: t('mark.wishlist.tip') },
   ];
+  // title — нативная подсказка: не влияет на раскладку (кнопки не «скачут» под курсором)
+  // и не обрезается границами карточки. Текст внутри <span> даёт кнопке доступное имя.
   return `<div class="marks" data-slug="${slug}">
     <span class="marks-label">${esc(t('results.mark'))}:</span>
     ${items.map((i) => `<button type="button" class="mark ${status === i.id ? 'on' : ''}"
-      data-action="mark" data-slug="${slug}" data-status="${i.id}" title="${esc(i.tip || i.label)}"
+      data-action="mark" data-slug="${slug}" data-status="${i.id}"
+      title="${esc(i.tip ? `${i.label} — ${i.tip}` : i.label)}"
       aria-pressed="${status === i.id}">${icon(i.icon)} <span>${esc(i.label)}</span></button>`).join('')}
   </div>`;
 }
@@ -235,7 +249,7 @@ export const breadcrumbs = (items) => `<nav class="crumbs">${items
 export const emptyState = (title, text, cta = '', iconName = 'search') => `
   <div class="empty">
     <div class="empty-icon">${icon(iconName)}</div>
-    <h3>${esc(title)}</h3>
+    <h2 class="h-lg">${esc(title)}</h2>
     <p>${esc(text)}</p>
     ${cta}
   </div>`;
@@ -246,15 +260,22 @@ export const sectionTitle = (title, subtitle = '') => `
     ${subtitle ? `<p>${esc(subtitle)}</p>` : ''}
   </header>`;
 
+/**
+ * Где купить. Только конкретные страницы: страница игры в Steam (если она есть)
+ * и официальный магазин/сайт издателя. Поисковых ссылок-заглушек и сторонних
+ * перепродавцов здесь нет — если конкретной страницы нет, кнопка не показывается.
+ */
 export const storeLinks = (game) => {
-  const steam = `${game.links.steam}${SITE.affiliates.steam}`;
-  const ig = `${game.links.instantGaming}${SITE.affiliates.instantGaming}`;
-  const official = game.links.official
-    ? `<a class="btn btn-ghost" href="${esc(game.links.official)}" target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t('game.official'))}</a>`
-    : '';
-  return `<div class="stores">
-    <a class="btn btn-ghost" href="${steam}" target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>
-    ${official}
-    <a class="btn btn-ghost" href="${ig}" target="_blank" rel="noopener nofollow">${icon('tag')} ${esc(t('game.instant'))}</a>
-  </div>`;
+  const buttons = [];
+  // game.links.steam === null у игр без страницы в Steam (Nintendo, мобильные, Battle.net):
+  // раньше в этом случае подставлялся поиск по названию — вместо него официальный магазин
+  if (game.links.steam) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.steam)}${SITE.affiliates.steam}"
+      target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>`);
+  }
+  if (game.links.official) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.official)}"
+      target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t(game.links.officialLabel || 'game.official'))}</a>`);
+  }
+  return buttons.length ? `<div class="stores">${buttons.join('')}</div>` : '';
 };

@@ -14,12 +14,23 @@ const CACHE_VERSION = 'v1';
 const STATIC_CACHE = `pn-static-${CACHE_VERSION}`;
 const PAGE_CACHE = `pn-pages-${CACHE_VERSION}`;
 
-const PRECACHE = ['/', '/quiz', '/catalog', '/manifest.webmanifest', '/css/styles.css'];
+/**
+ * Базовый путь деплоя берём из адреса самого воркера: он лежит в <base>/sw.js.
+ * При выкладке в подпапку (GitHub Pages) жёсткие '/quiz' и '/' указывали бы на
+ * чужой корень — предзагрузка молча падала, а офлайн-переход отдавал пустоту
+ * или главную чужого сайта.
+ */
+const BASE = self.location.pathname.replace(/\/sw\.js$/, '');
+const withBase = (path) => `${BASE}${path}`;
+
+const PRECACHE = ['/', '/quiz', '/catalog', '/manifest.webmanifest', '/css/styles.css'].map(withBase);
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((cache) => cache.addAll(PRECACHE).catch(() => undefined))
+      // Кэшируем по одному файлу: раньше addAll падал целиком из-за одного
+      // недоступного адреса, и офлайн-режим оставался пустым — «сайт не работает без сети».
+      .then((cache) => Promise.all(PRECACHE.map((url) => cache.add(url).catch(() => undefined))))
       .then(() => self.skipWaiting()),
   );
 });
@@ -36,7 +47,9 @@ self.addEventListener('activate', (event) => {
 
 const isStatic = (url) => /\.(css|js|mjs|png|jpg|jpeg|svg|webp|woff2?|ico)$/i.test(url.pathname);
 const isHtml = (request) => request.mode === 'navigate' || (request.headers.get('accept') || '').includes('text/html');
-const isApi = (url) => url.pathname.startsWith('/api/');
+// API считаем и при выкладке в подпапку (<base>/api/...): иначе ответы сервера
+// попадали в кэш страниц и профиль «не обновлялся» до полной очистки кэша.
+const isApi = (url) => url.pathname === `${BASE}/api` || url.pathname.startsWith(`${BASE}/api/`);
 
 self.addEventListener('fetch', (event) => {
   const { request } = event;
@@ -71,7 +84,7 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => caches.match(request).then((cached) => cached || caches.match('/'))),
+        .catch(() => caches.match(request).then((cached) => cached || caches.match(withBase('/')))),
     );
   }
 });

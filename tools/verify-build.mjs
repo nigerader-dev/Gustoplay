@@ -18,7 +18,7 @@
  */
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join, relative } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -51,9 +51,11 @@ const urlOf = (file) => {
   return `/${rel}`.replace(/\/$/, '/') || '/';
 };
 
-// Адрес сайта и базовый путь — из собранного конфига (истина в последней инстанции)
-const distConfig = readFileSync(join(dist, 'js/config.js'), 'utf8');
-const cfgUrl = /url:\s*'([^']*)'/.exec(distConfig)?.[1] || '';
+// Адрес сайта и базовый путь — из собранного конфига (истина в последней инстанции).
+// Читаем импортом, а не регуляркой по тексту: сборка минифицирует JS, и любой
+// текстовый разбор сломался бы при смене кавычек или порядка полей.
+const { SITE: distSite } = await import(pathToFileURL(join(dist, 'js', 'config.js')).href);
+const cfgUrl = String(distSite?.url || '');
 const siteUrl = cfgUrl.replace(/\/+$/, '');
 const styleOn = cfgUrl.endsWith('/');
 const normalizeBaseLocal = (raw) => {
@@ -61,7 +63,7 @@ const normalizeBaseLocal = (raw) => {
   if (!b || b === '/') return '';
   return (b.startsWith('/') ? b : `/${b}`).replace(/\/+$/, '');
 };
-let siteBase = normalizeBaseLocal(/(?:^|\n)\s*base:\s*'([^']*)'/.exec(distConfig)?.[1] || '');
+let siteBase = normalizeBaseLocal(distSite?.base || '');
 if (!siteBase && cfgUrl) {
   try {
     const p = new URL(cfgUrl).pathname;
@@ -186,6 +188,29 @@ for (const file of sample) {
   if (title.length < 6 || !/<h1/.test(html)) withoutTitle += 1;
 }
 check('страницы игр содержат JSON-LD', withoutJsonLd === 0, `проверено ${sample.length}`);
+// Минификация: аудит Lighthouse на собранном сайте показывал 21 КиБ лишнего
+// в CSS и 70 КиБ в JS — файлы уезжали как есть. Теперь build сжимает их,
+// и здесь проверяется, что сжатие не потерялось.
+{
+  const srcCss = readFileSync(resolve(root, 'css/styles.css'), 'utf8').length;
+  const distCssPath = resolve(dist, 'css/styles.css');
+  const distCss = existsSync(distCssPath) ? readFileSync(distCssPath, 'utf8').length : 0;
+  check('CSS собран сжатым', distCss > 0 && distCss < srcCss * 0.85, `${Math.round(distCss / 1024)} КиБ из ${Math.round(srcCss / 1024)} КиБ`);
+
+  const jsFiles = [];
+  const walkJs = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const full = resolve(dir, e.name);
+      if (e.isDirectory()) walkJs(full);
+      else if (e.name.endsWith('.js')) jsFiles.push(full);
+    }
+  };
+  if (existsSync(resolve(dist, 'js'))) walkJs(resolve(dist, 'js'));
+  const distJs = jsFiles.reduce((n, f) => n + readFileSync(f, 'utf8').length, 0);
+  const srcJs = jsFiles.reduce((n, f) => n + readFileSync(resolve(root, 'js', f.slice(resolve(dist, 'js').length + 1)), 'utf8').length, 0);
+  check('JS собран сжатым', distJs > 0 && distJs < srcJs * 0.95, `${Math.round(distJs / 1024)} КиБ из ${Math.round(srcJs / 1024)} КиБ`);
+}
+
 check('страницы игр содержат заголовок и <h1>', withoutTitle === 0, `проверено ${sample.length}`);
 check('игр в сборке столько же, сколько в каталоге', gameFiles.length > 400, `${gameFiles.length} страниц игр`);
 
