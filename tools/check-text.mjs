@@ -234,6 +234,11 @@ const PATTERNS = [
 ];
 
 console.log(`Проверяю ${items.length} текстов…\n`);
+// Язык поля известен из его пути (`каталог:balatro:about.en`), поэтому проверяем
+// и смешение языков: в английском тексте не должно быть кириллицы, в русском —
+// латинских слов (кроме названий игр и аббревиатур).
+const CYR = /[\u0400-\u04FF]/;
+const langOf = (where) => (/[:.](en|ru)(?:[:.\-]|$)/.exec(where) || [])[1] || '';
 for (const { where, text } of items) {
   for (const rule of RULES) {
     if (rule.test(text)) report(rule.name, where, text, rule.detail ? rule.detail(text) : '');
@@ -241,6 +246,9 @@ for (const { where, text } of items) {
   for (const [re, hint] of PATTERNS) {
     if (re.test(text)) report('частая ошибка', where, text, `${hint} — «${(text.match(re) || [''])[0]}»`);
   }
+  const lang = langOf(where);
+  if (lang === 'en' && CYR.test(text)) report('кириллица в английском тексте', where, text);
+  if (lang === 'ru' && !CYR.test(text) && text.length > 30) report('русский текст без кириллицы', where, text);
 }
 
 /* --------------------------- словари ---------------------------- */
