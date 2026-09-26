@@ -185,8 +185,10 @@ check('отчёт считает покрытие по всему каталог
 check('приложения без требований перечислены строками MISS',
   /^MISS /m.test(report) && !/^MISS (deep-rock-galactic|helldivers-2|left-4-dead-2|warhammer-end-times-vermintide-2) /m.test(report),
   `${(report.match(/^MISS /gm) || []).length} строк MISS`);
-check('отчёт не содержит ошибок сети', /Ответы с ошибкой сети\/HTTP \(appid\|язык\|причина\): 0/.test(report),
-  (report.split('\n').find((l) => l.startsWith('Ответы с ошибкой')) || '').slice(0, 80));
+check('отчёт не содержит ошибок сети', /Запросов, которые не прошли \(сеть\/HTTP\/разбор JSON\): 0/.test(report),
+  (report.split('\n').find((l) => l.startsWith('Запросов, которые не прошли')) || '').slice(0, 80));
+check('отчёт объясняет, как получены требования',
+  /Как получены: /.test(report), (report.split('\n').find((l) => l.startsWith('Как получены')) || '').slice(0, 100));
 
 console.log('\n4. Разбор русских и английских страниц по отдельности');
 const { parseSteamRequirements } = await import('../tools/pull-system-requirements.mjs');

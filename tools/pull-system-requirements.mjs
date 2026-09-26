@@ -370,7 +370,6 @@ async function main() {
   const collected = {};
   const misses = [];
   const mismatches = [];
-  const unreadable = [];
   const diagnostics = [];
   const reasons = {};
   const how = {};
@@ -463,8 +462,7 @@ async function main() {
     'Причины: ' + (Object.entries(reasons).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
     'Как получены: ' + (Object.entries(how).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
     ...diagnostics,
-    `Ответы с ошибкой сети/HTTP (appid|язык|причина): ${unreadable.length}`,
-    ...unreadable.slice(0, 40).map((u) => `ERR ${u}`),
+    `Запросов, которые не прошли (сеть/HTTP/разбор JSON): ${reasons['запрос не прошёл'] || 0}`,
     ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
     ...mismatches.map((m) => `LANG ${m}`),
     'Минимальные и рекомендуемые есть у: ' + Object.values(merged).filter((e) => e.min && e.rec).length,
