@@ -33,9 +33,14 @@ const APPLY = args.includes('--apply');
 
 const gh = (path) => JSON.parse(execFileSync('gh', ['api', path], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
 
-/** Блок --- NAME --- … --- END_NAME --- из лога прогона */
+/**
+ * Блок --- NAME --- … --- END_NAME --- из лога прогона.
+ * В аннотациях проверки переводы строк приходят либо как есть, либо схлопнутыми
+ * (`%0A` или вовсе без них) — разбираем все три вида.
+ */
 function block(text, name) {
-  const m = new RegExp(`--- ${name} ---\\n([\\s\\S]*?)\\n--- END_${name} ---`).exec(text);
+  const flat = text.replace(/%0A/g, '\n');
+  const m = new RegExp(`--- ${name} ---\\s*([\\s\\S]*?)\\s*--- END_${name} ---`).exec(flat);
   if (!m) return null;
   try { return JSON.parse(m[1]); } catch { return null; }
 }
@@ -56,7 +61,9 @@ function logFromRun(runId) {
     if (job.conclusion === 'skipped') continue;
     try {
       const list = gh(`repos/${repo}/check-runs/${job.id}/annotations`);
-      for (const a of list) parts.push(`--- ${a.title} ---\n${a.message}\n--- END_${a.title} ---`);
+      // сообщение уже содержит маркеры блока (workflow их печатает), поэтому
+      // оборачивать его второй раз нельзя — иначе парсер поймает пустое начало
+      for (const a of list) parts.push(a.message);
     } catch { /* у job без аннотаций запрос тоже отвечает пустым списком */ }
   }
   console.log(`Прогон ${run}: аннотаций ${parts.length}\n`);
