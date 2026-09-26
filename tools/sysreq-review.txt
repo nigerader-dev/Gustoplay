@@ -1,0 +1,43 @@
+Требования к ПК: 401 из 401 игр со steamId
+Состояние после прохода 3
+Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
+Данные не получены (нет pc_requirements или запрос не прошёл): 0
+Причины: нет
+Как получены: первый проход — 469 | повторный проход (2) — 219 | повторный проход (3) — 82
+По проходам: проход 1 — 250 игр | проход 2 — 110 игр | проход 3 — 41 игр
+Запросов, которые не прошли (сеть/HTTP/разбор JSON): 0
+LANG dead-by-daylight: язык магазина отдал данные только на en
+LANG cyberpunk-2077: язык магазина отдал данные только на en
+LANG grand-theft-auto-v: язык магазина отдал данные только на en
+LANG the-sims-4: язык магазина отдал данные только на en
+LANG farming-simulator-25: язык магазина отдал данные только на en
+LANG forza-horizon-5: язык магазина отдал данные только на en
+LANG warhammer-40-000-space-marine-2: язык магазина отдал данные только на ru
+LANG peak: язык магазина отдал данные только на ru
+LANG marvel-rivals: язык магазина отдал данные только на en
+LANG escape-from-tarkov: язык магазина отдал данные только на ru
+LANG hunt-showdown-1896: язык магазина отдал данные только на ru
+LANG ready-or-not: язык магазина отдал данные только на ru
+LANG risk-of-rain-2: язык магазина отдал данные только на ru
+LANG fallout-4: язык магазина отдал данные только на en
+LANG fallout-76: язык магазина отдал данные только на en
+LANG dying-light-2-stay-human: язык магазина отдал данные только на en
+LANG enshrouded: язык магазина отдал данные только на en
+LANG icarus: язык магазина отдал данные только на en
+LANG core-keeper: язык магазина отдал данные только на en
+LANG escape-simulator: язык магазина отдал данные только на en
+LANG watch-dogs-2: язык магазина отдал данные только на en
+LANG five-nights-at-freddys-security-breach: язык магазина отдал данные только на en
+LANG the-mortuary-assistant: язык магазина отдал данные только на en
+LANG fields-of-mistria: язык магазина отдал данные только на en
+LANG half-life: язык магазина отдал данные только на ru
+LANG heroes-of-might-and-magic-iii: язык магазина отдал данные только на ru
+LANG beamng-drive: язык магазина отдал данные только на ru
+LANG cookie-clicker: язык магазина отдал данные только на en
+LANG tabletop-simulator: язык магазина отдал данные только на en
+LANG black-desert-online: язык магазина отдал данные только на ru
+LANG path-of-exile: язык магазина отдал данные только на en
+LANG afterimage: язык магазина отдал данные только на en
+Минимальные и рекомендуемые есть у: 347
+Только минимальные: 54
+Только рекомендуемые: 0

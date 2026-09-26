@@ -133,6 +133,66 @@ function restoreBackup(label, intoArg) {
   console.log('   скрипт специально не перезаписывает текущие файлы.');
 }
 
+/* ------------------------------------------------------------------ *
+ * Связь с origin: сеть и токены могут отваливаться в самый неудачный
+ * момент (в этой сессии связь с GitHub обрывалась трижды). Коммит не должен
+ * из-за этого теряться или падать «non-fast-forward», если на ветку успел
+ * лечь авто-коммит бота (резолверы обложек и требований коммитят сами).
+ * ------------------------------------------------------------------ */
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const trySh = (cmd, args, opts = {}) => {
+  try { return { ok: true, out: sh(cmd, args, opts) }; } catch (e) {
+    return { ok: false, out: `${e.stdout || ''}${e.stderr || e.message}` };
+  }
+};
+
+/** Тихо забирает origin/<branch> в refs/remotes. Сеть может не ответить — это не смертельно. */
+function fetchOrigin(branch) {
+  const res = trySh('git', ['fetch', 'origin', `${branch}:refs/remotes/origin/${branch}`]);
+  return res.ok;
+}
+
+/** Подтягивает работу, которая успела уйти на сервер: сначала fast-forward, потом rebase. */
+function syncWithRemote(branch) {
+  if (!fetchOrigin(branch)) {
+    console.log('  ⚠️  origin недоступен — продолжаю с локальной историей (данные не потеряются: есть бэкап)');
+    return false;
+  }
+  const remote = trySh('git', ['rev-parse', `origin/${branch}`]);
+  if (!remote.ok) return true; // ветки на сервере ещё нет — это нормально для новой ветки
+
+  const ff = trySh('git', ['merge', '--ff-only', `origin/${branch}`]);
+  if (ff.ok) return true;
+
+  console.log('  • на сервере есть новые коммиты — переношу свои поверх (git rebase)');
+  const rebase = trySh('git', ['rebase', `origin/${branch}`]);
+  if (rebase.ok) return true;
+
+  trySh('git', ['rebase', '--abort']);
+  console.error('❌ Не удалось совместить локальные коммиты с origin (конфликт).');
+  console.error('   Разберите конфликт вручную: git rebase origin/' + branch);
+  return false;
+}
+
+/** Пуш с повторами: обрыв сети или авто-коммит бота не должны стоить работы. */
+async function pushWithRetry(branch, tries = 4) {
+  for (let attempt = 1; attempt <= tries; attempt += 1) {
+    const res = trySh('git', ['push', 'origin', branch], { stdio: ['ignore', 'pipe', 'pipe'] });
+    if (res.ok) return true;
+    const reason = /non-fast-forward|fetch first|rejected/i.test(res.out) ? 'на сервере новые коммиты'
+      : (/could not read Username|authentication|403|401/i.test(res.out) ? 'нет доступа к GitHub'
+        : 'сеть не ответила');
+    console.log(`  ⚠️  пуш не прошёл (${reason}), попытка ${attempt}/${tries}`);
+    if (attempt === tries) break;
+    if (reason === 'на сервере новые коммиты') syncWithRemote(branch);
+    else await sleep(3000 * attempt);
+  }
+  return false;
+}
+
+/* ------------------------------------------------------------------ */
+
 function showStatus() {
   const branch = sh('git', ['rev-parse', '--abbrev-ref', 'HEAD']).trim();
   const head = sh('git', ['rev-parse', 'HEAD']).trim();
@@ -152,7 +212,7 @@ function showStatus() {
  * Защита сработала в реальности: git add -A на неполном рабочем дереве однажды
  * закоммитил удаление 70 файлов.
  */
-function safeCommit(message, allowDelete) {
+async function safeCommit(message, allowDelete) {
   if (!message) die('нужно сообщение коммита: npm run commit -- "сообщение"');
   createBackup();
 
@@ -176,8 +236,15 @@ function safeCommit(message, allowDelete) {
   sh('git', ['commit', '-m', message]);
   ok(`коммит создан: ${sh('git', ['rev-parse', '--short', 'HEAD']).trim()}`);
   const branch = sh('git', ['rev-parse', '--abbrev-ref', 'HEAD']).trim();
-  sh('git', ['push', 'origin', branch], { stdio: 'inherit' });
-  ok(`отправлено в origin/${branch}`);
+
+  // Сначала догоняем сервер (туда мог лечь авто-коммит резолвера), потом отправляем.
+  syncWithRemote(branch);
+  if (await pushWithRetry(branch)) ok(`отправлено в origin/${branch}`);
+  else {
+    console.error('❌ Пуш не удался, но коммит и бэкап на месте.');
+    console.error(`   Отправить позже: git push origin ${branch}   (или npm run commit -- --push-only)`);
+    process.exit(1);
+  }
 }
 
 /* ------------------------------------------------------------------ */
@@ -201,7 +268,7 @@ switch (command) {
   case 'verify': verifyBackup(args[0]); break;
   case 'restore': restoreBackup(args[0], flags.find((f) => f.startsWith('--into='))?.slice(7)); break;
   case 'status': showStatus(); break;
-  case 'commit': safeCommit(args[0], flags.includes('--allow-delete')); break;
+  case 'commit': await safeCommit(args[0], flags.includes('--allow-delete')); break;
   default:
     console.log(`Использование: node tools/backup.mjs ${'{backup|list|verify|restore|status|commit "сообщение"}'}`);
     process.exit(command ? 1 : 0);

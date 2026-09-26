@@ -222,8 +222,12 @@ export function mount(root) {
   root.querySelector('#catalog-sort')?.addEventListener('change', (e) => updateQuery({ sort: e.target.value }));
 }
 
-/** Обновляет фильтры в адресе — таблица перерисовывается роутером */
-export function updateQuery(patch) {
+/**
+ * Обновляет фильтры в адресе — таблица перерисовывается роутером.
+ * keepScroll: true — не менять позицию прокрутки (пагинация «Показать ещё»).
+ * Смена фильтров этим флагом не пользуется: там возврат наверх ожидаем.
+ */
+export function updateQuery(patch, { keepScroll = false } = {}) {
   const [path, queryString = ''] = currentPath().split('?');
   const params = new URLSearchParams(queryString);
   for (const [key, value] of Object.entries(patch)) {
@@ -232,7 +236,7 @@ export function updateQuery(patch) {
   }
   const next = `${path}${params.toString() ? `?${params.toString()}` : ''}`;
   if (next === currentPath()) window.dispatchEvent(new CustomEvent('gf:rerender'));
-  else navigate(next, { replace: true });
+  else navigate(next, { replace: true, keepScroll });
 }
 
 /** Общая точка для чипов-переключателей каталога (вызывается изapp.js) */

@@ -21,7 +21,9 @@ export const SITE = {
   // Базовый путь деплоя: '' — корень домена, '/mydev' — подпапка (GitHub Pages).
   // Пусто — выводится из pathname у url. Заполняется сборкой флагом --site-url/--base.
   base: '',
-  email: 'hello@gustoplay.ru',
+  // Основная почта сайта: поддержка, фидбек, сообщения об ошибках и вопросы по игре.
+  // Показывается в подвале, в FAQ «Как это работает», в политике и в условиях.
+  email: 'gustoplaysupport@gmail.com',
   telegram: 'https://t.me/+K915edYs7C1iNTEy',
   languages: ['ru', 'en'],
   defaultLang: 'ru',

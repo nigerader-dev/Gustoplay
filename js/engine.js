@@ -621,8 +621,14 @@ function explain(item, profile, weights) {
   return out.slice(0, 4);
 }
 
-/** Пул по «компании»: во что поиграть вместе */
-export function recommendForParty({ players = 2, platforms = [], freeOnly = false, limit = 8, seed = 7, lang = 'ru' }) {
+/**
+ * Пул по «компании»: во что поиграть вместе.
+ *
+ * Возвращает весь подходящий пул в порядке релевантности (limit — необязательный
+ * потолок для вызовов извне). Раньше вид жёстко просил 24 игры и не показывал
+ * остальные: на вкладке «На компанию» игр было ровно 24 при 100+ подходящих.
+ */
+export function recommendForParty({ players = 2, platforms = [], freeOnly = false, limit = Infinity, seed = 7, lang = 'ru' }) {
   const pool = GAMES.filter((g) => {
     if (g.players[1] < players) return false;
     const team = g.modes.some((m) => ['coopOnline', 'coopLocal', 'pvpOnline', 'pvpLocal', 'mmo'].includes(m));

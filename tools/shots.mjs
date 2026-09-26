@@ -2,8 +2,11 @@
  * Визуальный QA в реальном браузере: скриншоты всех страниц на контрольных
  * ширинах + замеры (горизонтальное переполнение, консоль, h1, alt, тач-цели).
  * Требует puppeteer с браузером (npm i -D puppeteer && npx puppeteer install chrome)
- * и сам поднимает dev-сервер на свободном порту. Без браузера — вежливый пропуск
- * (exit 0), чтобы не краснить CI там, где браузера нет.
+ * и сам поднимает dev-сервер на свободном порту. Браузер берётся так: переменная
+ * PUPPETEER_EXECUTABLE_PATH → браузер из песочницы (/tmp/gustoplay-qa-bin/chromium) →
+ * системный Chrome (/usr/bin/google-chrome — так в CI). Если браузера нет вовсе —
+ * вежливый пропуск (exit 0), но при GUSTOPLAY_REQUIRE_BROWSER=1 (CI) пропуск становится
+ * ошибкой, чтобы зелёный шаг не выглядел выполненной проверкой.
  *
  * Запуск: npm run test:visual [-- --widths=360,768,1440 --theme=dark --shots=all --dir=dist]
  * Критерии провала: страница прокручивается по горизонтали, нет ровно одного h1,
@@ -22,6 +25,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
+import { browserOptions, browserSource, browserSkip } from './qa-browser.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -36,8 +40,7 @@ let puppeteer;
 try {
   puppeteer = (await import('puppeteer')).default;
 } catch {
-  console.log('SKIP test:visual — puppeteer не установлен (нужен Chrome; см. шапку файла)');
-  process.exit(0);
+  browserSkip('test:visual', 'puppeteer не установлен (нужен Chrome; см. шапку tools/shots.mjs)');
 }
 
 const WIDTHS = String(args.widths || '360,768,1024,1440,1920').split(',').map(Number);
@@ -106,11 +109,10 @@ let externalNotes = 0;
 let browser;
 try {
   await waitServer();
-  browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-dev-shm-usage'] });
+  browser = await puppeteer.launch(browserOptions());
 } catch (e) {
   server.kill();
-  console.log(`SKIP test:visual — браузер недоступен (${String(e.message || e).slice(0, 120)})`);
-  process.exit(0);
+  browserSkip('test:visual', `браузер недоступен (${String(e.message || e).slice(0, 120)})`);
 }
 
 mkdirSync(OUT, { recursive: true });
@@ -266,15 +268,9 @@ if (INTERACTION) {
   console.log('\n=== Интерактивные проверки (hover, шторка, сдвиги) ===');
   let ib = null;
   try {
-    ib = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox', '--disable-dev-shm-usage',
-        // «есть мышь и она умеет hover» + «точный указатель» — без этого медиазапросы
-        // hover/pointer ведут себя как на тачскрине и баг не ловится
-        '--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4',
-      ],
-    });
+    // hover:true добавляет ключи «есть мышь и она умеет hover» + «точный указатель»:
+    // без них медиазапросы hover/pointer ведут себя как на тачскрине и баг не ловится
+    ib = await puppeteer.launch(browserOptions({ hover: true }));
   } catch (e) {
     console.log(`  SKIP интерактивных проверок — браузер недоступен (${String(e.message || e).slice(0, 100)})`);
   }
@@ -681,6 +677,48 @@ if (INTERACTION) {
       else if (nav.btnBottom && nav.btnBottom > nav.vh + 1) markBad(`@${width}: кнопка панели квиза обрезана (${nav.btnBottom} при ${nav.vh})`);
       else if (nav.alpha < 1 && nav.backdrop === 'none') markBad(`@${width}: панель квиза просвечивает без размытия (фон ${nav.bg})`);
       else markOk(`@${width}: панель квиза липнет к низу (${nav.top}…${nav.bottom} при ${nav.vh}), фон ${nav.backdrop === 'none' ? 'сплошной' : 'с размытием'}`);
+      await page.close();
+    }
+
+    /* --- И. «Показать ещё» не уводит страницу наверх (каталог и «Компания») --- */
+    // Жалоба пользователя: нажатие кнопки внизу списка возвращало в самый верх
+    // документа. Проверяем позицию прокрутки до и после нажатия: разметка выше
+    // кнопки не меняется, поэтому страница обязана остаться на месте.
+    for (const [width, route, pool] of [
+      [360, '/catalog', false], [1440, '/catalog', false],
+      [360, '/party?players=2&platforms=pc&free=1', true], [1440, '/party?players=2&platforms=pc&free=1', true],
+    ]) {
+      const page = await newPage(width);
+      await goto(page, route);
+      await page.waitForSelector('[data-action="show-more"]', { timeout: 5000 }).catch(() => {});
+      const before = await page.evaluate(() => {
+        const btn = document.querySelector('[data-action="show-more"]');
+        if (!btn) return null;
+        btn.scrollIntoView({ block: 'center' });
+        return { cards: document.querySelectorAll('.game-card').length, label: btn.textContent.trim().slice(0, 30) };
+      });
+      if (!before) { markBad(`@${width} ${route}: кнопки «Показать ещё» нет`); await page.close(); continue; }
+      // У страницы `scroll-behavior: smooth`: прокрутку к кнопке надо дождаться,
+      // иначе «до» замеряется посреди анимации и тест ловит собственный сдвиг.
+      const settled = async () => {
+        let last = -1;
+        for (let i = 0; i < 25; i += 1) {
+          const y = await page.evaluate(() => Math.round(window.scrollY));
+          if (y === last) return y;
+          last = y;
+          await new Promise((r) => setTimeout(r, 100));
+        }
+        return last;
+      };
+      const yBefore = await settled();
+      await page.evaluate(() => document.querySelector('[data-action="show-more"]').click());
+      await new Promise((r) => setTimeout(r, 300));
+      const yAfter = await settled();
+      const after = { y: yAfter, cards: await page.evaluate(() => document.querySelectorAll('.game-card').length) };
+      const name = pool ? '«Компания»' : 'каталог';
+      if (after.cards <= before.cards) markBad(`@${width} ${name}: «Показать ещё» не добавило карточек (${before.cards} → ${after.cards})`);
+      else if (Math.abs(after.y - yBefore) > 2) markBad(`@${width} ${name}: прокрутка уехала при «Показать ещё» (${yBefore} → ${after.y})`);
+      else markOk(`@${width} ${name}: «Показать ещё» добавило карточки (${before.cards} → ${after.cards}) и оставило страницу на месте (${after.y}px, «${before.label}»)`, );
       await page.close();
     }
 

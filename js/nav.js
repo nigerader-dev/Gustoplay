@@ -92,10 +92,15 @@ export const currentPath = () => {
   return `${pathname.replace(/^\/+/, '')}${location.search}`;
 };
 
-/** Переход по сайту (без перезагрузки) */
-export function navigate(path, { replace = false } = {}) {
+/**
+ * Переход по сайту (без перезагрузки).
+ *
+ * keepScroll — «не менять позицию прокрутки»: так работает «Показать ещё»,
+ * где перерисовка страницы не должна возвращать человека в верх документа.
+ */
+export function navigate(path, { replace = false, keepScroll = false } = {}) {
   const target = clean(path);
-  window.dispatchEvent(new CustomEvent('gf:navigate', { detail: { path: target, replace } }));
+  window.dispatchEvent(new CustomEvent('gf:navigate', { detail: { path: target, replace, keepScroll } }));
 }
 
 /** Внешний ли это переход (его не перехватываем) */

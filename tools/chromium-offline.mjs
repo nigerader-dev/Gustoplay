@@ -33,8 +33,14 @@ let sparticuz;
 try {
   sparticuz = (await import('@sparticuz/chromium')).default;
 } catch {
+  // Оба пакета ставим ОДНОЙ командой: npm с готовым package-lock считает пакет,
+  // поставленный отдельным --no-save, лишним и вытесняет его при следующей установке
+  // (именно так пропадал puppeteer, и визуальные проверки молча уходили в SKIP).
   console.log('• @sparticuz/chromium не установлен — ставлю из npm (--no-save, package.json не меняется)…');
-  const install = spawnSync('npm', ['i', '--no-save', '@sparticuz/chromium'], { stdio: 'inherit' });
+  const install = spawnSync('npm', ['i', '--no-save', '@sparticuz/chromium', 'puppeteer'], {
+    stdio: 'inherit',
+    env: { ...process.env, PUPPETEER_SKIP_DOWNLOAD: '1' },
+  });
   if (install.status !== 0) {
     console.error('❌ Не удалось поставить @sparticuz/chromium. Проверьте доступ к npm-реестру.');
     process.exit(1);
@@ -74,6 +80,15 @@ console.log(`• Браузер: ${chromePath}`);
 mkdirSync(libRoot, { recursive: true });
 const libs = untar(brotliDecompressSync(readFileSync(join(srcDir, 'al2023.tar.br'))), libRoot);
 console.log(`• Библиотеки: ${libDir} (${libs.length} файлов)`);
+
+// Без puppeteer визуальные проверки не запустятся — говорим об этом прямо, а не
+// оставляем «SKIP», по которому непонятно, всё ли в порядке с окружением.
+try {
+  await import('puppeteer');
+} catch {
+  console.error('❌ puppeteer не установлен (нужен для test:visual). Поставьте: PUPPETEER_SKIP_DOWNLOAD=1 npm i --no-save puppeteer');
+  process.exit(1);
+}
 
 const env = { ...process.env, LD_LIBRARY_PATH: libDir, PUPPETEER_EXECUTABLE_PATH: chromePath };
 const manual = `LD_LIBRARY_PATH=${libDir} PUPPETEER_EXECUTABLE_PATH=${chromePath} npm run test:visual`;

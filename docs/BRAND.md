@@ -40,7 +40,7 @@ export const SITE = {
   name: 'GustoPlay',
   domain: 'gustoplay.ru',
   url: 'https://gustoplay.ru',
-  email: 'hello@gustoplay.ru',
+  email: 'gustoplaysupport@gmail.com',   // поддержка сайта: подвал, FAQ, политика, условия
   tagline: { ru: 'Подбор игры по вкусу за 60 секунд', en: 'Find your next game in 60 seconds' },
   ...
 };

@@ -299,9 +299,24 @@ check('сортировка в адресе', nav.currentPath().includes('sort=y
 click('[data-action="f-reset"]');
 await wait(40);
 check('сброс фильтров чистит адрес', nav.currentPath() === 'catalog', nav.currentPath());
+// «Показать ещё» не должно перебрасывать страницу наверх: раньше клик по кнопке
+// внизу списка возвращал человека в начало документа (render(true) → scrollTo(0)).
+const scrollCalls = [];
+window.scrollTo = (opts) => scrollCalls.push(opts);
+Object.defineProperty(window, 'scrollY', { value: 640, configurable: true });
 click('[data-action="show-more"]');
 await wait(40);
 check('пагинация каталога: стало 24', count('.game-card') === 24, `${count('.game-card')} шт.`);
+check('каталог: «Показать ещё» добавило вторую порцию в адрес',
+  nav.currentPath().includes('page=24'), nav.currentPath());
+check('каталог: прокрутка осталась на месте (не 0)',
+  scrollCalls.length > 0 && scrollCalls[scrollCalls.length - 1]?.top === 640,
+  JSON.stringify(scrollCalls));
+click('[data-action="f-reset"]');
+await wait(40);
+check('смена фильтров каталога по-прежнему открывает страницу сверху',
+  scrollCalls[scrollCalls.length - 1]?.top === 0, JSON.stringify(scrollCalls[scrollCalls.length - 1]));
+window.scrollTo = () => {};
 await navigate('catalog?mode=xxx&genre=yyy');
 check('битые id в адресе не роняют страницу', count('.game-card') === 12 && count('[data-action="f-remove"]') === 0);
 await navigate('catalog?mode=coopLocal&players=4');
@@ -316,6 +331,59 @@ check('страница Balatro открылась', text().includes('Balatro'))
 click('.marks [data-action="mark"][data-status="wishlist"]');
 await wait(30);
 check('отметка со страницы игры сохраняется', store.getMark('balatro') === 'wishlist');
+
+// Раскладка страницы игры: четыре вертикальных блока и широкая карточка под ними
+// (жалоба «нижний блок уже верхних, внутри пусто»). «Особенности» переехали вниз,
+// а их прежнее место заняли требования к ПК.
+const detailCards = [...window.document.querySelectorAll('.game-details .detail-card')];
+check('страница игры: 4 колонки и одна широкая карточка под ними',
+  detailCards.length === 5 && detailCards.filter((c) => c.classList.contains('detail-card-wide')).length === 1,
+  `${detailCards.length} карточек`);
+check('широкая карточка идёт последней и растянута на всю строку',
+  detailCards[4]?.classList.contains('detail-card-wide'));
+check('«Особенности» живут в широкой карточке, старый блок удалён',
+  count('.game-feats') === 0 && count('.detail-card-wide .feats-wide') === 1,
+  `feats-wide: ${count('.detail-card-wide .feats-wide')}`);
+check('требования к ПК стоят на месте «Особенностей» (в шапке игры)',
+  count('.game-info .sysreq') === 1);
+check('без данных блок требований честно об этом говорит, а не выдумывает цифры',
+  count('.sysreq-cols') === 0 ? count('.sysreq-none') === 1 : count('.sysreq-cols') === 1,
+  `колонок: ${count('.sysreq-cols')}, пустых: ${count('.sysreq-none')}`);
+{
+  // Обе ветки блока (с требованиями и без) — на синтетических данных: реальные
+  // требования приходят только из Steam Store API в CI, локально их может не быть.
+  const { sysreqBlock } = await import('../js/views/game.js');
+  const filled = sysreqBlock({ sysreq: {
+    min: { os: 'Windows 10', ram: '8 GB', gpu: { ru: 'GTX 1060', en: 'GTX 1060' }, bit64: true },
+    rec: { os: 'Windows 11', cpu: 'Ryzen 5', ram: '16 GB', disk: '60 GB' },
+  } }, 'ru');
+  check('блок требований рисует минимальные и рекомендуемые',
+    filled.includes('Минимальные') && filled.includes('Рекомендуемые')
+    && filled.includes('Windows 10') && filled.includes('16 GB'), filled.length + ' символов');
+  check('в блоке требований есть подписи полей и плашка 64-бит',
+    filled.includes('Оперативная память') && filled.includes('Нужна 64-битная система'));
+  check('частичные данные не выдумывают пустые строки',
+    !filled.includes('<dd></dd>') && filled.includes('Windows 11'));
+  const empty = sysreqBlock({ sysreq: null }, 'ru');
+  check('без данных блок говорит, что магазин их не публикует',
+    empty.includes('не публикует') && !empty.includes('DirectX'), empty.slice(0, 80));
+  const recOnly = sysreqBlock({ sysreq: { rec: { os: 'Windows 10' } } }, 'ru');
+  check('если есть только рекомендуемые — минимальные честно помечены как отсутствующие',
+    recOnly.includes('Магазин не указывает этот уровень'), recOnly.length + ' символов');
+}
+// Иконки отметок: «не понравилось» — большой палец вниз, а не перечёркнутый минус.
+// Сравниваем по геометрии пути: jsdom сериализует <path/> как <path></path>,
+// поэтому сравнение с исходной строкой ICONS даёт ложный минус.
+const { ICONS } = await import('../js/icons.js');
+const pathData = (name) => ICONS[name].match(/d="([^"]+)"/)?.[1];
+const markShape = (status) => window.document
+  .querySelector(`.game-info .marks [data-status="${status}"] svg path`)?.getAttribute('d');
+check('отметки «нравится/не нравится» — парные большие пальцы',
+  markShape('liked') === pathData('thumbsUp') && markShape('disliked') === pathData('thumbsDown'),
+  `liked: ${markShape('liked')?.slice(0, 24)}…, disliked: ${markShape('disliked')?.slice(0, 24)}…`);
+check('перечёркнутый минус больше не используется как отметка',
+  markShape('disliked') !== pathData('minusCircle')
+  && !window.document.querySelector('.game-info .marks')?.innerHTML.includes('M8 12h8'));
 await navigate('game/no-such-game-xyz');
 check('несуществующая игра → аккуратное пустое состояние', count('.empty') === 1);
 await navigate('party?players=8');
@@ -331,6 +399,42 @@ check('платформа компании в адресе', nav.currentPath().i
 click('[data-action="p-free"]');
 await wait(40);
 check('«только бесплатное» в адресе', nav.currentPath().includes('free=1'), nav.currentPath());
+
+// Регресс к жалобе «на вкладке видно только 24 варианта»: движок отдаёт весь пул,
+// вид показывает его порциями, а «Показать ещё» доводит до конца и исчезает.
+const partyPool = (q) => eng.recommendForParty({ ...q, seed: 7 }).length;
+const fullPool = partyPool({ players: 2, platforms: ['pc'], freeOnly: true });
+check('пул «Компании» не режется 24 играми', fullPool > 24, `${fullPool} игр`);
+await navigate('party?players=2&platforms=pc&free=1');
+check('на «Компании» первая порция — 12 карточек',
+  count('.game-card') === 12, `${count('.game-card')} шт.`);
+check('в заголовке «Компании» стоит размер всего пула, а не порции',
+  text().includes(String(fullPool)));
+const poolScrolls = [];
+window.scrollTo = (opts) => poolScrolls.push(opts);
+Object.defineProperty(window, 'scrollY', { value: 500, configurable: true });
+click('[data-action="show-more"]');
+await wait(40);
+check('«Показать ещё» на «Компании» добавляет порцию',
+  count('.game-card') === 24, `${count('.game-card')} шт.`);
+// На «Компании» и «Результатах» перерисовка идёт без перехода по адресу:
+// render(false) вообще не трогает прокрутку — позиция сохраняется сама.
+check('«Показать ещё» на «Компании» не уводит страницу наверх',
+  !poolScrolls.some((c) => (c?.top ?? c) === 0), JSON.stringify(poolScrolls));
+let partyClicks = 0;
+while (window.document.querySelector('[data-action="show-more"]') && partyClicks < 20) {
+  click('[data-action="show-more"]');
+  await wait(30);
+  partyClicks += 1;
+}
+check('«Показать ещё» доводит «Компанию» до всего пула и исчезает',
+  count('.game-card') === fullPool && !window.document.querySelector('[data-action="show-more"]'),
+  `${count('.game-card')} из ${fullPool}, кликов ${partyClicks}`);
+click('[data-action="p-players"][data-id="5"]');
+await wait(40);
+check('смена фильтра компании сбрасывает пагинацию на первую порцию',
+  count('.game-card') === 12, `${count('.game-card')} шт.`);
+window.scrollTo = () => {};
 
 /* ============================ 8. Профиль ============================ */
 console.log('\n8. Профиль: ответы, экспорт/импорт, сброс');

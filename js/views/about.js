@@ -87,6 +87,12 @@ export function render(ctx) {
       <p class="muted">${(Object.keys(GENRES).length)} ${lang === 'ru' ? 'жанров' : 'genres'} · ${Object.keys(TAGS).length} ${lang === 'ru' ? 'тегов' : 'tags'} · ${Object.keys(MOODS).length} ${lang === 'ru' ? 'настроений' : 'moods'}</p>
     </div>
 
+    <div class="panel">
+      <h2 class="h-lg">${icon('mail')} ${esc(t('about.support.title'))}</h2>
+      <p>${esc(t('about.support.text'))}</p>
+      <p class="panel-actions"><a class="btn btn-outline btn-mail" href="mailto:${esc(SITE.email)}">${icon('mail')} ${esc(SITE.email)}</a></p>
+    </div>
+
     ${adSlot('home-top')}
     ${houseAd()}
 

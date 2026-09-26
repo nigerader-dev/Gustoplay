@@ -45,7 +45,8 @@ export function render() {
     .map((m) => {
       const game = byId(m.slug);
       if (!game) return '';
-      const icons = { liked: 'heart', disliked: 'minusCircle', played: 'controller', wishlist: 'bookmark' };
+      // Иконки — как на кнопках отметок в карточках (js/views/components.js)
+      const icons = { liked: 'thumbsUp', disliked: 'thumbsDown', played: 'controller', wishlist: 'bookmark' };
       return `<div class="mark-row">
         <span class="mark-row-cover">${coverImage(game, 'mark-img')}</span>
         <a class="mark-row-title" href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a>
