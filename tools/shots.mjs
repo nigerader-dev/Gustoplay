@@ -2,8 +2,11 @@
  * Визуальный QA в реальном браузере: скриншоты всех страниц на контрольных
  * ширинах + замеры (горизонтальное переполнение, консоль, h1, alt, тач-цели).
  * Требует puppeteer с браузером (npm i -D puppeteer && npx puppeteer install chrome)
- * и сам поднимает dev-сервер на свободном порту. Без браузера — вежливый пропуск
- * (exit 0), чтобы не краснить CI там, где браузера нет.
+ * и сам поднимает dev-сервер на свободном порту. Браузер берётся так: переменная
+ * PUPPETEER_EXECUTABLE_PATH → браузер из песочницы (/tmp/gustoplay-qa-bin/chromium) →
+ * системный Chrome (/usr/bin/google-chrome — так в CI). Если браузера нет вовсе —
+ * вежливый пропуск (exit 0), но при GUSTOPLAY_REQUIRE_BROWSER=1 (CI) пропуск становится
+ * ошибкой, чтобы зелёный шаг не выглядел выполненной проверкой.
  *
  * Запуск: npm run test:visual [-- --widths=360,768,1440 --theme=dark --shots=all --dir=dist]
  * Критерии провала: страница прокручивается по горизонтали, нет ровно одного h1,
@@ -22,7 +25,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 import { createServer } from 'node:net';
-import { browserOptions, browserSource } from './qa-browser.mjs';
+import { browserOptions, browserSource, browserSkip } from './qa-browser.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -37,8 +40,7 @@ let puppeteer;
 try {
   puppeteer = (await import('puppeteer')).default;
 } catch {
-  console.log('SKIP test:visual — puppeteer не установлен (нужен Chrome; см. шапку файла)');
-  process.exit(0);
+  browserSkip('test:visual', 'puppeteer не установлен (нужен Chrome; см. шапку tools/shots.mjs)');
 }
 
 const WIDTHS = String(args.widths || '360,768,1024,1440,1920').split(',').map(Number);
@@ -110,8 +112,7 @@ try {
   browser = await puppeteer.launch(browserOptions());
 } catch (e) {
   server.kill();
-  console.log(`SKIP test:visual — браузер недоступен (${String(e.message || e).slice(0, 120)})`);
-  process.exit(0);
+  browserSkip('test:visual', `браузер недоступен (${String(e.message || e).slice(0, 120)})`);
 }
 
 mkdirSync(OUT, { recursive: true });

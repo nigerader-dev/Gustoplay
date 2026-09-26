@@ -26,6 +26,17 @@ jobs:
       - name: Установка зависимостей
         run: npm ci
 
+      # Браузер для test:visual и test:plan. На образе GitHub Actions уже стоит Chrome,
+      # поэтому puppeteer ставим без скачивания своей сборки; если Chrome не нашёлся —
+      # качаем браузер через сам puppeteer. Дальше в шагах стоит GUSTOPLAY_REQUIRE_BROWSER=1,
+      # и пропуск браузерной проверки становится ошибкой, а не зелёным шагом без проверок.
+      - name: Браузер для браузерных проверок
+        run: |
+          PUPPETEER_SKIP_DOWNLOAD=1 npm i --no-save puppeteer
+          if [ ! -x /usr/bin/google-chrome ] && [ ! -x /usr/bin/chromium ]; then
+            npx puppeteer browsers install chrome
+          fi
+
       - name: Каталог — корректность записей
         run: npm run check
 
@@ -41,6 +52,11 @@ jobs:
       - name: Требования к ПК — сборщик против заглушки магазина (без сети)
         run: npm run test:sysreq
 
+      # Блок «Подходит ли ваш ПК»: сопоставление моделей, разбор требований магазина,
+      # вердикт по комплектующим и разметка блока. Без сети и без браузера.
+      - name: Подбор ПК — сравнение комплектующих с требованиями
+        run: npm run test:pcfit
+
       - name: Поведение интерфейса (jsdom)
         run: npm run test:functional
 
@@ -51,10 +67,13 @@ jobs:
         run: npm run test:css
 
       # Сквозная проверка требований пользователя: пул «Компании», скролл, отметки,
-      # вёрстка страницы игры, почта поддержки. Нужен браузер: без него шаг аккуратно
-      # пропускается (SKIP), как test:visual.
+      # вёрстка страницы игры, почта поддержки, блок «Подходит ли ваш ПК». Нужен браузер,
+      # он ставится шагом выше; если браузера не окажется, шаг упадёт (GUSTOPLAY_REQUIRE_BROWSER),
+      # а не станет зелёным без единой проверки.
       - name: Требования заказчика — сквозная проверка в браузере
         run: npm run test:plan
+        env:
+          GUSTOPLAY_REQUIRE_BROWSER: '1'
 
       - name: API аккаунтов (реальная база SQLite)
         run: npm run test:api

@@ -742,6 +742,87 @@ select.input { cursor: pointer; }
 .why-box { background: var(--accent-soft); border-radius: var(--radius); padding: 16px; margin: 16px 0; }
 .why-box strong { display: block; margin-bottom: 8px; color: var(--accent); }
 .stores { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+/* Блок «Подходит ли ваш ПК»: свёрнутый вид — вердикт и кнопка, развёрнутый — выбор
+   комплектующих и таблица сравнения. Сравнение считает js/pcfit.js; что проверяется точно,
+   а что приблизительно — блок говорит сам, в списке оговорок. */
+.pcfit {
+  background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius);
+  padding: var(--space-4); margin: 0 0 var(--space-4); max-width: 78ch;
+}
+.pcfit-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+.pcfit-head strong { display: flex; align-items: center; gap: 8px; color: var(--accent); font-size: .95rem; }
+.pcfit-head .icon { width: 18px; height: 18px; flex: none; }
+/* Вердикт: цвет кодирует смысл, поэтому в тёмной теме берутся те же переменные —
+   они переопределены во второй теме и дают достаточный контраст на обоих фонах. */
+.pcfit-verdict {
+  font-size: .82rem; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+  background: var(--bg-sunken); color: var(--text-soft); overflow-wrap: anywhere;
+}
+.pcfit-verdict.recommended { background: var(--success-soft); color: var(--success); }
+.pcfit-verdict.minimum { background: var(--warn-soft); color: var(--warn); }
+.pcfit-verdict.not-enough { background: var(--danger-soft); color: var(--danger); }
+.pcfit-intro { color: var(--text-soft); font-size: .9rem; margin: 0 0 12px; }
+.pcfit-form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-bottom: 12px; }
+.pcfit[data-expanded="false"] .pcfit-form { display: none; }
+.pcfit-field { display: grid; gap: 4px; min-width: 0; }
+.pcfit-field > span { font-size: .78rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); font-weight: 700; }
+.pcfit-field select {
+  width: 100%; min-width: 0; padding: 8px 10px; border-radius: 10px; font: inherit; font-size: .9rem;
+  background: var(--bg); color: var(--text); border: 1px solid var(--surface-border);
+}
+.pcfit-field select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.pcfit-hint { grid-column: 1 / -1; margin: 0; color: var(--text-muted); font-size: .82rem; }
+.pcfit-verdict-line { margin: 0; font-weight: 600; }
+.pcfit-partial { margin: 6px 0 0; color: var(--text-soft); font-size: .86rem; }
+.pcfit-empty { margin: 0; color: var(--text-soft); font-size: .9rem; }
+.pcfit-table-wrap { overflow-x: auto; margin: 10px 0 0; }
+.pcfit-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.pcfit-table th, .pcfit-table td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--surface-border); vertical-align: top; }
+.pcfit-table thead th { font-size: .72rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
+.pcfit-table tbody th { font-weight: 600; white-space: nowrap; }
+.pcfit-table td { color: var(--text-soft); }
+.pcfit-mark { display: inline-flex; align-items: center; gap: 5px; font-size: .82rem; white-space: nowrap; }
+.pcfit-mark .icon { width: 14px; height: 14px; flex: none; }
+.pcfit-mark.ok { color: var(--success); }
+.pcfit-mark.close { color: var(--warn); }
+.pcfit-mark.fail { color: var(--danger); }
+.pcfit-mark.unknown { color: var(--text-muted); }
+.pcfit-notes { margin: 10px 0 0; padding-left: 18px; color: var(--text-muted); font-size: .82rem; display: grid; gap: 4px; }
+.pcfit-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+@media (max-width: 640px) {
+  /* На телефоне форма в одну колонку: два селекта рядом превращаются в кашу из длинных
+     названий моделей. */
+  .pcfit-form { grid-template-columns: minmax(0, 1fr); }
+
+  /* Таблица сравнения — карточками: в четыре колонки на 360px колонка «Итог» уезжала
+     за край (её приходилось искать прокруткой), а она и отвечает на вопрос «подходит ли».
+     Подписи колонок приходят из разметки (data-label) — значит, остаются и в английской версии. */
+  .pcfit-table-wrap { overflow-x: visible; }
+  .pcfit-table thead {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+  .pcfit-table, .pcfit-table tbody, .pcfit-table tr, .pcfit-table th, .pcfit-table td { display: block; width: auto; }
+  .pcfit-table tr {
+    border: 1px solid var(--surface-border); border-radius: var(--radius-sm);
+    padding: 10px 12px; margin: 0 0 8px;
+  }
+  .pcfit-table tr:last-child { margin-bottom: 0; }
+  .pcfit-table tbody th {
+    padding: 0 0 6px; border: 0; font-size: .92rem; white-space: normal;
+  }
+  .pcfit-table td {
+    display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px;
+    padding: 3px 0; border: 0; align-items: start;
+  }
+  .pcfit-table td::before {
+    content: attr(data-label);
+    color: var(--text-muted); font-size: .72rem; text-transform: uppercase;
+    letter-spacing: var(--track-caps); padding-top: 2px;
+  }
+  .pcfit-mark { white-space: normal; }
+}
+
 /* Ровно четыре колонки под четыре вертикальных блока: auto-fit мог выдать пятую
    колонку и оставить в ней дыру, потому что широкая карточка занимает всю строку.
    Ширины хватает: контент ограничен 1280px, колонка выходит ~250–300px. */

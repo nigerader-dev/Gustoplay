@@ -7,6 +7,7 @@ import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
 import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
+import { mountPcfit, pcfitBlock } from './pcfit.js';
 
 /* ------------------------------------------------------------------ *
  * Требования к ПК
@@ -47,6 +48,11 @@ export function sysreqBlock(game, lang) {
     ${level('min', t('sysreq.min'))}
     ${level('rec', t('sysreq.rec'))}
   </div></div>`;
+}
+
+/** Обработчики страницы: блок проверки «подходит ли ваш ПК» */
+export function mount(root) {
+  mountPcfit(root);
 }
 
 export function render(ctx) {
@@ -105,6 +111,7 @@ export function render(ctx) {
         </div>
         <p class="game-desc">${esc(aboutText)}</p>
         ${sysreqBlock(game, lang)}
+        ${pcfitBlock(game)}
 
         <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
 
