@@ -211,6 +211,33 @@ for (const theme of ['light', 'dark']) {
   check('уровень заголовка совпадает с закрывающим тегом', broken.length === 0, broken.join(', '));
 }
 
+/* ---------- 5. Доступность блока «Подходит ли ваш ПК» ---------- */
+console.log('\n5. Доступность блока «Подходит ли ваш ПК»');
+store.setMeta({ pc: { os: 'win-10', cpu: 'ryzen-5-3600', ram: 16, gpu: 'gtx-1660', disk: 100, bits: '64' } });
+await navigate('game/left-4-dead-2');
+const pcfit = window.document.querySelector('[data-pcfit]');
+check('блок подбора ПК присутствует на странице игры', Boolean(pcfit));
+const pcfitTitle = pcfit?.querySelector('.pcfit-head strong')?.textContent.trim() || '';
+check('блок ПК имеет видимый заголовок', Boolean(pcfitTitle));
+const pcfitFields = [...(pcfit?.querySelectorAll('select[data-pcfield]') || [])];
+check('в форме ПК ровно шесть полей выбора', pcfitFields.length === 6, `${pcfitFields.length} полей`);
+const expectedFields = ['os', 'cpu', 'ram', 'gpu', 'disk', 'bits'];
+check('в форме ПК есть все шесть ожидаемых параметров',
+  expectedFields.every((id) => pcfit?.querySelector(`select[data-pcfield="${id}"]`)));
+const unlabeledPcfit = pcfitFields.filter((field) => !field.closest('label')
+  || !(field.closest('label')?.textContent || '').trim());
+check('каждый селект ПК связан с текстовой подписью', unlabeledPcfit.length === 0);
+const pcfitTable = pcfit?.querySelector('.pcfit-table');
+check('таблица сравнения имеет доступное имя', Boolean(pcfitTable?.getAttribute('aria-label')?.trim()));
+const badPcfitHeaders = [...(pcfitTable?.querySelectorAll('thead th') || [])]
+  .filter((th) => th.getAttribute('scope') !== 'col');
+check('заголовки столбцов таблицы имеют scope="col"', badPcfitHeaders.length === 0 && Boolean(pcfitTable));
+const badPcfitRows = [...(pcfitTable?.querySelectorAll('tbody th') || [])]
+  .filter((th) => th.getAttribute('scope') !== 'row');
+check('названия параметров в таблице имеют scope="row"', badPcfitRows.length === 0 && Boolean(pcfitTable));
+check('изменение вердикта объявляется через aria-live',
+  pcfit?.querySelector('.pcfit-result-live')?.getAttribute('aria-live') === 'polite');
+
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
 if (failures.length) {
   console.log(failures.map((f) => ` - ${f}`).join('\n'));

@@ -181,8 +181,36 @@ check('нет правила, показывающего подпись отме
   !flat.some((e) => e.selectors.some((sel) => /mark.*:hover.*span|mark.*span.*:hover/.test(sel))
     && e.declarations.some((d) => d.property === 'display' && d.value === 'inline')));
 
-/* ---------- 7. Фолбэки современных функций ---------- */
-console.log('\n7. Фолбэки color-mix / backdrop-filter');
+/* ---------- 7. Блок «Подходит ли ваш ПК» ---------- */
+console.log('\n7. Блок «Подходит ли ваш ПК»');
+const pcfitRule = (selector, predicate = () => true, media = null) => flat.some((e) =>
+  e.selectors.includes(selector) && (!media || inMedia(e, media)) && predicate(e));
+check('карточка ПК оформлена как самостоятельный блок',
+  pcfitRule('.pcfit', (e) => hasDecl(e, 'background') && hasDecl(e, 'border') && hasDecl(e, 'border-radius')));
+check('форма ПК на широком экране в две колонки',
+  pcfitRule('.pcfit-form', (e) => hasDecl(e, 'grid-template-columns', (v) => v === '1fr 1fr')));
+check('форма ПК на телефоне в одну колонку',
+  pcfitRule('.pcfit-form', (e) => hasDecl(e, 'grid-template-columns', (v) => /minmax\(0,\s*1fr\)/.test(v)), '640'));
+check('поля формы ПК не раздвигают сетку',
+  pcfitRule('.pcfit-field', (e) => hasDecl(e, 'min-width', (v) => v === '0')));
+check('селекты формы ПК занимают доступную ширину',
+  pcfitRule('.pcfit-field select', (e) => hasDecl(e, 'width', (v) => v === '100%')));
+check('селекты ПК имеют видимый фокус клавиатуры',
+  pcfitRule('.pcfit-field select:focus-visible', (e) => hasDecl(e, 'outline')));
+check('свёрнутая форма ПК скрыта по data-expanded',
+  pcfitRule('.pcfit[data-expanded="false"] .pcfit-form', (e) => hasDecl(e, 'display', (v) => v === 'none')));
+check('статусы вердикта имеют отдельные классы',
+  ['.pcfit-verdict.recommended', '.pcfit-verdict.minimum', '.pcfit-verdict.not-enough']
+    .every((selector) => flat.some((e) => e.selectors.includes(selector))));
+check('таблица ПК превращается в карточки на телефоне',
+  pcfitRule('.pcfit-table tr', (e) => hasDecl(e, 'display', (v) => v === 'block'), '640'));
+check('мобильная таблица ПК не требует горизонтальной прокрутки',
+  pcfitRule('.pcfit-table-wrap', (e) => hasDecl(e, 'overflow-x', (v) => v === 'visible'), '640'));
+check('подписи мобильных ячеек берутся из data-label',
+  pcfitRule('.pcfit-table td::before', (e) => e.declarations.some((d) => d.property === 'content' && d.value.includes('attr(data-label)')), '640'));
+
+/* ---------- 8. Фолбэки современных функций ---------- */
+console.log('\n8. Фолбэки color-mix / backdrop-filter');
 const colorMixRules = flat.filter((e) => e.declarations.some((d) => d.value.includes('color-mix')));
 const noFallback = colorMixRules.filter((e) => {
   // у каждого color-mix должен быть plain-дубль того же свойства выше по каскаду
