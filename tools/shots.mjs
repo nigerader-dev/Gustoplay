@@ -540,6 +540,85 @@ if (INTERACTION) {
       await page.close();
     }
 
+    /* --- E. Ничего не вылезает за экран (нашёл на /profile) --- */
+    // Прошлая проверка обрезки смотрела только каталог, поэтому не поймала, что на
+    // 360px строка отметки в профиле шире своей панели: колонка грида растягивалась
+    // под неразрывное название игры, и подпись статуса уезжала за край экрана.
+    for (const width of [360, 768]) {
+      for (const [name, route] of [['profile', '/profile'], ['quiz', '/quiz'], ['party', '/party'], ['game', '/game/balatro'], ['about', '/about']]) {
+        const page = await newPage(width);
+        await goto(page, route);
+        const over = await page.evaluate(() => {
+          const vw = window.innerWidth;
+          // спрятанное «по замыслу» не считаем вылетом: skip-ссылка уезжает за левый
+          // край, а панель меню ждёт открытия за правым (visibility: hidden + transform)
+          const hiddenByDesign = (el) => {
+            if (el.closest('.skip')) return true;
+            for (let p = el; p && p !== document.body; p = p.parentElement) {
+              const cs = getComputedStyle(p);
+              if (cs.visibility === 'hidden' || cs.display === 'none' || Number(cs.opacity) === 0) return true;
+            }
+            const nav = el.closest('.nav');
+            return Boolean(nav && !nav.classList.contains('open'));
+          };
+          const insideScroller = (el) => {
+            for (let p = el.parentElement; p && p !== document.body; p = p.parentElement) {
+              const cs = getComputedStyle(p);
+              if (cs.overflowX === 'auto' || cs.overflowX === 'scroll') return true;
+            }
+            return false;
+          };
+          const out = [];
+          document.querySelectorAll('#app *').forEach((el) => {
+            if (insideScroller(el) || hiddenByDesign(el)) return;
+            const r = el.getBoundingClientRect();
+            if (r.width <= 2 || r.height <= 2) return;
+            // вылет вправо/влево больше пикселя — элемент обрезан краем экрана
+            if (r.right > vw + 1 || r.left < -1) {
+              out.push(`${el.className || el.tagName}: ${Math.round(r.left)}…${Math.round(r.right)} при экране ${vw}`);
+            }
+          });
+          return out.slice(0, 5);
+        });
+        if (!over.length) markOk(`@${width} ${name}: все блоки внутри экрана`);
+        else markBad(`@${width} ${name}: вылезает за экран — ${over.join(' · ')}`);
+        await page.close();
+      }
+    }
+
+    /* --- Ж. Панель навигации квиза: липнет к низу и не просвечивает --- */
+    for (const width of [360, 480]) {
+      const page = await newPage(width);
+      await goto(page, '/quiz');
+      await page.waitForSelector('.quiz-nav', { timeout: 5000 }).catch(() => {});
+      const nav = await page.evaluate(() => {
+        const n = document.querySelector('.quiz-nav');
+        if (!n) return null;
+        const r = n.getBoundingClientRect();
+        const cs = getComputedStyle(n);
+        const btn = n.querySelector('.btn')?.getBoundingClientRect();
+        // альфа фона: chrome отдаёт и `rgba(…)`, и `color(srgb … / a)`
+        const alpha = (() => {
+          const m = cs.backgroundColor.match(/\/\s*([\d.]+)\s*\)/);
+          if (m) return Number(m[1]);
+          const m2 = cs.backgroundColor.match(/,\s*([\d.]+)\s*\)$/);
+          return m2 ? Number(m2[1]) : 1;
+        })();
+        return {
+          top: Math.round(r.top), bottom: Math.round(r.bottom), vh: window.innerHeight,
+          backdrop: cs.backdropFilter, bg: cs.backgroundColor, alpha,
+          btnBottom: btn ? Math.round(btn.bottom) : null,
+        };
+      });
+      if (!nav) markBad(`@${width}: панель квиза не найдена`);
+      else if (nav.top >= nav.vh) markBad(`@${width}: панель квиза уехала ниже экрана (${nav.top} ≥ ${nav.vh})`);
+      else if (nav.bottom < nav.vh - 2) markBad(`@${width}: панель квиза не достаёт до низа экрана (${nav.bottom} при ${nav.vh})`);
+      else if (nav.btnBottom && nav.btnBottom > nav.vh + 1) markBad(`@${width}: кнопка панели квиза обрезана (${nav.btnBottom} при ${nav.vh})`);
+      else if (nav.alpha < 1 && nav.backdrop === 'none') markBad(`@${width}: панель квиза просвечивает без размытия (фон ${nav.bg})`);
+      else markOk(`@${width}: панель квиза липнет к низу (${nav.top}…${nav.bottom} при ${nav.vh}), фон ${nav.backdrop === 'none' ? 'сплошной' : 'с размытием'}`);
+      await page.close();
+    }
+
     await ib.close();
   }
 }

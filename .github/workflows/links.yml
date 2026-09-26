@@ -143,7 +143,9 @@ jobs:
             local label="$1" file="$2" start="$3" end="$4"
             if [ ! -s "$file" ]; then return; fi
             local json
-            json=$(sed -n "/$start/,/$end/p" "$file" | tr -d '\n')
+            # маркеры блока в части не кладём: клиент склеивает части и оборачивает
+            # их сам, иначе внутри JSON остаются строки «--- VERIFIED_JSON ---»
+            json=$(sed -n "/$start/,/$end/p" "$file" | sed '1d;$d' | tr -d '\n')
             if [ -z "$json" ]; then return; fi
             local size=3000 total i
             total=$(( (${#json} + size - 1) / size ))

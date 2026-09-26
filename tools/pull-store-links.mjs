@@ -22,7 +22,7 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { STRINGS } from '../js/i18n.js';
 import { GAMES } from '../js/catalog/index.js';
 
@@ -138,7 +138,13 @@ if (!APPLY) {
 /* ------------------------------ запись ------------------------------- */
 
 const path = resolve(root, 'js/catalog/store-links.js');
-const sorted = Object.fromEntries(Object.entries(accepted).sort(([a], [b]) => a.localeCompare(b)));
+// Сливаем с тем, что уже лежит в данных: CI проверяет только игры без ссылки,
+// поэтому полная замена файла стирала ранее подтверждённые адреса (так потерялся
+// PlayStation-адрес Bloodborne).
+const previous = (await import(pathToFileURL(path).href)).STORE_LINKS || {};
+const merged = { ...previous, ...accepted };
+const kept = Object.keys(previous).filter((slug) => !(slug in accepted)).length;
+const sorted = Object.fromEntries(Object.entries(merged).sort(([a], [b]) => a.localeCompare(b)));
 const body = Object.entries(sorted)
   .map(([slug, e]) => `  ${JSON.stringify(slug)}: { url: ${JSON.stringify(e.url)}, label: ${JSON.stringify(e.label)} },`)
   .join('\n');
@@ -154,5 +160,6 @@ ${body}
 };
 `;
 writeFileSync(path, header);
-console.log(`\nЗаписано в js/catalog/store-links.js: ${Object.keys(sorted).length} ссылок.`);
+console.log(`\nЗаписано в js/catalog/store-links.js: ${Object.keys(sorted).length} ссылок`
+  + ` (новых ${Object.keys(accepted).length}, сохранено прежних ${kept}).`);
 console.log('Дальше: npm run check:text && npm test (проверка подписей и ссылок).');

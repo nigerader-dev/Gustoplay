@@ -733,13 +733,19 @@ select.input { cursor: pointer; }
 .answers { display: grid; gap: 12px; }
 .answer-row { display: grid; gap: 6px; }
 .answer-row > span { font-size: .84rem; color: var(--text-muted); font-weight: 600; }
-.mark-rows { display: grid; gap: 8px; }
-.mark-row { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: var(--radius); background: var(--bg-sunken); }
+/* На 360px строка отметки вылезала из панели (364px в контейнер 294px) и правый
+   край с подписью статуса обрезался: колонка грида и flex-строка растягивались
+   под ширину неразрывного названия игры. Теперь колонка ограничена контейнером,
+   а длинное название обрезается многоточием (`text-overflow`). */
+.mark-rows { display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); }
+.mark-row { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: var(--radius); background: var(--bg-sunken); min-width: 0; }
 .mark-row-cover { width: 34px; height: 44px; border-radius: 6px; overflow: hidden; flex: 0 0 auto; background: var(--bg-elevated); }
 .mark-row-title { font-weight: 600; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mark-row-status { margin-left: auto; font-size: .85rem; color: var(--text-soft); white-space: nowrap; flex: 0 0 auto; }
 .bars { display: grid; gap: 8px; }
-.bar-row { display: grid; grid-template-columns: 150px 1fr 44px; align-items: center; gap: 10px; font-size: .88rem; }
+/* Колонка подписи — по её содержимому: с фиксированными 150px половина тегов
+   («Сплитскрин/локальный кооп») обрезалась многоточием даже на 1024px. */
+.bar-row { display: grid; grid-template-columns: max-content minmax(0, 1fr) 44px; align-items: center; gap: 10px; font-size: .88rem; }
 .bar-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .bar { height: 8px; background: var(--bg-sunken); border-radius: var(--radius-full); overflow: hidden; }
 .bar i { display: block; height: 100%; border-radius: var(--radius-full); background: linear-gradient(90deg, var(--accent), #22d3ee); }
@@ -1006,8 +1012,14 @@ select.input { cursor: pointer; }
     position: sticky; bottom: 0; z-index: 30;
     margin: 0 -14px; padding: 12px 14px calc(12px + env(safe-area-inset-bottom, 0px));
     background: var(--bg);
-    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    /* Просвечивать панели нельзя: под ней проезжает карточка вопроса и текст
+       читался сквозь кнопки. Размытие, как у шапки; без backdrop-filter — сплошной фон. */
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: saturate(160%) blur(12px);
     border-top: 1px solid var(--surface-border);
+  }
+  @supports not (backdrop-filter: blur(1px)) {
+    .quiz-nav { background: var(--bg); }
   }
   .quiz-nav .btn { padding: 10px 12px; font-size: .9rem; }
 
@@ -1024,6 +1036,25 @@ select.input { cursor: pointer; }
   .col { padding: 18px; }
   .footer-inner { grid-template-columns: 1fr; }
   .mark-row-status { font-size: .78rem; }
+  /* Подпись шкалы на телефоне не влезает рядом со значением — ставим её над шкалой,
+     на всю ширину панели, чтобы название тега читалось целиком. */
+  .bar-row { grid-template-columns: 1fr auto; grid-template-areas: 'label value' 'bar bar'; gap: 4px 10px; }
+  .bar-label { grid-area: label; white-space: normal; overflow-wrap: anywhere; }
+  .bar-value { grid-area: value; }
+  .bar { grid-area: bar; }
+  /* В одну строку на телефоне название не помещалось: из 173px под него оставалось
+     103px, «Deep Rock Galactic» превращалось в «Deep Rock Gal…». Поэтому на узких
+     экранах строка отметки — сетка: название и статус друг под другом, обложка и
+     крестик по краям. Длинные названия переносятся, а не обрезаются. */
+  .mark-row {
+    display: grid; grid-template-columns: 34px minmax(0, 1fr) auto;
+    grid-template-areas: 'cover title remove' 'cover status remove';
+    align-items: center; gap: 2px 12px;
+  }
+  .mark-row-cover { grid-area: cover; }
+  .mark-row-title { grid-area: title; white-space: normal; overflow-wrap: anywhere; }
+  .mark-row-status { grid-area: status; margin-left: 0; }
+  .mark-row .btn { grid-area: remove; align-self: center; }
 }
 
 /* --- компактный телефон --- */

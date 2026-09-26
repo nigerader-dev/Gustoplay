@@ -114,6 +114,22 @@ check('панель меню имеет явную высоту экрана, а
   flat.some((e) => inMedia(e, '1140') && e.selectors.includes('.nav')
     && (hasDecl(e, 'height', (v) => /100d?vh/.test(v)) || hasDecl(e, 'height', (v) => /100dvh/.test(v))))
   && !flat.some((e) => inMedia(e, '1140') && e.selectors.includes('.nav') && hasDecl(e, 'bottom', (v) => v === '0')));
+// На 360px строка отметки в профиле вылезала из панели (364px в 294px): колонка
+// грида и flex-строка растягивались под неразрывное название, правый край с
+// подписью статуса обрезался. Теперь колонка ограничена контейнером.
+check('колонка строк отметок ограничена контейнером',
+  flat.some((e) => e.selectors.includes('.mark-rows') && hasDecl(e, 'grid-template-columns', (v) => v.replace(/\s/g, '') === 'minmax(0,1fr)')));
+check('строка отметки может сжиматься (min-width: 0)',
+  flat.some((e) => e.selectors.includes('.mark-row') && hasDecl(e, 'min-width', (v) => v === '0')));
+// Панель навигации квиза на телефоне липнет к низу экрана и раньше просвечивала:
+// под ней проезжала карточка вопроса. Размытие, как у шапки, + сплошной фон-фолбэк.
+check('панель квиза размывает фон под собой',
+  flat.some((e) => inMedia(e, '640') && e.selectors.includes('.quiz-nav') && hasDecl(e, 'backdrop-filter', (v) => v.includes('blur'))));
+check('панель квиза имеет сплошной фон без backdrop-filter',
+  flat.some((e) => inMedia(e, '640') && e.selectors.includes('.quiz-nav')
+    && e.declarations.length && cssText.includes('@supports not (backdrop-filter: blur(1px))')
+    && /@supports not \(backdrop-filter: blur\(1px\)\) \{\s*\.quiz-nav \{ background: var\(--bg\); \}/.test(cssText)));
+
 check('баннер согласия не полагается на transform для центрирования',
   flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'margin-inline', (v) => v === 'auto'))
   && !flat.some((e) => e.selectors.includes('.consent') && hasDecl(e, 'transform', (v) => v.includes('translateX'))));
