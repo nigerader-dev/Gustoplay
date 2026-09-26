@@ -1,8 +1,8 @@
-Требования к ПК: 0 из 401 игр со steamId
+Требования к ПК: 66 из 401 игр со steamId
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
-Данные не получены (нет pc_requirements или запрос не прошёл): 401
+Данные не получены (нет pc_requirements или запрос не прошёл): 335
+Ответы с ошибкой сети/HTTP (appid|язык|причина): 0
 MISS deep-rock-galactic (548430) Deep Rock Galactic
-MISS helldivers-2 (553850) Helldivers 2
 MISS left-4-dead-2 (550) Left 4 Dead 2
 MISS warhammer-end-times-vermintide-2 (552500) Warhammer: End Times – Vermintide 2
 MISS warhammer-40-000-darktide (1361210) Warhammer 40,000: Darktide
@@ -11,27 +11,20 @@ MISS borderlands-3 (397540) Borderlands 3
 MISS monster-hunter-world (582010) Monster Hunter: World
 MISS it-takes-two (1426210) It Takes Two
 MISS split-fiction (2001120) Split Fiction
-MISS a-way-out (1222700) A Way Out
 MISS overcooked-2 (728880) Overcooked! 2
 MISS plateup (1599600) PlateUp!
 MISS cuphead (268910) Cuphead
 MISS human-fall-flat (477160) Human: Fall Flat
 MISS gang-beasts (285900) Gang Beasts
-MISS pummel-party (880940) Pummel Party
 MISS ultimate-chicken-horse (386940) Ultimate Chicken Horse
 MISS keep-talking-and-nobody-explodes (341800) Keep Talking and Nobody Explodes
 MISS valheim (892970) Valheim
 MISS palworld (1623730) Palworld
 MISS terraria (105600) Terraria
 MISS dont-starve-together (322330) Don't Starve Together
-MISS project-zomboid (108600) Project Zomboid
 MISS 7-days-to-die (251570) 7 Days to Die
 MISS grounded (962130) Grounded
-MISS raft (648800) Raft
-MISS the-forest (242760) The Forest
 MISS sea-of-thieves (1172620) Sea of Thieves
-MISS phasmophobia (739630) Phasmophobia
-MISS lethal-company (1966720) Lethal Company
 MISS dead-by-daylight (381210) Dead by Daylight
 MISS destiny-2 (1085660) Destiny 2
 MISS warframe (230410) Warframe
@@ -54,27 +47,20 @@ MISS dark-souls-iii (374320) Dark Souls III
 MISS sekiro-shadows-die-twice (814380) Sekiro: Shadows Die Twice
 MISS lies-of-p (1627720) Lies of P
 MISS black-myth-wukong (2358720) Black Myth: Wukong
-MISS god-of-war-2018 (1593500) God of War (2018)
 MISS god-of-war-ragnar-k (2322010) God of War Ragnarök
 MISS the-last-of-us-part-i (1888930) The Last of Us Part I
-MISS the-last-of-us-part-ii-remastered (2531310) The Last of Us Part II Remastered
 MISS red-dead-redemption-2 (1174180) Red Dead Redemption 2
-MISS grand-theft-auto-v (3240220) Grand Theft Auto V
 MISS uncharted-4-a-thiefs-end (1659420) Uncharted 4: A Thief’s End
-MISS marvels-spider-man-2 (2651280) Marvel’s Spider-Man 2
 MISS batman-arkham-knight (208650) Batman: Arkham Knight
 MISS ghost-of-tsushima (2215430) Ghost of Tsushima
 MISS horizon-forbidden-west (2420110) Horizon Forbidden West
 MISS death-stranding (1850570) Death Stranding
-MISS control (870780) Control
 MISS resident-evil-4-remake (2050650) Resident Evil 4 Remake
 MISS resident-evil-2-remake (883710) Resident Evil 2 Remake
 MISS silent-hill-2-2024 (2124490) Silent Hill 2 (2024)
 MISS alien-isolation (214490) Alien: Isolation
 MISS dead-space-2023 (1693980) Dead Space (2023)
-MISS soma (282140) SOMA
 MISS outlast (238320) Outlast
-MISS amnesia-the-bunker (1944430) Amnesia: The Bunker
 MISS subnautica (264710) Subnautica
 MISS the-long-dark (305620) The Long Dark
 MISS hollow-knight (367520) Hollow Knight
@@ -85,27 +71,21 @@ MISS hades-ii (1145350) Hades II
 MISS dead-cells (588650) Dead Cells
 MISS slay-the-spire (646570) Slay the Spire
 MISS balatro (2379780) Balatro
-MISS the-binding-of-isaac-repentance (1426300) The Binding of Isaac: Repentance
 MISS return-of-the-obra-dinn (653530) Return of the Obra Dinn
 MISS outer-wilds (753640) Outer Wilds
 MISS disco-elysium (632470) Disco Elysium
 MISS undertale (391540) Undertale
 MISS nier-automata (524220) NieR: Automata
-MISS persona-5-royal (1687950) Persona 5 Royal
 MISS metaphor-refantazio (2679460) Metaphor: ReFantazio
 MISS yakuza-like-a-dragon (1235140) Yakuza: Like a Dragon
 MISS stardew-valley (413150) Stardew Valley
-MISS a-short-hike (1055540) A Short Hike
 MISS journey (638230) Journey
 MISS firewatch (383870) Firewatch
 MISS what-remains-of-edith-finch (501300) What Remains of Edith Finch
-MISS detroit-become-human (1222140) Detroit: Become Human
-MISS until-dawn (2172010) Until Dawn
 MISS the-quarry (1577120) The Quarry
 MISS the-elder-scrolls-v-skyrim (489830) The Elder Scrolls V: Skyrim
 MISS dragon-age-the-veilguard (1845910) Dragon Age: The Veilguard
 MISS assassins-creed-odyssey (812140) Assassin’s Creed Odyssey
-MISS armored-core-vi-fires-of-rubicon (1888160) Armored Core VI: Fires of Rubicon
 MISS katana-zero (460950) Katana ZERO
 MISS factorio (427520) Factorio
 MISS satisfactory (526870) Satisfactory
@@ -145,14 +125,12 @@ MISS hollow-knight-silksong (1030300) Hollow Knight: Silksong
 MISS kingdom-come-deliverance-ii (1771300) Kingdom Come: Deliverance II
 MISS stalker-2-heart-of-chornobyl (1643320) STALKER 2: Heart of Chornobyl
 MISS warhammer-40-000-space-marine-2 (2183900) Warhammer 40,000: Space Marine 2
-MISS peak (3527290) Peak
 MISS the-alters (1601570) The Alters
 MISS schedule-i (3164500) Schedule I
 MISS marvel-rivals (2767030) Marvel Rivals
 MISS escape-from-tarkov (3932890) Escape from Tarkov
 MISS hunt-showdown-1896 (594650) Hunt: Showdown 1896
 MISS ready-or-not (1144200) Ready or Not
-MISS gtfo (493520) GTFO
 MISS risk-of-rain-2 (632360) Risk of Rain 2
 MISS remnant-ii (1282100) Remnant II
 MISS tom-clancys-rainbow-six-siege (359550) Tom Clancy’s Rainbow Six Siege
@@ -169,8 +147,6 @@ MISS hi-fi-rush (1817230) Hi-Fi Rush
 MISS beat-saber (620980) Beat Saber
 MISS crypt-of-the-necrodancer (247080) Crypt of the NecroDancer
 MISS life-is-strange-remastered (1265920) Life is Strange Remastered
-MISS the-walking-dead-the-telltale-definitive-series (1449690) The Walking Dead: The Telltale Definitive Series
-MISS steins-gate-elite (819030) Steins;Gate Elite
 MISS slime-rancher-2 (1657630) Slime Rancher 2
 MISS dave-the-diver (1868140) Dave the Diver
 MISS cult-of-the-lamb (1313140) Cult of the Lamb
@@ -178,13 +154,11 @@ MISS kenshi (233860) Kenshi
 MISS efootball (1665460) eFootball
 MISS deltarune (1671210) Deltarune
 MISS the-plucky-squire (1627570) The Plucky Squire
-MISS sons-of-the-forest (1326470) Sons of the Forest
 MISS enshrouded (1203620) Enshrouded
 MISS icarus (1149460) Icarus
 MISS core-keeper (1621690) Core Keeper
 MISS necesse (1169040) Necesse
 MISS abiotic-factor (427410) Abiotic Factor
-MISS content-warning (2881650) Content Warning
 MISS chained-together (2567870) Chained Together
 MISS pico-park (1509960) Pico Park
 MISS party-animals (1260320) Party Animals
@@ -194,7 +168,6 @@ MISS we-were-here-forever (1341290) We Were Here Forever
 MISS operation-tango (1335790) Operation: Tango
 MISS escape-simulator (1435790) Escape Simulator
 MISS devour (1274570) Devour
-MISS demonologist (1929610) Demonologist
 MISS scp-secret-laboratory (700330) SCP: Secret Laboratory
 MISS barotrauma (602960) Barotrauma
 MISS space-engineers (244850) Space Engineers
@@ -207,7 +180,6 @@ MISS snowrunner (1465360) SnowRunner
 MISS assetto-corsa-competizione (805550) Assetto Corsa Competizione
 MISS trackmania (2225070) Trackmania
 MISS cook-serve-delicious-3 (1000030) Cook, Serve, Delicious! 3?!
-MISS duck-game (312530) Duck Game
 MISS stick-fight-the-game (674940) Stick Fight: The Game
 MISS towerfall-ascension (251470) TowerFall Ascension
 MISS rounds (1557740) Rounds
@@ -217,16 +189,13 @@ MISS roboquest (692890) Roboquest
 MISS deep-rock-galactic-survivor (2321470) Deep Rock Galactic: Survivor
 MISS crab-champions (774801) Crab Champions
 MISS the-planet-crafter (1284190) The Planet Crafter
-MISS sunkenland (2080690) Sunkenland
 MISS midnight-ghost-hunt (915810) Midnight Ghost Hunt
-MISS goose-goose-duck (1568590) Goose Goose Duck
 MISS aliens-dark-descent (1150440) Aliens: Dark Descent
 MISS streets-of-rage-4 (985890) Streets of Rage 4
 MISS max-payne-3 (204100) Max Payne 3
 MISS mafia-definitive-edition (1030840) Mafia: Definitive Edition
 MISS sleeping-dogs (202170) Sleeping Dogs
 MISS watch-dogs-2 (447040) Watch Dogs 2
-MISS far-cry-3 (220240) Far Cry 3
 MISS far-cry-5 (552520) Far Cry 5
 MISS dishonored-2 (403640) Dishonored 2
 MISS prey (480490) Prey
@@ -237,7 +206,6 @@ MISS portal-2 (620) Portal 2
 MISS doom-eternal (782330) DOOM Eternal
 MISS doom-2016 (379720) DOOM (2016)
 MISS wolfenstein-the-new-order (201810) Wolfenstein: The New Order
-MISS metro-2033-redux (286690) Metro 2033 Redux
 MISS half-life-alyx (546560) Half-Life: Alyx
 MISS hitman-world-of-assassination (1659040) Hitman World of Assassination
 MISS metal-gear-solid-v-the-phantom-pain (287700) Metal Gear Solid V: The Phantom Pain
@@ -248,7 +216,6 @@ MISS tunic (553420) Tunic
 MISS deaths-door (894020) Death's Door
 MISS nine-sols (1809540) Nine Sols
 MISS blasphemous-2 (2114740) Blasphemous 2
-MISS enter-the-gungeon (311690) Enter the Gungeon
 MISS nuclear-throne (242680) Nuclear Throne
 MISS neon-abyss (788100) Neon Abyss
 MISS wizard-of-legend (445980) Wizard of Legend
@@ -263,29 +230,21 @@ MISS returnal (1649240) Returnal
 MISS ratchet-clank-rift-apart (1895880) Ratchet & Clank: Rift Apart
 MISS stray (1332010) Stray
 MISS little-nightmares-ii (860510) Little Nightmares II
-MISS inside (304430) Inside
 MISS divinity-original-sin-2 (435150) Divinity: Original Sin 2
 MISS pillars-of-eternity-ii-deadfire (560130) Pillars of Eternity II: Deadfire
 MISS pathfinder-wrath-of-the-righteous (1184370) Pathfinder: Wrath of the Righteous
 MISS wasteland-3 (719040) Wasteland 3
 MISS tyranny (362960) Tyranny
 MISS fallout-new-vegas (22380) Fallout: New Vegas
-MISS mass-effect-legendary-edition (1328670) Mass Effect Legendary Edition
-MISS dragon-age-origins (47810) Dragon Age: Origins
-MISS star-wars-knights-of-the-old-republic (32370) Star Wars: Knights of the Old Republic
 MISS final-fantasy-vii-remake-intergrade (1462040) Final Fantasy VII Remake Intergrade
 MISS final-fantasy-xvi (2515020) Final Fantasy XVI
-MISS dragon-quest-xi-s (1295510) Dragon Quest XI S
-MISS persona-4-golden (1113000) Persona 4 Golden
 MISS persona-3-reload (2161700) Persona 3 Reload
 MISS shin-megami-tensei-v-vengeance (1875830) Shin Megami Tensei V: Vengeance
-MISS octopath-traveler-ii (1971650) Octopath Traveler II
 MISS sea-of-stars (1244090) Sea of Stars
 MISS chained-echoes (1229240) Chained Echoes
 MISS crosscode (368340) CrossCode
 MISS omori (1150690) OMORI
 MISS wo-long-fallen-dynasty (1448440) Wo Long: Fallen Dynasty
-MISS nioh-2 (1325200) Nioh 2
 MISS elden-ring-nightreign (2622380) Elden Ring Nightreign
 MISS europa-universalis-iv (236850) Europa Universalis IV
 MISS hearts-of-iron-iv (394360) Hearts of Iron IV
@@ -296,7 +255,6 @@ MISS age-of-empires-ii-definitive-edition (813780) Age of Empires II: Definitive
 MISS northgard (466560) Northgard
 MISS they-are-billions (644930) They Are Billions
 MISS anno-1800 (916440) Anno 1800
-MISS manor-lords (1363080) Manor Lords
 MISS against-the-storm (1336490) Against the Storm
 MISS timberborn (1062090) Timberborn
 MISS tropico-6 (492720) Tropico 6
@@ -309,14 +267,8 @@ MISS rise-of-industry (671440) Rise of Industry
 MISS unpacking (1135690) Unpacking
 MISS spiritfarer (972660) Spiritfarer
 MISS coffee-talk (914800) Coffee Talk
-MISS va-11-hall-a (447530) VA-11 HALL-A
 MISS dorfromantik (1455840) Dorfromantik
-MISS islanders (1046030) Islanders
-MISS townscaper (1291340) Townscaper
-MISS mini-motorways (1127500) Mini Motorways
-MISS mini-metro (287980) Mini Metro
 MISS monument-valley-2 (1927740) Monument Valley 2
-MISS limbo (48000) Limbo
 MISS little-nightmares (424840) Little Nightmares
 MISS the-mortuary-assistant (1295920) The Mortuary Assistant
 MISS poppy-playtime (1721470) Poppy Playtime
@@ -327,38 +279,26 @@ MISS the-medium (1293160) The Medium
 MISS layers-of-fear (1946700) Layers of Fear
 MISS bendy-and-the-ink-machine (622650) Bendy and the Ink Machine
 MISS cozy-grove (1458100) Cozy Grove
-MISS ooblets (593150) Ooblets
 MISS coral-island (1158160) Coral Island
 MISS sun-haven (1432860) Sun Haven
 MISS roots-of-pacha (1245560) Roots of Pacha
-MISS fields-of-mistria (2142790) Fields of Mistria
 MISS travellers-rest (1139980) Travellers Rest
-MISS bear-and-breakfast (1136370) Bear and Breakfast
 MISS a-little-to-the-left (1629520) A Little to the Left
-MISS wilmots-warehouse (839870) Wilmot's Warehouse
 MISS florence (1102130) Florence
 MISS gris (683320) Gris
-MISS brothers-a-tale-of-two-sons (225080) Brothers: A Tale of Two Sons
 MISS sayonara-wild-hearts (1122720) Sayonara Wild Hearts
 MISS tetris-effect-connected (1003590) Tetris Effect: Connected
 MISS marvel-snap (1997040) Marvel Snap
-MISS wuthering-waves (3513350) Wuthering Waves
-MISS zenless-zone-zero (4162040) Zenless Zone Zero
-MISS afk-journey (4195600) AFK Journey
 MISS old-school-runescape (1343370) Old School RuneScape
 MISS eve-online (8500) EVE Online
 MISS albion-online (761890) Albion Online
-MISS torchlight-infinite (1974050) Torchlight Infinite
 MISS half-life (70) Half-Life
 MISS baldurs-gate-ii-enhanced-edition (257350) Baldur's Gate II: Enhanced Edition
 MISS heroes-of-might-and-magic-iii (4921760) Heroes of Might and Magic III
 MISS age-of-empires-ii-the-age-of-kings (221380) Age of Empires II: The Age of Kings
 MISS diablo-ii-resurrected (2536520) Diablo II: Resurrected
-MISS star-wars-battlefront-ii-2005 (6060) Star Wars: Battlefront II (2005)
 MISS stronghold-crusader (40970) Stronghold Crusader
-MISS dead-space-2008 (17470) Dead Space (2008)
 MISS the-elder-scrolls-iv-oblivion (2623190) The Elder Scrolls IV: Oblivion
-MISS prince-of-persia-the-sands-of-time (13600) Prince of Persia: The Sands of Time
 MISS beyond-good-evil (2556990) Beyond Good & Evil
 MISS sid-meiers-civilization-iv (3900) Sid Meier’s Civilization IV
 MISS command-conquer-red-alert-2 (2229850) Command & Conquer: Red Alert 2
@@ -377,18 +317,14 @@ MISS street-fighter-6 (1364780) Street Fighter 6
 MISS guilty-gear-strive (1384160) Guilty Gear Strive
 MISS mortal-kombat-11 (976310) Mortal Kombat 11
 MISS multiversus (1818750) MultiVersus
-MISS beamng-drive (284160) BeamNG.drive
-MISS trackmania-nations (11020) Trackmania Nations
 MISS art-of-rally (550320) Art of Rally
 MISS hot-wheels-unleashed-2 (2051120) Hot Wheels Unleashed 2
 MISS ea-sports-fc-25 (2669320) EA Sports FC 25
 MISS tony-hawks-pro-skater-1-2 (2395210) Tony Hawk’s Pro Skater 1 + 2
 MISS wwe-2k24 (2315690) WWE 2K24
 MISS golf-it (571740) Golf It!
-MISS splinter-cell-chaos-theory (13570) Splinter Cell: Chaos Theory
 MISS hitman-blood-money (6860) Hitman: Blood Money
 MISS shadow-tactics-blades-of-the-shogun (418240) Shadow Tactics: Blades of the Shogun
-MISS her-story (368370) Her Story
 MISS paradise-killer (1160220) Paradise Killer
 MISS case-of-the-golden-idol (1677770) Case of the Golden Idol
 MISS melvor-idle (1267910) Melvor Idle
@@ -396,12 +332,15 @@ MISS cookie-clicker (1454400) Cookie Clicker
 MISS tabletop-simulator (286160) Tabletop Simulator
 MISS gloomhaven (780290) Gloomhaven
 MISS ticket-to-ride (2477010) Ticket to Ride
-MISS codenames (884670) Codenames
 MISS the-elder-scrolls-online (306130) The Elder Scrolls Online
 MISS black-desert-online (582660) Black Desert Online
 MISS star-wars-the-old-republic (1286830) Star Wars: The Old Republic
 MISS path-of-exile (238960) Path of Exile
 MISS asphalt-legends-unite (1815780) Asphalt Legends Unite
-Минимальные и рекомендуемые есть у: 0
-Только минимальные: 0
+LANG grand-theft-auto-v: язык магазина отдал данные только на en
+LANG marvels-spider-man-2: язык магазина отдал данные только на en
+LANG nioh-2: язык магазина отдал данные только на en
+LANG brothers-a-tale-of-two-sons: язык магазина отдал данные только на en
+Минимальные и рекомендуемые есть у: 50
+Только минимальные: 16
 Только рекомендуемые: 0
