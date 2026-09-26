@@ -728,13 +728,13 @@ select.input { cursor: pointer; }
    Значения — из Steam Store API; если магазин их не публикует, текст честно об этом говорит. */
 .sysreq {
   background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius);
-  padding: var(--space-4); margin: var(--space-4) 0; max-width: 70ch;
+  padding: var(--space-4); margin: var(--space-4) 0; max-width: 78ch;
 }
 .sysreq strong { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: var(--accent); font-size: .95rem; }
 .sysreq-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 24px; }
 .sysreq-level { display: block; font-size: .78rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); font-weight: 700; margin-bottom: 6px; }
 .sysreq dl { margin: 0; display: grid; gap: 6px; }
-.sysreq dl div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 8px; font-size: .9rem; }
+.sysreq dl div { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 8px; font-size: .9rem; }
 .sysreq dt { color: var(--text-muted); }
 .sysreq dd { margin: 0; overflow-wrap: break-word; }
 .sysreq-none { color: var(--text-soft); font-size: .9rem; margin: 0; }
