@@ -308,13 +308,13 @@ console.log(`Не проверено из-за ограничений Steam: ${u
 console.log(`Проблемных официальных ссылок: ${badOfficial.length}`);
 console.log(`Игр без ссылки: ${noLink.length}`);
 
-if (suggest) {
-  // Список «Steam называет игру иначе» — без него в логе видно только число,
-  // а сами пары (slug → название на Steam) нужны для правки данных
-  console.log('\n--- WRONG_STEAM_JSON ---');
-  console.log(JSON.stringify(wrongSteam.map((w) => ({ slug: w.slug, title: w.title, appid: w.id, steamName: w.steamName, score: w.score })), null, 1));
-  console.log('--- END_WRONG_STEAM_JSON ---');
+// Список «Steam называет игру иначе» — относится к текущим данным, поэтому печатается
+// всегда: в логе видно только число, а пары (slug → название на Steam) нужны для правки
+console.log('\n--- WRONG_STEAM_JSON ---');
+console.log(JSON.stringify(wrongSteam.map((w) => ({ slug: w.slug, title: w.title, appid: w.id, steamName: w.steamName, score: w.score })), null, 1));
+console.log('--- END_WRONG_STEAM_JSON ---');
 
+if (suggest) {
   console.log('\n--- STEAM_SUGGESTIONS_JSON ---');
   console.log(JSON.stringify(steamSuggestions, null, 1));
   console.log('--- END_STEAM_SUGGESTIONS_JSON ---');
