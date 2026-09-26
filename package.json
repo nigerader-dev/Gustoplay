@@ -34,6 +34,7 @@
     "check:stores:candidates": "node tools/check-store-links.mjs --candidates=tools/store-candidates.json --suggest",
     "clean": "node tools/clean-catalog.mjs",
     "audit": "node tools/audit-catalog.mjs",
+    "audit:readiness": "node tools/audit-readiness.mjs",
     "backup": "node tools/backup.mjs backup",
     "backup:list": "node tools/backup.mjs list",
     "backup:verify": "node tools/backup.mjs verify",

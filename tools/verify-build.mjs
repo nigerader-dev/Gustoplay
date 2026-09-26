@@ -19,6 +19,7 @@
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join, relative } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { GAMES } from '../js/catalog/index.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
@@ -177,7 +178,9 @@ check('robots.txt ссылается на sitemap', /Sitemap:\s+https?:\/\/\S+si
 check('robots.txt ведёт на свой sitemap', robotsTxt.includes(`Sitemap: ${siteUrl}/sitemap.xml`));
 
 console.log('\n5. Страницы игр');
-const gameFiles = htmlFiles.filter((f) => f.includes(`${'game'}/`) || /\/game\//.test(f));
+// Match the route segment, not any path containing the substring "game/":
+// `/genre/boardgame/` is a genre page, not an extra game detail page.
+const gameFiles = htmlFiles.filter((f) => /[/\\]game[/\\]/.test(f));
 const sample = gameFiles.slice(0, 12);
 let withoutJsonLd = 0;
 let withoutTitle = 0;
@@ -192,9 +195,10 @@ check('страницы игр содержат JSON-LD', withoutJsonLd === 0, `
 // в CSS и 70 КиБ в JS — файлы уезжали как есть. Теперь build сжимает их,
 // и здесь проверяется, что сжатие не потерялось.
 {
-  const srcCss = readFileSync(resolve(root, 'css/styles.css'), 'utf8').length;
+  const srcCssPath = resolve(root, 'css/styles.css');
+  const srcCss = existsSync(srcCssPath) ? statSync(srcCssPath).size : 0;
   const distCssPath = resolve(dist, 'css/styles.css');
-  const distCss = existsSync(distCssPath) ? readFileSync(distCssPath, 'utf8').length : 0;
+  const distCss = existsSync(distCssPath) ? statSync(distCssPath).size : 0;
   check('CSS собран сжатым', distCss > 0 && distCss < srcCss * 0.85, `${Math.round(distCss / 1024)} КиБ из ${Math.round(srcCss / 1024)} КиБ`);
 
   const jsFiles = [];
@@ -206,13 +210,14 @@ check('страницы игр содержат JSON-LD', withoutJsonLd === 0, `
     }
   };
   if (existsSync(resolve(dist, 'js'))) walkJs(resolve(dist, 'js'));
-  const distJs = jsFiles.reduce((n, f) => n + readFileSync(f, 'utf8').length, 0);
-  const srcJs = jsFiles.reduce((n, f) => n + readFileSync(resolve(root, 'js', f.slice(resolve(dist, 'js').length + 1)), 'utf8').length, 0);
+  const distJs = jsFiles.reduce((n, f) => n + statSync(f).size, 0);
+  const srcJs = jsFiles.reduce((n, f) => n + statSync(resolve(root, 'js', f.slice(resolve(dist, 'js').length + 1))).size, 0);
   check('JS собран сжатым', distJs > 0 && distJs < srcJs * 0.95, `${Math.round(distJs / 1024)} КиБ из ${Math.round(srcJs / 1024)} КиБ`);
 }
 
 check('страницы игр содержат заголовок и <h1>', withoutTitle === 0, `проверено ${sample.length}`);
-check('игр в сборке столько же, сколько в каталоге', gameFiles.length > 400, `${gameFiles.length} страниц игр`);
+check('страницы игр в сборке совпадают с каталогом', gameFiles.length === GAMES.length,
+  `${gameFiles.length} страниц игр / ${GAMES.length} записей`);
 
 console.log('\n6. Заголовки безопасности и PWA');
 const headers = readFileSync(join(dist, '_headers'), 'utf8');
