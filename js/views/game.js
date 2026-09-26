@@ -70,7 +70,7 @@ export function render(ctx) {
 
         <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
 
-        ${whyAll.length ? `<div class="why-box">
+        ${FEATURES.scoreDebug && whyAll.length ? `<div class="why-box">
           <strong>${esc(t('results.why'))}</strong>
           <ul class="why">${whyAll.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>
         </div>` : ''}

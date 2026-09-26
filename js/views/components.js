@@ -80,12 +80,18 @@ export const meters = (game) => `
 
 export function coverImage(game, cls = 'cover-img') {
   const generated = coverDataUri(game);
-  // Основной источник — официальный арт магазина (сопоставление в js/catalog/steam-covers.js).
-  // Если владелец положил локальные арты в /covers/<slug>.jpg (FEATURES.realCovers),
-  // они в приоритете. Сгенерированная обложка — запасная: битая ссылка, офлайн, игра без арта.
-  const src = game.cover || (FEATURES.realCovers ? `covers/${game.slug}.jpg` : generated);
-  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900"
-    onerror="this.onerror=null;this.src=this.dataset.fallback">`;
+  // Порядок источников обложки:
+  //   1) официальный арт магазина (сопоставление в js/catalog/steam-covers.js);
+  //   2) если включён FEATURES.realCovers — файл владельца /covers/<slug>.jpg идёт первым,
+  //      а арт магазина остаётся первой ступенью отката;
+  //   3) сгенерированная обложка — последняя ступень (битая ссылка, офлайн, игра без арта).
+  // Если файла владельца нет, картинка тихо откатывается на арт магазина и генерацию:
+  // раньше в этом случае показывался сломанный значок изображения.
+  const shop = game.cover || '';
+  const local = `covers/${game.slug}.jpg`;
+  const src = FEATURES.realCovers ? local : (shop || generated);
+  const fallback = FEATURES.realCovers ? (shop || generated) : generated;
+  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -116,8 +122,8 @@ export function gameCard(game, opts = {}) {
         <span>${game.y}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
       </div>
       <div class="card-chips">${genreChips(game, 2)}${tagChips(game, 2)}</div>
-      ${why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
-      ${whyHtml}
+      ${FEATURES.scoreDebug && why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
+      ${FEATURES.scoreDebug ? whyHtml : ''}
       <div class="card-foot">
         ${priceLabel(game)}
         <span class="len">${icon('clock')} ${lengthLabel(game)}</span>
