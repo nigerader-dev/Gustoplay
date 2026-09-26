@@ -406,11 +406,9 @@ async function main() {
     req = second.json?.[String(id)]?.data?.pc_requirements ?? null;
     if (req) return { req, how: 'без фильтра', first, second };
 
-    if (!cc) return { req: null, how: 'нет', first, second };
-
-    const third = await fetchInfo(detailsUrl(id, lang, false, cc));
-    req = third.json?.[String(id)]?.data?.pc_requirements ?? null;
-    return { req, how: req ? `cc=${cc}` : 'нет', first, second, third };
+    // Витрину (cc) пробуем только в повторных проходах: в первом третий запрос
+    // на каждую из сотен «пустых» игр — это лишние ~800 обращений к магазину.
+    return { req: null, how: 'нет', first, second };
   }
 
   /**
@@ -470,50 +468,73 @@ async function main() {
   // медленнее и в один поток: пустой ответ магазина почти всегда снимается паузой.
   let pending = [...withId];
   const addedByPass = {};
+  let lastAdded = Infinity;
   for (let pass = 1; pass <= passes && pending.length; pass += 1) {
     const passDelay = pass === 1 ? delay : Math.max(600, delay * 3 * pass);
     const passConcurrency = pass === 1 ? concurrency : Math.max(1, Math.min(2, concurrency));
     console.log(`\nПроход ${pass}/${passes}: игр ${pending.length}, потоков ${passConcurrency}, пауза ${passDelay}мс`);
     const added = await collectPass(pending, { pass, passDelay, passConcurrency });
     addedByPass[pass] = added;
-    if (pass > 1 && added === 0) {
-      console.log(`проход ${pass} не добавил данных — дальше повторять нечего`);
+    // Сохраняем то, что уже собрано: оборвись джоб по таймауту — данные останутся
+    await flush(pass);
+    console.log(`после прохода ${pass} в файле ${Object.keys(collected).length} игр с требованиями`
+      + (pass > 1 ? ` (проход добавил ${added})` : ''));
+    // Останавливаемся, только если ДВА прохода подряд не дали ничего: один пустой
+    // проход объясняется троттлингом (магазин отвечает data: []), и следующая
+    // попытка с большей паузой обычно данные отдаёт.
+    if (pass > 1 && added === 0 && lastAdded === 0) {
+      console.log(`два прохода подряд без данных — дальше повторять нечего`);
       break;
     }
+    lastAdded = added;
     pending = pending.filter((g) => !collected[g.slug]);
   }
 
-  // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала.
-  // Идём по ВСЕМ играм со steamId: порционный прогон не должен терять остальные.
-  const merged = {};
-  for (const g of allWithId) {
-    const fresh = collected[g.slug];
-    const old = cleanEntry(existing[g.slug]);
-    const override = overrides[g.slug];
-    const entry = override || fresh || old;
-    if (entry) merged[g.slug] = entry;
+  /**
+   * Собирает итог и пишет оба файла. Вызывается после каждого прохода: если джоб
+   * оборвётся по таймауту, уже собранные данные останутся в ветке, а не пропадут
+   * вместе с прогоном (файл и отчёт — единственный способ сохранить результат).
+   */
+  async function flush(pass) {
+    // Оверрайды поверх сети; старые данные — только там, где сеть ничего не дала.
+    // Идём по ВСЕМ играм со steamId: порционный прогон не должен терять остальные.
+    const merged = {};
+    for (const g of allWithId) {
+      const fresh = collected[g.slug];
+      const old = cleanEntry(existing[g.slug]);
+      const override = overrides[g.slug];
+      const entry = override || fresh || old;
+      if (entry) merged[g.slug] = entry;
+    }
+    const withoutReq = allWithId.filter((g) => !merged[g.slug]);
+    const report = buildReport({ merged, withoutReq, pass });
+    await writeFile(outPath, renderSysreqFile(merged));
+    await writeFile(reviewPath, `${report}\n`);
+    return { merged, report };
   }
 
-  await writeFile(outPath, renderSysreqFile(merged));
+  /** Текст отчёта: покрытие, причины, способы получения и строки MISS/DIAG */
+  function buildReport({ merged, withoutReq, pass }) {
+    return [
+      `Требования к ПК: ${Object.keys(merged).length} из ${allWithId.length} игр со steamId`,
+      `Состояние после прохода ${pass}`,
+      `Игр без steamId (данные недоступны через Store API): ${withoutId.length} — ${withoutId.map((g) => g.slug).join(', ')}`,
+      `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
+      'Причины: ' + (Object.entries(reasons).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
+      'Как получены: ' + (Object.entries(how).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
+      'По проходам: ' + (Object.entries(addedByPass).map(([p, n]) => `проход ${p} — ${n} игр`).join(' | ') || 'нет'),
+      ...diagnostics,
+      `Запросов, которые не прошли (сеть/HTTP/разбор JSON): ${reasons['запрос не прошёл'] || 0}`,
+      ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
+      ...mismatches.map((m) => `LANG ${m}`),
+      'Минимальные и рекомендуемые есть у: ' + Object.values(merged).filter((e) => e.min && e.rec).length,
+      'Только минимальные: ' + Object.values(merged).filter((e) => e.min && !e.rec).length,
+      'Только рекомендуемые: ' + Object.values(merged).filter((e) => !e.min && e.rec).length,
+    ].join('\n');
+  }
 
-  const withoutReq = allWithId.filter((g) => !merged[g.slug]);
-  const report = [
-    `Требования к ПК: ${Object.keys(merged).length} из ${allWithId.length} игр со steamId`,
-    `Игр без steamId (данные недоступны через Store API): ${withoutId.length} — ${withoutId.map((g) => g.slug).join(', ')}`,
-    `Данные не получены (нет pc_requirements или запрос не прошёл): ${withoutReq.length}`,
-    'Причины: ' + (Object.entries(reasons).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
-    'Как получены: ' + (Object.entries(how).map(([k, v]) => `${k} — ${v}`).join(' | ') || 'нет'),
-    'По проходам: ' + (Object.entries(addedByPass).map(([p, n]) => `проход ${p} — ${n} игр`).join(' | ') || 'нет'),
-    ...diagnostics,
-    `Запросов, которые не прошли (сеть/HTTP/разбор JSON): ${reasons['запрос не прошёл'] || 0}`,
-    ...withoutReq.map((g) => `MISS ${g.slug} (${g.id}) ${g.title}`),
-    ...mismatches.map((m) => `LANG ${m}`),
-    'Минимальные и рекомендуемые есть у: ' + Object.values(merged).filter((e) => e.min && e.rec).length,
-    'Только минимальные: ' + Object.values(merged).filter((e) => e.min && !e.rec).length,
-    'Только рекомендуемые: ' + Object.values(merged).filter((e) => !e.min && e.rec).length,
-  ].join('\n');
-  await writeFile(reviewPath, `${report}\n`);
-  console.log(`\n${report.split('\n').slice(0, 8).join('\n')}`);
+  const { report } = await flush(Object.keys(addedByPass).length || 1);
+  console.log(`\n${report.split('\n').slice(0, 10).join('\n')}`);
 }
 
 // Импорт модуля не должен ходить в сеть: main() запускается только при прямом вызове,
