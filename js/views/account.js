@@ -152,7 +152,7 @@ function formBlock(L) {
   if (isForgot) {
     return `
     <div class="auth-card">
-      <h3>${esc(L.forgotTitle)}</h3>
+      <h2 class="h-lg">${esc(L.forgotTitle)}</h3>
       <p class="muted">${esc(L.forgotText)}</p>
       <form id="forgot-form" class="auth-form" novalidate>
         <label class="field">
@@ -169,7 +169,7 @@ function formBlock(L) {
   if (isReset) {
     return `
     <div class="auth-card">
-      <h3>${esc(L.resetTitle)}</h3>
+      <h2 class="h-lg">${esc(L.resetTitle)}</h3>
       <p class="muted">${esc(state.resetToken ? L.resetText : L.resetBadToken)}</p>
       ${state.resetToken ? `
       <form id="reset-form" class="auth-form" novalidate>
@@ -228,7 +228,7 @@ function authBlock(user, L) {
   return `
   <div class="account-grid">
     <div class="panel">
-      <h3>${esc(L.loggedAs)}: ${esc(user?.name || user?.email || '')}</h3>
+      <h2 class="h-lg">${esc(L.loggedAs)}: ${esc(user?.name || user?.email || '')}</h2>
       <p class="muted">${esc(user?.email || '')} · ${user?.provider === 'google' ? 'Google' : 'e-mail'}</p>
       <div class="panel-actions">
         <button type="button" class="btn btn-outline" data-action="auth-logout">${esc(L.logout)}</button>
@@ -237,7 +237,7 @@ function authBlock(user, L) {
     </div>
 
     <div class="panel">
-      <h3>${esc(L.syncTitle)}</h3>
+      <h2 class="h-lg">${esc(L.syncTitle)}</h3>
       <p class="muted">${esc(L.syncText)}</p>
       <p class="muted">${esc(t('profile.stats', {
         liked: countMarks('liked'), played: countMarks('played'),
@@ -250,7 +250,7 @@ function authBlock(user, L) {
     </div>
 
     <div class="panel">
-      <h3>${esc(L.sessions)}</h3>
+      <h2 class="h-lg">${esc(L.sessions)}</h3>
       <div class="sessions" id="sessions-list">
         ${state.sessions.length
           ? state.sessions.map((item) => `<div class="session-row">
@@ -264,7 +264,7 @@ function authBlock(user, L) {
     </div>
 
     <div class="panel">
-      <h3>${esc(t('about.privacy.title'))}</h3>
+      <h2 class="h-lg">${esc(t('about.privacy.title'))}</h2>
       <p class="muted">${esc(t('about.privacy.text'))}</p>
       <p class="muted">GustoPlay · ${esc(SITE.domain)}</p>
     </div>

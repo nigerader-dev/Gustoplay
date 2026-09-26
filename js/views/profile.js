@@ -64,14 +64,14 @@ export function render() {
 
     <div class="cols-2">
       <div class="panel">
-        <h3>${esc(t('profile.topTags'))}</h3>
+        <h2 class="h-lg">${esc(t('profile.topTags'))}</h2>
         <div class="bars">${bars || `<p class="muted">${esc(t('profile.empty'))}</p>`}</div>
-        ${stat.negativeTags.length ? `<h4>${esc(t('profile.negativeTags'))}</h4>
+        ${stat.negativeTags.length ? `<h3 class="h-base">${esc(t('profile.negativeTags'))}</h3>
           <div class="chips-cloud small">${stat.negativeTags.slice(0, 8).map((id) => `<span class="chip chip-warn">${esc(tl(TAGS, id))}</span>`).join('')}</div>` : ''}
       </div>
 
       <div class="panel">
-        <h3>${esc(t('profile.answers'))}</h3>
+        <h2 class="h-lg">${esc(t('profile.answers'))}</h2>
         <div class="answers">${answerRows || `<p class="muted">${esc(t('quiz.intro'))}</p>`}</div>
         <div class="panel-actions">
           <a class="btn btn-outline" href="#/quiz" data-action="nav">${icon('edit')} ${esc(t('profile.restartQuiz'))}</a>
@@ -81,12 +81,12 @@ export function render() {
     </div>
 
     <div class="panel">
-      <h3>${esc(t('profile.marks'))}</h3>
+      <h2 class="h-lg">${esc(t('profile.marks'))}</h2>
       <div class="mark-rows">${markRows || `<p class="muted">${esc(t('profile.empty'))}</p>`}</div>
     </div>
 
     <div class="panel">
-      <h3>${esc(t('about.privacy.title'))}</h3>
+      <h2 class="h-lg">${esc(t('about.privacy.title'))}</h2>
       <p class="muted">${esc(t('about.privacy.text'))}</p>
       <div class="panel-actions">
         <button type="button" class="btn btn-ghost" data-action="profile-export">${icon('download')} ${esc(t('profile.export'))}</button>

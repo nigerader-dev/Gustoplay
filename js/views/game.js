@@ -86,24 +86,24 @@ export function render(ctx) {
 
     <div class="game-details">
       <div class="detail-card">
-        <h3>${esc(t('game.about'))}</h3>
+        <h2>${esc(t('game.about'))}</h2>
         <dl class="facts">${facts.map((f) => `<div><dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd></div>`).join('')}</dl>
       </div>
       <div class="detail-card">
-        <h3>${esc(t('game.modes'))} · ${esc(t('game.platforms'))}</h3>
+        <h2>${esc(t('game.modes'))} · ${esc(t('game.platforms'))}</h2>
         <div class="badges">${game.platforms.map((p) => `<span class="badge">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</span>`).join('')}</div>
       </div>
       <div class="detail-card">
-        <h3>${esc(t('game.genres'))}</h3>
+        <h2>${esc(t('game.genres'))}</h2>
         <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id].icon)} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
       </div>
       <div class="detail-card">
-        <h3>${esc(t('game.tags'))}</h3>
+        <h2>${esc(t('game.tags'))}</h2>
         <div class="chips-cloud small">${tagChips(game, 20)}</div>
         ${meters(game)}
       </div>
       <div class="detail-card">
-        <h3>${esc(t('game.players'))}</h3>
+        <h2>${esc(t('game.players'))}</h2>
         <p class="detail-note">${platformIcons(game)}</p>
       </div>
     </div>

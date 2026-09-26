@@ -48,6 +48,7 @@
     "dictionary-en": "^4.0.0",
     "dictionary-en-gb": "^3.0.0",
     "dictionary-ru": "^3.0.0",
+    "esbuild": "^0.28.2",
     "jsdom": "^24.1.3",
     "nspell": "^2.1.5"
   }

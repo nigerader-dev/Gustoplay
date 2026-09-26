@@ -5,7 +5,7 @@
  * и сам поднимает dev-сервер на свободном порту. Без браузера — вежливый пропуск
  * (exit 0), чтобы не краснить CI там, где браузера нет.
  *
- * Запуск: npm run test:visual [-- --widths=360,768,1440 --theme=dark --shots=all]
+ * Запуск: npm run test:visual [-- --widths=360,768,1440 --theme=dark --shots=all --dir=dist]
  * Критерии провала: страница прокручивается по горизонтали, нет ровно одного h1,
  * «undefined» в тексте, ошибки консоли/битые картинки нашего origin, страница не отрисовалась.
  *
@@ -79,7 +79,9 @@ const freePort = () => new Promise((res, rej) => {
   });
 });
 const PORT = Number(args.port || await freePort());
-const server = spawn('node', ['server.js'], {
+// --dir=dist — прогон по собранному сайту: ловит поломки, которые видны только
+// после сборки (минификация CSS/JS, пре-рендер страниц)
+const server = spawn('node', ['server.js', ...(args.dir ? [`--dir=${args.dir}`] : [])], {
   cwd: root, env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore',
 });
 const BASE = `http://${args.host || '127.0.0.1'}:${PORT}`;

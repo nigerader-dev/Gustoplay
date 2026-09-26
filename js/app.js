@@ -129,7 +129,7 @@ function footer() {
         <p class="muted">${t('common.footer.note')}</p>
       </div>
       <div class="footer-col">
-        <h4>${t('common.footer.links')}</h4>
+        <h2 class="footer-head">${t('common.footer.links')}</h2>
         <a href="#/quiz" data-action="nav">${t('nav.quiz')}</a>
         <a href="#/catalog" data-action="nav">${t('nav.catalog')}</a>
         <a href="#/party" data-action="nav">${t('nav.party')}</a>
@@ -137,11 +137,11 @@ function footer() {
         <a href="#/about" data-action="nav">${t('nav.about')}</a>
       </div>
       <div class="footer-col">
-        <h4>${lang === 'ru' ? 'Жанры' : 'Genres'}</h4>
+        <h2 class="footer-head">${lang === 'ru' ? 'Жанры' : 'Genres'}</h2>
         ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${id}" data-action="nav">${tl(GENRES, id)}</a>`).join('')}
       </div>
       <div class="footer-col">
-        <h4>${lang === 'ru' ? 'Подборки' : 'Collections'}</h4>
+        <h2 class="footer-head">${lang === 'ru' ? 'Подборки' : 'Collections'}</h2>
         ${topTags.map((id) => `<a href="#/tag/${id}" data-action="nav">${tl(TAGS, id)}</a>`).join('')}
         <a href="#/privacy" data-action="nav">${t('about.privacy.title')}</a>
         <a href="#/terms" data-action="nav">${t('common.footer.terms')}</a>

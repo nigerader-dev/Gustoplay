@@ -24,7 +24,9 @@
   --surface-border: #e3e6ef;
   --text: #14161f;
   --text-soft: #545a6d;
-  --text-muted: #6b7280;
+  /* На «утопленном» фоне (#eef0f6) прежний #6b7280 давал 4.24 — меньше порога 4.5
+     для мелкого текста (нашёл Lighthouse на блоке рекламы). #676d7f даёт 4.53. */
+  --text-muted: #676d7f;
   --accent: #5b5bd6;
   --accent-hover: #4a4ac4;
   --accent-strong: #4338ca;
@@ -165,6 +167,12 @@ h1, h2, h3, h4 {
 h1 { font-size: var(--text-3xl); }
 h2 { font-size: var(--text-2xl); }
 h3 { font-size: var(--text-lg); }
+/* Уровень заголовка (h1…h3) выбирается по структуре страницы, а размер — по роли.
+   Эти классы сохраняют прежний вид там, где тег повышен ради порядка заголовков
+   (проверка Lighthouse heading-order: на каждой странице уровни не должны
+   перескакивать, а h1 «Каталог игр» → h3 карточки как раз перескакивал). */
+.h-lg { font-size: var(--text-lg); }
+.h-base { font-size: 1rem; }
 p { margin: 0 0 1em; }
 button, input, select { font: inherit; color: inherit; }
 ::selection { background: var(--accent); color: var(--accent-text); }
@@ -345,7 +353,7 @@ button, input, select { font: inherit; color: inherit; }
   background: var(--bg-elevated); border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg); padding: var(--space-6); margin-bottom: var(--space-5); box-shadow: var(--shadow-sm);
 }
-.panel h3 { margin-bottom: 12px; }
+.panel h2, .panel h3 { margin-bottom: 12px; }
 .panel-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
 
 /* ------------------------------- герой ------------------------------------ */
@@ -433,6 +441,12 @@ button, input, select { font: inherit; color: inherit; }
   border-color: var(--accent);
   border-color: color-mix(in srgb, var(--accent) 40%, var(--surface-border));
 }
+/* Обложка, оценка и плашка игроков — соседи внутри обёртки, а не внутри ссылки:
+   иначе видимый текст («96», «1–4») не входил в доступное имя ссылки и Lighthouse
+   справедливо ругался на label-content-name-mismatch (WCAG 2.5.3). Плашки не
+   перехватывают клик: под ними та же ссылка, поэтому нажатие работает по всей обложке. */
+.card-cover-wrap { position: relative; }
+.card-cover-wrap > .rating, .card-cover-wrap > .card-cover-meta { pointer-events: none; }
 .card-cover {
   position: relative; display: block; aspect-ratio: 3 / 4; overflow: hidden;
   background: var(--bg-sunken);
@@ -677,7 +691,7 @@ select.input { cursor: pointer; }
   background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius);
   padding: 14px 18px; margin: 18px 0; box-shadow: var(--shadow-sm);
 }
-.results-count strong { display: block; font-size: 1.05rem; }
+.results-count strong, .results-count h2 { display: block; font-size: 1.05rem; margin: 0; letter-spacing: var(--track-tight); }
 .results-count span { color: var(--text-muted); font-size: .85rem; }
 .results-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .switch { display: inline-flex; align-items: center; gap: 10px; font-size: .88rem; color: var(--text-soft); min-height: 44px; cursor: pointer; }
@@ -719,7 +733,7 @@ select.input { cursor: pointer; }
 .stores { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 .game-details { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px; margin: 30px 0; }
 .detail-card { background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius); padding: 18px; min-width: 0; }
-.detail-card h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
+.detail-card h2 { font-size: .82rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
 .facts { display: grid; gap: 8px; margin: 0; }
 .facts div { display: flex; justify-content: space-between; gap: 12px; }
 .facts dt { color: var(--text-muted); font-size: .9rem; }
@@ -776,7 +790,7 @@ select.input { cursor: pointer; }
 .faq details { border-bottom: 1px solid var(--surface-border); padding: 12px 0; }
 .faq summary { cursor: pointer; font-weight: 600; }
 .faq p { color: var(--text-soft); margin: 10px 0 0; }
-.legal h4 { margin-top: 18px; }
+.legal h2, .legal h3 { margin-top: 18px; }
 .legal p { color: var(--text-soft); font-size: .94rem; }
 
 .continue, .taste-mini, .notice { box-shadow: var(--shadow-sm); }
@@ -817,8 +831,10 @@ select.input { cursor: pointer; }
   margin: 26px 0; padding: 14px; border-radius: var(--radius);
   background: var(--bg-sunken); border: 1px solid var(--surface-border); text-align: center;
 }
-.ad-label { display: block; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; }
-.ad-mock .ad-body { display: grid; gap: 4px; padding: 26px 12px; border: 1px dashed var(--surface-border); border-radius: var(--radius); color: var(--text-muted); }
+/* --text-muted на фоне --bg-sunken даёт 4.24 — меньше порога 4.5 для мелкого
+   текста (нашёл аудит Lighthouse). --text-soft даёт 6.02, вид почти тот же. */
+.ad-label { display: block; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 10px; }
+.ad-mock .ad-body { display: grid; gap: 4px; padding: 26px 12px; border: 1px dashed var(--surface-border); border-radius: var(--radius); color: var(--text-soft); }
 .ad-mock strong { color: var(--text-soft); }
 .ad-off { display: none; }
 .house-ad {
@@ -855,7 +871,7 @@ select.input { cursor: pointer; }
   max-width: var(--max-width); margin: 0 auto; padding: 38px 20px 18px;
   display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 26px;
 }
-.footer-col h4 { font-size: .8rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
+.footer-head { margin: 0 0 .6em; font-size: .8rem; text-transform: uppercase; letter-spacing: var(--track-caps); color: var(--text-muted); }
 .footer-col a { display: block; padding: 3px 0; color: var(--text-soft); font-size: .92rem; transition: color var(--dur-fast) var(--ease); }
 .footer-col a:hover { color: var(--accent); }
 .footer-bottom {
@@ -1159,7 +1175,7 @@ select.input { cursor: pointer; }
   font-size: .88rem; cursor: pointer; text-decoration: underline; text-underline-offset: 2px;
   min-height: 44px;
 }
-.auth-card h3 { margin-bottom: 8px; }
+.auth-card h2, .auth-card h3 { margin-bottom: 8px; }
 
 /* ------------------------- уважение к настройкам движения ------------------ */
 

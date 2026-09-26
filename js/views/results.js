@@ -29,7 +29,7 @@ export function render() {
   const filtersBar = `
     <div class="results-bar">
       <div class="results-count">
-        <strong>${esc(tp('results.pool', result.poolSize))}</strong>
+        <h2>${esc(tp('results.pool', result.poolSize))}</h2>
         <span>${esc(t('results.subtitle'))}</span>
         ${result.confidence >= 25 ? `<span class="results-confidence" title="${esc(t('results.confidence.hint'))}">${esc(t('results.confidence', { n: result.confidence }))}</span>` : ''}
       </div>

@@ -67,6 +67,32 @@ for (const r of routes) {
   if (h1 !== 1) h1bad.push(`${r || '/'}:${h1}`);
 }
 check('ровно один h1 на каждой странице', h1bad.length === 0, h1bad.join(' ') || `${routes.length} маршрутов`);
+// Порядок заголовков: уровни не должны перескакивать (Lighthouse heading-order).
+// Раньше на каждой странице было h1 → h3 (карточки) и h2 → h4 (подвал).
+const orderBad = [];
+for (const r of routes) {
+  await navigate(r);
+  const levels = [...window.document.querySelectorAll('#app h1, #app h2, #app h3, #app h4, #app h5, #app h6')]
+    .map((h) => Number(h.tagName[1]));
+  let prev = 0;
+  for (const l of levels) {
+    if (prev && l > prev + 1) { orderBad.push(`${r || '/'}:${prev}→${l}`); break; }
+    prev = l;
+  }
+}
+check('уровни заголовков не перескакивают на всех страницах', orderBad.length === 0,
+  orderBad.join(' ') || `${routes.length} маршрутов`);
+// Имя ссылки-обложки должно содержать видимый текст (WCAG 2.5.3 Label in Name):
+// внутри ссылки оценки и число игроков, а aria-label был только с названием игры.
+await navigate('catalog');
+const cover = window.document.querySelector('.card-cover');
+const coverName = cover?.getAttribute('aria-label') || '';
+const coverVisible = cover?.textContent.replace(/\s+/g, ' ').trim() || '';
+const visibleParts = coverVisible.match(/\d+|\d+–\d+/g) || [];
+check('имя ссылки-обложки включает видимый текст',
+  !cover || visibleParts.every((part) => coverName.includes(part)),
+  cover ? `aria-label «${coverName.slice(0, 60)}»` : 'нет карточек');
+
 await navigate('/');
 check('html lang соответствует языку', window.document.documentElement.lang === 'ru');
 check('skip-link на месте', count('a.skip[href="#main"]') === 1);
@@ -150,6 +176,8 @@ const pairs = [
   ['--text-muted', '--bg-elevated'], ['--accent', '--bg'], ['--accent', '--accent-soft'],
   ['--accent-text', '--accent'], ['--warn', '--warn-soft'], ['--danger', '--danger-soft'],
   ['--danger', '--bg-elevated'], ['--success', '--bg-elevated'], ['--success', '--success-soft'],
+  // блок рекламы: подпись и текст на «утопленном» фоне (Lighthouse нашёл 4.24 при пороге 4.5)
+  ['--text-soft', '--bg-sunken'], ['--text-muted', '--bg-sunken'],
 ];
 for (const theme of ['light', 'dark']) {
   const bad = [];

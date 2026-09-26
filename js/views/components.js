@@ -101,13 +101,15 @@ export function gameCard(game, opts = {}) {
 
   return `
   <article class="card game-card" data-slug="${game.slug}">
-    <a class="card-cover" href="#/game/${game.slug}" data-action="nav" aria-label="${esc(game.t)}">
-      ${coverImage(game)}
+    <div class="card-cover-wrap">
+      <a class="card-cover" href="#/game/${game.slug}" data-action="nav" aria-label="${esc(game.t)}">
+        ${coverImage(game)}
+      </a>
       ${ratingPill(game)}
       <div class="card-cover-meta">
         <span class="cover-badge">${icon(MODES[game.modes[0]]?.icon)} ${playersLabel(game)}</span>
       </div>
-    </a>
+    </div>
     <div class="card-body">
       <h3 class="card-title"><a href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a></h3>
       <div class="card-sub">
@@ -241,7 +243,7 @@ export const breadcrumbs = (items) => `<nav class="crumbs">${items
 export const emptyState = (title, text, cta = '', iconName = 'search') => `
   <div class="empty">
     <div class="empty-icon">${icon(iconName)}</div>
-    <h3>${esc(title)}</h3>
+    <h2 class="h-lg">${esc(title)}</h2>
     <p>${esc(text)}</p>
     ${cta}
   </div>`;

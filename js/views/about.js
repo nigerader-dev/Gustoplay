@@ -66,13 +66,13 @@ export function render(ctx) {
     <div class="cols-2">
       ${blocks.map(([key, iconName]) => `<div class="col">
         <div class="col-icon">${icon(iconName)}</div>
-        <h3>${esc(t(`${key}.title`))}</h3>
+        <h2 class="h-lg">${esc(t(`${key}.title`))}</h2>
         <p>${esc(t(`${key}.text`))}</p>
       </div>`).join('')}
     </div>
 
     <div class="panel">
-      <h3>${lang === 'ru' ? 'Частые вопросы' : 'FAQ'}</h3>
+      <h2 class="h-lg">${lang === 'ru' ? 'Частые вопросы' : 'FAQ'}</h2>
       <div class="faq">
         ${(FAQ[lang] || FAQ.ru).map(([q, a]) => `<details>
           <summary>${esc(q)}</summary>
@@ -82,7 +82,7 @@ export function render(ctx) {
     </div>
 
     <div class="panel">
-      <h3>${esc(t('about.missing.title'))}</h3>
+      <h2 class="h-lg">${esc(t('about.missing.title'))}</h2>
       <p>${esc(t('about.missing.text'))}</p>
       <p class="muted">${(Object.keys(GENRES).length)} ${lang === 'ru' ? 'жанров' : 'genres'} · ${Object.keys(TAGS).length} ${lang === 'ru' ? 'тегов' : 'tags'} · ${Object.keys(MOODS).length} ${lang === 'ru' ? 'настроений' : 'moods'}</p>
     </div>
@@ -91,8 +91,8 @@ export function render(ctx) {
     ${houseAd()}
 
     <div class="panel legal" id="privacy">
-      <h3>${lang === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}</h3>
-      ${PRIVACY[lang].map(([q, a]) => `<h4>${esc(q)}</h4><p>${esc(a)}</p>`).join('')}
+      <h2 class="h-lg">${lang === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}</h2>
+      ${PRIVACY[lang].map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
     </div>
 
     <section class="section">
@@ -124,7 +124,7 @@ function renderPrivacy(lang) {
       <p class="muted">${esc(SITE.name)} · ${esc(SITE.email)}</p>
     </header>
     <div class="panel legal" id="privacy">
-      ${PRIVACY[lang].map(([q, a]) => `<h4>${esc(q)}</h4><p>${esc(a)}</p>`).join('')}
+      ${PRIVACY[lang].map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
     </div>
     <p class="muted">${esc(tail)}</p>
     ${houseAd()}
