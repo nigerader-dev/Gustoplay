@@ -87,7 +87,7 @@ jobs:
 
       - name: Проверка кандидатов
         continue-on-error: true
-        run: node tools/check-store-links.mjs --candidates=tools/store-candidates.json 2>&1 | tee /tmp/candidates.log
+        run: node tools/check-store-links.mjs --candidates=tools/store-candidates.json --suggest 2>&1 | tee /tmp/candidates.log
 
       - name: Результат в PR (комментарием — логи и артефакты из закрытых сред недоступны)
         if: always()
