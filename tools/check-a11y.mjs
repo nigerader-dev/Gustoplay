@@ -6,7 +6,7 @@
  * Запуск: npm run test:a11y
  */
 import { JSDOM } from 'jsdom';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -186,6 +186,29 @@ for (const theme of ['light', 'dark']) {
     if (r < 4.5) bad.push(`${fg.replace('--', '')}/${bg.replace('--', '')}=${r.toFixed(2)}`);
   }
   check(`контрасты темы ${theme}`, bad.length === 0, bad.join(' ') || `${pairs.length} пар`);
+}
+
+/* ------------------------------------------------------------------ *
+ * Заголовки в исходниках: открывающий и закрывающий теги одного уровня
+ * ------------------------------------------------------------------ */
+
+// Регресс: в кабинете было <h2 ...>…</h3> — браузер «чинил» разметку сам,
+// и уровень заголовка на странице отличался от задуманного.
+{
+  const files = ['js/app.js', ...readdirSync(resolve(root, 'js/views')).map((f) => `js/views/${f}`)];
+  const broken = [];
+  for (const file of files) {
+    const text = readFileSync(resolve(root, file), 'utf8');
+    const re = /<h([1-6])\b[^>]*>([\s\S]*?)<\/h([1-6])>/g;
+    let match;
+    while ((match = re.exec(text))) {
+      if (match[1] !== match[3]) {
+        const line = text.slice(0, match.index).split('\n').length;
+        broken.push(`${file}:${line} h${match[1]}→h${match[3]}`);
+      }
+    }
+  }
+  check('уровень заголовка совпадает с закрывающим тегом', broken.length === 0, broken.join(', '));
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
