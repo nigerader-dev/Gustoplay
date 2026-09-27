@@ -62,12 +62,17 @@ async function main() {
     console.log(`::notice::hltb-fatal: puppeteer-core не установлен (${String(e.message).slice(0, 200)}) — нужен шаг npm i --no-save puppeteer-core`);
     process.exit(1);
   }
-  const { execFileSync } = await import('node:child_process');
-  const execPaths = [process.env.CHROME_PATH, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome'].filter(Boolean);
-  let executablePath = null;
-  for (const p of execPaths) {
-    try { execFileSync(p, ['--version'], { stdio: 'pipe' }); executablePath = p; break; } catch { /* пробуем дальше */ }
-  }
+const { execFileSync } = await import('node:child_process');
+const execPaths = [process.env.CHROME_PATH, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome'].filter(Boolean);
+let executablePath = null;
+for (const p of execPaths) {
+  try {
+    execFileSync(p, ['--version'], { stdio: 'pipe' });
+    // puppeteer требует полный путь: fs.existsSync('google-chrome') = false
+    const full = p.includes('/') ? p : execFileSync('which', [p]).toString().trim();
+    if (full) { executablePath = full; break; }
+  } catch { /* пробуем дальше */ }
+}
   if (!executablePath) {
     console.log(`::notice::hltb-fatal: системный Chrome/Chromium не найден (пробовал: ${execPaths.join(', ')})`);
     process.exit(1);
