@@ -1295,6 +1295,9 @@ select.input { cursor: pointer; }
 .auth-card .btn-lg { width: 100%; }
 .support-card { max-width: 680px; }
 .support-textarea { min-height: 170px; resize: vertical; line-height: 1.55; }
+/* согласие на обработку данных обращения: тач-цель 44px у всего label, чекбокс сверху строки */
+.support-consent { display: flex; align-items: flex-start; width: 100%; text-align: left; line-height: 1.45; }
+.support-consent input[type="checkbox"] { margin-top: 2px; }
 .support-status:empty { display: none; }
 .support-mailto[hidden] { display: none !important; }
 .support-honeypot {

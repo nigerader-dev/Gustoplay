@@ -36,6 +36,10 @@ export function render() {
         <label for="support-website">${esc(t('support.honeypot'))}</label>
         <input id="support-website" name="website" type="text" tabindex="-1" autocomplete="off">
       </div>
+      <label class="switch support-consent" for="support-consent">
+        <input id="support-consent" name="consent" type="checkbox" required>
+        <span>${esc(t('support.consent'))}</span>
+      </label>
       <p class="support-status" id="support-status" role="status" aria-live="polite" tabindex="-1"></p>
       <a class="btn btn-ghost support-mailto" id="support-mailto" hidden></a>
       <button class="btn btn-primary btn-lg" id="support-submit" type="submit">${esc(t('support.submit'))}</button>
