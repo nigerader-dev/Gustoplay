@@ -179,3 +179,16 @@ Spacetime, Boomerang Fu, River City Girls, Degrees of Separation — +xbox.
 Даты HLTB NA подтвердили годы каталога: Unravel Two 09.06.2018, Old World
 01.07.2021; Wobbly Life: HLTB показывает 08.07.2020 (старт раннего доступа),
 год каталога — 2025 (выход 1.0, Steam 18.09.2025).
+
+## Football Manager 2024 — почему нет ссылки в магазин (27.09.2026)
+
+Единственная игра каталога без ссылки на официальный магазин (490/491 в
+`audit:readiness`). FM24 снят с продажи после выхода FM26: страницы удалены из
+Steam и Epic (обсуждения сообщества: «The game will be removed from store
+(Steam, Epic etc) after FM26 release», steamcommunity.com/app/2252570), а
+страница footballmanager.com/games/football-manager-2024 отдаёт «Access denied»
+и редиректит на архивную fm25 (проверено fetch_page 27.09.2026; сайт серии уже
+посвящён следующему релизу). Ссылаться на перепродавцов ключей (Eneba, CDKeys)
+сайт не может по правилам источников — только официальные страницы. Итог:
+у записи честно нет ссылки, интерфейс скрывает кнопку (components.js рендерит
+её только при наличии store URL/Steam ID).
