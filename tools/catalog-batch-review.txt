@@ -1,58 +1,58 @@
-# catalog-batch-review.txt (batch=2026-09-27-couch, собрано 2026-09-27T17:29:36.454Z)
+# catalog-batch-review.txt (batch=2026-09-27-couch, собрано 2026-09-27T17:33:26.895Z)
 # Собрано: 52 из 53 кандидатов (0 уже были в каталоге)
 # Цена (price_overview): 52 · рейтинг отзывов: 52 · HLTB: 0
-# Курс ЦБ РФ: 84.3414 ₽/$ на null
+# Курс ЦБ РФ: 84.3414 ₽/$ на 26.09.2026
 # MISS — точного совпадения в Steam нет, ERR/SKIP — данные не получены/не игра, HLTB — времени нет
-HLTB Overcooked — HLTB HTTP 403
-HLTB Moving Out — HLTB HTTP 403
-HLTB Unravel Two — HLTB HTTP 403
-HLTB Trine 4: The Nightmare Prince — HLTB HTTP 403
-HLTB Lovers in a Dangerous Spacetime — HLTB HTTP 403
-HLTB BattleBlock Theater — HLTB HTTP 403
-HLTB Castle Crashers — HLTB HTTP 403
-HLTB Rayman Legends — HLTB HTTP 403
-HLTB Heave Ho — HLTB HTTP 403
-HLTB ibb & obb — HLTB HTTP 403
-HLTB Shift Happens — HLTB HTTP 403
-HLTB KeyWe — HLTB HTTP 403
-HLTB Catastronauts — HLTB HTTP 403
-HLTB Tools Up! — HLTB HTTP 403
-HLTB Wobbly Life — HLTB HTTP 403
-HLTB Nidhogg 2 — HLTB HTTP 403
-HLTB SpeedRunners — HLTB HTTP 403
-HLTB Tricky Towers — HLTB HTTP 403
-HLTB Move or Die — HLTB HTTP 403
-HLTB Nine Parchments — HLTB HTTP 403
-HLTB Chariot — HLTB HTTP 403
-HLTB Bread & Fred — HLTB HTTP 403
-HLTB Biped — HLTB HTTP 403
-HLTB Death Squared — HLTB HTTP 403
-HLTB Out of Space — HLTB HTTP 403
-HLTB Get Packed: Fully Loaded — HLTB HTTP 403
-HLTB Unspottable — HLTB HTTP 403
-HLTB Spelunky 2 — HLTB HTTP 403
-HLTB Sackboy: A Big Adventure — HLTB HTTP 403
-HLTB Boomerang Fu — HLTB HTTP 403
-HLTB Worms W.M.D — HLTB HTTP 403
-HLTB Crawl — HLTB HTTP 403
-HLTB Full Metal Furies — HLTB HTTP 403
-HLTB Lethal League Blaze — HLTB HTTP 403
-HLTB Lost Castle — HLTB HTTP 403
-HLTB Teenage Mutant Ninja Turtles: Shredder's Revenge — HLTB HTTP 403
-HLTB Broforce — HLTB HTTP 403
-HLTB Pikuniku — HLTB HTTP 403
-HLTB Never Alone (Kisima Ingitchuna) — HLTB HTTP 403
-HLTB Sonic Mania — HLTB HTTP 403
-HLTB A Hat in Time — HLTB HTTP 403
+HLTB Overcooked — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Moving Out — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Unravel Two — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Trine 4: The Nightmare Prince — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Lovers in a Dangerous Spacetime — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB BattleBlock Theater — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Castle Crashers — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Rayman Legends — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Heave Ho — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB ibb & obb — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Shift Happens — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB KeyWe — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Catastronauts — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Tools Up! — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Wobbly Life — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Nidhogg 2 — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB SpeedRunners — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Tricky Towers — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Move or Die — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Nine Parchments — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Chariot — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Bread & Fred — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Biped — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Death Squared — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Out of Space — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Get Packed: Fully Loaded — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Unspottable — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Spelunky 2 — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Sackboy: A Big Adventure — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Boomerang Fu — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Worms W.M.D — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Crawl — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Full Metal Furies — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Lethal League Blaze — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Lost Castle — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Teenage Mutant Ninja Turtles: Shredder's Revenge — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Broforce — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Pikuniku — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Never Alone (Kisima Ingitchuna) — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Sonic Mania — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB A Hat in Time — страница поиска: точного совпадения нет (HTML сохранён)
 MISS Scott Pilgrim vs. The World: The Game – Complete Edition — точного совпадения нет; кандидаты: нет
-HLTB River City Girls — HLTB HTTP 403
-HLTB Degrees of Separation — HLTB HTTP 403
-HLTB Sid Meier's Civilization V — HLTB HTTP 403
-HLTB Age of Mythology: Retold — HLTB HTTP 403
-HLTB Dune: Spice Wars — HLTB HTTP 403
-HLTB Monster Train — HLTB HTTP 403
-HLTB Wingspan — HLTB HTTP 403
-HLTB Cobalt Core — HLTB HTTP 403
-HLTB Dome Keeper — HLTB HTTP 403
-HLTB Darkest Dungeon — HLTB HTTP 403
-HLTB Old World — HLTB HTTP 403
+HLTB River City Girls — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Degrees of Separation — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Sid Meier's Civilization V — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Age of Mythology: Retold — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Dune: Spice Wars — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Monster Train — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Wingspan — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Cobalt Core — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Dome Keeper — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Darkest Dungeon — страница поиска: точного совпадения нет (HTML сохранён)
+HLTB Old World — страница поиска: точного совпадения нет (HTML сохранён)

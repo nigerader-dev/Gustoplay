@@ -1,10 +1,10 @@
 {
  "batch": "2026-09-27-couch",
- "collectedAt": "2026-09-27T17:29:36.454Z",
+ "collectedAt": "2026-09-27T17:33:26.895Z",
  "cbr": {
   "ok": true,
   "rate": 84.3414,
-  "date": null,
+  "date": "26.09.2026",
   "url": "https://www.cbr.ru/scripts/XML_daily.asp"
  },
  "entries": [
@@ -954,7 +954,7 @@
    },
    "controller": null,
    "metacritic": 84,
-   "steamReviewCount": 141024,
+   "steamReviewCount": 141026,
    "reviews": {
     "positive": 149184,
     "total": 162767,
@@ -2621,7 +2621,7 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 2831,
+   "steamReviewCount": 2830,
    "reviews": {
     "positive": 3756,
     "total": 4492,
@@ -3563,7 +3563,7 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 33242,
+   "steamReviewCount": 33244,
    "reviews": {
     "positive": 35220,
     "total": 36228,
