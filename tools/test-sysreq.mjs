@@ -26,8 +26,10 @@ import { readFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { GAMES as CATALOG_GAMES } from '../js/catalog/index.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const totalSteamGames = CATALOG_GAMES.filter((game) => game.steamId).length;
 
 const failures = [];
 let passed = 0;
@@ -260,13 +262,13 @@ check('в файле нет HTML-тегов', !/<br|<strong|<li/i.test(file));
 console.log('\n3. Отчёт сборщика');
 const report = await readFile(review, 'utf8');
 check('отчёт называет число игр с требованиями',
-  new RegExp(`Требования к ПК: ${expectedCollected} из 401`).test(report), report.split('\n')[0]);
-// Отчёт считается по ВСЕМУ каталогу (401 игра со steamId), даже когда порция
+  new RegExp(`Требования к ПК: ${expectedCollected} из ${totalSteamGames}`).test(report), report.split('\n')[0]);
+// Отчёт считается по ВСЕМУ каталогу (число игр со Steam ID вычисляется из данных), даже когда порция
 // запросов маленькая: иначе порционный прогон стирал бы чужие данные.
 const missing = Number((report.match(/Данные не получены[^:]*: (\d+)/) || [])[1]);
 check('отчёт считает покрытие по всему каталогу, а не по порции',
-  new RegExp(`Требования к ПК: ${expectedCollected} из 401 игр со steamId`).test(report)
-  && missing === 401 - expectedCollected,
+  new RegExp(`Требования к ПК: ${expectedCollected} из ${totalSteamGames} игр со steamId`).test(report)
+  && missing === totalSteamGames - expectedCollected,
   (report.split('\n').slice(0, 3).join(' | ')).slice(0, 120));
 check('отчёт не содержит ошибок сети', /Запросов, которые не прошли \(сеть\/HTTP\/разбор JSON\): 0/.test(report),
   (report.split('\n').find((l) => l.startsWith('Запросов, которые не прошли')) || '').slice(0, 80));
