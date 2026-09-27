@@ -337,11 +337,12 @@ await goto('/support', 360);
 const supportNarrow = await page.evaluate(() => ({
   heading: document.querySelector('h1')?.textContent.trim() || '',
   fields: document.querySelectorAll('#support-form input[required], #support-form select[required], #support-form textarea[required]').length,
+  consent: Boolean(document.querySelector('#support-consent[type="checkbox"][required]')),
   width: document.documentElement.scrollWidth,
   viewport: innerWidth,
 }));
 check('страница поддержки адаптируется на ширине 360px и не переполняет экран',
-  supportNarrow.heading === 'Написать в поддержку' && supportNarrow.fields === 4
+  supportNarrow.heading === 'Написать в поддержку' && supportNarrow.fields === 5 && supportNarrow.consent
     && supportNarrow.width <= supportNarrow.viewport,
   `${supportNarrow.fields} полей, scrollWidth ${supportNarrow.width}/${supportNarrow.viewport}`);
 await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
@@ -360,6 +361,9 @@ await page.evaluate(() => {
   document.querySelector('#support-topic').value = 'bug';
   document.querySelector('#support-message').value = 'Проверка черновика обращения через поддержку сайта.';
 });
+const supportNoConsent = await page.$eval('#support-form', (form) => form.checkValidity());
+check('без согласия на обработку данных браузер отклоняет обращение', supportNoConsent === false);
+await page.evaluate(() => { document.querySelector('#support-consent').checked = true; });
 const supportFormValidity = await page.$eval('#support-form', (form) => ({
   valid: form.checkValidity(),
   values: [...new FormData(form).entries()].filter(([key]) => key !== 'website').map(([key, value]) => `${key}:${String(value).length}`),
@@ -380,6 +384,75 @@ check('без delivery API браузер предлагает черновик 
     && /никуда|not been sent/i.test(supportFallback.status)
     && /не отправлен|has not been sent/i.test(supportFallback.status),
   JSON.stringify(supportFallback));
+
+/* ------------------------------------------------------------------ *
+ * 7. Клавиатура и масштаб 200% — WCAG 2.1 AA (2.1.1, 2.4.3, 2.4.7, 1.4.4)
+ * ------------------------------------------------------------------ */
+console.log('\n8. Клавиатура и масштаб 200% — WCAG 2.1 AA');
+
+// 8.1 Первый Tab — ссылка «К основному содержимому», фокус видим (:focus-visible)
+await goto('/');
+await page.keyboard.press('Tab');
+const firstStop = await page.evaluate(() => {
+  const el = document.activeElement;
+  if (!el || el === document.body) return { tag: 'BODY', cls: '', outline: 'none 0px', visible: false };
+  const cs = getComputedStyle(el);
+  return {
+    tag: el.tagName,
+    cls: String(el.className),
+    outline: `${cs.outlineStyle} ${cs.outlineWidth}`,
+    visible: cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0,
+  };
+});
+check('первый Tab — ссылка «К основному содержимому» (skip link)',
+  firstStop.tag === 'A' && /\bskip\b/.test(firstStop.cls), `${firstStop.tag}.${firstStop.cls}`);
+check('клавиатурный фокус видим: :focus-visible рисует контур', firstStop.visible, firstStop.outline);
+
+// 8.2 Tab идёт по интерактивным элементам вперёд, фокус не теряется и не залипает
+const stops = [];
+for (let i = 0; i < 12; i += 1) {
+  await page.keyboard.press('Tab');
+  const info = await page.evaluate(() => {
+    const el = document.activeElement;
+    if (!el || el === document.body) return { interactive: false, key: 'body' };
+    return {
+      interactive: el.matches('a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])'),
+      key: el.id || el.getAttribute('href') || `${el.tagName}:${(el.textContent || '').trim().slice(0, 24)}`,
+    };
+  });
+  stops.push(info);
+}
+check('двенадцать Tab-стопов подряд — только интерактивные элементы',
+  stops.every((s) => s.interactive), stops.map((s) => s.key).slice(0, 4).join(' → '));
+check('фокус движется вперёд, не залипая на одном элементе',
+  new Set(stops.map((s) => s.key)).size >= 8, `${new Set(stops.map((s) => s.key)).size} уникальных из 12`);
+
+// 8.3 Enter активирует управление с клавиатуры (чип фильтра каталога; после клика
+//     каталог перерисовывается, поэтому чип ищем повторно по его подписи)
+await goto('/catalog');
+const chipBefore = await page.evaluate(() => {
+  const chip = document.querySelector('[aria-pressed]');
+  if (!chip) return null;
+  chip.focus();
+  return { pressed: chip.getAttribute('aria-pressed'), label: chip.textContent.trim() };
+});
+await page.keyboard.press('Enter');
+await new Promise((r) => setTimeout(r, 300));
+const chipAfter = await page.evaluate((label) => {
+  const chip = [...document.querySelectorAll('[aria-pressed]')].find((c) => c.textContent.trim() === label);
+  return chip ? chip.getAttribute('aria-pressed') : 'чип исчез';
+}, chipBefore?.label || '');
+check('Enter переключает чип фильтра каталога (aria-pressed)',
+  chipBefore !== null && chipBefore.pressed !== chipAfter, `${chipBefore?.pressed} → ${chipAfter}`);
+
+// 8.4 Масштаб 200%: экран 1440px при zoom 200% — это 720 CSS-px, контент обязан
+//     рефлоуить без горизонтальной прокрутки (WCAG 1.4.4)
+for (const route of ['/', '/quiz', '/catalog', '/game/balatro', '/party', '/support', '/terms', '/privacy']) {
+  await goto(route, 720);
+  const zoom = await page.evaluate(() => ({ w: document.documentElement.scrollWidth, v: window.innerWidth }));
+  check(`200% (${720} CSS-px): ${route} без горизонтального переполнения`,
+    zoom.w <= zoom.v + 1, `scrollWidth ${zoom.w}/${zoom.v}`);
+}
 
 await browser.close();
 server.kill('SIGTERM');
