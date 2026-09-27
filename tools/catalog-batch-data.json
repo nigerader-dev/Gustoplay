@@ -1,6 +1,6 @@
 {
  "batch": "2026-09-27-couch",
- "collectedAt": "2026-09-27T17:40:22.483Z",
+ "collectedAt": "2026-09-27T17:48:26.385Z",
  "cbr": {
   "ok": true,
   "rate": 84.3414,
@@ -318,7 +318,7 @@
    },
    "controller": "full",
    "metacritic": 74,
-   "steamReviewCount": 9064,
+   "steamReviewCount": 9065,
    "reviews": {
     "positive": 9844,
     "total": 11556,
@@ -954,7 +954,7 @@
    },
    "controller": null,
    "metacritic": 84,
-   "steamReviewCount": 141024,
+   "steamReviewCount": 141026,
    "reviews": {
     "positive": 149184,
     "total": 162767,
@@ -1848,7 +1848,7 @@
    },
    "controller": "full",
    "metacritic": 80,
-   "steamReviewCount": 16478,
+   "steamReviewCount": 16479,
    "reviews": {
     "positive": 20780,
     "total": 23308,
@@ -2744,7 +2744,7 @@
    },
    "controller": null,
    "metacritic": 90,
-   "steamReviewCount": 128277,
+   "steamReviewCount": 128278,
    "reviews": {
     "positive": 201680,
     "total": 210956,
@@ -3563,7 +3563,7 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 33242,
+   "steamReviewCount": 33244,
    "reviews": {
     "positive": 35220,
     "total": 36228,
@@ -3630,7 +3630,7 @@
    },
    "controller": "full",
    "metacritic": 79,
-   "steamReviewCount": 10456,
+   "steamReviewCount": 10457,
    "reviews": {
     "positive": 12744,
     "total": 14969,
