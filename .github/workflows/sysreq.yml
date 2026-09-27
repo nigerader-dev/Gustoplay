@@ -49,6 +49,10 @@ on:
       - 'tools/sysreq-format.mjs'
       - 'tools/sysreq-overrides.json'
       - 'js/catalog/part-*.js'
+      # steamId берутся из steam-covers.js: когда обложечный резолвер добавляет
+      # новые игры, требования к ПК должны пересобраться (иначе прогон идёт
+      # «впустую» — как 28.09.2026 на a7b6c6d, где sysreq не увидел 48 новых)
+      - 'js/catalog/steam-covers.js'
       - '.github/workflows/sysreq.yml'
 
 concurrency:
