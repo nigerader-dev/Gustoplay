@@ -14,6 +14,13 @@ name: GustoPlay — сбор данных каталога (кандидаты)
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - arena/01a0e3da-gustoplay
+    paths:
+      - 'tools/catalog-candidates.json'
+      - 'tools/pull-catalog-candidates.mjs'
+      - '.github/workflows/catalog-batch.yml'
 
 concurrency:
   group: gustoplay-catalog-batch
