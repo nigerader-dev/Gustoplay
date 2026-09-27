@@ -1,22 +1,57 @@
 # cover-review.txt (part=all)
 # CHECK — совпадение с несколькими кандидатами (проверить вручную)
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
-
+CHECK aliens-fireteam-elite — «Aliens: Fireteam Elite»: выбрано Aliens: Fireteam Elite (1549970); кандидаты: Aliens: Fireteam Elite 2 (3448650) | Aliens: Fireteam Elite (1549970) | Aliens: Fireteam Elite 2 - 40th Anniversary Premium Edition Upgrade (4941380) | Aliens: Fireteam Elite - Pathogen Expansion (1942650)
+CHECK ark-survival-evolved — «ARK: Survival Evolved»: выбрано ARK: Survival Evolved (346110); кандидаты: ARK: Survival Evolved (346110) | ARK: Survival Evolved Original Soundtrack (1646550)
+CHECK back-4-blood — «Back 4 Blood»: выбрано Back 4 Blood (924970); кандидаты: Back 4 Blood (924970) | Back 4 Blood Annual Pass (1598441) | Back 4 Blood - Expansion 3: River of Blood (2101940) | Back 4 Blood - Expansion 1: Tunnels of Terror (1840320)
+CHECK blazing-chrome — «Blazing Chrome»: выбрано Blazing Chrome (609110); кандидаты: Blazing Chrome (609110) | Blazing Chrome - Official Game Guide (1248160)
+CHECK brawlhalla — «Brawlhalla»: выбрано Brawlhalla (291550); кандидаты: Brawlhalla (291550) | Brawlhalla - All Legends (Current and Future) (387020) | Brawlhalla: Ezio Starter Pack (2974360) | Brawlhalla - Collectors Pack (298641)
+CHECK cake-bash — «Cake Bash»: выбрано Cake Bash (971690); кандидаты: Cake Bash (971690) | Cake Bash Demo (1312710)
+CHECK dragon-ball-fighterz — «DRAGON BALL FighterZ»: выбрано DRAGON BALL FighterZ (678950); кандидаты: DRAGON BALL FighterZ (678950) | DRAGON BALL FighterZ - DAIMA Pack (4179010) | DRAGON BALL FighterZ - Kefla (1209880) | DRAGON BALL FighterZ - Janemba (992173)
+CHECK escape-academy — «Escape Academy»: выбрано Escape Academy (1812090); кандидаты: Escape Academy (1812090) | Escape Academy 2: Back 2 School (3296060) | Escape Academy 2: Back 2 School Demo (4198180) | Escape Academy Season Pass (2023370)
+CHECK fightn-rage — «Fight’N Rage»: выбрано Fight'N Rage (674520); кандидаты: Fight'N Rage (674520) | Fight'N Rage Original Soundtrack Gold Edition (2262710)
+CHECK green-hell — «Green Hell»: выбрано Green Hell (815370); кандидаты: Green Hell (815370) | Green Hell Official Soundtrack (2564710) | Green Hell VR (1782330) | Hell Green Blue (2010400)
+CHECK guacamelee-2 — «Guacamelee! 2»: выбрано Guacamelee! 2 (534550); кандидаты: Guacamelee! 2 (534550) | Guacamelee! 2 - Soundtrack (911610) | Guacamelee! 2 - Three Enemigos Character Pack (942540) | Guacamelee! 2 - The Proving Grounds (Challenge Level) (944350)
+CHECK hot-wheels-unleashed — «HOT WHEELS UNLEASHED»: выбрано HOT WHEELS UNLEASHED™ (1271700); кандидаты: HOT WHEELS UNLEASHED™ (1271700) | HOT WHEELS UNLEASHED™ 2 - Turbocharged (2051120) | HOT WHEELS UNLEASHED™ 2 - Manga Free Pack (2370247) | HOT WHEELS UNLEASHED™ 2 - Highway 35 Free Pack (2370248)
+CHECK injustice-2 — «Injustice 2»: выбрано Injustice™ 2 (627270); кандидаты: Injustice™ 2 (627270) | Injustice™ 2 - Darkseid (721270) | Injustice™ 2 - TMNT (779401) | Injustice™ 2 - Starfire (704810)
+CHECK lego-batman-3-beyond-gotham — «LEGO Batman 3: Beyond Gotham»: выбрано LEGO® Batman™ 3: Beyond Gotham (313690); кандидаты: LEGO® Batman™ 3: Beyond Gotham (313690) | LEGO Batman 3: Beyond Gotham DLC: Arrow (327175) | LEGO Batman 3: Beyond Gotham DLC: Bizarro (327177) | LEGO Batman 3: Beyond Gotham Season Pass (330860)
+CHECK lego-marvel-super-heroes — «LEGO Marvel Super Heroes»: выбрано LEGO® Marvel™ Super Heroes (249130); кандидаты: LEGO® Marvel™ Super Heroes (249130) | LEGO® Marvel Super Heroes 2 (647830) | LEGO® Marvel Super Heroes 2 - Runaways (720770) | LEGO® Marvel Super Heroes 2 - Season Pass (720680)
+CHECK magicka-2 — «Magicka 2»: выбрано Magicka 2 (238370); кандидаты: Magicka 2 (238370) | Magicka 2: Ice, Death and Fury (414651) | Magicka 2: Three Cardinals Robe Pack (393831) | Magicka 2: Gates of Midgård Challenge pack (393830)
+CHECK monster-hunter-rise — «Monster Hunter Rise»: выбрано MONSTER HUNTER RISE (1446780); кандидаты: MONSTER HUNTER RISE (1446780) | Monster Hunter Rise: Sunbreak (1880360) | Monster Hunter Rise - "Braided" hairstyle (1940758) | Monster Hunter Rise: Sunbreak Demo (1836450)
+CHECK mortal-kombat-1 — «Mortal Kombat 1»: выбрано Mortal Kombat 1 (1971870); кандидаты: Mortal Kombat 1 (1971870) | Mortal Kombat™ 1: Definitive Edition Upgrade (3747600) | Mortal Kombat™ 1: Khaos Reigns Bundle (3134000) | Mortal Kombat 11 (976310)
+CHECK nidhogg — «Nidhogg»: выбрано Nidhogg (94400); кандидаты: Nidhogg 2 (535520) | Nidhogg (94400) | Nidhogg 2 Soundtrack (683740)
+CHECK nobody-saves-the-world — «Nobody Saves the World»: выбрано Nobody Saves the World (1432050); кандидаты: Nobody Saves the World (1432050) | Nobody Saves the World - Frozen Hearth (1951590) | Nobody Saves the World - Soundtrack (1837560)
+CHECK octopath-traveler — «OCTOPATH TRAVELER»: выбрано OCTOPATH TRAVELER™ (921570); кандидаты: OCTOPATH TRAVELER™ (921570) | OCTOPATH TRAVELER 0 (3014320) | OCTOPATH TRAVELER II (1971650) | OCTOPATH TRAVELER 0 Digital Deluxe Upgrade (3825480)
+CHECK phogs — «PHOGS!»: выбрано PHOGS! (850320); кандидаты: PHOGS! (850320) | PHOGS! Soundtrack (1475790) | PHOGS! Demo (1280140)
+CHECK pico-park-2 — «PICO PARK 2»: выбрано PICO PARK 2 (2644470); кандидаты: PICO PARK 2 (2644470) | PICO PARK 2 Soundtrack (3228750)
+CHECK pit-people — «Pit People»: выбрано Pit People® (291860); кандидаты: Pit People® (291860) | Fantasy Grounds - Dungeon Crawl Classics #68: The People of the Pit (DCC) (1091630)
+CHECK pode — «Pode»: выбрано Pode (944080); кандидаты: Pode (944080) | PODER (4458740)
+CHECK rivals-of-aether — «Rivals of Aether»: выбрано Rivals of Aether (383980); кандидаты: Rivals of Aether (383980) | Rivals of Aether II (2217000) | Rivals of Aether: Tuxedo Ranno (1035230) | Rivals of Aether: Penguin Absa (941241)
+CHECK river-city-girls-2 — «River City Girls 2»: выбрано River City Girls 2 (1920480); кандидаты: River City Girls 2 (1920480) | River City Girls 2: Double Dragon DLC (2787870)
+CHECK samurai-gunn-2 — «Samurai GUNN 2»: выбрано Samurai GUNN 2 (1397790); кандидаты: Samurai GUNN 2 (1397790) | Samurai GUNN 2: Free Edition (4375060)
+CHECK the-cave — «The Cave»: выбрано The Cave (221810); кандидаты: The Cave (221810) | The Cave Diver (3004390) | ASTLIBRA Gaiden: The Cave of Phantom Mist (2669360) | The Beast In The Cave (1711600)
+CHECK the-jackbox-party-pack — «The Jackbox Party Pack»: выбрано The Jackbox Party Pack (331670); кандидаты: The Jackbox Party Pack 3 (434170) | The Jackbox Party Pack 11 (3364070) | The Jackbox Party Pack 7 (1211630) | The Jackbox Party Pack 6 (1005300)
+CHECK the-jackbox-party-pack-3 — «The Jackbox Party Pack 3»: выбрано The Jackbox Party Pack 3 (434170); кандидаты: The Jackbox Party Pack 3 (434170) | The Jackbox Party Pack 3 - Soundtrack (577810)
+CHECK the-outlast-trials — «The Outlast Trials»: выбрано The Outlast Trials (1304930); кандидаты: The Outlast Trials (1304930) | The Outlast Trials - Exotica Pack (3030370) | The Outlast Trials - Sweet Release Pack (3518320) | The Outlast Trials - Unholy Night Pack (3307910)
+CHECK trine-5-a-clockwork-conspiracy — «Trine 5: A Clockwork Conspiracy»: выбрано Trine 5: A Clockwork Conspiracy (1436700); кандидаты: Trine 5: A Clockwork Conspiracy (1436700) | Trine 5: A Clockwork Conspiracy Soundtrack (2469220)
+CHECK v-rising — «V Rising»: выбрано V Rising (1604030); кандидаты: V Rising (1604030) | V Rising - Eternal Dominance Pack (3604340) | V Rising Soundtrack (1999270) | V Rising - Sinister Evolution Pack (2358430)
+CHECK we-were-here-together — «We Were Here Together»: выбрано We Were Here Together (865360); кандидаты: We Were Here Together (865360) | We Were Here Together: Supporter Edition (1163640) | We Were Here Together Demo (1614610) | We Were Here Together: Original Soundtrack (1246990)
 
 # ---- check:covers (exit=0) ----
 
 > gustoplay@1.0.0 check:covers
 > node tools/check-covers.mjs
 
-Проверяю обложки 491 игр (заполнено: 491)…
-  …проверено 50/491
-  …проверено 100/491
-  …проверено 150/491
-  …проверено 200/491
-  …проверено 250/491
-  …проверено 300/491
-  …проверено 350/491
-  …проверено 400/491
-  …проверено 450/491
+Проверяю обложки 539 игр (заполнено: 539)…
+  …проверено 50/539
+  …проверено 100/539
+  …проверено 150/539
+  …проверено 200/539
+  …проверено 250/539
+  …проверено 300/539
+  …проверено 350/539
+  …проверено 400/539
+  …проверено 450/539
+  …проверено 500/539
 
-✅ Обложки: у всех 491 игр официальный арт, URL ответил у 491 из 491, все URL отвечают.
+✅ Обложки: у всех 539 игр официальный арт, URL ответил у 539 из 539, все URL отвечают.
