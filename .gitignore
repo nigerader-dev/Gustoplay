@@ -21,3 +21,6 @@ docs/qa-shots/
 *.log
 .env*
 !.env.example
+
+# Сырые HTML страниц поиска HowLongToBeat — диагностика сбора, не для коммита
+tools/hltb-pages/

@@ -23,7 +23,7 @@
  *   • HLTB и ЦБ — best effort: недоступность честно пишется в отчёт, поля
  *     остаются пустыми, а не заменяются догадкой.
  */
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { PART_A } from '../js/catalog/part-a.js';
 import { PART_B } from '../js/catalog/part-b.js';
 import { PART_C } from '../js/catalog/part-c.js';
@@ -37,6 +37,7 @@ import { PART_I } from '../js/catalog/part-i.js';
 const candidatesPath = new URL('./catalog-candidates.json', import.meta.url);
 const dataPath = new URL('./catalog-batch-data.json', import.meta.url);
 const reviewPath = new URL('./catalog-batch-review.txt', import.meta.url);
+const hltbDir = new URL('./hltb-pages/', import.meta.url);
 
 const arg = (name) => process.argv.find((x) => x.startsWith(`--${name}=`))?.split('=')[1];
 const DELAY = Number(arg('delay') || 350);
@@ -71,7 +72,7 @@ async function fetchCbrRate() {
     const res = await fetch('https://www.cbr.ru/scripts/XML_daily.asp', { headers: { 'User-Agent': UA }, signal: AbortSignal.timeout(TIMEOUT) });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const xml = await res.text();
-    const date = xml.match(/XML_DailyRates Date="([\d.]+)"/)?.[1] || null;
+    const date = xml.match(/Date="([\d.]+)"/)?.[1] || null;
     const value = xml.match(/<Valute ID="R01235">[\s\S]*?<Value>([\d,]+)<\/Value>/)?.[1];
     if (!value) throw new Error('USD не найден в ответе');
     return { ok: true, rate: Number(value.replace(',', '.')), date, url: 'https://www.cbr.ru/scripts/XML_daily.asp' };
@@ -80,8 +81,23 @@ async function fetchCbrRate() {
   }
 }
 
-/** Оценки времени из HowLongToBeat (неофициальный API, может отдать 403 — пишем честно). */
+/** Оценки времени из HowLongToBeat. Основной путь — неофициальный POST /api/search;
+ * если Cloudflare отдаёт 403 (так было 27.09.2026 с GitHub-раннера), fallback —
+ * GET страница поиска /?q=…: она серверно-рендерится и содержит id игры,
+ * Main Story, Main + Extra и Completionist. */
 async function fetchHltb(name) {
+  const api = await hltbApi(name);
+  const result = (api.matched || api.error !== 'HLTB HTTP 403') ? api : await hltbSearchPage(name);
+  // нормализуем времена до чисел (часы), сохраняя исходные строки, если они были
+  if (result.matched) {
+    if (result.mainH === undefined) result.mainH = parseHltbTime(result.main);
+    if (result.plusH === undefined) result.plusH = parseHltbTime(result.plus);
+    if (result.hundredH === undefined) result.hundredH = parseHltbTime(result.hundred);
+  }
+  return result;
+}
+
+async function hltbApi(name) {
   try {
     const res = await fetch('https://howlongtobeat.com/api/search', {
       method: 'POST',
@@ -111,7 +127,74 @@ async function fetchHltb(name) {
     const json = await res.json();
     const game = (json.data || []).find((x) => norm(x.game_name) === norm(name));
     if (!game) return { matched: false, note: 'точного совпадения нет' };
-    return { matched: true, id: game.game_id, name: game.game_name, main: game.compMain || null, plus: game.comp_plus || null, hundred: game.comp100 || null };
+    return { matched: true, via: 'api', id: game.game_id, name: game.game_name, main: game.compMain || null, plus: game.comp_plus || null, hundred: game.comp100 || null };
+  } catch (error) {
+    return { matched: false, error: String(error.message || error) };
+  }
+}
+
+/** Разбор «54 Mins» / «7½ Hours» / «1½ Hours» → часы (число). */
+function parseHltbTime(s) {
+  if (!s) return null;
+  const m = String(s).match(/([\d½¼¾⅓⅔0-9,.]+)\s*(Hours?|Mins?|M)/i);
+  if (!m) return null;
+  const frac = { '½': 0.5, '¼': 0.25, '¾': 0.75, '⅓': 1 / 3, '⅔': 2 / 3 };
+  const num = Number(frac[m[1]] !== undefined ? frac[m[1]] : m[1].replace(',', '.'));
+  if (!Number.isFinite(num)) return null;
+  return /min/i.test(m[2]) ? Math.round((num / 60) * 10) / 10 : num;
+}
+
+/** Fallback: серверно-рендеренная страница поиска. Сырой HTML сохраняется в
+ *  tools/hltb-pages/<slug>.html (коммит/артефакт) — структуру страницы нельзя
+ *  угадывать заранее, поэтому разбор дублируется локально по сохранённому HTML.
+ *  Здесь — две известные разметки: текущая (заголовок-ссылка /game/<id> +
+ *  подписи Main Story/Main + Extra/Completionist) и старая (search_list_tidbit). */
+async function hltbSearchPage(name) {
+  const slug = norm(name);
+  try {
+    const res = await fetch(`https://howlongtobeat.com/?q=${encodeURIComponent(name)}`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en',
+      },
+      signal: AbortSignal.timeout(TIMEOUT),
+    });
+    if (!res.ok) throw new Error(`HLTB page HTTP ${res.status}`);
+    const html = await res.text();
+    try {
+      await mkdir(hltbDir, { recursive: true });
+      await writeFile(new URL(`./hltb-pages/${slug}.html`, import.meta.url), html);
+    } catch { /* сохранение — best effort, разбор важнее */ }
+
+    // Разметка 1 (текущая): <a href="…/game/<id>" title="Name">…Name…</a> и подписи
+    const cardRe = /<a[^>]+href="https:\/\/howlongtobeat\.com\/game\/(\d+)"[^>]*(?:title="([^"]*)")?[^>]*>([\s\S]*?)<\/a>/g;
+    let m;
+    let picked = null;
+    while ((m = cardRe.exec(html))) {
+      const title = (m[2] || m[3] || '').replace(/<[^>]+>/g, '').trim();
+      if (norm(title) === slug) { picked = { id: Number(m[1]), title }; break; }
+    }
+    if (!picked) {
+      // Разметка 2 (старая): game?id=<id> + search_list_tidbit
+      const oldRe = /<h3[^>]*><a[^>]+href="[^"]*game\?id=(\d+)"[^>]*(?:title="([^"]*)")?[^>]*>([\s\S]*?)<\/a>/g;
+      while ((m = oldRe.exec(html))) {
+        const title = (m[2] || m[3] || '').replace(/<[^>]+>/g, '').trim();
+        if (norm(title) === slug) { picked = { id: Number(m[1]), title }; break; }
+      }
+    }
+    if (!picked) return { matched: false, note: 'страница поиска: точного совпадения нет (HTML сохранён)' };
+
+    const grab = (label) => {
+      const after = html.slice(html.indexOf(`game/${picked.id}`) !== -1 ? html.indexOf(`game/${picked.id}`) : 0);
+      const mm = after.match(new RegExp(`${label}[\\s\\S]{0,200}?([\\d½¼¾⅓⅔,.]+)\\s*(?:&#189;|&frac12;|½)?\\s*(Hours?|Mins?|h|m)`, 'i'));
+      return mm ? parseHltbTime(mm[0]) : null;
+    };
+    return {
+      matched: true, via: 'search-page', id: picked.id, name: picked.title,
+      mainH: grab('Main Story'), plusH: grab('Main \\+ Extra'), hundredH: grab('Completionist'),
+      raw: null,
+    };
   } catch (error) {
     return { matched: false, error: String(error.message || error) };
   }

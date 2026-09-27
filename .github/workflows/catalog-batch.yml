@@ -68,6 +68,7 @@ jobs:
           path: |
             tools/catalog-batch-data.json
             tools/catalog-batch-review.txt
+            tools/hltb-pages/
           if-no-files-found: ignore
 
       - name: Сводка прогона
