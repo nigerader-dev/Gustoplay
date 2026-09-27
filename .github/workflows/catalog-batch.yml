@@ -47,19 +47,21 @@ jobs:
       - name: Сбор данных кандидатов
         run: node tools/pull-catalog-candidates.mjs --delay=350
 
-      # Диагностика разбора HLTB: сырой HTML не виден из песочницы (артефакт
-      # качается с Azure Blob, который недоступен), поэтому фрагмент первой
-      # сохранённой страницы и её размер печатаются прямо в лог прогона.
+      # Диагностика разбора HLTB: сырой HTML не виден из песочницы (артефакт —
+      # Azure Blob, лог — results-receiver; оба недоступны из закрытой среды),
+      # поэтому фрагмент первой сохранённой страницы уходит аннотациями — их
+      # читает api.github.com (проверено конвейерами обложек/sysreq).
       - name: Диагностика страницы HLTB
         if: always()
         run: |
           f=$(ls tools/hltb-pages/*.html 2>/dev/null | head -1)
           if [ -n "$f" ]; then
-            echo "hltb-page: $f ($(wc -c < "$f") байт)"
-            echo "hltb-first-3000-bytes:"
-            head -c 3000 "$f"
+            echo "::notice::hltb-page: $(basename "$f") — $(wc -c < "$f") байт"
+            head -c 6000 "$f" | base64 -w 3000 | while read -r chunk; do
+              echo "::notice::hltb-html-b64: $chunk"
+            done
           else
-            echo "hltb-page: ни одной страницы не сохранено"
+            echo "::notice::hltb-page: ни одной страницы не сохранено"
           fi
 
       - name: Коммит результата
