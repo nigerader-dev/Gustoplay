@@ -1,5 +1,10 @@
 {
   "__comment": "Ручные сопоставления обложек. Резолвер сливает их в js/catalog/steam-covers.js. Формат: для Steam — {steamId, cover, src:'steam'}; для игр вне Steam — {cover, url, src:'official'|'gog'|'epic'}. Каждый AppID проверен через Steam Store API (см. git-историю), обложки вне Steam берутся только из официальных источников.",
+  "a-hat-in-time": {
+    "steamId": 253230,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/253230/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "age-of-empires-ii-the-age-of-kings": {
     "steamId": 221380,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/221380/library_600x900_2x.jpg",
@@ -8,6 +13,11 @@
   "age-of-empires-iv": {
     "steamId": 1466860,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1466860/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "age-of-mythology-retold": {
+    "steamId": 1934680,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1934680/library_600x900_2x.jpg",
     "src": "steam"
   },
   "alan-wake-2": {
@@ -31,9 +41,19 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1815780/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "battleblock-theater": {
+    "steamId": 238460,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/238460/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "beyond-good-evil": {
     "steamId": 2556990,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2556990/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "biped": {
+    "steamId": 1071870,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1071870/library_600x900_2x.jpg",
     "src": "steam"
   },
   "black-desert-online": {
@@ -45,9 +65,24 @@
     "cover": "https://image.api.playstation.com/vulcan/img/rnd/202010/2614/O2Z66UWrZH8zcejxopwWxhGu.png",
     "src": "playstation"
   },
+  "boomerang-fu": {
+    "steamId": 965680,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/965680/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "brawl-stars": {
     "cover": "https://supercell.com/_next/static/media/games_thumbnail_brawlstars.59dcf516.jpg",
     "src": "supercell"
+  },
+  "bread-fred": {
+    "steamId": 1607680,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1607680/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "broforce": {
+    "steamId": 274190,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/274190/library_600x900_2x.jpg",
+    "src": "steam"
   },
   "call-of-duty-mobile": {
     "cover": "https://www.callofduty.com/content/dam/atvi/callofduty/cod-touchui/mobile/home/hero/CODM_Home_Hero-BG_Desktop-LG-11.webp",
@@ -58,9 +93,24 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1677770/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "castle-crashers": {
+    "steamId": 204360,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/204360/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "castlevania-symphony-of-the-night": {
     "cover": "https://www.konami.com/games/castlevania/s/img/history/2018_x_son_rob_us.png",
     "src": "konami"
+  },
+  "catastronauts": {
+    "steamId": 737890,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/737890/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "chariot": {
+    "steamId": 319450,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/319450/library_600x900_2x.jpg",
+    "src": "steam"
   },
   "clash-of-clans": {
     "cover": "https://supercell.com/_next/static/media/games_thumbnail_clashofclans.c50b0ec8.jpg",
@@ -69,6 +119,11 @@
   "clash-royale": {
     "cover": "https://supercell.com/_next/static/media/games_thumbnail_clashroyale.d4751945.jpg",
     "src": "supercell"
+  },
+  "cobalt-core": {
+    "steamId": 2179850,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2179850/library_600x900_2x.jpg",
+    "src": "steam"
   },
   "command-conquer-red-alert-2": {
     "steamId": 2229850,
@@ -80,14 +135,34 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/870780/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "crawl": {
+    "steamId": 293780,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/293780/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "darkest-dungeon": {
+    "steamId": 262060,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/262060/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "dead-space-2023": {
     "steamId": 1693980,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1693980/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "death-squared": {
+    "steamId": 471810,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/471810/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "death-stranding": {
     "steamId": 1850570,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1850570/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "degrees-of-separation": {
+    "steamId": 809880,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/809880/library_600x900_2x.jpg",
     "src": "steam"
   },
   "diablo-ii-resurrected": {
@@ -105,6 +180,11 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/435150/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "dome-keeper": {
+    "steamId": 1637320,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1637320/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "doom-2016": {
     "steamId": 379720,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/379720/library_600x900_2x.jpg",
@@ -118,6 +198,11 @@
   "dragon-quest-xi-s": {
     "steamId": 1295510,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1295510/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "dune-spice-wars": {
+    "steamId": 1605220,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1605220/library_600x900_2x.jpg",
     "src": "steam"
   },
   "dying-light-2-stay-human": {
@@ -151,6 +236,11 @@
     "cover": "https://play-lh.googleusercontent.com/cK-U0_B9GrnSy26SNISDuvU_hL4VggyqJ1J5V2oiuyVEfiGo7fzegdBjk0ejXPg3PKK5sPwumdLBbWv8KkBKLQ=s512-rw",
     "src": "google-play"
   },
+  "full-metal-furies": {
+    "steamId": 416600,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/416600/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "genshin-impact": {
     "cover": "https://cdn2.unrealengine.com/egs-genshinimpact-cognospherepteltd-s2-1200x1600-f33338ee244c.jpg",
     "src": "epic"
@@ -174,6 +264,11 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/3240220/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "heave-ho": {
+    "steamId": 905340,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/905340/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "honkai-star-rail": {
     "cover": "https://cdn2.unrealengine.com/2-6-1200x1600-en-1200x1600-f43aa119f1b3.jpg",
     "src": "epic"
@@ -188,9 +283,34 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2051120/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "ibb-obb": {
+    "steamId": 95400,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/95400/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "keywe": {
+    "steamId": 1242980,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1242980/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "league-of-legends": {
     "cover": "https://ddragon.leagueoflegends.com/cdn/img/champion/loading/Ahri_0.jpg",
     "src": "riot"
+  },
+  "lethal-league-blaze": {
+    "steamId": 553310,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/553310/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "lost-castle": {
+    "steamId": 434650,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/434650/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "lovers-in-a-dangerous-spacetime": {
+    "steamId": 252110,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/252110/library_600x900_2x.jpg",
+    "src": "steam"
   },
   "mario-kart-8-deluxe": {
     "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000000153/de697f487a36d802dd9a5ff0341f717c8486221f2f1219b675af37aca63bc453",
@@ -217,9 +337,39 @@
     "cover": "https://play-lh.googleusercontent.com/AUGFPG5XqzHukTUDH2mcdOTpEwlDmZ5hUuWPXwu9IcvcyaBTwhV2WJeKKFAj_UA2m05ZxPgJuhrllXIqlW0i=s512-rw",
     "src": "google-play"
   },
+  "monster-train": {
+    "steamId": 1102190,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1102190/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "move-or-die": {
+    "steamId": 323850,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/323850/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "moving-out": {
+    "steamId": 996770,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/996770/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "multiversus": {
     "steamId": 1818750,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1818750/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "never-alone": {
+    "steamId": 295790,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/295790/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "nidhogg-2": {
+    "steamId": 535520,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/535520/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "nine-parchments": {
+    "steamId": 471550,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/471550/library_600x900_2x.jpg",
     "src": "steam"
   },
   "nioh-2": {
@@ -232,6 +382,21 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/466560/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "old-world": {
+    "steamId": 597180,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/597180/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "out-of-space": {
+    "steamId": 400080,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/400080/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "overcooked": {
+    "steamId": 448510,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/448510/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "overwatch-2": {
     "steamId": 2357570,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2357570/library_600x900_2x.jpg",
@@ -240,6 +405,11 @@
   "pathfinder-wrath-of-the-righteous": {
     "steamId": 1184370,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1184370/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "pikuniku": {
+    "steamId": 572890,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/572890/library_600x900_2x.jpg",
     "src": "steam"
   },
   "pok-mon-tcg-pocket": {
@@ -254,6 +424,11 @@
     "cover": "https://play-lh.googleusercontent.com/Se7jR6A5R0Mk9ClaIguf46yi2K3k32JsqKb3gAtrktIh3JwnFfxrQRmG9GLvdMpbxbMrReUOxzDkStxGxNo-5Q=s512-rw",
     "src": "google-play"
   },
+  "rayman-legends": {
+    "steamId": 242550,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/242550/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "resident-evil-2-remake": {
     "steamId": 883710,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/883710/library_600x900_2x.jpg",
@@ -264,6 +439,11 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2050650/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "river-city-girls": {
+    "steamId": 1049320,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1049320/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "roblox": {
     "cover": "https://play-lh.googleusercontent.com/QqZj22aXblAyYDxLQw-Gg0ycW0QkKhrDnwqgERZU9BMRXZnMlgXfq-94sikG5mEpt_I0lzZxcUzfLblmQgwYzUE=s512-rw",
     "src": "google-play"
@@ -271,6 +451,11 @@
   "rocket-league": {
     "steamId": 252950,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/252950/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sackboy-a-big-adventure": {
+    "steamId": 1599660,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1599660/library_600x900_2x.jpg",
     "src": "steam"
   },
   "sea-of-stars": {
@@ -288,9 +473,34 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/814380/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "shift-happens": {
+    "steamId": 359840,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/359840/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sid-meiers-civilization-v": {
+    "steamId": 8930,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/8930/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "silent-hill-2-2024": {
     "steamId": 2124490,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2124490/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "sonic-mania": {
+    "steamId": 584400,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/584400/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "speedrunners": {
+    "steamId": 207140,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/207140/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "spelunky-2": {
+    "steamId": 418530,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/418530/library_600x900_2x.jpg",
     "src": "steam"
   },
   "spiritfarer": {
@@ -330,6 +540,11 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/3215050/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "teenage-mutant-ninja-turtles-shredders-revenge": {
+    "steamId": 1361510,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1361510/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "the-elder-scrolls-iv-oblivion": {
     "steamId": 2623190,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2623190/library_600x900_2x.jpg",
@@ -350,14 +565,39 @@
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/2395210/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "tools-up": {
+    "steamId": 1004490,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1004490/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "trackmania-nations": {
     "steamId": 11020,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/11020/library_600x900_2x.jpg",
     "src": "steam"
   },
+  "tricky-towers": {
+    "steamId": 437920,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/437920/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "trine-4-the-nightmare-prince": {
+    "steamId": 690640,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/690640/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "uncharted-4-a-thiefs-end": {
     "steamId": 1659420,
     "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1659420/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "unravel-two": {
+    "steamId": 1225570,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1225570/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "unspottable": {
+    "steamId": 1243960,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1243960/library_600x900_2x.jpg",
     "src": "steam"
   },
   "va-11-hall-a": {
@@ -382,9 +622,24 @@
     "cover": "https://play-lh.googleusercontent.com/tNMaMiJ4wTQy_TeZSWHdSlP5qH0PGig9g9sDJu2QFvCHdnrbo2u17pX55W4i6KITo56v_ZyICkqLgA2svH9ycQ=s512-rw",
     "src": "google-play"
   },
+  "wingspan": {
+    "steamId": 1054490,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1054490/library_600x900_2x.jpg",
+    "src": "steam"
+  },
+  "wobbly-life": {
+    "steamId": 1211020,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/1211020/library_600x900_2x.jpg",
+    "src": "steam"
+  },
   "world-of-warcraft": {
     "cover": "https://blz-contentstack-images.akamaized.net/v3/assets/blta8f9a8e092360c6c/blt5b9630b991abc743/6939c64f5a1d2c822390a263/WoW_GameCard.png",
     "src": "blizzard"
+  },
+  "worms-w-m-d": {
+    "steamId": 327030,
+    "cover": "https://cdn.akamai.steamstatic.com/steam/apps/327030/library_600x900_2x.jpg",
+    "src": "steam"
   },
   "xenoblade-chronicles-3": {
     "cover": "https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000053336/e933b48650b33b355e9cf2583da5c94b77180e40fb02d050041083dd62f4df39",

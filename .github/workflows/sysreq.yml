@@ -42,12 +42,13 @@ on:
         default: 'full'
   push:
     branches:
-      - arena/01a0ddd3-gustoplay
+      - arena/01a0e3da-gustoplay
       - main
     paths:
       - 'tools/pull-system-requirements.mjs'
       - 'tools/sysreq-format.mjs'
       - 'tools/sysreq-overrides.json'
+      - 'js/catalog/part-*.js'
       - '.github/workflows/sysreq.yml'
 
 concurrency:

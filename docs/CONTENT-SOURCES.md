@@ -58,3 +58,104 @@
 ## Ограничения снимка
 
 Счётчики отзывов Steam и цены со временем меняются: API показывает текущий агрегат, а не постоянную оценку. Перед обновлением цен или рейтингов нужно проверить актуальные данные магазина. `Steam appdetails` вернул `success:false` для `cc=ru` и `cc=by` у Indiana Jones, DOOM и Avowed; региональные суммы не подставлялись. Пересчёт Blue Prince из USD в RUB тоже является только конвертацией и не должен называться ценой BY/RU-магазина.
+
+## Батч расширения каталога 27.09.2026 (52 кандидата, конвейер GitHub Actions)
+
+Метод общий для всех записей батча; для каждой игры в `tools/catalog-batch-data.json`
+лежит снимок ответов Steam, из которого взяты поля. Ничего не подставлялось руками.
+
+- **AppID, название, год, разработчик, издатель, жанры, категории режимов, обычная
+  цена (USD), поддержка контроллера**: Steam Store API `appdetails?cc=us&l=english`
+  (и `l=russian` для русского короткого описания), официальная витрина
+  `store.steampowered.com`, снимок 27.09.2026 17:33 UTC. AppID найден через
+  Steam Store Search API **только по точному совпадению нормализованного названия**
+  (код: `tools/pull-catalog-candidates.mjs`, тот же принцип, что у резолвера обложек).
+- **Рейтинг `rat`** — доля положительных рекомендаций Steam:
+  `round(total_positive / total_reviews × 100)` из Steam Reviews API
+  (`appreviews/<id>?language=all&review_type=all&purchase_type=all`), снимок
+  27.09.2026. Это пользовательский агрегат Steam, не Metascore.
+- **Цена `pv`** — обычная цена Steam (USD, `price_overview.initial`, без скидки),
+  пересчитанная по официальному курсу ЦБ РФ **84,3414 ₽/$ (публикация от
+  26.09.2026, получена скриптом из cbr.ru 27.09.2026)**, округление до 100 ₽.
+  Это расчётная конвертация, а не цена регионального магазина.
+- **Время `len`** — оценки HowLongToBeat ([main story, completionist], округление
+  до часа): собраны браузерным сборщиком `tools/pull-hltb-pages.mjs` со страниц
+  поиска HLTB 27.09.2026 (страница — клиентское Next.js-приложение; API отдаёт
+  403 датацентровым IP). HLTB — пользовательские агрегаты, не обещание точного
+  времени. Для каждой игры в журнале ниже — ID страницы HLTB.
+- **Режимы `md`** — прямое отражение категорий Steam: «Shared/Split Screen Co-op» →
+  `coopLocal`, «Online Co-op» → `coopOnline`, «Shared/Split Screen PvP» →
+  `pvpLocal`, «Online PvP» → `pvpOnline`, «Single-player» → `solo`. Remote Play
+  Together не кодируется отдельным режимом.
+- **Платформы `pf`** — `pc` подтверждена Steam (windows); консольные версии — по
+  строке платформ на странице игры HowLongToBeat (краудсорс-агрегатор, не магазин);
+  где HLTB платформ не разобрал — стоит только `pc`.
+- **Субъективные поля** (`dif`, `pace`, `mood`, `coopQ`, теги, `pl` — макс. число
+  игроков) — редакционная оценка этого батча по официальным описаниям Steam,
+  единообразно со шкалами существующего каталога (docs/CONTENT.md); это оценка
+  редакции, а не измерение. `pl` сверен с текстом описания Steam там, где число
+  игроков названо явно.
+- **Описания/особенности (`desc`, `about`, `feats`)** — написаны своими словами
+  по фактам из официальных описаний Steam; формулировки редакции.
+- Отклонён по результату сбора: **Get Packed: Fully Loaded** — доля положительных
+  отзывов Steam 55% (снимок 27.09.2026), существенно ниже планки каталога.
+- Не найден в Steam Search: **Scott Pilgrim vs. The World: The Game – Complete
+  Edition** — страница не находится поиском магазина (снимок 27.09.2026);
+  по правилам источников игра без страницы магазина в каталог не добавляется.
+
+### Батч 27.09.2026 — дополнение по итогам записи в каталог (51 игра)
+
+- **Итог**: каталог 440 → **491 запись**; кооп за одним экраном 79 → **118**;
+  39 новых игр с `coopLocal`, 51 запись с `ratingSource` (рекомендации Steam,
+  снимок 27.09.2026). Распределение: 42 → `part-a.js`, 8 → `part-c.js`,
+  1 (Darkest Dungeon) → `part-b.js`.
+- **`len` и консольные `pf`**: токен GitHub перестал действовать до сбора
+  аннотаций прогона Actions, поэтому карточки HowLongToBeat собраны
+  поисковыми сниппетами страниц howlongtobeat.com (и зеркал hl2b/ITAD) —
+  файл `tools/hltb-manual.json` (51 игра, дата среза 27.09.2026, ID страниц
+  HLTB сохранены). Значения — из карточки игры (Main Story / Completionist),
+  половины округляются вниз. Исключения задокументированы в поле `note`
+  файла: Catastronauts — второе значение Main+Extra (completionist не
+  голосован); Unspottable — TrueAchievements modal 1–2 ч (HLTB main не
+  голосован); Age of Mythology: Retold — карточка HLTB недоступна в
+  сниппетах, числа 25/62 из IGN (данные HowLongToBeat).
+- **Годы**: берутся из снимка Steam. Исключения (обе даты названы в about):
+  Unravel Two — 2018 (1.0 Origin/PS4/Xbox 21.06–09.2018, HLTB NA 09.06.2018;
+  Steam-страница показывает 04.06.2020 — порт), Sackboy: A Big Adventure —
+  2020 (PS5 12.11.2020; Steam-порт 27.10.2022), Old World — 2021 (1.0
+  01.07.2021 по HLTB NA; Steam-страница показывает 18.05.2022 — смена
+  издателя), Wobbly Life — 2025 (выход из раннего доступа 18.09.2025).
+- **`pl` с источником в описании Steam**: Overcooked 1–4, Boomerang Fu до 6,
+  TMNT до 6, Worms W.M.D до 6 (пятеро противников), Tricky Towers 4
+  («против троих»), Lethal League Blaze 4, Full Metal Furies 4, Lovers 4,
+  Nine Parchments 4, Wingspan 1–5, Wobbly Life 4, SpeedRunners 4, Trine 4 4,
+  Crawl 4, Biped 2, Death Squared 4, Chariot 1–2 («одному или с другом»),
+  Sonic Mania 2 («с другом»). Числа игроков сетевых стратегий: Civ V — 12
+  (хотсит, Arqade/CivFanatics), Age of Mythology: Retold — 12 (wiki
+  Age of Empires: «кроме AoM — максимум 8»), Dune: Spice Wars — 4
+  (официальный пост разработчика о мультиплеере), Old World — 10 (ответ
+  разработчика в Steam-обсуждении).
+- **`md`, исключения сверх категорий Steam**: Chariot — категории Steam не
+  декларируют кооп, но описание магазина прямо называет игру couch co-op
+  («can be played alone or with a friend») → `coopLocal` по описанию Steam;
+  ibb & obb — категории не содержат «Shared/Split Screen», описание Steam
+  называет «true local co-op couch fun or match up online» → `coopLocal` +
+  `coopOnline`; Civilization V — сетевой мультиплеер подтверждён описанием
+  Steam («Compete with players all over the world or locally in LAN»), хотсит
+  упомянут только в feats.
+- **Обложки**: 51 appid из снимка Steam вписаны в `tools/steam-overrides.json`
+  (формат `{steamId, cover, src:'steam'}`), `js/catalog/steam-covers.js`
+  сгенерирован резолвером локально (слияние без сети). Проверка URL и ремонт
+  404 — шагом резолвера в Actions (`.github/workflows/covers.yml`);
+  в песочнице CDN Steam недоступен (ECONNRESET), локальная проверка
+  невозможна. После пуша: прогон covers.yml и перезапуск CI, если проверка
+  обложек на коммите пакета упала до ремонтного коммита.
+- **Требования к ПК**: для 51 новой игры подтянет `sysreq.yml` (триггеры
+  расширены на `js/catalog/part-*.js` и ветку этой сессии — раньше в списке
+  была чужая сессионная ветка, и workflow на push каталога не срабатывал).
+- **Ветки-триггеры воркфлоу**: `covers.yml` и `sysreq.yml` ссылались на ветки
+  прошлых сессий (`arena/01a0d952-…`, `arena/01a0ddd3-…`) — заменены на
+  `arena/01a0e3da-gustoplay`; `catalog-batch.yml` уже был корректен.
+- **Мелкий фикс**: CSS-переменная `--ad-h` → `--ad-height`
+  (`js/views/components.js`, `css/styles.css`) — словарная проверка
+  `check:text` считала «ad-h» опечаткой и роняла шаг CI.

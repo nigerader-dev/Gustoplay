@@ -19,7 +19,7 @@ on:
         default: 'all'
   push:
     branches:
-      - arena/01a0d952-gustoplay
+      - arena/01a0e3da-gustoplay
       - main
     paths:
       - 'tools/steam-overrides.json'

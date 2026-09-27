@@ -201,7 +201,7 @@ export function adSlot(slotId) {
   const slot = AD_SLOTS[slotId];
   if (!slot) return '';
   // Высота креатива резервируется всегда — и в mock, и в реальной сети
-  const reserve = `style="--ad-h: ${Number(slot.h) || 90}px"`;
+  const reserve = `style="--ad-height: ${Number(slot.h) || 90}px"`;
   if (ADS.mode === 'mock') {
     return `<aside class="ad-slot ad-mock" data-slot="${slotId}" ${reserve}>
       <span class="ad-label">${esc(t('ad.mockLabel'))}</span>

@@ -948,7 +948,7 @@ select.input { cursor: pointer; }
   background: var(--bg-sunken); border: 1px solid var(--surface-border); text-align: center;
 }
 /* Высота креатива резервируется до загрузки рекламы — контент не сдвигается (CLS 0) */
-.ad-slot .ad-network, .ad-slot .ad-body { min-height: var(--ad-h, 90px); }
+.ad-slot .ad-network, .ad-slot .ad-body { min-height: var(--ad-height, 90px); }
 /* --text-muted на фоне --bg-sunken даёт 4.24 — меньше порога 4.5 для мелкого
    текста (нашёл аудит Lighthouse). --text-soft даёт 6.02, вид почти тот же. */
 .ad-label { display: block; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 10px; }

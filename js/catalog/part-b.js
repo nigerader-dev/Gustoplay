@@ -1,4 +1,7 @@
 /** Каталог, часть B — одиночные игры: сюжет, атмосфера, хардкор, хоррор. */
+
+import { g } from './dsl.js';
+
 export const PART_B = [
   {
     t: 'Baldur\u2019s Gate 3', y: 2023, dev: 'Larian Studios', gr: ['rpg', 'tactics', 'adventure'],
@@ -567,4 +570,8 @@ export const PART_B = [
     about: {"ru":"Неонуарный экшен про самурая с катаной и способностью замедлять время: каждый уровень — хореография на одно касание, где смерть мгновенна, а перезапуск — моментальный. Стиль, синтвейв и сюжет, который внезапно оказывается глубже, чем кажется.","en":"A neo-noir action game about a katana-wielding samurai who can slow time: every level is one-hit choreography where death is instant and restart is instant. Style, synthwave and a plot that turns out deeper than it looks."},
     feats: {"ru":["Одна смерть — один вдох, и снова в бой","Синтвейв-саундтрек, под который хочется двигаться","Сюжет с неожиданным вторым дном"],"en":["One death, one breath, back into the fight","A synthwave soundtrack that makes you move","A story with an unexpected second layer"]},
   },
+
+  /* ---------- батч 27.09.2026 ---------- */
+
+  g('Darkest Dungeon', 2016, 'Red Hook Studios', ['rpg', 'roguelike', 'tactics'], ['dark', 'difficult', 'permadeath', 'tbs', 'loot', 'procedural', 'grind'], ['solo'], [1, 1], ['pc', 'ps', 'xbox', 'switch'], 'mid', 2100, [57, 128], 4, 2, 92, ['tense', 'progress'], { ru: 'Готический рогалик о цене приключений: герои сходят с ума, а наёмники — расходный материал.', en: 'A gothic roguelike about the price of adventuring: heroes break, and mercenaries are consumables.' }, { about: { "ru": "Пошаговая RPG о психологических тяготах приключенчества: набирайте, обучайте и ведите отряд несовершенных героев против немыслимых ужасов. Страх, болезни и тьма давят на рассудок не хуже монстров, а смерть героя окончательна.", "en": "A turn-based RPG about the psychological stresses of adventuring: recruit, train and lead a team of flawed heroes against unthinkable horrors. Fear, disease and the dark gnaw at minds as hard as monsters do, and a hero’s death is permanent." }, feats: { "ru": ["Система стресса как полноценная механика", "Перманентная смерть и наследие предков", "Готическая атмосфера под голос рассказчика"], "en": ["A stress system as a full mechanic", "Permadeath and the Ancestor’s legacy", "A gothic atmosphere carried by the narrator"] }, ratingSource: { "ru": "Рекомендации игроков Steam, снимок 27.09.2026", "en": "Steam player recommendations, snapshot 2026-09-27" } }),
 ];
