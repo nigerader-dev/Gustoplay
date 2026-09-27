@@ -1,6 +1,6 @@
 {
  "batch": "2026-09-27-couch",
- "collectedAt": "2026-09-27T17:48:26.385Z",
+ "collectedAt": "2026-09-27T17:52:07.257Z",
  "cbr": {
   "ok": true,
   "rate": 84.3414,
@@ -1848,7 +1848,7 @@
    },
    "controller": "full",
    "metacritic": 80,
-   "steamReviewCount": 16479,
+   "steamReviewCount": 16478,
    "reviews": {
     "positive": 20780,
     "total": 23308,
@@ -2435,7 +2435,7 @@
    },
    "controller": null,
    "metacritic": 74,
-   "steamReviewCount": 10109,
+   "steamReviewCount": 10110,
    "reviews": {
     "positive": 11387,
     "total": 11878,
