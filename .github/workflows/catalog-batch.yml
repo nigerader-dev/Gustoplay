@@ -72,8 +72,12 @@ jobs:
         id: hltb
         continue-on-error: true
         run: |
-          npm i --no-save puppeteer-core
-          node tools/pull-hltb-pages.mjs
+          set -o pipefail
+          if ! npm i --no-save puppeteer-core 2>&1 | tail -3; then
+            echo "::notice::hltb-fatal: npm i puppeteer-core не удался"
+            exit 1
+          fi
+          node tools/pull-hltb-pages.mjs 2>&1 | tee /tmp/hltb-run.log
 
       - name: Коммит результата HLTB
         if: steps.hltb.outcome == 'success'

@@ -44,88 +44,115 @@ const batch = JSON.parse(await readFile(dataPath, 'utf8'));
 const names = batch.entries.map((e) => e.steamName).slice(0, LIMIT);
 console.log(`HLTB: ${names.length} игр из batch ${batch.batch}`);
 
-// puppeteer-core ставится шагом workflow (npm i --no-save); Chrome берём системный
-const { default: puppeteer } = await import('puppeteer-core');
-const execPaths = ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser'];
-const { execFileSync } = await import('node:child_process');
-let executablePath = null;
-for (const p of execPaths) {
-  try { execFileSync(p, ['--version'], { stdio: 'pipe' }); executablePath = p; break; } catch { /* пробуем дальше */ }
-}
-if (!executablePath) throw new Error('системный Chrome/Chromium не найден');
-console.log(`браузер: ${executablePath} (${execFileSync(executablePath, ['--version']).toString().trim()})`);
+async function main() {
 
-const browser = await puppeteer.launch({
-  executablePath,
-  headless: 'new',
-  args: ['--no-sandbox', '--disable-dev-shm-usage', '--window-size=1280,900'],
-});
 
-const results = [];
-const misses = [];
+  /** Фатальную ошибку нельзя оставлять в логе (логи из закрытой песочницы не
+   *  читаются) — уводим её аннотацией, как и данные. */
+  process.on('unhandledRejection', (e) => {
+    console.log(`::notice::hltb-fatal: ${String(e?.message || e).slice(0, 500)}`);
+    process.exit(1);
+  });
 
-for (const name of names) {
-  const page = await browser.newPage();
-  await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36');
+  // puppeteer-core ставится шагом workflow (npm i --no-save); Chrome берём системный
+  let puppeteer;
   try {
-    await page.goto(`https://howlongtobeat.com/?q=${encodeURIComponent(name)}`, { waitUntil: 'networkidle2', timeout: 45000 });
-    // ждём появления карточек результатов (клиентский рендер)
-    await page.waitForSelector('a[href*="/game/"]', { timeout: 25000 });
-    const html = await page.content();
-    const slug = norm(name);
-    try {
-      await mkdir(hltbDir, { recursive: true });
-      await writeFile(new URL(`./hltb-pages/${slug}.html`, import.meta.url), html);
-    } catch { /* сохранение — best effort */ }
-
-    // Карточка: ссылка /game/<id>, видимый текст ссылки — название игры
-    const found = [];
-    const re = /<a[^>]+href="https:\/\/howlongtobeat\.com\/game\/(\d+)"[^>]*>([\s\S]*?)<\/a>/g;
-    let m;
-    while ((m = re.exec(html))) {
-      const title = m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-      if (title) found.push({ id: Number(m[1]), title });
-    }
-    const exact = found.find((x) => norm(x.title) === slug);
-    if (!exact) {
-      misses.push(`${name} — точного совпадения нет (${found.slice(0, 3).map((x) => `${x.title}/${x.id}`).join(', ') || 'карточек нет'})`);
-      console.warn(`  ⚠️  ${name}: точного совпадения нет`);
-    } else {
-      // Окно текста после заголовка карточки: там три пары «подпись → время»
-      const anchor = html.indexOf(`game/${exact.id}`);
-      const text = html.slice(anchor, anchor + 4000).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-      const grab = (label) => parseHltbTime((text.match(new RegExp(`${label}\\s*([\\d½¼¾⅓⅔,.]+\\s*(?:Hours?|Mins?))`, 'i')) || [])[1]);
-      const entry = {
-        name, hltbId: exact.id, url: `https://howlongtobeat.com/game/${exact.id}`,
-        mainH: grab('Main Story'), plusH: grab('Main \\+ Extra'), hundredH: grab('Completionist'),
-      };
-      if (entry.mainH == null && entry.plusH == null && entry.hundredH == null) {
-        misses.push(`${name} — карточка найдена (${exact.id}), но времена не разобраны`);
-        console.warn(`  ⚠️  ${name}: времена не разобраны`);
-      } else {
-        results.push(entry);
-        console.log(`  ✅ ${name} → ${exact.id}: main=${entry.mainH} plus=${entry.plusH} 100%=${entry.hundredH}`);
-      }
-    }
-  } catch (error) {
-    misses.push(`${name} — ${String(error.message || error).slice(0, 120)}`);
-    console.warn(`  ⚠️  ${name}: ${error.message}`);
-  } finally {
-    await page.close();
-    await sleep(400 + Math.random() * 400); // не дёргаем сайт очередью запросов
+    puppeteer = (await import('puppeteer-core')).default;
+  } catch (e) {
+    console.log(`::notice::hltb-fatal: puppeteer-core не установлен (${String(e.message).slice(0, 200)}) — нужен шаг npm i --no-save puppeteer-core`);
+    process.exit(1);
   }
+  const { execFileSync } = await import('node:child_process');
+  const execPaths = [process.env.CHROME_PATH, 'google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'chrome'].filter(Boolean);
+  let executablePath = null;
+  for (const p of execPaths) {
+    try { execFileSync(p, ['--version'], { stdio: 'pipe' }); executablePath = p; break; } catch { /* пробуем дальше */ }
+  }
+  if (!executablePath) {
+    console.log(`::notice::hltb-fatal: системный Chrome/Chromium не найден (пробовал: ${execPaths.join(', ')})`);
+    process.exit(1);
+  }
+  console.log(`браузер: ${executablePath} (${execFileSync(executablePath, ['--version']).toString().trim()})`);
+
+  const browser = await puppeteer.launch({
+    executablePath,
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-dev-shm-usage', '--window-size=1280,900'],
+  });
+
+  const results = [];
+  const misses = [];
+
+  for (const name of names) {
+    const page = await browser.newPage();
+    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36');
+    try {
+      await page.goto(`https://howlongtobeat.com/?q=${encodeURIComponent(name)}`, { waitUntil: 'networkidle2', timeout: 45000 });
+      // ждём появления карточек результатов (клиентский рендер)
+      await page.waitForSelector('a[href*="/game/"]', { timeout: 25000 });
+      const html = await page.content();
+      const slug = norm(name);
+      try {
+        await mkdir(hltbDir, { recursive: true });
+        await writeFile(new URL(`./hltb-pages/${slug}.html`, import.meta.url), html);
+      } catch { /* сохранение — best effort */ }
+
+      // Карточка: ссылка /game/<id>, видимый текст ссылки — название игры
+      const found = [];
+      const re = /<a[^>]+href="https:\/\/howlongtobeat\.com\/game\/(\d+)"[^>]*>([\s\S]*?)<\/a>/g;
+      let m;
+      while ((m = re.exec(html))) {
+        const title = m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+        if (title) found.push({ id: Number(m[1]), title });
+      }
+      const exact = found.find((x) => norm(x.title) === slug);
+      if (!exact) {
+        misses.push(`${name} — точного совпадения нет (${found.slice(0, 3).map((x) => `${x.title}/${x.id}`).join(', ') || 'карточек нет'})`);
+        console.warn(`  ⚠️  ${name}: точного совпадения нет`);
+      } else {
+        // Окно текста после заголовка карточки: там три пары «подпись → время»
+        const anchor = html.indexOf(`game/${exact.id}`);
+        const text = html.slice(anchor, anchor + 4000).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+        const grab = (label) => parseHltbTime((text.match(new RegExp(`${label}\\s*([\\d½¼¾⅓⅔,.]+\\s*(?:Hours?|Mins?))`, 'i')) || [])[1]);
+        const entry = {
+          name, hltbId: exact.id, url: `https://howlongtobeat.com/game/${exact.id}`,
+          mainH: grab('Main Story'), plusH: grab('Main \\+ Extra'), hundredH: grab('Completionist'),
+        };
+        if (entry.mainH == null && entry.plusH == null && entry.hundredH == null) {
+          misses.push(`${name} — карточка найдена (${exact.id}), но времена не разобраны`);
+          console.warn(`  ⚠️  ${name}: времена не разобраны`);
+        } else {
+          results.push(entry);
+          console.log(`  ✅ ${name} → ${exact.id}: main=${entry.mainH} plus=${entry.plusH} 100%=${entry.hundredH}`);
+        }
+      }
+    } catch (error) {
+      misses.push(`${name} — ${String(error.message || error).slice(0, 120)}`);
+      console.warn(`  ⚠️  ${name}: ${error.message}`);
+    } finally {
+      await page.close();
+      await sleep(400 + Math.random() * 400); // не дёргаем сайт очередью запросов
+    }
+  }
+
+  await browser.close();
+
+  const out = { batch: batch.batch, collectedAt: new Date().toISOString(), entries: results, misses };
+  await writeFile(outPath, `${JSON.stringify(out, null, 1)}\n`);
+  console.log(`\nСобрано: ${results.length} из ${names.length}; проблем: ${misses.length}`);
+
+  // Аннотации: единственный канал, читаемый из закрытой песочницы (api.github.com)
+  const b64 = Buffer.from(JSON.stringify(out), 'utf8').toString('base64');
+  for (let i = 0; i < b64.length; i += 3000) {
+    console.log(`::notice::hltb-b64 [${Math.floor(i / 3000) + 1}/${Math.ceil(b64.length / 3000)}]: ${b64.slice(i, i + 3000)}`);
+  }
+  console.log(`::notice::hltb-meta: ${results.length} записей, ${misses.length} проблем, ${b64.length} байт b64`);
+  for (const line of misses.slice(0, 40)) console.log(`::notice::hltb-review: ${line}`);
+
 }
 
-await browser.close();
-
-const out = { batch: batch.batch, collectedAt: new Date().toISOString(), entries: results, misses };
-await writeFile(outPath, `${JSON.stringify(out, null, 1)}\n`);
-console.log(`\nСобрано: ${results.length} из ${names.length}; проблем: ${misses.length}`);
-
-// Аннотации: единственный канал, читаемый из закрытой песочницы (api.github.com)
-const b64 = Buffer.from(JSON.stringify(out), 'utf8').toString('base64');
-for (let i = 0; i < b64.length; i += 3000) {
-  console.log(`::notice::hltb-b64 [${Math.floor(i / 3000) + 1}/${Math.ceil(b64.length / 3000)}]: ${b64.slice(i, i + 3000)}`);
+try { await main(); }
+catch (e) {
+  console.log(`::notice::hltb-fatal: ${String(e?.stack || e?.message || e).slice(0, 900)}`);
+  process.exit(1);
 }
-console.log(`::notice::hltb-meta: ${results.length} записей, ${misses.length} проблем, ${b64.length} байт b64`);
-for (const line of misses.slice(0, 40)) console.log(`::notice::hltb-review: ${line}`);
