@@ -1,54 +1,533 @@
 {
-  "_комментарий": "Время прохождения и платформы с HowLongToBeat (карточки игры, веб-сниппеты, 27.09.2026; снимки зеркал/агрегаторов сверены). main = Main Story, hundred = Completionist, часы, половины округляются вниз. pf — платформы по строкам таблицы HLTB (краудсорс, не магазин; устаревшие/мёртвые платформы опущены, mobile = iOS/Android-версия существует). Исключения по источнику помечены в note. Замена аннотациям прогона 36339299053, пока токен GitHub недоступен.",
-  "Overcooked": { "id": 39030, "main": 8, "hundred": 12, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Moving Out": { "id": 75031, "main": 5, "hundred": 18, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Unravel Two": { "id": 57358, "main": 5, "hundred": 14, "pf": ["pc", "ps", "xbox", "switch"], "note": "HLTB NA-дата 09.06.2018; год каталога 2018" },
-  "Trine 4: The Nightmare Prince": { "id": 62027, "main": 10, "hundred": 16, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Lovers in a Dangerous Spacetime": { "id": 21703, "main": 5, "hundred": 13, "pf": ["pc", "ps", "switch"] },
-  "BattleBlock Theater": { "id": 929, "main": 10, "hundred": 46, "pf": ["pc", "xbox"], "note": "кооп по HLTB ~13½ ч" },
-  "Castle Crashers": { "id": 1556, "main": 7, "hundred": 34, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Rayman Legends": { "id": 12655, "main": 10, "hundred": 33, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Heave Ho": { "id": 70193, "main": 4, "hundred": 14, "pf": ["pc", "switch"] },
-  "ibb & obb": { "id": 14534, "main": 6, "hundred": 17, "pf": ["pc"], "note": "карточка HLTB через IsThereAnyDeal; консольные версии в таблице HLTB не представлены" },
-  "KeyWe": { "id": 82661, "main": 6, "hundred": 17, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Catastronauts": { "id": 63165, "main": 6, "hundred": 11, "pf": ["pc", "ps", "xbox", "switch"], "note": "completionist не голосован, второе значение — Main+Extra" },
-  "Tools Up!": { "id": 73064, "main": 5, "hundred": 9, "pf": ["pc", "ps", "switch"] },
-  "Wobbly Life": { "id": 94401, "main": 16, "hundred": 25, "pf": ["pc", "ps", "xbox", "switch"], "note": "мало голосов (5), данные шумные" },
-  "Nidhogg 2": { "id": 46284, "main": 1, "hundred": 9, "pf": ["pc", "ps", "xbox", "switch"], "note": "main 32 мин → 1 ч" },
-  "SpeedRunners": { "id": 13778, "main": 2, "hundred": 15, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Tricky Towers": { "id": 38919, "main": 9, "hundred": 37, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Move or Die": { "id": 28657, "main": 11, "hundred": 15, "pf": ["pc", "ps"] },
-  "Nine Parchments": { "id": 51393, "main": 8, "hundred": 44, "pf": ["pc", "ps", "switch"] },
-  "Chariot": { "id": 21407, "main": 13, "hundred": 37, "pf": ["pc", "ps", "xbox"] },
-  "Bread & Fred": { "id": 126715, "main": 4, "hundred": 8, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Biped": { "id": 76246, "main": 3, "hundred": 10, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Death Squared": { "id": 47424, "main": 6, "hundred": 10, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Out of Space": { "id": 71548, "main": 5, "hundred": 22, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Unspottable": { "id": 94470, "main": 1, "hundred": 2, "pf": ["pc", "xbox", "switch"], "note": "HLTB main не голосован (Vs.); TrueAchievements modal 1–2 ч" },
-  "Spelunky 2": { "id": 75151, "main": 27, "hundred": 166, "pf": ["pc", "ps", "switch"] },
-  "Sackboy: A Big Adventure": { "id": 80125, "main": 11, "hundred": 34, "pf": ["pc", "ps"], "note": "1.0 — PS5 12.11.2020, Steam-порт 2022; год каталога 2020" },
-  "Boomerang Fu": { "id": 84584, "main": 1, "hundred": 3, "pf": ["pc", "switch"] },
-  "Worms W.M.D": { "id": 39481, "main": 14, "hundred": 46, "pf": ["pc", "xbox", "switch"] },
-  "Crawl": { "id": 21168, "main": 1, "hundred": 13, "pf": ["pc", "ps", "switch"] },
-  "Full Metal Furies": { "id": 52480, "main": 11, "hundred": 27, "pf": ["pc", "xbox", "switch"] },
-  "Lethal League Blaze": { "id": 61412, "main": 2, "hundred": 35, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Lost Castle": { "id": 38434, "main": 12, "hundred": 67, "pf": ["pc", "ps", "switch"] },
-  "Teenage Mutant Ninja Turtles: Shredder's Revenge": { "id": 89573, "main": 3, "hundred": 20, "pf": ["pc", "ps", "xbox", "switch", "mobile"] },
-  "Broforce": { "id": 17638, "main": 7, "hundred": 17, "pf": ["pc", "ps", "xbox", "switch"] },
-  "Pikuniku": { "id": 64060, "main": 3, "hundred": 6, "pf": ["pc", "xbox", "switch"] },
-  "Never Alone": { "id": 21708, "main": 3, "hundred": 4, "pf": ["pc", "ps", "switch", "mobile"] },
-  "Sonic Mania": { "id": 38916, "main": 5, "hundred": 19, "pf": ["pc", "ps", "xbox", "switch"] },
-  "A Hat in Time": { "id": 130, "main": 9, "hundred": 19, "pf": ["pc", "ps", "xbox", "switch"] },
-  "River City Girls": { "id": 69993, "main": 7, "hundred": 16, "pf": ["pc", "ps", "switch"] },
-  "Degrees of Separation": { "id": 64901, "main": 6, "hundred": 9, "pf": ["pc", "switch"] },
-  "Shift Happens": { "id": 33648, "main": 7, "hundred": 20, "pf": ["pc", "switch"] },
-  "Sid Meier's Civilization V": { "id": 8510, "main": 40, "hundred": 431, "pf": ["pc"] },
-  "Age of Mythology: Retold": { "id": null, "main": 25, "hundred": 62, "pf": ["pc", "xbox"], "note": "карточка HLTB недоступна в сниппетах; числа из IGN (HowLongToBeat) 25/62 ч" },
-  "Dune: Spice Wars": { "id": 107255, "main": 12, "hundred": 88, "pf": ["pc", "xbox"] },
-  "Old World": { "id": 113973, "main": 22, "hundred": 88, "pf": ["pc"] },
-  "Monster Train": { "id": 78633, "main": 3, "hundred": 97, "pf": ["pc", "ps", "xbox", "switch", "mobile"] },
-  "Wingspan": { "id": 83257, "main": 2, "hundred": 76, "pf": ["pc", "ps", "xbox", "switch", "mobile"] },
-  "Cobalt Core": { "id": 121843, "main": 18, "hundred": 31, "pf": ["pc", "switch"] },
-  "Dome Keeper": { "id": 109776, "main": 4, "hundred": 33, "pf": ["pc", "xbox"] },
-  "Darkest Dungeon": { "id": 22535, "main": 57, "hundred": 128, "pf": ["pc", "ps", "xbox", "switch"] }
+ "_комментарий": "Ручной сбор карточек HowLongToBeat (веб-сниппеты, 27.09.2026). После восстановления GitHub значения сверены с каноническим прогоном 36339299053 (tools/hltb-data.json): расхождения устранены в пользу прогона, этот файл остаётся источником для 14 игр, которых прогон не собрал (miss), и хранит ID страниц HLTB. main = Main Story, hundred = Completionist, часы. pf — платформы по строкам таблицы HLTB (краудсорс, не магазин).",
+ "Overcooked": {
+  "id": 39030,
+  "main": 8,
+  "hundred": 12,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Moving Out": {
+  "id": 75031,
+  "main": 5,
+  "hundred": 18,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Unravel Two": {
+  "id": 57358,
+  "main": 5,
+  "hundred": 14,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ],
+  "note": "HLTB NA-дата 09.06.2018; год каталога 2018"
+ },
+ "Trine 4: The Nightmare Prince": {
+  "id": 62027,
+  "main": 10,
+  "hundred": 16,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Lovers in a Dangerous Spacetime": {
+  "id": 21703,
+  "main": 5,
+  "hundred": 13,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "BattleBlock Theater": {
+  "id": 929,
+  "main": 10,
+  "hundred": 46,
+  "pf": [
+   "pc",
+   "xbox"
+  ],
+  "note": "кооп по HLTB ~13½ ч"
+ },
+ "Castle Crashers": {
+  "id": 1556,
+  "main": 7,
+  "hundred": 34,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Rayman Legends": {
+  "id": 12655,
+  "main": 10,
+  "hundred": 33,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Heave Ho": {
+  "id": 70193,
+  "main": 4,
+  "hundred": 14,
+  "pf": [
+   "pc",
+   "switch"
+  ]
+ },
+ "ibb & obb": {
+  "id": 14534,
+  "main": 6,
+  "hundred": 17,
+  "pf": [
+   "pc"
+  ],
+  "note": "карточка HLTB через IsThereAnyDeal; консольные версии в таблице HLTB не представлены"
+ },
+ "KeyWe": {
+  "id": 82661,
+  "main": 6,
+  "hundred": 17,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Catastronauts": {
+  "id": 63165,
+  "main": 6,
+  "hundred": 11,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ],
+  "note": "completionist не голосован, второе значение — Main+Extra"
+ },
+ "Tools Up!": {
+  "id": 73064,
+  "main": 5,
+  "hundred": 9,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Wobbly Life": {
+  "id": 94401,
+  "main": 16,
+  "hundred": 25,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ],
+  "note": "мало голосов (5), данные шумные"
+ },
+ "Nidhogg 2": {
+  "id": 46284,
+  "main": 1,
+  "hundred": 9,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ],
+  "note": "main 32 мин → 1 ч"
+ },
+ "SpeedRunners": {
+  "id": 13778,
+  "main": 2,
+  "hundred": 15,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Tricky Towers": {
+  "id": 38919,
+  "main": 9,
+  "hundred": 37,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Move or Die": {
+  "id": 28657,
+  "main": 11,
+  "hundred": 15,
+  "pf": [
+   "pc",
+   "ps"
+  ]
+ },
+ "Nine Parchments": {
+  "id": 51393,
+  "main": 8,
+  "hundred": 44,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Chariot": {
+  "id": 21407,
+  "main": 13,
+  "hundred": 37,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox"
+  ]
+ },
+ "Bread & Fred": {
+  "id": 126715,
+  "main": 4,
+  "hundred": 8,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Biped": {
+  "id": 76246,
+  "main": 3,
+  "hundred": 10,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Death Squared": {
+  "id": 47424,
+  "main": 6,
+  "hundred": 10,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Out of Space": {
+  "id": 71548,
+  "main": 5,
+  "hundred": 22,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Unspottable": {
+  "id": 94470,
+  "main": 1,
+  "hundred": 2,
+  "pf": [
+   "pc",
+   "xbox",
+   "switch"
+  ],
+  "note": "HLTB main не голосован (Vs.); TrueAchievements modal 1–2 ч"
+ },
+ "Spelunky 2": {
+  "id": 75151,
+  "main": 27,
+  "hundred": 166,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Sackboy: A Big Adventure": {
+  "id": 80125,
+  "main": 11,
+  "hundred": 34,
+  "pf": [
+   "pc",
+   "ps"
+  ],
+  "note": "1.0 — PS5 12.11.2020, Steam-порт 2022; год каталога 2020"
+ },
+ "Boomerang Fu": {
+  "id": 84584,
+  "main": 1,
+  "hundred": 3,
+  "pf": [
+   "pc",
+   "switch"
+  ]
+ },
+ "Worms W.M.D": {
+  "id": 39481,
+  "main": 14,
+  "hundred": 46,
+  "pf": [
+   "pc",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Crawl": {
+  "id": 21168,
+  "main": 1,
+  "hundred": 13,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Full Metal Furies": {
+  "id": 52480,
+  "main": 11,
+  "hundred": 27,
+  "pf": [
+   "pc",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Lethal League Blaze": {
+  "id": 61412,
+  "main": 2,
+  "hundred": 35,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Lost Castle": {
+  "id": 38434,
+  "main": 12,
+  "hundred": 67,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Teenage Mutant Ninja Turtles: Shredder's Revenge": {
+  "id": 89573,
+  "main": 3,
+  "hundred": 20,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch",
+   "mobile"
+  ]
+ },
+ "Broforce": {
+  "id": 17638,
+  "main": 7,
+  "hundred": 17,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Pikuniku": {
+  "id": 64060,
+  "main": 3,
+  "hundred": 6,
+  "pf": [
+   "pc",
+   "xbox",
+   "switch"
+  ]
+ },
+ "Never Alone": {
+  "id": 21708,
+  "main": 3,
+  "hundred": 4,
+  "pf": [
+   "pc",
+   "ps",
+   "switch",
+   "mobile"
+  ]
+ },
+ "Sonic Mania": {
+  "id": 38916,
+  "main": 5,
+  "hundred": 19,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "A Hat in Time": {
+  "id": 130,
+  "main": 9,
+  "hundred": 19,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ },
+ "River City Girls": {
+  "id": 69993,
+  "main": 7,
+  "hundred": 16,
+  "pf": [
+   "pc",
+   "ps",
+   "switch"
+  ]
+ },
+ "Degrees of Separation": {
+  "id": 64901,
+  "main": 6,
+  "hundred": 9,
+  "pf": [
+   "pc",
+   "switch"
+  ]
+ },
+ "Shift Happens": {
+  "id": 33648,
+  "main": 7,
+  "hundred": 20,
+  "pf": [
+   "pc",
+   "switch"
+  ]
+ },
+ "Sid Meier's Civilization V": {
+  "id": 8510,
+  "main": 40,
+  "hundred": 431,
+  "pf": [
+   "pc"
+  ]
+ },
+ "Age of Mythology: Retold": {
+  "id": null,
+  "main": 25,
+  "hundred": 62,
+  "pf": [
+   "pc",
+   "xbox"
+  ],
+  "note": "карточка HLTB недоступна в сниппетах; числа из IGN (HowLongToBeat) 25/62 ч"
+ },
+ "Dune: Spice Wars": {
+  "id": 107255,
+  "main": 12,
+  "hundred": 88,
+  "pf": [
+   "pc",
+   "xbox"
+  ]
+ },
+ "Old World": {
+  "id": 113973,
+  "main": 22,
+  "hundred": 88,
+  "pf": [
+   "pc"
+  ]
+ },
+ "Monster Train": {
+  "id": 78633,
+  "main": 3,
+  "hundred": 97,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch",
+   "mobile"
+  ]
+ },
+ "Wingspan": {
+  "id": 83257,
+  "main": 2,
+  "hundred": 76,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch",
+   "mobile"
+  ]
+ },
+ "Cobalt Core": {
+  "id": 121843,
+  "main": 18,
+  "hundred": 31,
+  "pf": [
+   "pc",
+   "switch"
+  ]
+ },
+ "Dome Keeper": {
+  "id": 109776,
+  "main": 4,
+  "hundred": 33,
+  "pf": [
+   "pc",
+   "xbox"
+  ]
+ },
+ "Darkest Dungeon": {
+  "id": 22535,
+  "main": 57,
+  "hundred": 128,
+  "pf": [
+   "pc",
+   "ps",
+   "xbox",
+   "switch"
+  ]
+ }
 }

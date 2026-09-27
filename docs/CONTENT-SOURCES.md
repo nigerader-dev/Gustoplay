@@ -159,3 +159,23 @@
 - **Мелкий фикс**: CSS-переменная `--ad-h` → `--ad-height`
   (`js/views/components.js`, `css/styles.css`) — словарная проверка
   `check:text` считала «ad-h» опечаткой и роняла шаг CI.
+
+### Батч 27.09.2026 — сверка с прогоном сборщика (после восстановления GitHub)
+
+Прогон 36339299053 (коммит afd274c) завершился и закоммитил `tools/hltb-data.json`
+(бот-коммиты `cb4be03`, `710ab53`): 38 записей с данными, 14 miss (таймауты
+загрузки карточек: BattleBlock Theater, Castle Crashers, Rayman Legends,
+Darkest Dungeon, Worms W.M.D, Civ V, Sackboy, Tools Up!, Unspottable,
+ibb & obb, Bread & Fred, Lost Castle, Never Alone, Get Packed).
+
+Правило слияния: **значения прогона каноничны** (карточка поиска HLTB,
+воспроизводимый пайплайн, снимок 27.09.2026 18:06 UTC); ручной сбор
+(`tools/hltb-manual.json`, карточки страниц игр) остаётся источником для 14 miss
+и не расходится с прогоном по остальным. По сверке обновлены записи:
+Moving Out [5, 19], Wobbly Life [14, 25] (completionist карточки страницы —
+25), Nidhogg 2 [1, 11] (32 мин → 1 ч), Crawl [1, 14], Old World [23, 88],
+Dome Keeper [5, 34]; платформы по строкам HLTB: Lovers in a Dangerous
+Spacetime, Boomerang Fu, River City Girls, Degrees of Separation — +xbox.
+Даты HLTB NA подтвердили годы каталога: Unravel Two 09.06.2018, Old World
+01.07.2021; Wobbly Life: HLTB показывает 08.07.2020 (старт раннего доступа),
+год каталога — 2025 (выход 1.0, Steam 18.09.2025).
