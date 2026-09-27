@@ -1,6 +1,6 @@
 # Передача сессии — актуально на 27 сентября 2026
 
-**Активная ветка:** `arena/01a0dfcb-gustoplay`. **PR:** [#7](https://github.com/nigerader-dev/Gustoplay/pull/7), открыт; не сливался. Pass 5 восстановлен поверх опубликованного `20e26fbc23f9692f53552db680eef5d89269028b`; pass 6 также выполнен локально. Текущие изменения pass 5–6 не закоммичены и не опубликованы. Последние попытки GitHub API: HTTP 401 `Bad credentials`, затем пять повторов с интервалом 45 секунд завершились HTTP 403 `Resource not accessible by integration` (процесс `github-connection-retry-756f9c28`). Доступ к GitHub в Arena требуется переподключить. Последний завершённый CI остаётся на `20e26fb` (push/PR tests зелёные). Локальные независимые работы завершены; изменения pass 5–6 будут сохранены локальным commit, push/CI отложены до восстановления доступа.
+**Активная ветка:** `arena/01a0dfcb-gustoplay`. **PR:** [#7](https://github.com/nigerader-dev/Gustoplay/pull/7), открыт; не сливался. Pass 5–6 закоммичены и отправлены: `7e5e521254d74bfe993288dbcdf55d222c38b229` (`fix(auth): harden Google sign-in key rotation and identity binding`). Git push и чтение PR через `gh` прошли; `gh api user` по-прежнему возвращает HTTP 403 `Resource not accessible by integration` после пяти фоновых попыток (`github-connection-retry-756f9c28`). PR CI run `36317372832` завершился успешно (все job steps зелёные). Рабочее дерево после push чистое; последняя проверка ветки — `arena/01a0dfcb-gustoplay`.
 
 ## Заход 4 — каталог и CI follow-up
 
@@ -26,6 +26,7 @@ CI для HEAD `20e26fb`: push `36314362519` и PR tests `36314364969` — succe
 - `tools/test-api.mjs` добавил тесты обновления JWKS при смене ключа и неизменности уже установленного `sub`. API-набор теперь **78/78**; полный `npm run test:all` прошёл после восстановления окружения и этих правок.
 - Live Google OAuth не выполнялся: `AUTH.googleClientId` пуст, `GOOGLE_CLIENT_ID`/production Worker не настроен. Реальный OAuth Client ID, Cloud project, origins, secrets и публикация без отдельного согласования не создавались. Синтетический RSA/JWKS тест подтверждает серверную логику, но не Google consent screen и не реальную кнопку. Границы описаны в `docs/ACCOUNTS.md` и `docs/SECURITY.md`.
 - `npm run build` — 630 prerendered routes; Google sign-in отображается как выключенный и account API как не подключённый. `npm run verify:build` — 31/31. `npm run audit:readiness` — 440 записей, 439/440 store links; 399/405 Steam IDs имеют system requirements.
+- Commit `7e5e521` опубликован в ветку сессии. PR #7 run `36317372832` завершён успешно за 4m38s; все проверки, включая API и e2e, зелёные.
 
 ---
 
