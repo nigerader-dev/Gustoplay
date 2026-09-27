@@ -45,7 +45,13 @@ try {
     notice(`запушено в ${branch}`);
     setOutput('yes');
   } catch (pushError) {
-    notice(`пуш в ветку недоступен (токен только на чтение) — данные уйдут аннотациями: ${String(pushError?.stderr || pushError).split('\n')[0]?.slice(0, 200)}`);
+    // Не путать причины: non-fast-forward — ветка ушла вперёд, пока шёл сбор
+    // (лечится повторным прогоном на свежем HEAD), отказ в доступе — другое.
+    const stderr = String(pushError?.stderr || pushError);
+    const reason = /non-fast-forward|fetch first|rejected/.test(stderr)
+      ? 'ветка ушла вперёд во время сбора (гонка) — повторите прогон на свежем HEAD и не пушьте, пока он идёт'
+      : 'пуш недоступен (права токена?) — полный файл доступен в артефакте прогона (аннотации несут только ~10 чанков из ~110)';
+    notice(`пуш в ${branch} не прошёл: ${reason}. Первая строка stderr: ${stderr.split('\n').find((l) => l.trim())?.slice(0, 200) || '(пусто)'}`);
     setOutput('no');
   }
 } catch (error) {
