@@ -88,9 +88,12 @@ for (const p of execPaths) {
   const results = [];
   const misses = [];
 
-  for (const name of names) {
+  // Одна попытка = открытие страницы поиска + разбор; при неудаче — вторая
+  // (Cloudflare/Ziff-антибот иногда отдаёт челлендж или таймаут на первый заход)
+  async function attempt(name, attemptNo) {
     const page = await browser.newPage();
-    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36');
+    await page.setUserAgent('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36');
+    await page.setExtraHTTPHeaders({ 'Accept-Language': 'en' });
     try {
       await page.goto(`https://howlongtobeat.com/?q=${encodeURIComponent(name)}`, { waitUntil: 'networkidle2', timeout: 45000 });
       // ждём появления карточек результатов (клиентский рендер)
@@ -102,45 +105,83 @@ for (const p of execPaths) {
         await writeFile(new URL(`./hltb-pages/${slug}.html`, import.meta.url), html);
       } catch { /* сохранение — best effort */ }
 
-      // Карточка: ссылка /game/<id>, видимый текст ссылки — название игры
-      const found = [];
-      const re = /<a[^>]+href="https:\/\/howlongtobeat\.com\/game\/(\d+)"[^>]*>([\s\S]*?)<\/a>/g;
-      let m;
-      while ((m = re.exec(html))) {
-        const title = m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-        if (title) found.push({ id: Number(m[1]), title });
+    // Карточка: ссылка /game/<id> (в отрендеренном HTML — относительная; абсолютная
+    // форма появляется не всегда, первый прогон из-за этого собрал 0 записей),
+    // видимый текст ссылки — название игры
+    const found = [];
+    const re = /<a[^>]+href="(?:https:\/\/howlongtobeat\.com)?\/game\/(\d+)"[^>]*>([\s\S]*?)<\/a>/g;
+    let m;
+    while ((m = re.exec(html))) {
+      const title = m[2].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      if (title) found.push({ id: Number(m[1]), title });
+    }
+    const exact = found.find((x) => norm(x.title) === slug);
+    if (!exact) {
+      return { miss: `точного совпадения нет (${found.slice(0, 3).map((x) => `${x.title}/${x.id}`).join(', ') || 'карточек нет'})` };
+    } else {
+      // Окно текста после заголовка карточки: там три пары «подпись → время»
+      const anchor = html.indexOf(`game/${exact.id}`);
+      const text = html.slice(anchor, anchor + 4000).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+      const grab = (label) => parseHltbTime((text.match(new RegExp(`${label}\\s*([\\d½¼¾⅓⅔,.]+\\s*(?:Hours?|Mins?))`, 'i')) || [])[1]);
+      const entry = {
+        name, hltbId: exact.id, url: `https://howlongtobeat.com/game/${exact.id}`,
+        mainH: grab('Main Story'), plusH: grab('Main \\+ Extra'), hundredH: grab('Completionist'),
+      };
+
+      // Страница игры: платформы и дата релиза — единственный бесплатный источник
+      // консольных платформ для этого батча (страницы магазинов из песочницы
+      // недоступны). HLTB — краудсорс-агрегатор: платформы сверяются с ним, а не
+      // с магазинами; в журнал источников пишется именно HLTB.
+      try {
+        await page.goto(entry.url, { waitUntil: 'networkidle2', timeout: 45000 });
+        await page.waitForSelector('table', { timeout: 20000 }).catch(() => {});
+        const gameHtml = await page.content();
+        const gameText = gameHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
+        const platMatch = gameText.match(/Platform:\s*([A-Za-z0-9,\/ \-]{2,60}?)(?:\s*Genres|\s*Developer|\s*$)/);
+        if (platMatch) entry.hltbPlatforms = platMatch[1].trim();
+        const naMatch = gameText.match(/North America:\s*([A-Za-z]+\s+\d{1,2}(?:st|nd|rd|th)?,?\s+\d{4})/);
+        if (naMatch) entry.hltbReleaseNa = naMatch[1].replace(/(\d{1,2})(st|nd|rd|th)/, '$1');
+        const rows = [...gameHtml.matchAll(/<tr[^>]*>\s*<td[^>]*>([^<]{2,12})<\/td>/g)].map((x) => x[1].trim());
+        if (rows.length) entry.hltbPlatformRows = [...new Set(rows)];
+      } catch (e) {
+        entry.hltbPageError = String(e.message || e).slice(0, 100);
       }
-      const exact = found.find((x) => norm(x.title) === slug);
-      if (!exact) {
-        misses.push(`${name} — точного совпадения нет (${found.slice(0, 3).map((x) => `${x.title}/${x.id}`).join(', ') || 'карточек нет'})`);
-        console.warn(`  ⚠️  ${name}: точного совпадения нет`);
-      } else {
-        // Окно текста после заголовка карточки: там три пары «подпись → время»
-        const anchor = html.indexOf(`game/${exact.id}`);
-        const text = html.slice(anchor, anchor + 4000).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ');
-        const grab = (label) => parseHltbTime((text.match(new RegExp(`${label}\\s*([\\d½¼¾⅓⅔,.]+\\s*(?:Hours?|Mins?))`, 'i')) || [])[1]);
-        const entry = {
-          name, hltbId: exact.id, url: `https://howlongtobeat.com/game/${exact.id}`,
-          mainH: grab('Main Story'), plusH: grab('Main \\+ Extra'), hundredH: grab('Completionist'),
-        };
-        if (entry.mainH == null && entry.plusH == null && entry.hundredH == null) {
-          misses.push(`${name} — карточка найдена (${exact.id}), но времена не разобраны`);
-          console.warn(`  ⚠️  ${name}: времена не разобраны`);
-        } else {
-          results.push(entry);
-          console.log(`  ✅ ${name} → ${exact.id}: main=${entry.mainH} plus=${entry.plusH} 100%=${entry.hundredH}`);
-        }
+
+      if (entry.mainH == null && entry.plusH == null && entry.hundredH == null) {
+        return { miss: `карточка найдена (${exact.id}), но времена не разобраны` };
       }
+      results.push(entry);
+      console.log(`  ✅ ${name} → ${exact.id}: main=${entry.mainH} plus=${entry.plusH} 100%=${entry.hundredH} [${entry.hltbPlatforms || 'платформы не разобраны'}]`);
+      return { ok: true };
+    }
     } catch (error) {
-      misses.push(`${name} — ${String(error.message || error).slice(0, 120)}`);
-      console.warn(`  ⚠️  ${name}: ${error.message}`);
+      if (attemptNo === 1) return attempt(name, 2);
+      return { miss: String(error.message || error).slice(0, 120) };
     } finally {
       await page.close();
-      await sleep(400 + Math.random() * 400); // не дёргаем сайт очередью запросов
+    }
+  }
+
+  for (const name of names) {
+    await sleep(600 + Math.random() * 500); // не дёргаем сайт очередью запросов
+    const outcome = await attempt(name, 1);
+    if (outcome?.miss) {
+      misses.push(`${name} — ${outcome.miss}`);
+      console.warn(`  ⚠️  ${name}: ${outcome.miss}`);
     }
   }
 
   await browser.close();
+
+  // Если конвейер собрал ничего — показываем текст первой отрендеренной страницы:
+  // без этого «0 записей» из закрытой среды не разобрать (логи не читаются)
+  if (!results.length) {
+    try {
+      const first = await readFile(new URL('./hltb-pages/' + norm(names[0]) + '.html', import.meta.url), 'utf8');
+      const text = first.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 2400);
+      console.log(`::notice::hltb-debug-page[0]: ${Buffer.from(text).toString('base64').slice(0, 3000)}`);
+    } catch { /* страницы нет — уже есть miss с причиной */ }
+  }
 
   const out = { batch: batch.batch, collectedAt: new Date().toISOString(), entries: results, misses };
   await writeFile(outPath, `${JSON.stringify(out, null, 1)}\n`);
