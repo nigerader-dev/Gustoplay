@@ -1,59 +1,662 @@
 {
  "batch": "2026-09-27-couch",
- "collectedAt": "2026-09-27T18:03:09.366Z",
- "entries": [],
+ "collectedAt": "2026-09-27T18:18:38.758Z",
+ "entries": [
+  {
+   "name": "A Hat in Time",
+   "hltbId": 130,
+   "url": "https://howlongtobeat.com/game/130",
+   "mainH": null,
+   "plusH": 15,
+   "hundredH": 19,
+   "hltbReleaseNa": "October 5, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Age of Mythology: Retold",
+   "hltbId": 115181,
+   "url": "https://howlongtobeat.com/game/115181",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 62,
+   "hltbReleaseNa": "September 4, 2024",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Biped",
+   "hltbId": 76246,
+   "url": "https://howlongtobeat.com/game/76246",
+   "mainH": 3,
+   "plusH": 5,
+   "hundredH": null,
+   "hltbReleaseNa": "March 26, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Boomerang Fu",
+   "hltbId": 84584,
+   "url": "https://howlongtobeat.com/game/84584",
+   "mainH": 0.9,
+   "plusH": 3,
+   "hundredH": null,
+   "hltbReleaseNa": "August 13, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Broforce",
+   "hltbId": 17638,
+   "url": "https://howlongtobeat.com/game/17638",
+   "mainH": 7,
+   "plusH": 10,
+   "hundredH": null,
+   "hltbReleaseNa": "October 15, 2015",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Catastronauts",
+   "hltbId": 63165,
+   "url": "https://howlongtobeat.com/game/63165",
+   "mainH": 6,
+   "plusH": 11,
+   "hundredH": null,
+   "hltbReleaseNa": "September 28, 2018",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Chariot",
+   "hltbId": 21407,
+   "url": "https://howlongtobeat.com/game/21407",
+   "mainH": 13,
+   "plusH": 30,
+   "hundredH": 37,
+   "hltbReleaseNa": "October 1, 2014",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Wii U",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Cobalt Core",
+   "hltbId": 121843,
+   "url": "https://howlongtobeat.com/game/121843",
+   "mainH": 18,
+   "plusH": 30,
+   "hundredH": null,
+   "hltbReleaseNa": "November 8, 2023",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Crawl",
+   "hltbId": 21168,
+   "url": "https://howlongtobeat.com/game/21168",
+   "mainH": 1,
+   "plusH": 4,
+   "hundredH": 14,
+   "hltbReleaseNa": "April 11, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Death Squared",
+   "hltbId": 47424,
+   "url": "https://howlongtobeat.com/game/47424",
+   "mainH": 6,
+   "plusH": 8,
+   "hundredH": 10,
+   "hltbReleaseNa": "March 13, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Degrees of Separation",
+   "hltbId": 64901,
+   "url": "https://howlongtobeat.com/game/64901",
+   "mainH": 6,
+   "plusH": null,
+   "hundredH": 9,
+   "hltbReleaseNa": "February 14, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Dome Keeper",
+   "hltbId": 109776,
+   "url": "https://howlongtobeat.com/game/109776",
+   "mainH": 5,
+   "plusH": 13,
+   "hundredH": 34,
+   "hltbReleaseNa": "September 27, 2022",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Dune: Spice Wars",
+   "hltbId": 107255,
+   "url": "https://howlongtobeat.com/game/107255",
+   "mainH": null,
+   "plusH": 27,
+   "hundredH": null,
+   "hltbReleaseNa": "April 26, 2022",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Full Metal Furies",
+   "hltbId": 52480,
+   "url": "https://howlongtobeat.com/game/52480",
+   "mainH": 11,
+   "plusH": 17,
+   "hundredH": null,
+   "hltbReleaseNa": "January 17, 2018",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Heave Ho",
+   "hltbId": 70193,
+   "url": "https://howlongtobeat.com/game/70193",
+   "mainH": 4,
+   "plusH": 8,
+   "hundredH": null,
+   "hltbReleaseNa": "August 29, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "KeyWe",
+   "hltbId": 82661,
+   "url": "https://howlongtobeat.com/game/82661",
+   "mainH": 6,
+   "plusH": null,
+   "hundredH": 17,
+   "hltbReleaseNa": "August 31, 2021",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Lethal League Blaze",
+   "hltbId": 61412,
+   "url": "https://howlongtobeat.com/game/61412",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 35,
+   "hltbReleaseNa": "October 24, 2018",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Lovers in a Dangerous Spacetime",
+   "hltbId": 21703,
+   "url": "https://howlongtobeat.com/game/21703",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 13,
+   "hltbReleaseNa": "September 9, 2015",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Monster Train",
+   "hltbId": 78633,
+   "url": "https://howlongtobeat.com/game/78633",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 97,
+   "hltbReleaseNa": "May 21, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "Mobile",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Move or Die",
+   "hltbId": 28657,
+   "url": "https://howlongtobeat.com/game/28657",
+   "mainH": 11,
+   "plusH": 12,
+   "hundredH": 15,
+   "hltbReleaseNa": "January 21, 2016",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Moving Out",
+   "hltbId": 75031,
+   "url": "https://howlongtobeat.com/game/75031",
+   "mainH": 5,
+   "plusH": null,
+   "hundredH": 19,
+   "hltbReleaseNa": "April 28, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Nidhogg 2",
+   "hltbId": 46284,
+   "url": "https://howlongtobeat.com/game/46284",
+   "mainH": 0.5,
+   "plusH": 2,
+   "hundredH": 11,
+   "hltbReleaseNa": "August 15, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Nine Parchments",
+   "hltbId": 51393,
+   "url": "https://howlongtobeat.com/game/51393",
+   "mainH": null,
+   "plusH": 11,
+   "hundredH": 44,
+   "hltbReleaseNa": "December 5, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Old World",
+   "hltbId": 113973,
+   "url": "https://howlongtobeat.com/game/113973",
+   "mainH": 23,
+   "plusH": 47,
+   "hundredH": null,
+   "hltbReleaseNa": "July 1, 2021",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Out of Space",
+   "hltbId": 71548,
+   "url": "https://howlongtobeat.com/game/71548",
+   "mainH": 5,
+   "plusH": 12,
+   "hundredH": 22,
+   "hltbReleaseNa": "April 24, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Overcooked",
+   "hltbId": 39030,
+   "url": "https://howlongtobeat.com/game/39030",
+   "mainH": 8,
+   "plusH": null,
+   "hundredH": 12,
+   "hltbReleaseNa": "August 3, 2016",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Pikuniku",
+   "hltbId": 64060,
+   "url": "https://howlongtobeat.com/game/64060",
+   "mainH": 3,
+   "plusH": 4,
+   "hundredH": null,
+   "hltbReleaseNa": "January 24, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "100%",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "River City Girls",
+   "hltbId": 69993,
+   "url": "https://howlongtobeat.com/game/69993",
+   "mainH": 7,
+   "plusH": null,
+   "hundredH": 16,
+   "hltbReleaseNa": "September 5, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Shift Happens",
+   "hltbId": 33648,
+   "url": "https://howlongtobeat.com/game/33648",
+   "mainH": 7,
+   "plusH": null,
+   "hundredH": null,
+   "hltbReleaseNa": "September 9, 2015",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Sonic Mania",
+   "hltbId": 38916,
+   "url": "https://howlongtobeat.com/game/38916",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 19,
+   "hltbReleaseNa": "August 15, 2017",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Multi-Player",
+    "Co-Op",
+    "Competitive",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "SpeedRunners",
+   "hltbId": 13778,
+   "url": "https://howlongtobeat.com/game/13778",
+   "mainH": 2,
+   "plusH": 11,
+   "hundredH": null,
+   "hltbReleaseNa": "August 26, 2013",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Spelunky 2",
+   "hltbId": 75151,
+   "url": "https://howlongtobeat.com/game/75151",
+   "mainH": null,
+   "plusH": 76,
+   "hundredH": 166,
+   "hltbReleaseNa": "September 15, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Teenage Mutant Ninja Turtles: Shredder's Revenge",
+   "hltbId": 89573,
+   "url": "https://howlongtobeat.com/game/89573",
+   "mainH": 3,
+   "plusH": 4,
+   "hundredH": 20,
+   "hltbReleaseNa": "June 16, 2022",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "Mobile",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Tricky Towers",
+   "hltbId": 38919,
+   "url": "https://howlongtobeat.com/game/38919",
+   "mainH": null,
+   "plusH": null,
+   "hundredH": 37,
+   "hltbReleaseNa": "August 2, 2016",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC"
+   ]
+  },
+  {
+   "name": "Trine 4: The Nightmare Prince",
+   "hltbId": 62027,
+   "url": "https://howlongtobeat.com/game/62027",
+   "mainH": 10,
+   "plusH": 13,
+   "hundredH": null,
+   "hltbReleaseNa": "October 8, 2019",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Unravel Two",
+   "hltbId": 57358,
+   "url": "https://howlongtobeat.com/game/57358",
+   "mainH": 5,
+   "plusH": null,
+   "hundredH": 14,
+   "hltbReleaseNa": "June 9, 2018",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Speedruns",
+    "Any%",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Wingspan",
+   "hltbId": 83257,
+   "url": "https://howlongtobeat.com/game/83257",
+   "mainH": 2,
+   "plusH": null,
+   "hundredH": null,
+   "hltbReleaseNa": "September 17, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "Mobile",
+    "PC",
+    "Xbox One"
+   ]
+  },
+  {
+   "name": "Wobbly Life",
+   "hltbId": 94401,
+   "url": "https://howlongtobeat.com/game/94401",
+   "mainH": 14,
+   "plusH": 20,
+   "hundredH": null,
+   "hltbReleaseNa": "July 8, 2020",
+   "hltbPlatformRows": [
+    "Main Story",
+    "Main + Sides",
+    "Platform",
+    "PC",
+    "Xbox One"
+   ]
+  }
+ ],
  "misses": [
-  "A Hat in Time — точного совпадения нет (карточек нет)",
-  "Age of Mythology: Retold — точного совпадения нет (карточек нет)",
   "BattleBlock Theater® — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Biped — точного совпадения нет (карточек нет)",
-  "Boomerang Fu — Navigation timeout of 45000 ms exceeded",
-  "Bread & Fred — точного совпадения нет (карточек нет)",
-  "Broforce — точного совпадения нет (карточек нет)",
+  "Bread & Fred — точного совпадения нет (Bread &amp; Fred/126715)",
   "Castle Crashers® — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Catastronauts — точного совпадения нет (карточек нет)",
-  "Chariot — точного совпадения нет (карточек нет)",
-  "Cobalt Core — точного совпадения нет (карточек нет)",
-  "Crawl — точного совпадения нет (карточек нет)",
   "Darkest Dungeon® — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Death Squared — точного совпадения нет (карточек нет)",
-  "Degrees of Separation — точного совпадения нет (карточек нет)",
-  "Dome Keeper — точного совпадения нет (карточек нет)",
-  "Dune: Spice Wars — точного совпадения нет (карточек нет)",
-  "Full Metal Furies — точного совпадения нет (карточек нет)",
   "Get Packed: Fully Loaded — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Heave Ho — точного совпадения нет (карточек нет)",
-  "KeyWe — точного совпадения нет (карточек нет)",
-  "Lethal League Blaze — точного совпадения нет (карточек нет)",
   "Lost Castle / 失落城堡 — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Lovers in a Dangerous Spacetime — точного совпадения нет (карточек нет)",
-  "Monster Train — точного совпадения нет (карточек нет)",
-  "Move or Die — точного совпадения нет (карточек нет)",
-  "Moving Out — точного совпадения нет (карточек нет)",
   "Never Alone (Kisima Ingitchuna) — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Nidhogg 2 — точного совпадения нет (карточек нет)",
-  "Nine Parchments — точного совпадения нет (карточек нет)",
-  "Old World — точного совпадения нет (карточек нет)",
-  "Out of Space — точного совпадения нет (карточек нет)",
-  "Overcooked — точного совпадения нет (карточек нет)",
-  "Pikuniku — точного совпадения нет (карточек нет)",
   "Rayman® Legends — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "River City Girls — точного совпадения нет (карточек нет)",
   "Sackboy™: A Big Adventure — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Shift Happens — точного совпадения нет (карточек нет)",
   "Sid Meier's Civilization® V — Waiting for selector `a[href*=\"/game/\"]` failed",
-  "Sonic Mania — точного совпадения нет (карточек нет)",
-  "SpeedRunners — точного совпадения нет (карточек нет)",
-  "Spelunky 2 — точного совпадения нет (карточек нет)",
-  "Teenage Mutant Ninja Turtles: Shredder's Revenge — точного совпадения нет (карточек нет)",
-  "Tools Up! — точного совпадения нет (карточек нет)",
-  "Tricky Towers — точного совпадения нет (карточек нет)",
-  "Trine 4: The Nightmare Prince — точного совпадения нет (карточек нет)",
-  "Unravel Two — точного совпадения нет (карточек нет)",
-  "Unspottable — точного совпадения нет (карточек нет)",
-  "Wingspan — точного совпадения нет (карточек нет)",
-  "Wobbly Life — точного совпадения нет (карточек нет)",
-  "Worms W.M.D — точного совпадения нет (карточек нет)",
-  "ibb & obb — точного совпадения нет (карточек нет)"
+  "Tools Up! — карточка найдена (73064), но времена не разобраны",
+  "Unspottable — карточка найдена (94470), но времена не разобраны",
+  "Worms W.M.D — карточка найдена (39481), но времена не разобраны",
+  "ibb & obb — точного совпадения нет (ibb &amp; obb/14534)"
  ]
 }
