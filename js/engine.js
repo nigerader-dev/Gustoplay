@@ -429,11 +429,14 @@ export function scoreGame(game, profile, weights, context = {}) {
     score += 1.2 * (novelty.genres || []).filter((g) => game.genres.includes(g)).length;
   }
 
-  // 8. Сложность и темп
-  if ((a.difficulty || []).includes('easy') && game.difficulty >= 4) score -= 6;
-  if ((a.difficulty || []).includes('hard') && game.difficulty <= 2) score -= 4;
-  if ((a.difficulty || []).includes('chill') && game.pace >= 5 && game.difficulty >= 4) score -= 5;
-  if ((a.difficulty || []).includes('souls') && game.difficulty >= 4) score += 4;
+  // 8. Сложность и темп. Неизвестные значения не подменяем нейтральной цифрой:
+  // такие записи не получают ни бонуса, ни штрафа за отсутствующий сигнал.
+  if (game.difficulty != null) {
+    if ((a.difficulty || []).includes('easy') && game.difficulty >= 4) score -= 6;
+    if ((a.difficulty || []).includes('hard') && game.difficulty <= 2) score -= 4;
+    if ((a.difficulty || []).includes('chill') && game.pace != null && game.pace >= 5 && game.difficulty >= 4) score -= 5;
+    if ((a.difficulty || []).includes('souls') && game.difficulty >= 4) score += 4;
+  }
 
   // 9. Отметки
   const mark = profile.marks?.[game.slug];

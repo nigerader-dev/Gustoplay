@@ -48,7 +48,21 @@ const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
 const { GAMES } = await import('../js/catalog/index.js');
-const { gameCard, storeLinks, jsonForHtmlScript } = await import('../js/views/components.js');
+const { gameCard, storeLinks, jsonForHtmlScript, meters, ratingPill } = await import('../js/views/components.js');
+const verifiedRecent = ['blue-prince', 'indiana-jones-and-the-great-circle', 'doom-the-dark-ages', 'avowed']
+  .map((slug) => GAMES.find((game) => game.slug === slug));
+check('four new fact-checked titles are registered with explicit unknown difficulty/pace',
+  verifiedRecent.every((game) => game && game.difficulty === null && game.pace === null));
+check('unknown difficulty and pace are omitted from meters, not shown as a fabricated midpoint',
+  verifiedRecent.every((game) => meters(game) === ''));
+check('new Steam ratings visibly identify their source and snapshot date',
+  verifiedRecent.every((game) => game.ratingSource?.ru?.includes('Steam') && game.ratingSource?.ru?.includes('27.09.2026')
+    && ratingPill(game).includes(game.ratingSource.ru)));
+check('unverified cloud availability is not inferred for the new games',
+  verifiedRecent.every((game) => !game.platforms.includes('cloud')));
+check('Switch 2 releases use a distinct, accurate platform filter',
+  GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch2')
+    && !GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch'));
 await import('../js/app.js');
 
 async function navigate(route) {

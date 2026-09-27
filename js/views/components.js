@@ -46,7 +46,9 @@ export const genreChips = (game, limit = 3, link = true) => game.genres.slice(0,
 
 export const ratingPill = (game) => {
   const cls = game.rating >= 90 ? 'rating-top' : game.rating >= 80 ? 'rating-good' : 'rating-mid';
-  return `<span class="rating ${cls}" title="${esc(t('game.rating'))}">${esc(game.rating)}</span>`;
+  const source = game.ratingSource?.[getLang()];
+  const label = source ? `${t('game.rating')}: ${source}` : t('game.rating');
+  return `<span class="rating ${cls}" title="${esc(label)}" aria-label="${esc(`${label}, ${game.rating}`)}">${esc(game.rating)}</span>`;
 };
 
 export const priceLabel = (game) => {
@@ -68,11 +70,12 @@ export const lengthLabel = (game) => {
 const dots = (value, max = 5, cls = '') =>
   `<span class="dots ${cls}">${Array.from({ length: max }, (_, i) => `<i class="${i < value ? 'on' : ''}"></i>`).join('')}</span>`;
 
-export const meters = (game) => `
-  <div class="meters">
-    <div class="meter"><span class="meter-label">${esc(t('game.difficulty'))}</span>${dots(game.difficulty)}</div>
-    <div class="meter"><span class="meter-label">${esc(t('game.pace'))}</span>${dots(game.pace, 5, 'dots-pace')}</div>
-  </div>`;
+export const meters = (game) => {
+  const rows = [];
+  if (game.difficulty != null) rows.push(`<div class="meter"><span class="meter-label">${esc(t('game.difficulty'))}</span>${dots(game.difficulty)}</div>`);
+  if (game.pace != null) rows.push(`<div class="meter"><span class="meter-label">${esc(t('game.pace'))}</span>${dots(game.pace, 5, 'dots-pace')}</div>`);
+  return rows.length ? `<div class="meters">${rows.join('')}</div>` : '';
+};
 
 /* ------------------------------------------------------------------ *
  * Обложка игры
