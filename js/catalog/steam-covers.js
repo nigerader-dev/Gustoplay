@@ -334,7 +334,7 @@ export const STEAM_COVERS = {
   "quantum-break": {"steamId":474960,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/474960/library_600x900_2x.jpg","src":"steam"},
   "raft": {"steamId":648800,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/648800/library_600x900_2x.jpg","src":"steam"},
   "ratchet-clank-rift-apart": {"steamId":1895880,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1895880/library_600x900_2x.jpg","src":"steam"},
-  "rayman-legends": {"steamId":242550,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/242550/library_600x900_2x.jpg","src":"steam"},
+  "rayman-legends": {"steamId":242550,"cover":"https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/242550/header.jpg?t=1782234498","src":"steam"},
   "ready-or-not": {"steamId":1144200,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1144200/library_600x900_2x.jpg","src":"steam"},
   "red-dead-redemption-2": {"steamId":1174180,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1174180/library_600x900_2x.jpg","src":"steam"},
   "remnant-ii": {"steamId":1282100,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1282100/library_600x900_2x.jpg","src":"steam"},
