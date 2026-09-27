@@ -8,6 +8,7 @@ import { getProfile } from '../store.js';
 import { icon } from '../icons.js';
 import { FEATURES } from '../config.js';
 import { currentPath, navigate } from '../nav.js';
+import { LANDING_TEXTS } from './landing-texts.js';
 
 const POPULAR_TAGS = [
   'coopfocused', 'splitscreen', 'storyrich', 'openworld', 'difficult', 'cozy', 'short',
@@ -94,6 +95,25 @@ export function filterGames(filters) {
  * Страница
  * ------------------------------------------------------------------ */
 
+/** Уникальный SEO-текст лендинга таксономии (/genre/:id, /mode/:id, /mood/:id).
+ *  На страницах тегов и платформ уникального текста нет — там обычный каталог. */
+export const landingFor = (ctx) => {
+  const key = ctx?.name && ctx?.params?.id ? `${ctx.name}:${ctx.params.id}` : '';
+  return LANDING_TEXTS[key] || null;
+};
+
+/** Словари для related-ссылок: каждая ведёт на реальную страницу таксономии */
+const RELATED_DICTS = { genre: GENRES, mode: MODES, mood: MOODS, tag: TAGS, platform: PLATFORMS };
+const relatedChips = (ids = []) => ids
+  .map((ref) => {
+    const [kind, id] = String(ref).split(':');
+    const dict = RELATED_DICTS[kind];
+    if (!dict || !dict[id]) return '';
+    const icn = dict[id].icon ? `${icon(dict[id].icon)} ` : '';
+    return `<a class="chip" href="#/${kind}/${encodeURIComponent(id)}" data-action="nav">${icn}${esc(tl(dict, id))}</a>`;
+  })
+  .join('');
+
 export function render(ctx) {
   const filters = parseFilters(ctx.query, ctx.preset || {});
   const found = filterGames(filters).sort(SORTS[filters.sort] || SORTS.rating);
@@ -105,6 +125,8 @@ export function render(ctx) {
   const subtitle = presetTitle
     ? tp('catalog.subtitle', found.length)
     : tp('catalog.subtitle', GAMES.length);
+  const landing = landingFor(ctx);
+  const landingBody = landing ? (landing.body[getLang()] || landing.body.ru) : null;
 
   // Все непустые фильтры собираем в ссылку-«поделиться»
   const activeChips = [
@@ -140,6 +162,12 @@ export function render(ctx) {
       <h1>${ctx.preset?.icon ? `${icon(ctx.preset.icon)} ` : ''}${esc(heading)}</h1>
       <p>${esc(subtitle)}</p>
     </header>
+
+    ${landingBody ? `
+    <div class="landing-intro">
+      ${landingBody.map((p) => `<p>${esc(p)}</p>`).join('')}
+      ${landing.related?.length ? `<div class="landing-related"><span class="landing-related-title">${esc(t('catalog.related'))}</span><div class="chips-cloud small">${relatedChips(landing.related)}</div></div>` : ''}
+    </div>` : ''}
 
     <button type="button" class="btn btn-outline filters-toggle" data-action="filters-toggle" aria-expanded="${filtersOpen}" aria-controls="catalog-filters">${icon('search')} ${esc(t('catalog.filters'))}${activeFilterCount ? ` <span class="filters-count">${activeFilterCount}</span>` : ''}</button>
 
@@ -267,4 +295,9 @@ export function removeFilter(kind, id, current) {
 }
 
 export const title = (ctx) => `${ctx?.preset?.heading || t('catalog.title')} — ${t('site.name')}`;
-export const description = (ctx) => `${ctx?.preset?.heading || t('catalog.title')}. ${tp('catalog.subtitle', GAMES.length)}`;
+export const description = (ctx) => {
+  // На лендингах жанров/режимов/настроений — уникальное мета-описание вместо шаблонного
+  const landing = landingFor(ctx);
+  if (landing) return landing.meta[getLang()] || landing.meta.ru;
+  return `${ctx?.preset?.heading || t('catalog.title')}. ${tp('catalog.subtitle', GAMES.length)}`;
+};

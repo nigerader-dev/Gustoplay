@@ -85,12 +85,60 @@ for (const [slug, entry] of Object.entries(SYSREQ)) {
   }
 }
 
+// Уникальные тексты SEO-лендингов (js/views/landing-texts.js): каждый жанр, режим
+// и настроение обязан иметь собственный текст — иначе страница таксономии остаётся
+// «тонким» дублем каталога (h1 + сетка карточек). Проверяем покрытие, структуру,
+// уникальность и то, что related-ссылки ведут на реальные страницы таксономии.
+const { LANDING_TEXTS } = await import('../js/views/landing-texts.js');
+const LANDING_DICTS = { genre: GENRES, mode: MODES, mood: MOODS, tag: TAGS, platform: PLATFORMS };
+const landingKeys = Object.keys(LANDING_TEXTS);
+const landingRequired = [
+  ...Object.keys(GENRES).map((id) => `genre:${id}`),
+  ...Object.keys(MODES).map((id) => `mode:${id}`),
+  ...Object.keys(MOODS).map((id) => `mood:${id}`),
+];
+for (const key of landingRequired) {
+  if (!landingKeys.includes(key)) problems.push(`landing: нет текста для «${key}»`);
+}
+for (const key of landingKeys) {
+  const [kind, id] = key.split(':');
+  if (!['genre', 'mode', 'mood'].includes(kind)) { problems.push(`landing: «${key}» — тексты бывают только у жанров, режимов и настроений`); continue; }
+  const text = LANDING_TEXTS[key];
+  for (const lang of ['ru', 'en']) {
+    const meta = text?.meta?.[lang];
+    if (typeof meta !== 'string' || meta.trim().length < 50) problems.push(`landing:${key}: пустое или короткое meta.${lang}`);
+    else if (meta.length > 160) problems.push(`landing:${key}: meta.${lang} длиннее 160 символов (${meta.length})`);
+    const body = text?.body?.[lang];
+    if (!Array.isArray(body) || body.length < 2 || body.some((p) => typeof p !== 'string' || p.trim().length < 100)) {
+      problems.push(`landing:${key}: body.${lang} — нужно минимум 2 содержательных абзаца`);
+    }
+  }
+  for (const ref of text?.related || []) {
+    const [refKind, refId] = String(ref).split(':');
+    if (!LANDING_DICTS[refKind] || !LANDING_DICTS[refKind][refId]) problems.push(`landing:${key}: related «${ref}» не является страницей таксономии`);
+    else if (ref === key) problems.push(`landing:${key}: related ссылается на самого себя`);
+  }
+}
+// дублей текстов быть не должно — иначе «уникальный» контент на деле шаблонный
+const seenTexts = new Map();
+for (const key of landingKeys) {
+  const text = LANDING_TEXTS[key];
+  for (const lang of ['ru', 'en']) {
+    for (const field of ['meta', 'body']) {
+      const sig = `${lang}:${field}:${JSON.stringify(text[field]?.[lang])}`;
+      if (seenTexts.has(sig)) problems.push(`landing: «${key}» повторяет ${field}.${lang} из «${seenTexts.get(sig)}»`);
+      seenTexts.set(sig, key);
+    }
+  }
+}
+
 // неиспользуемые справочники — просто информация
 const unusedTags = Object.keys(TAGS).filter((id) => !raw.some((g) => (g.tg || []).includes(id)));
 const unusedGenres = Object.keys(GENRES).filter((id) => !raw.some((g) => (g.gr || []).includes(id)));
 const unusedMoods = Object.keys(MOODS).filter((id) => !raw.some((g) => (g.mood || []).includes(id)));
 
 console.log(`Всего игр: ${GAMES.length}`);
+console.log(`Лендинги таксономии: ${landingKeys.length} текстов (${landingRequired.length} обязательных: ${Object.keys(GENRES).length} жанров, ${Object.keys(MODES).length} режимов, ${Object.keys(MOODS).length} настроений)`);
 console.log(`Покрытие: ${JSON.stringify({ coop: STATS.coop, pvp: STATS.pvp, solo: STATS.solo })}`);
 console.log('Режимы: ' + Object.entries(MODES).map(([id, m]) => `${m.ru} — ${GAMES.filter((g) => g.modes.includes(id)).length}`).join(' | '));
 console.log('Настроения: ' + Object.entries(MOODS).map(([id, m]) => `${id} — ${GAMES.filter((g) => g.moods.includes(id)).length}`).join(' | '));

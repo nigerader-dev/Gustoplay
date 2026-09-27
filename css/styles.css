@@ -323,6 +323,20 @@ button, input, select { font: inherit; color: inherit; }
 .section { margin: var(--space-12) 0; }
 .section-head h1, .section-head h2 { margin-bottom: .25em; }
 .section-head p { color: var(--text-soft); max-width: 68ch; }
+/* Уникальный текст лендингов таксономии (/genre/:id, /mode/:id, /mood/:id) —
+   вводный блок между заголовком и сеткой каталога */
+.landing-intro {
+  margin: 0 0 20px; padding: 18px 22px; border-radius: var(--radius-lg);
+  background: var(--bg-elevated); border: 1px solid var(--surface-border);
+}
+.landing-intro p { color: var(--text-soft); line-height: 1.65; max-width: 72ch; }
+.landing-intro p + p { margin-top: 10px; }
+.landing-related { margin-top: 14px; }
+.landing-related-title {
+  display: block; font-size: .78rem; font-weight: 700; letter-spacing: .04em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 2px;
+}
+.landing-related .chips-cloud { margin: 4px 0 0; }
 .pill {
   display: inline-flex; align-items: center; gap: 7px; padding: 7px 15px; border-radius: var(--radius-full);
   background: var(--accent-soft); color: var(--accent); font-weight: 650; font-size: .82rem; margin-bottom: 16px;
