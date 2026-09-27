@@ -312,6 +312,12 @@ const REQUIRE_64 = [
   /requires a 64-bit processor and operating system/i,
   /требуется 64-битный процессор и операционная система/i,
   /requires a 64-bit processor/i,
+  // Русская карточка Steam пишет «64-разрядные процессор и операционная система» —
+  // без этих шаблонов прогон 36355500850 (234c1de) потерял bit64 у 9 ru-only игр
+  // (persona-5-royal, baldurs-gate-3 и др.), и вердикт «рекомендуемые» в pcfit
+  // падал до «минимальных» — тест test-plan ловит это на persona-5-royal.
+  /64-разрядн[а-яё]*\s+процессор/i,
+  /64-битн[а-яё]*\s+процессор/i,
 ];
 
 const DEFAULTS = {};
@@ -435,9 +441,17 @@ function mergeLevel(ru, en) {
 const SUSPICIOUS_VALUE = /(^|\s)[A-ZА-ЯЁ][\p{L}\p{N} .+-]{2,30}:\s/iu;
 function cleanEntry(entry) {
   if (!entry || typeof entry !== 'object') return undefined;
+  // Свободные текстовые поля (note, sound, net) НЕ проверяем на «Метка: »:
+  // примечания Steam легитимно содержат двоеточия («Video Preset: Lowest (720p)»
+  // у assassins-creed-odyssey, «Expected Framerate: 60 FPS…» у octopath-traveler),
+  // и прогон 36356582634 (f3b340b) из-за этого выкинул три целые записи из файла.
+  // Страж нужен только структурированным полям (os/cpu/ram/gpu/dx/disk), где
+  // «Метка: » внутри значения — признак старого мусора от кривого парсинга.
+  const FREE_TEXT = new Set(['note', 'sound', 'net']);
   for (const value of Object.values(entry)) {
     if (!value || typeof value !== 'object') return undefined;
-    for (const field of Object.values(value)) {
+    for (const [key, field] of Object.entries(value)) {
+      if (FREE_TEXT.has(key)) continue;
       const texts = typeof field === 'string' ? [field] : [field?.ru, field?.en].filter(Boolean);
       if (texts.some((t) => SUSPICIOUS_VALUE.test(String(t)))) return undefined;
     }
