@@ -9,10 +9,7 @@ import { JSDOM } from 'jsdom';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const css = require('css');
+import postcss from 'postcss';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'index.html'), 'utf8');
@@ -146,15 +143,15 @@ check('prefers-reduced-motion учтён', cssText.includes('prefers-reduced-mot
 
 /* ---------- 4. Контраст текстовых пар ---------- */
 console.log('\n4. WCAG-контраст ≥ 4.5:1 для текста (обе темы)');
-const ast = css.parse(cssText);
+const ast = postcss.parse(cssText);
 const vars = { light: {}, dark: {} };
-for (const rule of ast.stylesheet.rules) {
+for (const rule of ast.nodes) {
   if (rule.type !== 'rule') continue;
-  const sel = (rule.selectors || []).join(',');
+  const sel = rule.selector || '';
   const theme = sel === ':root' ? 'light' : sel === "[data-theme='dark']" ? 'dark' : null;
   if (!theme) continue;
-  for (const d of rule.declarations || []) {
-    if (d.type === 'declaration' && d.property?.startsWith('--')) vars[theme][d.property] = d.value.trim();
+  for (const d of rule.nodes || []) {
+    if (d.type === 'decl' && d.prop?.startsWith('--')) vars[theme][d.prop] = d.value.trim();
   }
 }
 const val = (theme, name) => vars[theme][name] || vars.light[name];

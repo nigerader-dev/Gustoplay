@@ -12,6 +12,9 @@ import { getConsent, adCount, bumpAdCounter } from '../store.js';
 export const esc = (s = '') => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
+/** JSON inside a script element must not contain a literal HTML closing tag. */
+export const jsonForHtmlScript = (value) => JSON.stringify(value).replace(/</g, '\\u003c');
+
 /* ------------------------------------------------------------------ *
  * Плашки и ярлыки
  * ------------------------------------------------------------------ */
@@ -27,22 +30,23 @@ export const playersLabel = (game) => (game.players[0] === game.players[1]
 export const tagChips = (game, limit = 6, link = true) => game.tags.slice(0, limit)
   .map((id) => {
     const c = tagColor(id);
-    const style = `--chip-bg:${c.bg};--chip-fg:${c.fg}`;
+    const style = esc(`--chip-bg:${c.bg};--chip-fg:${c.fg}`);
+    const safeId = encodeURIComponent(String(id));
     return link
-      ? `<a class="chip" style="${style}" href="#/tag/${id}" data-action="nav">${esc(tl(TAGS, id))}</a>`
+      ? `<a class="chip" style="${style}" href="#/tag/${safeId}" data-action="nav">${esc(tl(TAGS, id))}</a>`
       : `<span class="chip" style="${style}">${esc(tl(TAGS, id))}</span>`;
   })
   .join('');
 
 export const genreChips = (game, limit = 3, link = true) => game.genres.slice(0, limit)
   .map((id) => (link
-    ? `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</a>`
+    ? `<a class="chip chip-genre" href="#/genre/${encodeURIComponent(String(id))}" data-action="nav">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</a>`
     : `<span class="chip chip-genre">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</span>`))
   .join('');
 
 export const ratingPill = (game) => {
   const cls = game.rating >= 90 ? 'rating-top' : game.rating >= 80 ? 'rating-good' : 'rating-mid';
-  return `<span class="rating ${cls}" title="${esc(t('game.rating'))}">${game.rating}</span>`;
+  return `<span class="rating ${cls}" title="${esc(t('game.rating'))}">${esc(game.rating)}</span>`;
 };
 
 export const priceLabel = (game) => {
@@ -50,7 +54,7 @@ export const priceLabel = (game) => {
   const label = tl(PRICE, game.price);
   // Две части одним span'ом рвались на узкой карточке: «2500 ₽ и / выше · / ~3900 ₽».
   // Разделяем — перенос тогда идёт между частями, а не внутри числа с ценой.
-  const rub = game.priceRub ? `<span class="price-rub">· ~${game.priceRub} ₽</span>` : '';
+  const rub = game.priceRub ? `<span class="price-rub">· ~${esc(game.priceRub)} ₽</span>` : '';
   return `<span class="price">${esc(label)}</span>${rub}`;
 };
 
@@ -83,11 +87,11 @@ export function coverImage(game, cls = 'cover-img') {
   //   3) сгенерированная обложка — последняя ступень (битая ссылка, офлайн, игра без арта).
   // Если файла владельца нет, картинка тихо откатывается на арт магазина и генерацию:
   // раньше в этом случае показывался сломанный значок изображения.
-  const shop = game.cover || '';
-  const local = `covers/${game.slug}.jpg`;
+  const shop = typeof game.cover === 'string' && /^https?:\/\//i.test(game.cover) ? game.cover : '';
+  const local = `covers/${encodeURIComponent(String(game.slug))}.jpg`;
   const src = FEATURES.realCovers ? local : (shop || generated);
   const fallback = FEATURES.realCovers ? (shop || generated) : generated;
-  return `<img class="${cls}" src="${esc(src)}" data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
+  return `<img class="${esc(cls)}" src="${esc(src)}" data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -97,32 +101,34 @@ export function coverImage(game, cls = 'cover-img') {
 export function gameCard(game, opts = {}) {
   const { why = [], mark = null } = opts;
   const lang = getLang();
+  const safeSlug = esc(String(game.slug));
+  const gamePath = encodeURIComponent(String(game.slug));
   const whyHtml = why.length
     ? `<ul class="why">${why.slice(0, 4).map((w) => `<li>${esc(w[lang] ?? w.ru ?? '')}</li>`).join('')}</ul>`
     : `<p class="card-desc">${esc(game.desc?.[lang] || '')}</p>`;
 
   return `
-  <article class="card game-card" data-slug="${game.slug}">
+  <article class="card game-card" data-slug="${safeSlug}">
     <div class="card-cover-wrap">
-      <a class="card-cover" href="#/game/${game.slug}" data-action="nav" aria-label="${esc(game.t)}">
+      <a class="card-cover" href="#/game/${gamePath}" data-action="nav" aria-label="${esc(game.t)}">
         ${coverImage(game)}
       </a>
       ${ratingPill(game)}
       <div class="card-cover-meta">
-        <span class="cover-badge">${icon(MODES[game.modes[0]]?.icon)} ${playersLabel(game)}</span>
+        <span class="cover-badge">${icon(MODES[game.modes[0]]?.icon)} ${esc(playersLabel(game))}</span>
       </div>
     </div>
     <div class="card-body">
-      <h3 class="card-title"><a href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a></h3>
+      <h3 class="card-title"><a href="#/game/${gamePath}" data-action="nav">${esc(game.t)}</a></h3>
       <div class="card-sub">
-        <span>${game.y}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
+        <span>${esc(game.y)}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
       </div>
       <div class="card-chips">${genreChips(game, 2)}${tagChips(game, 2)}</div>
       ${FEATURES.scoreDebug && why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
       ${FEATURES.scoreDebug ? whyHtml : ''}
       <div class="card-foot">
         ${priceLabel(game)}
-        <span class="len">${icon('clock')} ${lengthLabel(game)}</span>
+        <span class="len">${icon('clock')} ${esc(lengthLabel(game))}</span>
       </div>
       ${markButtons(game.slug, mark)}
     </div>
@@ -150,10 +156,11 @@ export function markButtons(slug, status = null) {
   ];
   // title — нативная подсказка: не влияет на раскладку (кнопки не «скачут» под курсором)
   // и не обрезается границами карточки. Текст внутри <span> даёт кнопке доступное имя.
-  return `<div class="marks" data-slug="${slug}">
+  const safeSlug = esc(String(slug));
+  return `<div class="marks" data-slug="${safeSlug}">
     <span class="marks-label">${esc(t('results.mark'))}:</span>
     ${items.map((i) => `<button type="button" class="mark ${status === i.id ? 'on' : ''}"
-      data-action="mark" data-slug="${slug}" data-status="${i.id}"
+      data-action="mark" data-slug="${safeSlug}" data-status="${i.id}"
       title="${esc(i.tip ? `${i.label} — ${i.tip}` : i.label)}"
       aria-pressed="${status === i.id}">${icon(i.icon)} <span>${esc(i.label)}</span></button>`).join('')}
   </div>`;
@@ -169,7 +176,7 @@ export function filterGroup(title, options, activeIds, { multi = true, action = 
     <div class="filter-title">${esc(title)}</div>
     <div class="filter-options">
       ${options.map((o) => `<button type="button" class="chip chip-btn ${activeIds.includes(o.id) ? 'on' : ''}"
-        data-action="${action}" data-id="${o.id}" aria-pressed="${activeIds.includes(o.id)}">${o.icon ? `${icon(o.icon)} ` : ''}${esc(o.label)}</button>`).join('')}
+        data-action="${esc(action)}" data-id="${esc(String(o.id))}" aria-pressed="${activeIds.includes(o.id)}">${o.icon ? `${icon(o.icon)} ` : ''}${esc(o.label)}</button>`).join('')}
     </div>
   </div>`;
 }
@@ -241,7 +248,7 @@ export function houseAd() {
 export const breadcrumbs = (items) => `<nav class="crumbs">${items
   .map((i, idx) => (idx === items.length - 1
     ? `<span>${esc(i.label)}</span>`
-    : `<a href="${i.href}" data-action="nav">${esc(i.label)}</a><span class="dot-sep">/</span>`))
+    : `<a href="${esc(i.href)}" data-action="nav">${esc(i.label)}</a><span class="dot-sep">/</span>`))
   .join('')}</nav>`;
 
 export const emptyState = (title, text, cta = '', iconName = 'search') => `
@@ -263,16 +270,25 @@ export const sectionTitle = (title, subtitle = '') => `
  * и официальный магазин/сайт издателя. Поисковых ссылок-заглушек и сторонних
  * перепродавцов здесь нет — если конкретной страницы нет, кнопка не показывается.
  */
+const safeHttpsUrl = (value) => {
+  try {
+    const url = new URL(String(value));
+    return url.protocol === 'https:' ? url.href : '';
+  } catch { return ''; }
+};
+
 export const storeLinks = (game) => {
   const buttons = [];
+  const steamUrl = safeHttpsUrl(game.links?.steam);
+  const officialUrl = safeHttpsUrl(game.links?.official);
   // game.links.steam === null у игр без страницы в Steam (Nintendo, мобильные, Battle.net):
   // раньше в этом случае подставлялся поиск по названию — вместо него официальный магазин
-  if (game.links.steam) {
-    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.steam)}${SITE.affiliates.steam}"
+  if (steamUrl) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(steamUrl)}${SITE.affiliates.steam}"
       target="_blank" rel="noopener nofollow">${icon('cart')} ${esc(t('game.steam'))}</a>`);
   }
-  if (game.links.official) {
-    buttons.push(`<a class="btn btn-ghost" href="${esc(game.links.official)}"
+  if (officialUrl) {
+    buttons.push(`<a class="btn btn-ghost" href="${esc(officialUrl)}"
       target="_blank" rel="noopener nofollow">${icon('globe')} ${esc(t(game.links.officialLabel || 'game.official'))}</a>`);
   }
   return buttons.length ? `<div class="stores">${buttons.join('')}</div>` : '';

@@ -9,10 +9,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const css = require('css');
+import postcss from 'postcss';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const cssText = readFileSync(resolve(root, 'css/styles.css'), 'utf8');
@@ -27,8 +24,8 @@ const check = (name, condition, extra = '') => {
 
 let ast;
 try {
-  ast = css.parse(cssText);
-  check('CSS парсится без ошибок', true, `${ast.stylesheet.rules.length} правил`);
+  ast = postcss.parse(cssText);
+  check('CSS парсится без ошибок', true, `${ast.nodes.length} правил верхнего уровня`);
 } catch (e) {
   check('CSS парсится без ошибок', false, e.message);
   process.exit(1);
@@ -36,13 +33,36 @@ try {
 
 // плоский список: { selectors[], declarations[], media }
 const flat = [];
-const walk = (rules, media = '') => {
-  for (const r of rules) {
-    if (r.type === 'media') walk(r.rules, r.media);
-    else if (r.type === 'rule') flat.push({ selectors: r.selectors || [], declarations: (r.declarations || []).filter((d) => d.type === 'declaration'), media });
+const splitSelectors = (selector) => {
+  const out = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < selector.length; i += 1) {
+    if (selector[i] === '(') depth += 1;
+    else if (selector[i] === ')') depth = Math.max(0, depth - 1);
+    else if (selector[i] === ',' && depth === 0) {
+      out.push(selector.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  out.push(selector.slice(start).trim());
+  return out;
+};
+const walk = (nodes, media = '') => {
+  for (const node of nodes || []) {
+    if (node.type === 'atrule' && node.name === 'media') {
+      walk(node.nodes, [media, node.params].filter(Boolean).join(' '));
+    } else if (node.type === 'rule') {
+      flat.push({
+        selectors: splitSelectors(node.selector || ''),
+        declarations: (node.nodes || []).filter((d) => d.type === 'decl')
+          .map((d) => ({ type: 'declaration', property: d.prop, value: d.value })),
+        media,
+      });
+    }
   }
 };
-walk(ast.stylesheet.rules);
+walk(ast.nodes);
 
 const hasDecl = (entry, prop, match) => entry.declarations.some((d) => d.property === prop && (!match || match(d.value)));
 const inMedia = (entry, width) => entry.media.includes(`max-width: ${width}px`);

@@ -87,7 +87,7 @@ const stripBase = (p) => {
 console.log(`\n1. Страницы (${htmlFiles.length})`);
 check('сборка содержит сотни страниц', htmlFiles.length > 500, `${htmlFiles.length} страниц`);
 check('есть 404.html', existsSync(join(dist, '404.html')));
-check('есть служебные файлы хостинга', ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'ads.txt'].every((f) => existsSync(join(dist, f))));
+check('есть служебные файлы хостинга', ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'ads.txt', '.well-known/security.txt'].every((f) => existsSync(join(dist, f))));
 
 const titles = new Map();
 const duplicates = [];
@@ -224,6 +224,14 @@ const headers = readFileSync(join(dist, '_headers'), 'utf8');
 check('_headers содержит CSP', /Content-Security-Policy:/.test(headers));
 check('_headers содержит HSTS', /Strict-Transport-Security:/.test(headers));
 check('_headers запрещает фреймы', /frame-ancestors 'none'/.test(headers));
+const securityTxt = existsSync(join(dist, '.well-known/security.txt'))
+  ? readFileSync(join(dist, '.well-known/security.txt'), 'utf8') : '';
+const securityExpiry = /^Expires: (.+)$/m.exec(securityTxt)?.[1] || '';
+check('security.txt имеет публичный контакт, языки, будущий срок и canonical',
+  /^Contact: mailto:\S+@\S+$/m.test(securityTxt)
+    && /^Preferred-Languages: ru, en$/m.test(securityTxt)
+    && Date.parse(securityExpiry) > Date.now()
+    && securityTxt.split(/\r?\n/).includes(`Canonical: ${siteUrl}/.well-known/security.txt`));
 check('service worker собран и версионирован', existsSync(join(dist, 'sw.js')) && /CACHE_VERSION = '\d/.test(readFileSync(join(dist, 'sw.js'), 'utf8')));
 check('манифест корректный JSON', (() => {
   try { const m = JSON.parse(readFileSync(join(dist, 'manifest.webmanifest'), 'utf8')); return Boolean(m.name && m.icons); } catch { return false; }

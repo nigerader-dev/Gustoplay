@@ -10,6 +10,7 @@ import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, SITE, FEATURES } from './config.js';
 import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
 import { initAnalytics, track, trackPageview } from './analytics.js';
+import { esc, jsonForHtmlScript } from './views/components.js';
 
 import { byId } from './catalog/index.js';
 
@@ -93,27 +94,27 @@ function header(ctx) {
   <a class="skip" href="#main">${lang === 'ru' ? 'К основному содержимому' : 'Skip to content'}</a>
   <header class="header">
     <div class="header-inner">
-      <a class="logo" href="#/" data-action="nav" aria-label="${t('site.name')}">
+      <a class="logo" href="#/" data-action="nav" aria-label="${esc(t('site.name'))}">
         <span class="logo-mark">${icon('controller')}</span>
-        <span class="logo-text">${t('site.name')}<small>${t('site.tagline')}</small></span>
+        <span class="logo-text">${esc(t('site.name'))}<small>${esc(t('site.tagline'))}</small></span>
       </a>
       <nav class="nav" id="main-nav" aria-label="main">
-        <button type="button" class="nav-close" data-action="menu-close" aria-label="${t('common.close')}">${icon('x')}</button>
-        ${navItem('#/quiz', icon('compass') + ' ' + t('nav.quiz'), 'quiz', ctx)}
-        ${navItem('#/catalog', icon('grid') + ' ' + t('nav.catalog'), 'catalog', ctx)}
-        ${navItem('#/party', icon('users') + ' ' + t('nav.party'), 'party', ctx)}
-        ${navItem('#/profile', icon('heart') + ' ' + t('nav.profile'), 'profile', ctx)}
-        ${navItem('#/account', (isLoggedIn() ? icon('user') : icon('lock')) + ' ' + t('nav.account'), 'account', ctx)}
-        ${navItem('#/about', t('nav.about'), 'about', ctx, ' nav-link-soft')}
+        <button type="button" class="nav-close" data-action="menu-close" aria-label="${esc(t('common.close'))}">${icon('x')}</button>
+        ${navItem('#/quiz', icon('compass') + ' ' + esc(t('nav.quiz')), 'quiz', ctx)}
+        ${navItem('#/catalog', icon('grid') + ' ' + esc(t('nav.catalog')), 'catalog', ctx)}
+        ${navItem('#/party', icon('users') + ' ' + esc(t('nav.party')), 'party', ctx)}
+        ${navItem('#/profile', icon('heart') + ' ' + esc(t('nav.profile')), 'profile', ctx)}
+        ${navItem('#/account', (isLoggedIn() ? icon('user') : icon('lock')) + ' ' + esc(t('nav.account')), 'account', ctx)}
+        ${navItem('#/about', esc(t('nav.about')), 'about', ctx, ' nav-link-soft')}
       </nav>
       <div class="header-tools">
-        <button type="button" class="icon-btn" data-action="lang-toggle" title="${t('common.lang')}">${lang.toUpperCase()}</button>
-        <button type="button" class="icon-btn" data-action="theme-toggle" title="${t('common.theme')}">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
-        <button type="button" class="icon-btn burger" data-action="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="${t('common.menu')}"><span></span><span></span><span></span></button>
+        <button type="button" class="icon-btn" data-action="lang-toggle" title="${esc(t('common.lang'))}">${lang.toUpperCase()}</button>
+        <button type="button" class="icon-btn" data-action="theme-toggle" title="${esc(t('common.theme'))}">${icon(document.documentElement.dataset.theme === 'dark' ? 'sun' : 'moon')}</button>
+        <button type="button" class="icon-btn burger" data-action="menu-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="${esc(t('common.menu'))}"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
-  <button type="button" class="nav-overlay" data-action="menu-close" aria-label="${t('common.close')}" tabindex="-1"></button>`;
+  <button type="button" class="nav-overlay" data-action="menu-close" aria-label="${esc(t('common.close'))}" tabindex="-1"></button>`;
 }
 
 function footer() {
@@ -124,33 +125,33 @@ function footer() {
     <div class="footer-inner">
       <div class="footer-col">
         <div class="logo">
-          <span class="logo-mark">${icon('controller')}</span><span class="logo-text">${t('site.name')}</span>
+          <span class="logo-mark">${icon('controller')}</span><span class="logo-text">${esc(t('site.name'))}</span>
         </div>
-        <p class="muted">${t('common.footer.note')}</p>
+        <p class="muted">${esc(t('common.footer.note'))}</p>
       </div>
       <div class="footer-col">
-        <h2 class="footer-head">${t('common.footer.links')}</h2>
-        <a href="#/quiz" data-action="nav">${t('nav.quiz')}</a>
-        <a href="#/catalog" data-action="nav">${t('nav.catalog')}</a>
-        <a href="#/party" data-action="nav">${t('nav.party')}</a>
-        <a href="#/profile" data-action="nav">${t('nav.profile')}</a>
-        <a href="#/about" data-action="nav">${t('nav.about')}</a>
+        <h2 class="footer-head">${esc(t('common.footer.links'))}</h2>
+        <a href="#/quiz" data-action="nav">${esc(t('nav.quiz'))}</a>
+        <a href="#/catalog" data-action="nav">${esc(t('nav.catalog'))}</a>
+        <a href="#/party" data-action="nav">${esc(t('nav.party'))}</a>
+        <a href="#/profile" data-action="nav">${esc(t('nav.profile'))}</a>
+        <a href="#/about" data-action="nav">${esc(t('nav.about'))}</a>
       </div>
       <div class="footer-col">
         <h2 class="footer-head">${lang === 'ru' ? 'Жанры' : 'Genres'}</h2>
-        ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${id}" data-action="nav">${tl(GENRES, id)}</a>`).join('')}
+        ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${encodeURIComponent(id)}" data-action="nav">${esc(tl(GENRES, id))}</a>`).join('')}
       </div>
       <div class="footer-col">
         <h2 class="footer-head">${lang === 'ru' ? 'Подборки' : 'Collections'}</h2>
-        ${topTags.map((id) => `<a href="#/tag/${id}" data-action="nav">${tl(TAGS, id)}</a>`).join('')}
-        <a href="#/privacy" data-action="nav">${t('about.privacy.title')}</a>
-        <a href="#/terms" data-action="nav">${t('common.footer.terms')}</a>
-        ${ADS.consentRequired ? `<button type="button" class="footer-link" data-action="consent-open">${t('consent.change')}</button>` : ''}
+        ${topTags.map((id) => `<a href="#/tag/${encodeURIComponent(id)}" data-action="nav">${esc(tl(TAGS, id))}</a>`).join('')}
+        <a href="#/privacy" data-action="nav">${esc(t('about.privacy.title'))}</a>
+        <a href="#/terms" data-action="nav">${esc(t('common.footer.terms'))}</a>
+        ${ADS.consentRequired ? `<button type="button" class="footer-link" data-action="consent-open">${esc(t('consent.change'))}</button>` : ''}
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© ${new Date().getFullYear()} ${t('site.name')}</span>
-      <a class="footer-mail" href="mailto:${SITE.email}">${icon('mail')} ${t('common.support')}: ${SITE.email}</a>
+      <span>© ${new Date().getFullYear()} ${esc(t('site.name'))}</span>
+      <a class="footer-mail" href="mailto:${esc(SITE.email)}">${icon('mail')} ${esc(t('common.support'))}: ${esc(SITE.email)}</a>
     </div>
   </footer>`;
 }
@@ -180,13 +181,13 @@ function consentBanner() {
   return `
   <div class="consent" id="consent">
     <div>
-      <strong>${icon('cookie')} ${t('about.ads.title')}</strong>
-      <p>${t('consent.text')}</p>
+      <strong>${icon('cookie')} ${esc(t('about.ads.title'))}</strong>
+      <p>${esc(t('consent.text'))}</p>
     </div>
     <div class="consent-actions">
-      <button type="button" class="btn btn-primary" data-action="consent-accept">${t('consent.accept')}</button>
-      <button type="button" class="btn btn-ghost" data-action="consent-decline">${t('consent.decline')}</button>
-      <a class="btn btn-ghost" href="#/privacy" data-action="nav">${t('consent.policy')}</a>
+      <button type="button" class="btn btn-primary" data-action="consent-accept">${esc(t('consent.accept'))}</button>
+      <button type="button" class="btn btn-ghost" data-action="consent-decline">${esc(t('consent.decline'))}</button>
+      <a class="btn btn-ghost" href="#/privacy" data-action="nav">${esc(t('consent.policy'))}</a>
     </div>
   </div>`;
 }
@@ -263,9 +264,9 @@ function render(scroll = true) {
 
   if (!view) {
     html = `<section class="section"><div class="empty"><div class="empty-icon">${icon('compass')}</div>
-      <h1>${t('common.notFound')}</h1><p>${t('common.notFound.text')}</p>
-      <div class="panel-actions"><a class="btn btn-primary" href="#/quiz" data-action="nav">${t('home.cta.start')}</a>
-      <a class="btn btn-ghost" href="#/catalog" data-action="nav">${t('nav.catalog')}</a></div></div></section>`;
+      <h1>${esc(t('common.notFound'))}</h1><p>${esc(t('common.notFound.text'))}</p>
+      <div class="panel-actions"><a class="btn btn-primary" href="#/quiz" data-action="nav">${esc(t('home.cta.start'))}</a>
+      <a class="btn btn-ghost" href="#/catalog" data-action="nav">${esc(t('nav.catalog'))}</a></div></div></section>`;
   } else {
     // при новом входе на страницу сбрасываем «показать ещё», чтобы не терять контекст
     if (view.reset && lastRouteName !== ctx.name) view.reset();
@@ -315,7 +316,8 @@ function injectJsonLd(ctx, view) {
   const node = document.createElement('script');
   node.type = 'application/ld+json';
   node.dataset.gfJsonld = '1';
-  node.textContent = JSON.stringify(data);
+  // A closing-script sequence in catalog text must stay JSON data after prerendering.
+  node.textContent = jsonForHtmlScript(data);
   document.head.append(node);
 }
 
@@ -389,7 +391,7 @@ window.addEventListener('gf:marks-changed', () => {
   const node = document.createElement('div');
   node.className = 'refresh-pill refresh-pill-info';
   node.setAttribute('role', 'status');
-  node.innerHTML = `${icon('refresh')} ${t('results.updated')}`;
+  node.innerHTML = `${icon('refresh')} ${esc(t('results.updated'))}`;
   document.body.append(node);
   refreshPill = node;
   setTimeout(() => { if (refreshPill === node) { node.remove(); refreshPill = null; } }, 2600);

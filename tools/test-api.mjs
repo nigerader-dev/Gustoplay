@@ -91,9 +91,11 @@ const CLIENT_ID = 'test.apps.googleusercontent.com';
 const base64url = (input) => Buffer.from(input).toString('base64url');
 
 /** Собираем настоящий ID-токен Google и подписываем его нашим ключом */
-function googleToken({ sub = '1234567890', email = 'player@gmail.com', name = 'Player One', aud = CLIENT_ID, kid = 'test-key', exp = Math.floor(Date.now() / 1000) + 600, badSignature = false } = {}) {
-  const header = base64url(JSON.stringify({ alg: 'RS256', kid, typ: 'JWT' }));
-  const payload = base64url(JSON.stringify({ iss: 'https://accounts.google.com', aud, sub, email, email_verified: true, name, exp, iat: Date.now() / 1000 }));
+function googleToken({ sub = '1234567890', email = 'player@gmail.com', name = 'Player One', aud = CLIENT_ID, azp, kid = 'test-key', exp = Math.floor(Date.now() / 1000) + 600, iat = Math.floor(Date.now() / 1000), nbf, emailVerified = true, badSignature = false, alg = 'RS256', extraClaims = {} } = {}) {
+  const header = base64url(JSON.stringify({ alg, kid, typ: 'JWT' }));
+  const claims = { iss: 'https://accounts.google.com', aud, sub, email, email_verified: emailVerified, name, exp, iat,
+    ...(azp === undefined ? {} : { azp }), ...(nbf === undefined ? {} : { nbf }), ...extraClaims };
+  const payload = base64url(JSON.stringify(claims));
   const data = `${header}.${payload}`;
   const signer = createSign('RSA-SHA256');
   signer.update(data);
@@ -162,11 +164,23 @@ check('CSP для API не мешает (нет X-Frame от чужого дом
  * ------------------------------------------------------------------ */
 
 console.log('\n2. Регистрация');
+const malformedJsonResponse = await api.fetch(new Request('https://gustoplay.ru/api/auth/register', {
+  method: 'POST',
+  headers: { Origin: 'https://gustoplay.ru', 'CF-Connecting-IP': '203.0.113.82', 'Content-Type': 'application/json' },
+  body: '{"email":',
+}), env);
+check('повреждённый JSON отклонён как 400, не 500', malformedJsonResponse.status === 400);
+
 const weak = await call('/auth/register', { method: 'POST', body: { email: 'a@b.ru', password: 'short' } });
 check('короткий пароль отклонён', weak.status === 400 && /не короче/.test(weak.json.error), weak.json?.error);
 
 const noEmail = await call('/auth/register', { method: 'POST', body: { email: 'плохой-адрес', password: PASSWORD } });
 check('некорректный e-mail отклонён', noEmail.status === 400);
+const oversizedAuth = await call('/auth/register', {
+  method: 'POST', ip: '203.0.113.83',
+  body: { email: 'large@example.com', password: PASSWORD, name: 'x'.repeat(20 * 1024) },
+});
+check('слишком большой auth JSON отклонён до обработки (413)', oversizedAuth.status === 413);
 
 const registered = await call('/auth/register', { method: 'POST', body: { email: 'Player@Example.com', password: PASSWORD, name: 'Игрок' } });
 check('регистрация проходит', registered.status === 201 && Boolean(registered.json.token), `status ${registered.status}`);
@@ -191,6 +205,8 @@ const wrongPassword = await call('/auth/login', { method: 'POST', body: { email:
 const unknownUser = await call('/auth/login', { method: 'POST', body: { email: 'nobody@example.com', password: 'WrongPassw0rd!' } });
 check('неверный пароль → 401', wrongPassword.status === 401);
 check('ответ не раскрывает, есть ли аккаунт', wrongPassword.json.error === unknownUser.json.error, wrongPassword.json.error);
+const loginLimitKeys = db.prepare("SELECT key FROM rate_limits WHERE key LIKE 'login:%'").all().map((row) => row.key);
+check('rate-limit входа не хранит e-mail в открытом виде', loginLimitKeys.length >= 2 && loginLimitKeys.every((key) => !key.includes('@')));
 
 const login = await call('/auth/login', { method: 'POST', body: { email: 'player@example.com', password: PASSWORD } });
 check('верный пароль → вход', login.status === 200 && Boolean(login.json.token));
@@ -222,6 +238,30 @@ check('чужой aud отклонён', badAudience.status === 401);
 
 const expired = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ exp: Math.floor(Date.now() / 1000) - 60 }) } });
 check('просроченный токен отклонён', expired.status === 401);
+const futureIssued = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ iat: Math.floor(Date.now() / 1000) + 600 }) } });
+check('токен с iat из будущего отклонён', futureIssued.status === 401);
+const notYetValid = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ nbf: Math.floor(Date.now() / 1000) + 600 }) } });
+check('токен до nbf отклонён', notYetValid.status === 401);
+const wrongAzp = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ azp: 'other-client.apps.googleusercontent.com' }) } });
+check('чужой azp отклонён', wrongAzp.status === 401);
+const missingSub = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ extraClaims: { sub: '' } }) } });
+check('токен без subject отклонён', missingSub.status === 401);
+const oversizedGoogle = await call('/auth/google', { method: 'POST', body: { credential: 'x'.repeat(12_001) } });
+check('слишком большой Google ID-токен отклонён', oversizedGoogle.status === 401);
+
+const unverifiedEmail = await call('/auth/google', {
+  method: 'POST', ip: '203.0.113.81',
+  body: { credential: googleToken({ email: 'player@example.com', emailVerified: false }) },
+});
+const beforeLink = db.prepare('SELECT provider FROM users WHERE email = ?').get('player@example.com');
+check('неподтверждённый Google e-mail отклонён', unverifiedEmail.status === 401);
+check('неподтверждённый e-mail не привязывает чужой аккаунт', beforeLink?.provider === 'email');
+
+const malformedPayload = `${base64url(JSON.stringify({ alg: 'RS256', kid: 'test-key' }))}.${base64url('not-json')}.signature`;
+const malformedGoogle = await call('/auth/google', {
+  method: 'POST', ip: '203.0.113.82', body: { credential: malformedPayload },
+});
+check('повреждённый ID-токен возвращает отказ входа, а не 500', malformedGoogle.status === 401);
 
 // привязка Google к аккаунту, созданному по паролю
 const linkToken = googleToken({ email: 'player@example.com', sub: '5555555555' });
@@ -249,6 +289,10 @@ check('профиль читается обратно без потерь', JSON
 
 const huge = await call('/me/profile', { method: 'PUT', body: { profile: { blob: 'x'.repeat(300 * 1024) } }, token });
 check('слишком большой профиль отклонён (413)', huge.status === 413, huge.json?.error);
+const unicodeHuge = await call('/me/profile', {
+  method: 'PUT', token, body: { profile: { blob: '🙂'.repeat(65_536) } },
+});
+check('лимит профиля измеряется в UTF-8 байтах, не символах', unicodeHuge.status === 413);
 
 /* ------------------------------------------------------------------ *
  * 6. Сессии
@@ -291,6 +335,8 @@ check('в письме нет пароля и секретов', !/password_hash
 
 const unknownReset = await call('/auth/reset-request', { method: 'POST', body: { email: 'nobody@example.com' } });
 check('для несуществующего адреса ответ такой же (нет перебора)', unknownReset.status === 200 && unknownReset.json.ok === true);
+const resetLimitKeys = db.prepare("SELECT key FROM rate_limits WHERE key LIKE 'reset:%'").all().map((row) => row.key);
+check('rate-limit сброса не хранит e-mail в открытом виде', resetLimitKeys.length >= 2 && resetLimitKeys.every((key) => !key.includes('@')));
 
 const tokensInDb = db.prepare('SELECT token_hash FROM reset_tokens').all();
 check('токен сброса хранится как хеш', tokensInDb.every((r) => r.token_hash !== resetToken));
@@ -353,6 +399,7 @@ check('после десятков попыток включается rate limi
 const options = await api.fetch(new Request('https://gustoplay.ru/api/auth/login', { method: 'OPTIONS', headers: { Origin: 'https://gustoplay.ru' } }), env);
 check('CORS preflight отвечает 204 и разрешает только наш домен',
   options.status === 204 && options.headers.get('Access-Control-Allow-Origin') === 'https://gustoplay.ru');
+check('CORS не включает cookie credentials для Bearer API', !options.headers.has('Access-Control-Allow-Credentials'));
 const foreignResponse = await api.fetch(new Request('https://gustoplay.ru/api/health', { headers: { Origin: 'https://evil.example' } }), env);
 const allowOrigin = foreignResponse.headers.get('Access-Control-Allow-Origin');
 check('чужой домен не получает разрешения CORS', allowOrigin !== 'https://evil.example', `отдаём: ${allowOrigin}`);

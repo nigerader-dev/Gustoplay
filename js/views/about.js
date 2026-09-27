@@ -126,7 +126,7 @@ function renderPrivacy(lang) {
   return `
   <section class="section about legal-page">
     <header class="section-head">
-      <h1>${heading}</h1>
+      <h1>${esc(heading)}</h1>
       <p class="muted">${esc(SITE.name)} · ${esc(SITE.email)}</p>
     </header>
     <div class="panel legal" id="privacy">

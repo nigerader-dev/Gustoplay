@@ -48,6 +48,7 @@ const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
 const { GAMES } = await import('../js/catalog/index.js');
+const { gameCard, storeLinks, jsonForHtmlScript } = await import('../js/views/components.js');
 await import('../js/app.js');
 
 async function navigate(route) {
@@ -861,6 +862,34 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
   check('у SVG-иконок нет текстовых эмодзи внутри',
     icons.every((svg) => !firstEmoji(svg.textContent || '')));
+}
+
+// HTML contexts are exercised with untrusted-looking catalog values, not only trusted fixtures.
+{
+  const payload = '\"><img src=x onerror=alert(1)><svg onload=alert(2)></svg>';
+  const hostileGame = {
+    slug: payload, t: payload, y: payload, dev: payload, cover: 'javascript:alert(3)',
+    rating: payload, modes: ['single'], players: [1, 1], genres: [], tags: [],
+    price: 'full', priceRub: payload, len: [1, 2], difficulty: 3, pace: 3,
+    desc: { ru: payload, en: payload }, links: { steam: 'javascript:alert(4)', official: 'data:text/html,x' },
+  };
+  const template = window.document.createElement('template');
+  template.innerHTML = gameCard(hostileGame);
+  const injectedNodes = template.content.querySelectorAll('img[onerror], svg[onload], script, iframe');
+  const unsafeUrls = [...template.content.querySelectorAll('[href], [src]')]
+    .some((node) => /^\s*javascript:/i.test(node.getAttribute('href') || node.getAttribute('src') || ''));
+  check('HTML-шаблон карточки экранирует payload в атрибутах и тексте',
+    injectedNodes.length === 0 && unsafeUrls === false
+      && template.content.querySelector('.game-card')?.getAttribute('data-slug') === payload);
+  check('storeLinks отбрасывает javascript: и не-HTTPS схемы', storeLinks(hostileGame) === '');
+  const jsonLdScript = window.document.createElement('script');
+  jsonLdScript.type = 'application/ld+json';
+  jsonLdScript.textContent = jsonForHtmlScript({ name: payload });
+  window.document.head.append(jsonLdScript);
+  check('JSON-LD остаётся валидным JSON и не закрывает script элемент',
+    JSON.parse(jsonLdScript.textContent).name === payload
+      && !window.document.head.innerHTML.includes('<img src=x onerror='));
+  jsonLdScript.remove();
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);

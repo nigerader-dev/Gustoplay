@@ -60,7 +60,8 @@ async function request(path, { method = 'GET', body, auth = true, timeout = 1200
     const response = await fetch(`${base}${path}`, {
       method,
       headers,
-      credentials: 'include',
+      // Authentication uses an explicit Bearer token; cookies are neither required nor sent.
+      credentials: 'omit',
       body: body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
       // keepalive — для отправки профиля в момент ухода со страницы (pagehide):
