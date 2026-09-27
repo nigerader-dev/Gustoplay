@@ -55,7 +55,7 @@ const urlOf = (file) => {
 // Адрес сайта и базовый путь — из собранного конфига (истина в последней инстанции).
 // Читаем импортом, а не регуляркой по тексту: сборка минифицирует JS, и любой
 // текстовый разбор сломался бы при смене кавычек или порядка полей.
-const { SITE: distSite } = await import(pathToFileURL(join(dist, 'js', 'config.js')).href);
+const { SITE: distSite, ADS: distAds } = await import(pathToFileURL(join(dist, 'js', 'config.js')).href);
 const cfgUrl = String(distSite?.url || '');
 const siteUrl = cfgUrl.replace(/\/+$/, '');
 const styleOn = cfgUrl.endsWith('/');
@@ -88,6 +88,11 @@ console.log(`\n1. Страницы (${htmlFiles.length})`);
 check('сборка содержит сотни страниц', htmlFiles.length > 500, `${htmlFiles.length} страниц`);
 check('есть 404.html', existsSync(join(dist, '404.html')));
 check('есть служебные файлы хостинга', ['_headers', '_redirects', 'robots.txt', 'sitemap.xml', 'ads.txt', '.well-known/security.txt'].every((f) => existsSync(join(dist, f))));
+const adsTxtExpected = distAds.adsTxt.length
+  ? `${distAds.adsTxt.join('\n')}\n`
+  : '# Рекламные сети не подключены; записей ads.txt пока нет.\n';
+const adsTxtBuilt = readFileSync(join(dist, 'ads.txt'), 'utf8');
+check('ads.txt содержит только выданные строки, без примеров или фиктивных ID', adsTxtBuilt === adsTxtExpected);
 
 const titles = new Map();
 const duplicates = [];

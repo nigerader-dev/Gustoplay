@@ -86,12 +86,13 @@ const DB = {
 
 const { publicKey, privateKey } = generateKeyPairSync('rsa', { modulusLength: 2048 });
 const jwk = { ...publicKey.export({ format: 'jwk' }), kid: 'test-key', alg: 'RS256', use: 'sig' };
+let googleJwks = [jwk];
 
 const CLIENT_ID = 'test.apps.googleusercontent.com';
 const base64url = (input) => Buffer.from(input).toString('base64url');
 
 /** Собираем настоящий ID-токен Google и подписываем его нашим ключом */
-function googleToken({ sub = '1234567890', email = 'player@gmail.com', name = 'Player One', aud = CLIENT_ID, azp, kid = 'test-key', exp = Math.floor(Date.now() / 1000) + 600, iat = Math.floor(Date.now() / 1000), nbf, emailVerified = true, badSignature = false, alg = 'RS256', extraClaims = {} } = {}) {
+function googleToken({ sub = '1234567890', email = 'player@gmail.com', name = 'Player One', aud = CLIENT_ID, azp, kid = 'test-key', signingKey = privateKey, exp = Math.floor(Date.now() / 1000) + 600, iat = Math.floor(Date.now() / 1000), nbf, emailVerified = true, badSignature = false, alg = 'RS256', extraClaims = {} } = {}) {
   const header = base64url(JSON.stringify({ alg, kid, typ: 'JWT' }));
   const claims = { iss: 'https://accounts.google.com', aud, sub, email, email_verified: emailVerified, name, exp, iat,
     ...(azp === undefined ? {} : { azp }), ...(nbf === undefined ? {} : { nbf }), ...extraClaims };
@@ -99,7 +100,7 @@ function googleToken({ sub = '1234567890', email = 'player@gmail.com', name = 'P
   const data = `${header}.${payload}`;
   const signer = createSign('RSA-SHA256');
   signer.update(data);
-  const signature = badSignature ? Buffer.from('подделка').toString('base64url') : signer.sign(privateKey).toString('base64url');
+  const signature = badSignature ? Buffer.from('подделка').toString('base64url') : signer.sign(signingKey).toString('base64url');
   return `${data}.${signature}`;
 }
 
@@ -109,7 +110,7 @@ const realFetch = globalThis.fetch;
 globalThis.fetch = async (url, options = {}) => {
   const href = String(url);
   if (href.includes('googleapis.com/oauth2')) {
-    return new Response(JSON.stringify({ keys: [jwk] }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ keys: googleJwks }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   }
   if (href.includes('resend.com')) {
     mailsSent += 1;
@@ -271,6 +272,24 @@ check('аккаунт создан с провайдером google', googleOk.j
 const googleAgain = await call('/auth/google', { method: 'POST', body: { credential: googleToken() } });
 check('повторный вход через Google не создаёт дубль', googleAgain.json?.user?.id === googleOk.json?.user?.id);
 
+const changedIdentity = await call('/auth/google', {
+  method: 'POST', body: { credential: googleToken({ sub: 'different-google-subject' }) },
+});
+const originalGoogleIdentity = db.prepare('SELECT provider_id FROM users WHERE email = ?').get('player@gmail.com');
+check('Google e-mail с другим subject не захватывает существующую привязку',
+  changedIdentity.status === 401 && originalGoogleIdentity.provider_id === '1234567890');
+
+// Имитация ротации ключей: незнакомый kid должен вызвать немедленное обновление JWKS.
+const rotatedPair = generateKeyPairSync('rsa', { modulusLength: 2048 });
+const rotatedJwk = { ...rotatedPair.publicKey.export({ format: 'jwk' }), kid: 'rotated-key', alg: 'RS256', use: 'sig' };
+googleJwks = [rotatedJwk];
+const rotatedToken = await call('/auth/google', {
+  method: 'POST', ip: '203.0.113.80',
+  body: { credential: googleToken({ sub: 'rotated-key-user', email: 'rotated@gmail.com', kid: 'rotated-key', signingKey: rotatedPair.privateKey }) },
+});
+check('новый Google kid принимается после обновления кеша JWKS', rotatedToken.status === 200);
+googleJwks = [jwk];
+
 const badSignature = await call('/auth/google', { method: 'POST', body: { credential: googleToken({ badSignature: true, email: 'hacker@gmail.com' }) } });
 check('подделанная подпись отклонена', badSignature.status === 401, badSignature.json?.error);
 
@@ -309,6 +328,12 @@ const linkToken = googleToken({ email: 'player@example.com', sub: '5555555555' }
 const linked = await call('/auth/google', { method: 'POST', body: { credential: linkToken } });
 const boundUser = db.prepare('SELECT provider FROM users WHERE email = ?').get('player@example.com');
 check('Google привязывается к аккаунту с тем же e-mail', linked.status === 200 && boundUser.provider === 'google');
+const conflictingLink = await call('/auth/google', {
+  method: 'POST', body: { credential: googleToken({ email: 'player@example.com', sub: 'other-google-subject' }) },
+});
+const preservedLink = db.prepare('SELECT provider_id FROM users WHERE email = ?').get('player@example.com');
+check('повторная Google-привязка не заменяет другой subject',
+  conflictingLink.status === 401 && preservedLink.provider_id === '5555555555');
 
 const passwordStillWorks = await call('/auth/login', { method: 'POST', body: { email: 'player@example.com', password: PASSWORD } });
 check('пароль продолжает работать после привязки', passwordStillWorks.status === 200);

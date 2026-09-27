@@ -48,7 +48,7 @@ const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
 const { GAMES } = await import('../js/catalog/index.js');
-const { gameCard, storeLinks, jsonForHtmlScript, meters, ratingPill } = await import('../js/views/components.js');
+const { gameCard, storeLinks, jsonForHtmlScript, meters, ratingPill, adSlot } = await import('../js/views/components.js');
 const verifiedRecent = ['blue-prince', 'indiana-jones-and-the-great-circle', 'doom-the-dark-ages', 'avowed']
   .map((slug) => GAMES.find((game) => game.slug === slug));
 check('four new fact-checked titles are registered with explicit unknown difficulty/pace',
@@ -63,7 +63,29 @@ check('unverified cloud availability is not inferred for the new games',
 check('Switch 2 releases use a distinct, accurate platform filter',
   GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch2')
     && !GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch'));
+check('реклама остаётся mock без фиктивных сетевых ID и ads.txt',
+  config.ADS.mode === 'mock'
+    && config.ADS.rsya.clientId === ''
+    && Object.values(config.ADS.rsya.blocks).every((id) => id === '')
+    && config.ADS.adsense.client === ''
+    && Object.values(config.ADS.adsense.blocks).every((id) => id === '')
+    && config.ADS.adsense.autoAds === false
+    && config.ADS.adsTxt.length === 0);
+const mockSlot = adSlot('home-top');
+check('mock-слот явно помечен заглушкой и не содержит сетевых блоков',
+  mockSlot.includes('ad-mock') && mockSlot.includes('Тестовая заглушка')
+    && mockSlot.includes('рекламный запрос не отправляется')
+    && !mockSlot.includes('data-rsya') && !mockSlot.includes('adsbygoogle'));
 await import('../js/app.js');
+check('при mock-режиме приложение не загружает скрипты рекламных сетей',
+  !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]'));
+config.ADS.mode = 'rsya';
+window.dispatchEvent(new window.Event('gf:rerender'));
+check('режим сети без выданных ID также не создаёт внешних запросов',
+  !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
+    && !window.document.querySelector('#consent'));
+config.ADS.mode = 'mock';
+window.dispatchEvent(new window.Event('gf:rerender'));
 
 async function navigate(route) {
   nav.navigate(route.replace(/^#\/?/, ''));
@@ -494,11 +516,11 @@ check('сброс профиля ведёт в квиз с чистым проф
 console.log('\n9. Консент, тема, язык, 404');
 window.localStorage.removeItem('gf.consent.v1');
 await navigate('catalog');
-check('баннер согласия показывается', count('#consent') === 1);
-click('[data-action="consent-decline"]');
-await wait(30);
-check('отказ запоминается и прячет баннер',
-  window.localStorage.getItem('gf.consent.v1') === 'necessary' && count('#consent') === 0);
+check('без активной сети нет ненужного баннера cookie', count('#consent') === 0
+  && !window.document.querySelector('[data-action="consent-open"]'));
+store.setConsent('necessary');
+check('выбор cookie может храниться локально',
+  window.localStorage.getItem('gf.consent.v1') === 'necessary');
 click('[data-action="theme-toggle"]');
 await wait(20);
 check('переключение темы применяется и сохраняется',
@@ -712,6 +734,17 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
   const { score, neighbours } = eng.scoreGame(r1.list[0].game, p, eng.computeWeights(p));
   check('скоринг возвращает число и корректный neighbours',
     Number.isFinite(score) && (neighbours === null || typeof neighbours.slug === 'string'));
+  const orderedMarks = ['portal-2', 'stardew-valley', 'hades', 'outer-wilds', 'balatro'];
+  const recencyProfile = {
+    answers: {},
+    marks: Object.fromEntries(orderedMarks.map((slug, i) => [slug, { status: 'liked', ts: (i + 1) * 100 }])),
+    impressions: {},
+  };
+  const portalScore = eng.scoreGame(GAMES.find((g) => g.slug === 'portal-2'), recencyProfile,
+    eng.computeWeights(recencyProfile));
+  check('рекомендации используют актуальные отметки и возвращают ближайшую похожую игру',
+    portalScore.neighbours?.slug === 'outer-wilds' && portalScore.neighbours.sim > 0.12,
+    `сосед: ${portalScore.neighbours?.slug || 'нет'}`);
   const party = eng.recommendForParty({ players: 4, platforms: ['pc'], limit: 24, seed: 7 });
   check('подбор для компании возвращает игры', party.length > 0
     && party.every((g) => g.players[1] >= 4), `${party.length} шт.`);

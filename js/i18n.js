@@ -375,7 +375,7 @@ export const STRINGS = {
     'about.privacy.title': 'Приватность',
     'about.privacy.text': 'Подбор работает без регистрации: профиль вкуса и отметки хранятся в localStorage вашего браузера. Аккаунт (e-mail или вход через Google) нужен только для синхронизации между устройствами и удаляется одной кнопкой вместе со всеми серверными данными.',
     'about.ads.title': 'Про рекламу',
-    'about.ads.text': 'Сайт бесплатный и живёт на рекламу. Мы не продаём партнёрские ссылки под видом рекомендаций: рекламные блоки помечены.',
+    'about.ads.text': 'Сейчас рекламные сети не подключены: вместо объявлений видны только тестовые заглушки. Возможные рекламные блоки отделены от рекомендаций.',
     'about.data.title': 'Откуда данные об играх',
     'about.data.text': 'Каталог собран вручную: жанры, теги, режимы, длительность, сложность, темп и рейтинги, цены и подписки. Обложки — официальный арт игр из Steam, Nintendo eShop, Epic Games Store и магазинов издателей, права принадлежат их владельцам.',
     'about.missing.title': 'Не нашли игру?',
@@ -412,8 +412,9 @@ export const STRINGS = {
     'consent.policy': 'Подробнее',
 
     'ad.label': 'Реклама',
+    'ad.mockLabel': 'Тестовая заглушка',
     'ad.placeholder': 'Рекламный блок {size}',
-    'ad.hint': 'Здесь появится объявление после подключения рекламной сети (см. docs/MONETIZATION.md).',
+    'ad.hint': 'Тестовая заглушка: рекламный запрос не отправляется.',
 
     'common.loading': 'Загружаем…',
     'common.footer.note': 'GustoPlay — сервис подбора игр. Данные об играх — справочные: цены и наличие в подписках меняются.',
@@ -793,7 +794,7 @@ export const STRINGS = {
     'about.privacy.title': 'Privacy',
     'about.privacy.text': 'Matching works without an account: your taste profile and marks live in your browser localStorage. An account (e-mail or Google sign-in) only syncs them between devices and can be deleted in one click together with all server data.',
     'about.ads.title': 'About ads',
-    'about.ads.text': 'The site is free and funded by ads. We do not disguise affiliate links as recommendations: ad blocks are labelled.',
+    'about.ads.text': 'No ad networks are connected at the moment: only test placeholders appear instead of ads. Any future ad units are kept separate from recommendations.',
     'about.data.title': 'Where game data comes from',
     'about.data.text': 'The catalog is curated by hand: genres, tags, modes, length, difficulty, pace, ratings, prices and subscriptions. Covers are official game art from Steam, the Nintendo eShop, the Epic Games Store and publishers’ stores; all rights belong to their owners.',
     'about.missing.title': 'Missing a game?',
@@ -830,8 +831,9 @@ export const STRINGS = {
     'consent.policy': 'Learn more',
 
     'ad.label': 'Advertisement',
+    'ad.mockLabel': 'Ad preview',
     'ad.placeholder': 'Ad slot {size}',
-    'ad.hint': 'An ad will appear here once an ad network is connected (see docs/MONETIZATION.md).',
+    'ad.hint': 'Test placeholder: no advertising request is sent.',
 
     'common.loading': 'Loading…',
     'common.footer.note': 'GustoPlay is a game matching service. Game data is informational; prices and subscription availability change.',

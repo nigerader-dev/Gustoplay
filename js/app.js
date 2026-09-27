@@ -7,7 +7,7 @@ import { setLang, getLang, t, tl } from './i18n.js';
 import { icon } from './icons.js';
 import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
-import { ADS, SITE, FEATURES } from './config.js';
+import { ADS, ANALYTICS, SITE, FEATURES } from './config.js';
 import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
 import { initAnalytics, track, trackPageview } from './analytics.js';
 import { esc, jsonForHtmlScript } from './views/components.js';
@@ -148,7 +148,7 @@ function footer() {
         ${topTags.map((id) => `<a href="#/tag/${encodeURIComponent(id)}" data-action="nav">${esc(tl(TAGS, id))}</a>`).join('')}
         <a href="#/privacy" data-action="nav">${esc(t('about.privacy.title'))}</a>
         <a href="#/terms" data-action="nav">${esc(t('common.footer.terms'))}</a>
-        ${ADS.consentRequired ? `<button type="button" class="footer-link" data-action="consent-open">${esc(t('consent.change'))}</button>` : ''}
+        ${consentSettingsEnabled() ? `<button type="button" class="footer-link" data-action="consent-open">${esc(t('consent.change'))}</button>` : ''}
       </div>
     </div>
     <div class="footer-bottom">
@@ -159,6 +159,22 @@ function footer() {
 }
 
 let consentReopen = false;
+
+function activeAdNetworks() {
+  return {
+    rsya: (ADS.mode === 'rsya' || ADS.mode === 'both')
+      && Boolean(ADS.rsya.clientId)
+      && Object.values(ADS.rsya.blocks || {}).some(Boolean),
+    adsense: (ADS.mode === 'adsense' || ADS.mode === 'both')
+      && Boolean(ADS.adsense.client)
+      && Object.values(ADS.adsense.blocks || {}).some(Boolean),
+  };
+}
+
+function consentSettingsEnabled() {
+  const networks = activeAdNetworks();
+  return Boolean(ADS.consentRequired && (networks.rsya || networks.adsense || ANALYTICS.yandexMetrika));
+}
 
 /**
  * Предупреждение: браузер не сохраняет данные (приватный режим, переполнено хранилище).
@@ -178,7 +194,7 @@ function storageWarning() {
 }
 
 function consentBanner() {
-  if (!ADS.consentRequired) return '';
+  if (!consentSettingsEnabled()) return '';
   if (getConsent() && !consentReopen) return '';
   return `
   <div class="consent" id="consent">
@@ -330,17 +346,19 @@ function injectJsonLd(ctx, view) {
 let adScriptsLoaded = false;
 
 function ensureAdScripts() {
-  if (adScriptsLoaded || ADS.mode === 'mock') return;
+  if (adScriptsLoaded) return;
+  const networks = activeAdNetworks();
+  if (!networks.rsya && !networks.adsense) return;
   if (ADS.consentRequired && getConsent() !== 'all') return;
   adScriptsLoaded = true;
 
-  if (ADS.mode === 'rsya' || ADS.mode === 'both') {
+  if (networks.rsya) {
     const s = document.createElement('script');
     s.src = 'https://yandex.ru/ads/system/context.js';
     s.async = true;
     document.head.append(s);
   }
-  if (ADS.mode === 'adsense' || ADS.mode === 'both') {
+  if (networks.adsense) {
     const s = document.createElement('script');
     s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.adsense.client}`;
     s.async = true;

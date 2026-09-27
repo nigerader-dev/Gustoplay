@@ -218,11 +218,13 @@ async function authUser(request, env) {
 
 let jwksCache = { at: 0, keys: [] };
 
-async function googleKeys() {
-  if (Date.now() - jwksCache.at < 3600_000 && jwksCache.keys.length) return jwksCache.keys;
+async function googleKeys(forceRefresh = false) {
+  if (!forceRefresh && Date.now() - jwksCache.at < 3600_000 && jwksCache.keys.length) return jwksCache.keys;
   const response = await fetch(GOOGLE_JWKS_URL);
+  if (!response.ok) throw new Error('Google signing keys unavailable');
   const data = await response.json();
-  jwksCache = { at: Date.now(), keys: data.keys || [] };
+  if (!Array.isArray(data.keys)) throw new Error('Invalid Google signing keys response');
+  jwksCache = { at: Date.now(), keys: data.keys };
   return jwksCache.keys;
 }
 
@@ -266,9 +268,15 @@ async function verifyGoogleToken(credential, clientId) {
   if (typeof payload.sub !== 'string' || !payload.sub || payload.sub.length > 255) return null;
 
   let keys;
-  try { keys = await googleKeys(); } catch { return null; }
-  const jwk = keys.find((k) => k.kid === header.kid);
-  if (!jwk) return null;
+  try {
+    keys = await googleKeys();
+    // Google rotates signing keys. A cached set can be valid but not yet contain a
+    // newly-issued kid, so make one immediate refresh before rejecting the token.
+    if (!keys.some((key) => key.kid === header.kid)) keys = await googleKeys(true);
+  } catch { return null; }
+  const jwk = keys.find((key) => key.kid === header.kid);
+  if (!jwk || jwk.kty !== 'RSA' || (jwk.use && jwk.use !== 'sig') || (jwk.alg && jwk.alg !== 'RS256')
+    || typeof jwk.n !== 'string' || typeof jwk.e !== 'string') return null;
 
   try {
     const key = await crypto.subtle.importKey(
@@ -425,7 +433,7 @@ async function handleGoogle(request, env, origin) {
   const googleProfile = await verifyGoogleToken(body.credential, env.GOOGLE_CLIENT_ID);
   if (!googleProfile) return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
 
-  let user = await env.DB.prepare('SELECT id, email, name, provider FROM users WHERE email = ?')
+  let user = await env.DB.prepare('SELECT id, email, name, provider, provider_id FROM users WHERE email = ?')
     .bind(googleProfile.email).first();
 
   if (!user) {
@@ -435,12 +443,24 @@ async function handleGoogle(request, env, origin) {
        VALUES (?, ?, ?, 'google', ?, ?, ?)`,
     ).bind(id, googleProfile.email, googleProfile.name.slice(0, 60), googleProfile.providerId,
       googleProfile.emailVerified ? 1 : 0, new Date().toISOString()).run();
-    user = { id, email: googleProfile.email, name: googleProfile.name, provider: 'google' };
-  } else if (user.provider === 'email') {
-    // Привязываем Google к существующему аккаунту (почта уже подтверждена Google)
-    await env.DB.prepare('UPDATE users SET provider = ?, provider_id = ?, email_verified = 1 WHERE id = ?')
-      .bind('google', googleProfile.providerId, user.id).run();
-    user = { ...user, provider: 'google' };
+    user = { id, email: googleProfile.email, name: googleProfile.name, provider: 'google', provider_id: googleProfile.providerId };
+  } else {
+    // Email is used only to link a first Google identity to an existing password account.
+    // Once linked, require Google's stable `sub` to match; never silently replace a link.
+    if (user.provider_id && user.provider_id !== googleProfile.providerId) {
+      return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
+    }
+    if (user.provider !== 'google' || !user.provider_id) {
+      await env.DB.prepare(
+        'UPDATE users SET provider = ?, provider_id = ?, email_verified = 1 WHERE id = ? AND (provider_id IS NULL OR provider_id = ?)',
+      ).bind('google', googleProfile.providerId, user.id, googleProfile.providerId).run();
+      user = await env.DB.prepare('SELECT id, email, name, provider, provider_id FROM users WHERE id = ?')
+        .bind(user.id).first();
+      // A concurrent request may have linked a different Google identity first.
+      if (!user || user.provider_id !== googleProfile.providerId) {
+        return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
+      }
+    }
   }
 
   const token = await createSession(env, user.id, request);

@@ -319,10 +319,7 @@ writeFileSync(join(dist, '.well-known', 'security.txt'), securityTxt);
 
 const adsTxt = ADS.adsTxt.length
   ? `${ADS.adsTxt.join('\n')}\n`
-  : `# ads.txt появится здесь после подключения рекламной сети.
-# Примеры строк:
-# yandex.com, 1234567, DIRECT
-# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+  : `# Рекламные сети не подключены; записей ads.txt пока нет.
 `;
 writeFileSync(join(dist, 'ads.txt'), adsTxt);
 

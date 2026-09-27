@@ -202,7 +202,7 @@ export function adSlot(slotId) {
   if (!slot) return '';
   if (ADS.mode === 'mock') {
     return `<aside class="ad-slot ad-mock" data-slot="${slotId}">
-      <span class="ad-label">${esc(t('ad.label'))}</span>
+      <span class="ad-label">${esc(t('ad.mockLabel'))}</span>
       <div class="ad-body">
         <strong>${esc(t('ad.placeholder', { size: slot.size }))}</strong>
         <span>${esc(t('ad.hint'))}</span>
