@@ -159,6 +159,47 @@ check('GET /health отвечает ok', health.status === 200 && health.json.ok
 check('есть заголовок HSTS', Boolean(health.headers.get('Strict-Transport-Security')));
 check('CSP для API не мешает (нет X-Frame от чужого домена)', health.headers.get('X-Frame-Options') === 'DENY');
 
+console.log('Форма поддержки');
+const supportHoneypotBefore = db.prepare("SELECT COUNT(*) AS n FROM rate_limits WHERE key LIKE 'support-%'").get().n;
+const supportTrap = await call('/support', { method: 'POST', body: {
+  name: 'Spam Bot', email: 'spam@example.com', topic: 'other', message: 'A long enough message for this test.', website: 'filled',
+}, ip: '192.0.2.41' });
+const supportHoneypotAfter = db.prepare("SELECT COUNT(*) AS n FROM rate_limits WHERE key LIKE 'support-%'").get().n;
+check('honeypot тихо отклоняет бота без записи лимита', supportTrap.status === 202 && supportHoneypotBefore === supportHoneypotAfter);
+const supportInvalid = await call('/support', { method: 'POST', body: {
+  name: 'A', email: 'not-an-email', topic: 'unexpected', message: 'short',
+}, ip: '192.0.2.42' });
+check('форма поддержки валидируется на сервере', supportInvalid.status === 400 && supportInvalid.json.code === 'invalid_support_form');
+const supportValid = await call('/support', { method: 'POST', body: {
+  name: 'Player', email: 'Player@Example.com', topic: 'bug', message: 'A sufficiently detailed support message.',
+}, ip: '192.0.2.43' });
+const supportRateKeys = db.prepare("SELECT key FROM rate_limits WHERE key LIKE 'support-%'").all().map((row) => row.key);
+const supportStoresMessages = db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='support_messages'").get();
+check('валидная форма ограничивается частотой и не обещает не настроенную доставку',
+  supportValid.status === 503 && supportValid.json.code === 'support_delivery_unconfigured');
+check('антиспам-лимит хранит только IP и хеш e-mail, не содержимое обращения',
+  supportRateKeys.some((key) => key.startsWith('support-ip:192.0.2.43'))
+    && supportRateKeys.some((key) => key.startsWith('support-email:'))
+    && !supportRateKeys.some((key) => key.includes('player@example.com'))
+    && supportStoresMessages === undefined);
+const repeatedSupportBody = { name: 'Player', email: 'repeat@example.com', topic: 'other', message: 'A sufficiently detailed repeat message.' };
+const repeatedSupport = [];
+for (let i = 0; i < 4; i += 1) repeatedSupport.push(await call('/support', {
+  method: 'POST', body: repeatedSupportBody, ip: '192.0.2.44',
+}));
+check('e-mail ограничен тремя обращениями в часовое окно',
+  repeatedSupport.slice(0, 3).every((response) => response.status === 503)
+    && repeatedSupport[3].status === 429,
+  repeatedSupport.map((response) => response.status).join('/'));
+const supportIpAttempts = [];
+for (let i = 0; i < 6; i += 1) supportIpAttempts.push(await call('/support', {
+  method: 'POST', body: { ...repeatedSupportBody, email: `ip-limit-${i}@example.com` }, ip: '192.0.2.46',
+}));
+check('IP ограничен пятью обращениями за десять минут',
+  supportIpAttempts.slice(0, 5).every((response) => response.status === 503)
+    && supportIpAttempts[5].status === 429,
+  supportIpAttempts.map((response) => response.status).join('/'));
+
 /* ------------------------------------------------------------------ *
  * 2. Регистрация
  * ------------------------------------------------------------------ */

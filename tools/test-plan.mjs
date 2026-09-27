@@ -332,6 +332,54 @@ async function pickPc(page, values) {
     `${reset.cpu} / ${reset.ram} · «${reset.verdict}»`);
 }
 
+console.log('\n7. Форма поддержки: адаптив и mailto fallback');
+await goto('/support', 360);
+const supportNarrow = await page.evaluate(() => ({
+  heading: document.querySelector('h1')?.textContent.trim() || '',
+  fields: document.querySelectorAll('#support-form input[required], #support-form select[required], #support-form textarea[required]').length,
+  width: document.documentElement.scrollWidth,
+  viewport: innerWidth,
+}));
+check('страница поддержки адаптируется на ширине 360px и не переполняет экран',
+  supportNarrow.heading === 'Написать в поддержку' && supportNarrow.fields === 4
+    && supportNarrow.width <= supportNarrow.viewport,
+  `${supportNarrow.fields} полей, scrollWidth ${supportNarrow.width}/${supportNarrow.viewport}`);
+await page.setViewport({ width: 1440, height: 900, deviceScaleFactor: 1 });
+await new Promise((r) => setTimeout(r, 300));
+const supportWide = await page.evaluate(() => ({
+  width: document.documentElement.scrollWidth,
+  viewport: innerWidth,
+  card: document.querySelector('#support-form')?.getBoundingClientRect().width || 0,
+}));
+check('форма не растягивается и не переполняет экран на 1440px',
+  supportWide.width <= supportWide.viewport && supportWide.card <= 680,
+  `форма ${Math.round(supportWide.card)}px, scrollWidth ${supportWide.width}/${supportWide.viewport}`);
+await page.evaluate(() => {
+  document.querySelector('#support-name').value = 'Тестовый игрок';
+  document.querySelector('#support-email').value = 'player@example.com';
+  document.querySelector('#support-topic').value = 'bug';
+  document.querySelector('#support-message').value = 'Проверка черновика обращения через поддержку сайта.';
+});
+const supportFormValidity = await page.$eval('#support-form', (form) => ({
+  valid: form.checkValidity(),
+  values: [...new FormData(form).entries()].filter(([key]) => key !== 'website').map(([key, value]) => `${key}:${String(value).length}`),
+}));
+check('браузер принимает корректное обращение перед отправкой', supportFormValidity.valid, JSON.stringify(supportFormValidity.values));
+await new Promise((r) => setTimeout(r, 1900));
+await page.$eval('#support-form', (form) => form.requestSubmit());
+await page.waitForFunction(() => {
+  const link = document.querySelector('#support-mailto');
+  return Boolean(link && !link.hidden);
+}, { timeout: 5000 });
+const supportFallback = await page.evaluate(() => ({
+  href: document.querySelector('#support-mailto')?.getAttribute('href') || '',
+  status: document.querySelector('#support-status')?.textContent || '',
+}));
+check('без delivery API браузер предлагает черновик и честно сообщает, что письмо не отправлено',
+  supportFallback.href.startsWith('mailto:') && decodeURIComponent(supportFallback.href).includes('Проверка черновика')
+    && /никуда|not been sent/i.test(supportFallback.status)
+    && /не отправлен|has not been sent/i.test(supportFallback.status),
+  JSON.stringify(supportFallback));
 
 await browser.close();
 server.kill('SIGTERM');

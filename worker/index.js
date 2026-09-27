@@ -557,6 +557,41 @@ async function handleResetConfirm(request, env, origin) {
   return respond({ ok: true }, 200, origin, env);
 }
 
+/**
+ * Public support intake. This endpoint validates and rate-limits only; it deliberately
+ * does not persist or send messages until a delivery provider is approved/configured.
+ */
+async function handleSupport(request, env, origin) {
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
+
+  // Honeypot submissions are silently accepted and discarded; never log field contents.
+  if (typeof body.website === 'string' && body.website.trim()) return respond({ ok: true }, 202, origin, env);
+
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const topic = typeof body.topic === 'string' ? body.topic : '';
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const validTopics = new Set(['bug', 'missing-game', 'account', 'other']);
+  if (name.length < 2 || name.length > 80 || !isEmail(email)
+    || !validTopics.has(topic) || message.length < 20 || message.length > 4000) {
+    return respond({ error: 'Проверьте имя, e-mail, тему и сообщение (20–4000 символов).', code: 'invalid_support_form' }, 400, origin, env);
+  }
+
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  if (!(await rateLimit(env, `support-ip:${ip}`, 5, 600))) {
+    return respond({ error: 'Слишком много обращений. Попробуйте позже.', code: 'support_rate_limited' }, 429, origin, env);
+  }
+  const emailBucket = await sha256Hex(email);
+  if (!(await rateLimit(env, `support-email:${emailBucket}`, 3, 3600))) {
+    return respond({ error: 'Слишком много обращений с этого адреса. Попробуйте позже.', code: 'support_rate_limited' }, 429, origin, env);
+  }
+
+  // Do not retain personal data or claim delivery: mailto fallback is the only active route.
+  return respond({ error: 'Отправка через сайт не настроена.', code: 'support_delivery_unconfigured' }, 503, origin, env);
+}
+
 /* ------------------------------- роутер ------------------------------- */
 
 export default {
@@ -574,6 +609,7 @@ export default {
     // ограничение методов и маршрутизация
     try {
       if (path === '/health') return respond({ ok: true, time: new Date().toISOString() }, 200, origin, env);
+      if (path === '/support' && request.method === 'POST') return handleSupport(request, env, origin);
 
       if (path === '/auth/register' && request.method === 'POST') return handleRegister(request, env, origin);
       if (path === '/auth/login' && request.method === 'POST') return handleLogin(request, env, origin);

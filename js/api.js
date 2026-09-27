@@ -8,7 +8,7 @@
  *
  * Безопасность на клиенте:
  *   • токен сессии храним в localStorage с пометкой срока действия;
- *   • все запросы идут с credentials: 'include' (для httpOnly-cookie варианта) и Bearer-заголовком;
+ *   • запросы используют явный Bearer-заголовок и credentials: 'omit'; cookies не нужны и не отправляются;
  *   • никаких паролей в открытом виде дольше одного запроса;
  *   • при 401 токен автоматически забывается.
  */
@@ -126,6 +126,11 @@ export async function requestPasswordReset({ email, turnstileToken }) {
 /** Установка нового пароля по токену из письма */
 export async function confirmPasswordReset({ token, password }) {
   return request('/auth/reset-confirm', { method: 'POST', auth: false, body: { token, password } });
+}
+
+/** Send a support form to the API; current Worker intentionally does not deliver/store it. */
+export async function submitSupportMessage(fields) {
+  return request('/support', { method: 'POST', auth: false, body: fields });
 }
 
 export async function logout() {

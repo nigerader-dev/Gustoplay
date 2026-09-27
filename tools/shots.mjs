@@ -57,7 +57,7 @@ const ROUTES = [
   ['genre', '/genre/rpg'], ['tag', '/tag/coopfocused'], ['mode', '/mode/coopOnline'],
   ['mood', '/mood/relax'], ['platform', '/platform/pc'], ['game', '/game/balatro'],
   ['party', '/party'], ['profile', '/profile'], ['account', '/account'],
-  ['terms', '/terms'], ['about', '/about'], ['privacy', '/privacy'], ['404', '/no-such-page'],
+  ['terms', '/terms'], ['about', '/about'], ['privacy', '/privacy'], ['support', '/support'], ['404', '/no-such-page'],
 ];
 const KEY = new Set(['home', 'quiz', 'results', 'catalog', 'game', 'party', 'profile', 'account', '404']);
 

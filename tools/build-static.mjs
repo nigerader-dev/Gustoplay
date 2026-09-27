@@ -85,6 +85,7 @@ export const ROUTES = [
   { path: '/profile', priority: '0.3', changefreq: 'monthly', noindex: true },
   { path: '/account', priority: '0.2', changefreq: 'yearly', noindex: true },
   { path: '/about', priority: '0.4', changefreq: 'monthly' },
+  { path: '/support', priority: '0.3', changefreq: 'yearly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
   ...Object.keys(GENRES).map((id) => ({ path: `/genre/${id}`, priority: '0.7', changefreq: 'weekly' })),

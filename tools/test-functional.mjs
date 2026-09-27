@@ -17,7 +17,7 @@ const html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const dom = new JSDOM(html, { url: 'http://localhost/', pretendToBeVisual: true });
 const { window } = dom;
 
-for (const key of ['document', 'localStorage', 'sessionStorage', 'CustomEvent', 'Event', 'HTMLElement', 'Node']) {
+for (const key of ['document', 'localStorage', 'sessionStorage', 'CustomEvent', 'Event', 'FormData', 'HTMLElement', 'Node']) {
   try { globalThis[key] = window[key]; } catch { /* ignore */ }
 }
 try { Object.defineProperty(globalThis, 'navigator', { value: window.navigator, configurable: true }); } catch { /* ignore */ }
@@ -846,7 +846,7 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
 
   // 3) отрисованные страницы: эмодзи не должны появляться и после подстановок
   const emojiInPage = [];
-  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms']) {
+  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms', 'support']) {
     await navigate(route);
     const text = window.document.body.textContent || '';
     const ch = firstEmoji(text);
@@ -862,6 +862,59 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
   check('у SVG-иконок нет текстовых эмодзи внутри',
     icons.every((svg) => !firstEmoji(svg.textContent || '')));
+}
+
+// Support form: ru/en copy, browser validation, local anti-spam and mailto fallback.
+{
+  console.log('\nФорма поддержки');
+  const previousApiBase = config.SITE.apiBase;
+  config.SITE.apiBase = '';
+  window.sessionStorage.clear();
+  await navigate('support');
+  let form = window.document.querySelector('#support-form');
+  check('страница поддержки открывается с подписанными полями',
+    Boolean(form) && form.querySelectorAll('input[required], select[required], textarea[required]').length === 4
+      && form.querySelector('label[for="support-message"]'));
+  check('пустая форма не проходит браузерную валидацию', form?.checkValidity() === false);
+  i18n.setLang('en');
+  await navigate('support');
+  check('форма корректно отображается на английском',
+    window.document.querySelector('h1')?.textContent.includes('Contact support')
+      && window.document.querySelector('#support-submit')?.textContent.includes('Continue'));
+  i18n.setLang('ru');
+  await navigate('support');
+  form = window.document.querySelector('#support-form');
+  form.querySelector('#support-name').value = 'Тестовый игрок';
+  form.querySelector('#support-email').value = 'player@example.com';
+  form.querySelector('#support-topic').value = 'missing-game';
+  form.querySelector('#support-message').value = 'Подробное тестовое сообщение в службу поддержки.';
+  check('заполненные корректные данные проходят валидацию', form.checkValidity());
+  const startNow = Date.now();
+  const realDateNow = Date.now;
+  Date.now = () => startNow + 500;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(10);
+  check('слишком быстрая отправка отклоняется клиентским антиспамом',
+    window.document.querySelector('#support-status')?.textContent.includes('через несколько секунд'));
+  Date.now = () => startNow + 2500;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(35);
+  Date.now = realDateNow;
+  const fallback = window.document.querySelector('#support-mailto');
+  const mailtoHref = fallback?.getAttribute('href') || '';
+  check('без настроенного API виден явный mailto fallback с черновиком',
+    !fallback?.hidden && mailtoHref.startsWith('mailto:')
+      && decodeURIComponent(mailtoHref).includes('Подробное тестовое сообщение'));
+  const allStorage = [...Object.values(window.localStorage), ...Object.values(window.sessionStorage)].join(' ');
+  check('содержимое обращения не записывается в localStorage/sessionStorage',
+    !allStorage.includes('Подробное тестовое сообщение'));
+  Date.now = () => startNow + 2600;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(10);
+  Date.now = realDateNow;
+  check('повторные попытки блокируются коротким session-side лимитом',
+    window.document.querySelector('#support-status')?.textContent.includes('Слишком много обращений'));
+  config.SITE.apiBase = previousApiBase;
 }
 
 // HTML contexts are exercised with untrusted-looking catalog values, not only trusted fixtures.

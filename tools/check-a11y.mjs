@@ -56,7 +56,7 @@ store.setAnswers({ mood: ['relax'], modes: ['coop'], players: 4 });
 store.markGame('balatro', 'liked');
 const routes = ['/', 'quiz', 'results', 'catalog', 'genre/rpg', 'tag/coopfocused', 'mode/solo',
   'mood/relax', 'platform/pc', 'game/balatro', 'party', 'profile', 'account', 'terms', 'about',
-  'privacy', 'no-such-route', 'game/no-such-game'];
+  'privacy', 'support', 'no-such-route', 'game/no-such-game'];
 const h1bad = [];
 for (const r of routes) {
   await navigate(r);

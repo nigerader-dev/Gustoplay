@@ -1277,6 +1277,15 @@ select.input { cursor: pointer; }
 .auth-divider::before, .auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--surface-border); }
 .google-slot, .turnstile-slot { display: flex; justify-content: center; margin-bottom: 4px; min-height: 4px; }
 .auth-card .btn-lg { width: 100%; }
+.support-card { max-width: 680px; }
+.support-textarea { min-height: 170px; resize: vertical; line-height: 1.55; }
+.support-status:empty { display: none; }
+.support-mailto[hidden] { display: none !important; }
+.support-honeypot {
+  position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important;
+  margin: -1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important; border: 0 !important;
+}
 .notice-error { background: rgba(217, 83, 79, .12); color: var(--danger, #d9534f); }
 /* предупреждение о недоступном хранилище: полоса под шапкой, вровень с контентом */
 .notice-warn { display: flex; align-items: center; gap: 8px; max-width: var(--max-width); margin: var(--space-4) auto 0; padding-inline: var(--space-5); }

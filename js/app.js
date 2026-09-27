@@ -24,6 +24,7 @@ import * as profileView from './views/profile.js';
 import * as about from './views/about.js';
 import * as account from './views/account.js';
 import * as terms from './views/terms.js';
+import * as support from './views/support.js';
 import { isLoggedIn, getUser, clearSession } from './api.js';
 
 /* ------------------------------------------------------------------ *
@@ -45,6 +46,7 @@ const ROUTES = [
   { path: ['profile'], view: profileView, name: 'profile' },
   { path: ['account'], view: account, name: 'account' },
   { path: ['terms'], view: terms, name: 'terms' },
+  { path: ['support'], view: support, name: 'support' },
   { path: ['about'], view: about, name: 'about' },
   { path: ['privacy'], view: about, name: 'privacy' },
 ];
@@ -292,7 +294,7 @@ function render(scroll = true) {
   // Возврат позиции для «Показать ещё»: разметка выше кнопки не меняется,
   // поэтому человек остаётся ровно там, где нажал. behavior: 'instant' — важно:
   // 'auto' подчиняется CSS `html { scroll-behavior: smooth }`, и страница
-  // уезжала бы к цели анимацией (в браузерном тесте это выглядело как прыжок).
+  // уезжала бы к цели анимацией (в брмацией (в браузерном тесте это выглядело как прыжок).
   if (restoreScrollY !== null) {
     const y = restoreScrollY;
     restoreScrollY = null;
