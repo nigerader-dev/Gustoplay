@@ -64,6 +64,31 @@ jobs:
             echo "::notice::hltb-page: ни одной страницы не сохранено"
           fi
 
+      # Страница поиска HLTB — клиентское Next.js-приложение, текстовые времена
+      # видит только браузер. На раннере есть системный Chrome; puppeteer-core —
+      # лёгкий пакет без своей копии Chromium. Результат уходит аннотациями
+      # (hltb-b64) и пишется в tools/hltb-data.json (коммит/артефакт).
+      - name: Время прохождения из HowLongToBeat (headless Chrome)
+        id: hltb
+        continue-on-error: true
+        run: |
+          npm i --no-save puppeteer-core
+          node tools/pull-hltb-pages.mjs
+
+      - name: Коммит результата HLTB
+        if: steps.hltb.outcome == 'success'
+        continue-on-error: true
+        run: |
+          git config user.name "gustoplay-bot"
+          git config user.email "gustoplay-bot@users.noreply.github.com"
+          git add tools/hltb-data.json
+          if git diff --cached --quiet; then
+            echo "изменений нет"
+          else
+            git commit -m "chore(catalog): оценки времени HLTB (headless-сборщик)"
+            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
+          fi
+
       - name: Коммит результата
         continue-on-error: true
         run: |
@@ -85,6 +110,7 @@ jobs:
           path: |
             tools/catalog-batch-data.json
             tools/catalog-batch-review.txt
+            tools/hltb-data.json
             tools/hltb-pages/
           if-no-files-found: ignore
 
