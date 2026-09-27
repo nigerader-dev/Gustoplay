@@ -94,7 +94,7 @@ export function render(ctx) {
   <section class="section game-page">
     ${breadcrumbs([
       { label: t('nav.catalog'), href: '#/catalog' },
-      { label: tl(GENRES, game.genres[0]), href: `#/genre/${game.genres[0]}` },
+      { label: tl(GENRES, game.genres[0]), href: `#/genre/${encodeURIComponent(game.genres[0])}` },
       { label: game.t },
     ])}
 
@@ -106,7 +106,7 @@ export function render(ctx) {
       <div class="game-info">
         <h1>${esc(game.t)}</h1>
         <div class="game-sub">
-          <span>${game.y}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
+          <span>${esc(game.y)}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
           <span class="dot-sep">•</span>${priceLabel(game)}
         </div>
         <p class="game-desc">${esc(aboutText)}</p>
@@ -137,15 +137,15 @@ export function render(ctx) {
       <div class="detail-card">
         <h2>${esc(t('game.modes'))} · ${esc(t('game.platforms'))}</h2>
         <div class="badges">
-          ${game.modes.map((m) => `<a class="badge badge-mode" href="#/mode/${m}" data-action="nav">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</a>`).join('')}
-          ${game.platforms.map((p) => `<a class="badge" href="#/platform/${p}" data-action="nav">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</a>`).join('')}
+          ${game.modes.map((m) => `<a class="badge badge-mode" href="#/mode/${encodeURIComponent(m)}" data-action="nav">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</a>`).join('')}
+          ${game.platforms.map((p) => `<a class="badge" href="#/platform/${encodeURIComponent(p)}" data-action="nav">${icon(PLATFORMS[p].icon)} ${esc(tl(PLATFORMS, p))}</a>`).join('')}
         </div>
       </div>
       <div class="detail-card">
         <h2>${esc(t('game.genres'))}</h2>
-        <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${id}" data-action="nav">${icon(GENRES[id].icon)} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
+        <div class="chips-cloud small">${game.genres.map((id) => `<a class="chip chip-genre" href="#/genre/${encodeURIComponent(id)}" data-action="nav">${icon(GENRES[id].icon)} ${esc(tl(GENRES, id))}</a>`).join('')}</div>
         ${game.moods.length ? `<h3 class="detail-sub">${esc(t('game.moods'))}</h3>
-        <div class="chips-cloud small">${game.moods.map((id) => `<a class="chip" href="#/mood/${id}" data-action="nav">${icon(MOODS[id].icon)} ${esc(tl(MOODS, id))}</a>`).join('')}</div>` : ''}
+        <div class="chips-cloud small">${game.moods.map((id) => `<a class="chip" href="#/mood/${encodeURIComponent(id)}" data-action="nav">${icon(MOODS[id].icon)} ${esc(tl(MOODS, id))}</a>`).join('')}</div>` : ''}
       </div>
       <div class="detail-card">
         <h2>${esc(t('game.tags'))}</h2>

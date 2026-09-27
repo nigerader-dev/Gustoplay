@@ -49,9 +49,9 @@ export function render() {
       const icons = { liked: 'thumbsUp', disliked: 'thumbsDown', played: 'controller', wishlist: 'bookmark' };
       return `<div class="mark-row">
         <span class="mark-row-cover">${coverImage(game, 'mark-img')}</span>
-        <a class="mark-row-title" href="#/game/${game.slug}" data-action="nav">${esc(game.t)}</a>
+        <a class="mark-row-title" href="#/game/${encodeURIComponent(game.slug)}" data-action="nav">${esc(game.t)}</a>
         <span class="mark-row-status">${icon(icons[m.status])} ${esc(t(`mark.${m.status}`))}</span>
-        <button type="button" class="btn btn-ghost btn-sm" data-action="mark-remove" data-slug="${game.slug}" aria-label="${t('common.remove')}">${icon('x')}</button>
+        <button type="button" class="btn btn-ghost btn-sm" data-action="mark-remove" data-slug="${esc(game.slug)}" aria-label="${esc(t('common.remove'))}">${icon('x')}</button>
       </div>`;
     }).join('');
 

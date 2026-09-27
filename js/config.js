@@ -71,44 +71,36 @@ export const ADS = {
   consentRequired: true,
   /** Сколько рекламных блоков на страницу максимум (защита от «рекламной простыни»). */
   maxPerPage: 3,
-  /** Не показывать рекламу на этих страницах (удобство важнее денег). */
-  excludeRoutes: ['/quiz', '/account'],
-
   /** Текст раскрытия партнёрских ссылок — выводится в условиях использования и на странице игры */
   affiliateDisclosure: {
     ru: 'Часть ссылок на магазины партнёрские: если вы купите игру по такой ссылке, магазин может поделиться с нами небольшой комиссией. Цена для вас не меняется.',
     en: 'Some store links are affiliate links: if you buy a game through one, the store may share a small commission with us. Your price stays the same.',
   },
 
+  // Идентификаторы намеренно пусты: их нельзя подменять примерами или включать без согласования.
   rsya: {
-    /** ID аккаунта РСЯ, например 1234567 */
-    clientId: 'R-A-000000-1',
+    clientId: '',
     blocks: {
-      'home-top': 'R-A-000000-1',
-      'results-inline': 'R-A-000000-2',
-      'game-side': 'R-A-000000-3',
-      'catalog-inline': 'R-A-000000-4',
+      'home-top': '',
+      'results-inline': '',
+      'game-side': '',
+      'catalog-inline': '',
     },
   },
 
   adsense: {
-    /** data-ad-client, например ca-pub-0000000000000000 */
-    client: 'ca-pub-0000000000000000',
+    client: '',
     blocks: {
-      'home-top': '0000000000',
-      'results-inline': '0000000000',
-      'game-side': '0000000000',
-      'catalog-inline': '0000000000',
+      'home-top': '',
+      'results-inline': '',
+      'game-side': '',
+      'catalog-inline': '',
     },
-    /** Автоматические блоки AdSense, если включены в панели */
     autoAds: false,
   },
 
-  /** Строки для ads.txt (генерируется в сборке). Заполните реальными ID перед деплоем. */
-  adsTxt: [
-    // 'yandex.com, 1234567, DIRECT',
-    // 'google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0',
-  ],
+  /** Пусто, пока нет одобренных рекламных партнёров и выданных ими записей. */
+  adsTxt: [],
 
   /** Своя реклама (например, свой Telegram-канал) — показывается, если сеть не подключена. */
   house: {
@@ -135,7 +127,7 @@ export const AD_SLOTS = {
 export const ANALYTICS = {
   plausibleDomain: '',   // например 'gustoplay.ru'
   umamiScript: '',       // полный URL скрипта umami
-  yandexMetrika: '',     // номер счётчика Метрики, например '12345678'
+  yandexMetrika: '',     // пусто до отдельного согласования и выдачи реального счётчика
 };
 
 export const FEATURES = {
@@ -157,7 +149,7 @@ export const FEATURES = {
    * true — в папке /covers лежат файлы <slug>.jpg с официальными артами (нужны права!).
    * Такие файлы идут первыми, а при их отсутствии картинка тихо откатывается
    * на арт магазина и на сгенерированную обложку. false — сразу арт магазина:
-   * для всех 436 игр он уже сопоставлен в js/catalog/steam-covers.js.
+   * для всех 440 игр он сопоставлен в js/catalog/steam-covers.js.
    */
   realCovers: false,
 };

@@ -206,6 +206,7 @@ export const PLATFORMS = {
   ps:     { ru: 'PlayStation',     en: 'PlayStation',   icon: 'brandPs' },
   xbox:   { ru: 'Xbox',            en: 'Xbox',            icon: 'brandXbox' },
   switch: { ru: 'Nintendo Switch', en: 'Nintendo Switch', icon: 'brandSwitch' },
+  switch2: { ru: 'Nintendo Switch 2', en: 'Nintendo Switch 2', icon: 'brandSwitch' },
   mobile: { ru: 'Телефон и планшет', en: 'Phone & tablet',          icon: 'smartphone' },
   cloud:  { ru: 'Облако (GeForce NOW)', en: 'Cloud gaming', icon: 'cloud' },
 };

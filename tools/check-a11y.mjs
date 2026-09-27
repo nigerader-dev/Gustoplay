@@ -9,10 +9,7 @@ import { JSDOM } from 'jsdom';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const css = require('css');
+import postcss from 'postcss';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const html = readFileSync(resolve(root, 'index.html'), 'utf8');
@@ -59,7 +56,7 @@ store.setAnswers({ mood: ['relax'], modes: ['coop'], players: 4 });
 store.markGame('balatro', 'liked');
 const routes = ['/', 'quiz', 'results', 'catalog', 'genre/rpg', 'tag/coopfocused', 'mode/solo',
   'mood/relax', 'platform/pc', 'game/balatro', 'party', 'profile', 'account', 'terms', 'about',
-  'privacy', 'no-such-route', 'game/no-such-game'];
+  'privacy', 'support', 'no-such-route', 'game/no-such-game'];
 const h1bad = [];
 for (const r of routes) {
   await navigate(r);
@@ -146,15 +143,15 @@ check('prefers-reduced-motion учтён', cssText.includes('prefers-reduced-mot
 
 /* ---------- 4. Контраст текстовых пар ---------- */
 console.log('\n4. WCAG-контраст ≥ 4.5:1 для текста (обе темы)');
-const ast = css.parse(cssText);
+const ast = postcss.parse(cssText);
 const vars = { light: {}, dark: {} };
-for (const rule of ast.stylesheet.rules) {
+for (const rule of ast.nodes) {
   if (rule.type !== 'rule') continue;
-  const sel = (rule.selectors || []).join(',');
+  const sel = rule.selector || '';
   const theme = sel === ':root' ? 'light' : sel === "[data-theme='dark']" ? 'dark' : null;
   if (!theme) continue;
-  for (const d of rule.declarations || []) {
-    if (d.type === 'declaration' && d.property?.startsWith('--')) vars[theme][d.property] = d.value.trim();
+  for (const d of rule.nodes || []) {
+    if (d.type === 'decl' && d.prop?.startsWith('--')) vars[theme][d.prop] = d.value.trim();
   }
 }
 const val = (theme, name) => vars[theme][name] || vars.light[name];
@@ -210,6 +207,33 @@ for (const theme of ['light', 'dark']) {
   }
   check('уровень заголовка совпадает с закрывающим тегом', broken.length === 0, broken.join(', '));
 }
+
+/* ---------- 5. Доступность блока «Подходит ли ваш ПК» ---------- */
+console.log('\n5. Доступность блока «Подходит ли ваш ПК»');
+store.setMeta({ pc: { os: 'win-10', cpu: 'ryzen-5-3600', ram: 16, gpu: 'gtx-1660', disk: 100, bits: '64' } });
+await navigate('game/left-4-dead-2');
+const pcfit = window.document.querySelector('[data-pcfit]');
+check('блок подбора ПК присутствует на странице игры', Boolean(pcfit));
+const pcfitTitle = pcfit?.querySelector('.pcfit-head strong')?.textContent.trim() || '';
+check('блок ПК имеет видимый заголовок', Boolean(pcfitTitle));
+const pcfitFields = [...(pcfit?.querySelectorAll('select[data-pcfield]') || [])];
+check('в форме ПК ровно шесть полей выбора', pcfitFields.length === 6, `${pcfitFields.length} полей`);
+const expectedFields = ['os', 'cpu', 'ram', 'gpu', 'disk', 'bits'];
+check('в форме ПК есть все шесть ожидаемых параметров',
+  expectedFields.every((id) => pcfit?.querySelector(`select[data-pcfield="${id}"]`)));
+const unlabeledPcfit = pcfitFields.filter((field) => !field.closest('label')
+  || !(field.closest('label')?.textContent || '').trim());
+check('каждый селект ПК связан с текстовой подписью', unlabeledPcfit.length === 0);
+const pcfitTable = pcfit?.querySelector('.pcfit-table');
+check('таблица сравнения имеет доступное имя', Boolean(pcfitTable?.getAttribute('aria-label')?.trim()));
+const badPcfitHeaders = [...(pcfitTable?.querySelectorAll('thead th') || [])]
+  .filter((th) => th.getAttribute('scope') !== 'col');
+check('заголовки столбцов таблицы имеют scope="col"', badPcfitHeaders.length === 0 && Boolean(pcfitTable));
+const badPcfitRows = [...(pcfitTable?.querySelectorAll('tbody th') || [])]
+  .filter((th) => th.getAttribute('scope') !== 'row');
+check('названия параметров в таблице имеют scope="row"', badPcfitRows.length === 0 && Boolean(pcfitTable));
+check('изменение вердикта объявляется через aria-live',
+  pcfit?.querySelector('.pcfit-result-live')?.getAttribute('aria-live') === 'polite');
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
 if (failures.length) {

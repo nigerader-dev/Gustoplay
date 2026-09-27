@@ -9,9 +9,9 @@
  *   pl    — [мин, макс] игроков
  *   pf    — платформы (id из PLATFORMS)
  *   pr    — ценовая категория (PRICE), pv — примерная цена в ₽ (для сортировки и фильтра бюджета)
- *   len   — [часов до финала, часов на 100%] (для «бесконечных» — второе число большое)
- *   dif   — сложность 1..5, pace — темп 1..5 (1 спокойно, 5 мясорубка)
- *   rat   — рейтинг 0..100 (усреднённый агрегатор)
+ *   len   — [основной сюжет, completionist-оценка часов] (HLTB/иной названный источник)
+ *   dif   — сложность 1..5, pace — темп 1..5; null = данных нет, без подстановки среднего
+ *   rat   — рейтинг 0..100; ratingSource — подпись источника/даты для интерфейса и журнала
  *   mood  — настроения (id из MOODS) ← верхний слой квиза
  *   coopQ — 0..10, насколько хороша игра именно в компании (если применимо)
  *   gp / psp — есть ли в Game Pass / PS Plus каталоге
@@ -58,8 +58,8 @@ function normalize(g) {
   const storeLink = STORE_LINKS[slug] || null;
   const modes = (g.md || []).filter((m) => MODES[m]);
   const platforms = (g.pf || []).filter((p) => PLATFORMS[p]);
-  // облачный гейминг доступен почти для всех крупных ПК-игр
-  if (platforms.includes('pc') && g.rat >= 80 && !platforms.includes('cloud')) platforms.push('cloud');
+  // Старые записи используют эвристику каталога; cloud:false запрещает неподтверждённое добавление для новой игры.
+  if (platforms.includes('pc') && g.cloud !== false && g.rat >= 80 && !platforms.includes('cloud')) platforms.push('cloud');
 
   const len = g.len || [10, 20];
   const tags = (g.tg || []).filter((t) => TAGS[t]);
@@ -78,8 +78,8 @@ function normalize(g) {
     players: g.pl || [1, 1],
     price: g.pr || 'mid',
     priceRub: g.pv ?? 0,
-    difficulty: g.dif ?? 3,
-    pace: g.pace ?? 3,
+    difficulty: g.dif ?? null,
+    pace: g.pace ?? null,
     rating: g.rat ?? 75,
     moods: [...new Set((g.mood || []).filter((m) => MOODS[m]))],
     desc: g.desc || { ru: '', en: '' },

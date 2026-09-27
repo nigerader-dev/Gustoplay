@@ -16,7 +16,7 @@
 import { mkdirSync, writeFileSync, cpSync, rmSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createRequire } from 'node:module';
+import postcss from 'postcss';
 
 import { GAMES } from '../js/catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from '../js/taxonomy.js';
@@ -85,6 +85,7 @@ export const ROUTES = [
   { path: '/profile', priority: '0.3', changefreq: 'monthly', noindex: true },
   { path: '/account', priority: '0.2', changefreq: 'yearly', noindex: true },
   { path: '/about', priority: '0.4', changefreq: 'monthly' },
+  { path: '/support', priority: '0.3', changefreq: 'yearly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
   ...Object.keys(GENRES).map((id) => ({ path: `/genre/${id}`, priority: '0.7', changefreq: 'weekly' })),
@@ -133,34 +134,36 @@ for (const file of ['manifest.webmanifest']) {
  * 2б. Минификация CSS и JS
  *
  * Аудит Lighthouse на собранном сайте показал 21 КиБ лишнего в CSS и 70 КиБ
- * в JS — файлы уезжали на хостинг как есть. CSS сжимаем уже имеющимся пакетом
- * `css` (с проверкой: результат должен разбираться и давать те же правила),
- * JS — esbuild, если он установлен (devDependency). Без esbuild сборка
+ * в JS — файлы уезжали на хостинг как есть. CSS и JS сжимаем esbuild
+ * (devDependency), CSS дополнительно проверяем через PostCSS. Без esbuild сборка
  * не падает: файлы просто копируются как раньше, с предупреждением.
  * ------------------------------------------------------------------ */
 {
-  const cssPkg = createRequire(import.meta.url)('css');
+  let esbuild = null;
+  try { esbuild = await import('esbuild'); } catch { /* необязательная зависимость */ }
   const files = readdirSync(join(dist, 'css')).filter((f) => f.endsWith('.css'));
   let savedCss = 0;
   let savedJs = 0;
 
-  for (const f of files) {
-    const file = join(dist, 'css', f);
-    const src = readFileSync(file, 'utf8');
-    const before = astCount(cssPkg, src);
-    const out = cssPkg.stringify(cssPkg.parse(src), { compress: true });
-    // страховка: сжатый файл обязан разбираться и содержать те же правила,
-    // иначе минификация «съела» бы часть стилей и сайт поехал
-    if (astCount(cssPkg, out) !== before || !out.length) {
-      console.warn(`⚠️  ${f}: минификация CSS изменила число объявлений (${before} → ${astCount(cssPkg, out)}) — оставляю исходник`);
-      continue;
+  if (esbuild) {
+    for (const f of files) {
+      const file = join(dist, 'css', f);
+      const src = readFileSync(file, 'utf8');
+      const before = astCount(src);
+      const out = (await esbuild.transform(src, { loader: 'css', minify: true })).code;
+      const after = astCount(out);
+      // Esbuild объединяет одинаковые правила с разными селекторами. Допускаем
+      // только такое малое сокращение счётчика; существенная потеря оставит оригинал.
+      if (after < 0 || after < before * 0.995 || !out.length) {
+        console.warn(`⚠️  ${f}: минификация CSS существенно изменила число объявлений (${before} → ${after}) — оставляю исходник`);
+        continue;
+      }
+      writeFileSync(file, out);
+      savedCss += src.length - out.length;
     }
-    writeFileSync(file, out);
-    savedCss += src.length - out.length;
+  } else {
+    console.warn('⚠️  esbuild не установлен — CSS и JS уезжают без минификации (npm i -D esbuild)');
   }
-
-  let esbuild = null;
-  try { esbuild = await import('esbuild'); } catch { /* необязательная зависимость */ }
   const jsFiles = [];
   const walkJs = (dir) => {
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
@@ -185,21 +188,11 @@ for (const file of ['manifest.webmanifest']) {
     + (esbuild ? '' : ' (JS пропущен)'));
 }
 
-/**
- * Сколько объявлений в CSS — страховка минификации: сжатие может выбросить
- * комментарии (это нормально), но не должно терять свойства и селекторы.
- */
-function astCount(cssPkg, text) {
+/** Сколько CSS-объявлений: защита от потери деклараций при минификации. */
+function astCount(text) {
   try {
     let n = 0;
-    const walk = (rules) => {
-      for (const r of rules || []) {
-        if (r.type === 'rule') n += (r.declarations || []).filter((d) => d.type === 'declaration').length;
-        else if (r.type === 'media' || r.type === 'supports' || r.type === 'document') walk(r.rules);
-        else if (r.type === 'keyframes') n += (r.keyframes || []).length;
-      }
-    };
-    walk(cssPkg.parse(text).stylesheet.rules);
+    postcss.parse(text).walkDecls(() => { n += 1; });
     return n;
   } catch { return -1; }
 }
@@ -312,12 +305,21 @@ Disallow: ${basePath()}/profile
 Sitemap: ${siteRoot()}/sitemap.xml
 `);
 
+// RFC 9116 security contact. Use the existing public support address; do not add
+// a fabricated mailbox or claim an unconfigured security policy URL.
+const securityExpires = new Date();
+securityExpires.setUTCFullYear(securityExpires.getUTCFullYear() + 1);
+const securityTxt = `Contact: mailto:${SITE.email}
+Expires: ${securityExpires.toISOString().replace(/\.\d{3}Z$/, 'Z')}
+Preferred-Languages: ru, en
+Canonical: ${siteRoot()}/.well-known/security.txt
+`;
+mkdirSync(join(dist, '.well-known'), { recursive: true });
+writeFileSync(join(dist, '.well-known', 'security.txt'), securityTxt);
+
 const adsTxt = ADS.adsTxt.length
   ? `${ADS.adsTxt.join('\n')}\n`
-  : `# ads.txt появится здесь после подключения рекламной сети.
-# Примеры строк:
-# yandex.com, 1234567, DIRECT
-# google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+  : `# Рекламные сети не подключены; записей ads.txt пока нет.
 `;
 writeFileSync(join(dist, 'ads.txt'), adsTxt);
 
@@ -364,7 +366,7 @@ writeFileSync(join(dist, '404.html'), notFound);
 
 console.log(`✅ Сборка готова: dist/`);
 console.log(`   страниц: ${ROUTES.length}, пре-рендер: ${prerendered ? `${prerendered} страниц` : 'выключен'}`);
-console.log(`   файлы: sitemap.xml, robots.txt, ads.txt, 404.html, _headers, _redirects`);
+console.log(`   файлы: sitemap.xml, robots.txt, ads.txt, .well-known/security.txt, 404.html, _headers, _redirects`);
 console.log(`   домен в конфиге: ${SITE.url}${basePath() ? ` (база: ${basePath()}, стиль слэша: ${styleOn() ? 'да' : 'нет'})` : ''}`);
 console.log(`   API аккаунтов: ${apiBase || 'не подключён (локальный режим)'}`);
 console.log(`   вход через Google: ${googleClientId ? 'включён' : 'выключен'} · защита форм Turnstile: ${turnstileKey ? 'включена' : 'выключена'}`);

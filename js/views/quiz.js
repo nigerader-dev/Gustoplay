@@ -143,7 +143,7 @@ function renderStep(root, scroll = true) {
   const count = FEATURES.livePoolCounter === false ? '' : poolCounter();
 
   body.innerHTML = `
-    <div class="quiz-card" data-q="${q.id}">
+    <div class="quiz-card" data-q="${esc(q.id)}">
       <div class="quiz-q-head">
         <span class="quiz-icon">${icon(q.icon || 'help')}</span>
         <div>
@@ -231,7 +231,7 @@ function optionHtml(q, opt, value) {
   const iconHtml = opt.icon ? `<span class=\"opt-icon\">${icon(opt.icon)}</span>` : '';
   const dictHint = opt.dict && DICTS[opt.dict][opt.id]?.hint ? DICTS[opt.dict][opt.id].hint[getLang()] : null;
   const hint = opt.hintKey ? `<small class="opt-hint">${esc(t(opt.hintKey))}</small>` : dictHint ? `<small class="opt-hint">${esc(dictHint)}</small>` : '';
-  return `<button type="button" class="opt ${on ? 'on' : ''}" data-action="quiz-option" data-q="${q.id}" data-id="${esc(String(opt.id))}" aria-pressed="${on}">
+  return `<button type="button" class="opt ${on ? 'on' : ''}" data-action="quiz-option" data-q="${esc(q.id)}" data-id="${esc(String(opt.id))}" aria-pressed="${on}">
     ${iconHtml}<span class="opt-label">${esc(optionLabel(opt))}${hint}</span>
   </button>`;
 }
@@ -254,7 +254,7 @@ function seedCards(value) {
     .slice(0, 48);
   return pool.map((g) => {
     const on = (value || []).includes(g.slug);
-    return `<button type="button" class="seed-item ${on ? 'on' : ''}" data-action="seed-toggle" data-slug="${g.slug}" aria-pressed="${on}">
+    return `<button type="button" class="seed-item ${on ? 'on' : ''}" data-action="seed-toggle" data-slug="${esc(g.slug)}" aria-pressed="${on}">
       <span class="seed-cover">${coverImage(g, 'seed-img')}</span>
       <span class="seed-meta">
         <strong>${esc(g.t)}</strong>

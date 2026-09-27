@@ -10,10 +10,10 @@
  *   • защита от ботов (Cloudflare Turnstile) и rate limit по IP на уровне базы.
  *
  * Безопасность:
- *   • строгие заголовки (CSP, HSTS, no-sniff, no-referrer) для всех ответов;
- *   • CORS только для своего домена (список в ALLOWED_ORIGINS);
- *   • все запросы к базе — параметризованные (никаких конкатенаций SQL);
- *   • лимиты: 20 неудачных входов/час на e-mail, 30 запросов/минуту на IP для авторизации;
+ *   • строгие заголовки API: HSTS, no-sniff, referrer policy, frame denial;
+ *   • CORS ограничен точным списком origin в ALLOWED_ORIGINS, без cookie credentials;
+ *   • запросы к базе в обработчиках привязывают значения через bind();
+ *   • лимиты: 20 попыток входа/час на адрес (ключ rate-limit — SHA-256), 30 запросов/минуту на IP;
  *   • сравнение пароля — постоянное по времени (timingSafeEqual);
  *   • ошибки наружу отдаём без деталей, подробности — только в логи.
  *
@@ -24,9 +24,11 @@
 
 const SESSION_TTL_DAYS = 90;
 const PBKDF2_ITERATIONS = 210000;
-const MAX_PROFILE_BYTES = 256 * 1024;      // 256 КБ на профиль вкуса
+const MAX_PROFILE_BYTES = 256 * 1024;      // 256 КБ на сериализованный профиль (UTF-8)
+const MAX_AUTH_BODY_BYTES = 16 * 1024;
+const MAX_PROFILE_REQUEST_BYTES = MAX_PROFILE_BYTES + 4096; // профиль + JSON-обёртка
 const AUTH_RATE_PER_MIN = 30;              // запросов в минуту на IP для /auth/*
-const FAILED_LOGINS_PER_HOUR = 20;         // неудачных попыток на e-mail
+const LOGIN_ATTEMPTS_PER_HOUR = 20;        // попыток входа на e-mail
 const GOOGLE_ISSUERS = ['https://accounts.google.com', 'accounts.google.com'];
 const GOOGLE_JWKS_URL = 'https://www.googleapis.com/oauth2/v3/certs';
 const RESET_TTL_MINUTES = 60;              // сколько живёт ссылка сброса пароля
@@ -99,7 +101,6 @@ function corsHeaders(origin, env) {
     'Access-Control-Allow-Origin': allow,
     'Access-Control-Allow-Methods': 'GET,POST,PUT,PATCH,DELETE,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-    'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Max-Age': '86400',
     Vary: 'Origin',
   };
@@ -115,17 +116,60 @@ const securityHeaders = {
 
 const respond = (data, status, origin, env) => json(data, status, { ...corsHeaders(origin, env), ...securityHeaders });
 
+/** Read bounded JSON bodies so auth endpoints do not parse arbitrarily large payloads. */
+async function readJsonBody(request, maxBytes = MAX_AUTH_BODY_BYTES) {
+  const declared = Number(request.headers.get('Content-Length'));
+  if (Number.isFinite(declared) && declared > maxBytes) return { ok: false, status: 413 };
+  if (!request.body) return { ok: true, value: {} };
+
+  const reader = request.body.getReader();
+  const chunks = [];
+  let size = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maxBytes) {
+        await reader.cancel();
+        return { ok: false, status: 413 };
+      }
+      chunks.push(value);
+    }
+  } catch {
+    return { ok: false, status: 400 };
+  }
+
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  try {
+    const value = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return { ok: false, status: 400 };
+    return { ok: true, value };
+  } catch {
+    return { ok: false, status: 400 };
+  }
+}
+
+const invalidJsonResponse = (result, origin, env) => respond(
+  { error: result.status === 413 ? 'Запрос слишком большой' : 'Некорректный JSON-запрос' },
+  result.status, origin, env,
+);
+
 /* ------------------------------- rate limit ------------------------------- */
 
 async function rateLimit(env, bucket, limit, windowSeconds) {
-  const key = `${bucket}:${Math.floor(Date.now() / 1000 / windowSeconds)}`;
-  const row = await env.DB.prepare('SELECT count FROM rate_limits WHERE key = ?').bind(key).first();
-  const count = (row?.count || 0) + 1;
-  if (count > limit) return false;
-  await env.DB.prepare(
-    'INSERT INTO rate_limits (key, count, expires_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET count = count + 1',
-  ).bind(key, count, Math.floor(Date.now() / 1000) + windowSeconds * 2).run();
-  return true;
+  const now = Math.floor(Date.now() / 1000);
+  const key = `${bucket}:${Math.floor(now / windowSeconds)}`;
+  // Count and increment in one SQLite statement. A read-then-write check can let
+  // concurrent requests all pass when the bucket is close to its limit.
+  const row = await env.DB.prepare(
+    `INSERT INTO rate_limits (key, count, expires_at) VALUES (?, 1, ?)
+     ON CONFLICT(key) DO UPDATE SET count = count + 1
+     RETURNING count`,
+  ).bind(key, now + windowSeconds * 2).first();
+  return Number(row?.count || 0) <= limit;
 }
 
 /* ------------------------------- Turnstile ------------------------------- */
@@ -174,60 +218,94 @@ async function authUser(request, env) {
 
 let jwksCache = { at: 0, keys: [] };
 
-async function googleKeys() {
-  if (Date.now() - jwksCache.at < 3600_000 && jwksCache.keys.length) return jwksCache.keys;
+async function googleKeys(forceRefresh = false) {
+  if (!forceRefresh && Date.now() - jwksCache.at < 3600_000 && jwksCache.keys.length) return jwksCache.keys;
   const response = await fetch(GOOGLE_JWKS_URL);
+  if (!response.ok) throw new Error('Google signing keys unavailable');
   const data = await response.json();
-  jwksCache = { at: Date.now(), keys: data.keys || [] };
+  if (!Array.isArray(data.keys)) throw new Error('Invalid Google signing keys response');
+  jwksCache = { at: Date.now(), keys: data.keys };
   return jwksCache.keys;
 }
 
 /**
- * Проверяем ID-токен Google: подпись (RS256 по JWKS), issuer, audience, срок действия.
+ * Проверяем ID-токен Google: RS256/JWKS, issuer/audience/azp, временные claims,
+ * subject и обязательный подтверждённый e-mail.
  * Возвращаем нормализованный профиль пользователя или null.
  */
 async function verifyGoogleToken(credential, clientId) {
-  if (!credential || !clientId) return null;
+  // Google ID tokens are small. Reject oversized/malformed input before decoding or
+  // doing any network/crypto work, and turn invalid claims into an ordinary auth failure.
+  if (typeof credential !== 'string' || credential.length > 12_000 || !clientId) return null;
   const parts = credential.split('.');
-  if (parts.length !== 3) return null;
+  if (parts.length !== 3 || parts.some((part) => !/^[A-Za-z0-9_-]+$/.test(part))) return null;
   const [headerPart, payloadPart, signaturePart] = parts;
 
-  const header = JSON.parse(new TextDecoder().decode(fromB64url(headerPart)));
-  const payload = JSON.parse(new TextDecoder().decode(fromB64url(payloadPart)));
+  let header;
+  let payload;
+  try {
+    header = JSON.parse(new TextDecoder().decode(fromB64url(headerPart)));
+    payload = JSON.parse(new TextDecoder().decode(fromB64url(payloadPart)));
+  } catch {
+    return null;
+  }
+  if (!header || typeof header !== 'object' || !payload || typeof payload !== 'object') return null;
+  if (header.alg !== 'RS256' || typeof header.kid !== 'string' || header.kid.length > 128) return null;
+  if (!GOOGLE_ISSUERS.includes(payload.iss) || payload.aud !== clientId) return null;
+  if (payload.azp && payload.azp !== clientId) return null;
 
-  if (header.alg !== 'RS256') return null;
-  if (!GOOGLE_ISSUERS.includes(payload.iss)) return null;
-  if (payload.aud !== clientId) return null;
-  if (payload.exp * 1000 < Date.now()) return null;
+  const now = Math.floor(Date.now() / 1000);
+  const issuedAt = Number(payload.iat);
+  const expiresAt = Number(payload.exp);
+  if (!Number.isFinite(issuedAt) || !Number.isFinite(expiresAt)
+    || issuedAt > now + 60 || issuedAt < now - 7200
+    || expiresAt <= now || expiresAt <= issuedAt || expiresAt - issuedAt > 7200) return null;
+  if (payload.nbf !== undefined && (!Number.isFinite(Number(payload.nbf)) || Number(payload.nbf) > now + 60)) return null;
 
-  const keys = await googleKeys();
-  const jwk = keys.find((k) => k.kid === header.kid);
-  if (!jwk) return null;
+  const email = typeof payload.email === 'string' ? payload.email.toLowerCase() : '';
+  // Never create/link an account using an address Google has not verified.
+  if (payload.email_verified !== true || !isEmail(email)) return null;
+  if (typeof payload.sub !== 'string' || !payload.sub || payload.sub.length > 255) return null;
 
-  const key = await crypto.subtle.importKey(
-    'jwk', { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: 'RS256', ext: true },
-    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify'],
-  );
-  const valid = await crypto.subtle.verify(
-    'RSASSA-PKCS1-v1_5', key, fromB64url(signaturePart),
-    new TextEncoder().encode(`${headerPart}.${payloadPart}`),
-  );
-  if (!valid) return null;
+  let keys;
+  try {
+    keys = await googleKeys();
+    // Google rotates signing keys. A cached set can be valid but not yet contain a
+    // newly-issued kid, so make one immediate refresh before rejecting the token.
+    if (!keys.some((key) => key.kid === header.kid)) keys = await googleKeys(true);
+  } catch { return null; }
+  const jwk = keys.find((key) => key.kid === header.kid);
+  if (!jwk || jwk.kty !== 'RSA' || (jwk.use && jwk.use !== 'sig') || (jwk.alg && jwk.alg !== 'RS256')
+    || typeof jwk.n !== 'string' || typeof jwk.e !== 'string') return null;
+
+  try {
+    const key = await crypto.subtle.importKey(
+      'jwk', { kty: jwk.kty, n: jwk.n, e: jwk.e, alg: 'RS256', ext: true },
+      { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' }, false, ['verify'],
+    );
+    const valid = await crypto.subtle.verify(
+      'RSASSA-PKCS1-v1_5', key, fromB64url(signaturePart),
+      new TextEncoder().encode(`${headerPart}.${payloadPart}`),
+    );
+    if (!valid) return null;
+  } catch {
+    return null;
+  }
 
   return {
     provider: 'google',
     providerId: payload.sub,
-    email: String(payload.email || '').toLowerCase(),
-    name: payload.name || '',
-    emailVerified: Boolean(payload.email_verified),
+    email,
+    name: typeof payload.name === 'string' ? payload.name.slice(0, 60) : '',
+    emailVerified: true,
   };
 }
 
 /* ------------------------------- почта ------------------------------- */
 
 /**
- * Отправка письма через Resend (https://resend.com — бесплатный тариф 3000 писем/мес).
- * Если ключ не задан, письмо не отправляем — API честно сообщает об этом флагом sent:false.
+ * Необязательная отправка через Resend. Включение сервиса, домена и отправителя
+ * требует согласования; без ключа письмо не отправляется (`sent:false`).
  */
 async function sendMail(env, { to, subject, html }) {
   if (!env.RESEND_API_KEY || !env.MAIL_FROM) return false;
@@ -262,7 +340,9 @@ const resetEmailHtml = (link) => `
 /* ------------------------------- обработчики ------------------------------- */
 
 async function handleRegister(request, env, origin) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const { email, password, name, turnstileToken } = body;
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
@@ -297,7 +377,9 @@ async function handleRegister(request, env, origin) {
 }
 
 async function handleLogin(request, env, origin) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const { email, password, turnstileToken } = body;
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
@@ -309,7 +391,8 @@ async function handleLogin(request, env, origin) {
   }
 
   const normalized = String(email || '').toLowerCase().trim();
-  if (!(await rateLimit(env, `login:${normalized}`, FAILED_LOGINS_PER_HOUR, 3600))) {
+  const emailBucket = await sha256Hex(normalized);
+  if (!(await rateLimit(env, `login:${emailBucket}`, LOGIN_ATTEMPTS_PER_HOUR, 3600))) {
     return respond({ error: 'Слишком много неудачных попыток входа. Попробуйте позже.' }, 429, origin, env);
   }
 
@@ -338,7 +421,9 @@ async function handleLogin(request, env, origin) {
 }
 
 async function handleGoogle(request, env, origin) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
   if (!(await rateLimit(env, `auth:${ip}`, AUTH_RATE_PER_MIN, 60))) {
@@ -348,7 +433,7 @@ async function handleGoogle(request, env, origin) {
   const googleProfile = await verifyGoogleToken(body.credential, env.GOOGLE_CLIENT_ID);
   if (!googleProfile) return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
 
-  let user = await env.DB.prepare('SELECT id, email, name, provider FROM users WHERE email = ?')
+  let user = await env.DB.prepare('SELECT id, email, name, provider, provider_id FROM users WHERE email = ?')
     .bind(googleProfile.email).first();
 
   if (!user) {
@@ -358,12 +443,24 @@ async function handleGoogle(request, env, origin) {
        VALUES (?, ?, ?, 'google', ?, ?, ?)`,
     ).bind(id, googleProfile.email, googleProfile.name.slice(0, 60), googleProfile.providerId,
       googleProfile.emailVerified ? 1 : 0, new Date().toISOString()).run();
-    user = { id, email: googleProfile.email, name: googleProfile.name, provider: 'google' };
-  } else if (user.provider === 'email') {
-    // Привязываем Google к существующему аккаунту (почта уже подтверждена Google)
-    await env.DB.prepare('UPDATE users SET provider = ?, provider_id = ?, email_verified = 1 WHERE id = ?')
-      .bind('google', googleProfile.providerId, user.id).run();
-    user = { ...user, provider: 'google' };
+    user = { id, email: googleProfile.email, name: googleProfile.name, provider: 'google', provider_id: googleProfile.providerId };
+  } else {
+    // Email is used only to link a first Google identity to an existing password account.
+    // Once linked, require Google's stable `sub` to match; never silently replace a link.
+    if (user.provider_id && user.provider_id !== googleProfile.providerId) {
+      return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
+    }
+    if (user.provider !== 'google' || !user.provider_id) {
+      await env.DB.prepare(
+        'UPDATE users SET provider = ?, provider_id = ?, email_verified = 1 WHERE id = ? AND (provider_id IS NULL OR provider_id = ?)',
+      ).bind('google', googleProfile.providerId, user.id, googleProfile.providerId).run();
+      user = await env.DB.prepare('SELECT id, email, name, provider, provider_id FROM users WHERE id = ?')
+        .bind(user.id).first();
+      // A concurrent request may have linked a different Google identity first.
+      if (!user || user.provider_id !== googleProfile.providerId) {
+        return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
+      }
+    }
   }
 
   const token = await createSession(env, user.id, request);
@@ -376,12 +473,14 @@ async function handleProfileGet(request, env, origin, user) {
 }
 
 async function handleProfilePut(request, env, origin, user) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request, MAX_PROFILE_REQUEST_BYTES);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const profile = body.profile;
-  if (!profile || typeof profile !== 'object') return respond({ error: 'Пустой профиль' }, 400, origin, env);
+  if (!profile || typeof profile !== 'object' || Array.isArray(profile)) return respond({ error: 'Пустой профиль' }, 400, origin, env);
 
   const serialized = JSON.stringify(profile);
-  if (serialized.length > MAX_PROFILE_BYTES) {
+  if (new TextEncoder().encode(serialized).byteLength > MAX_PROFILE_BYTES) {
     return respond({ error: 'Профиль слишком большой. Уменьшите количество отметок.' }, 413, origin, env);
   }
 
@@ -400,7 +499,9 @@ async function handleProfilePut(request, env, origin, user) {
  * иначе по ответу можно перебирать зарегистрированные адреса.
  */
 async function handleResetRequest(request, env, origin) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
   if (!(await rateLimit(env, `auth:${ip}`, AUTH_RATE_PER_MIN, 60))) {
@@ -412,7 +513,8 @@ async function handleResetRequest(request, env, origin) {
 
   const email = String(body.email || '').toLowerCase().trim();
   if (!isEmail(email)) return respond({ error: 'Проверьте адрес e-mail' }, 400, origin, env);
-  if (!(await rateLimit(env, `reset:${email}`, 5, 3600))) {
+  const emailBucket = await sha256Hex(email);
+  if (!(await rateLimit(env, `reset:${emailBucket}`, 5, 3600))) {
     return respond({ ok: true, sent: false }, 200, origin, env);   // тихо игнорируем флуд
   }
 
@@ -438,7 +540,9 @@ async function handleResetRequest(request, env, origin) {
 
 /** Установка нового пароля по одноразовому токену */
 async function handleResetConfirm(request, env, origin) {
-  const body = await request.json().catch(() => ({}));
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
   const ip = request.headers.get('CF-Connecting-IP') || '';
 
   if (!(await rateLimit(env, `auth:${ip}`, AUTH_RATE_PER_MIN, 60))) {
@@ -473,6 +577,41 @@ async function handleResetConfirm(request, env, origin) {
   return respond({ ok: true }, 200, origin, env);
 }
 
+/**
+ * Public support intake. This endpoint validates and rate-limits only; it deliberately
+ * does not persist or send messages until a delivery provider is approved/configured.
+ */
+async function handleSupport(request, env, origin) {
+  const parsed = await readJsonBody(request);
+  if (!parsed.ok) return invalidJsonResponse(parsed, origin, env);
+  const body = parsed.value;
+
+  // Honeypot submissions are silently accepted and discarded; never log field contents.
+  if (typeof body.website === 'string' && body.website.trim()) return respond({ ok: true }, 202, origin, env);
+
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : '';
+  const topic = typeof body.topic === 'string' ? body.topic : '';
+  const message = typeof body.message === 'string' ? body.message.trim() : '';
+  const validTopics = new Set(['bug', 'missing-game', 'account', 'other']);
+  if (name.length < 2 || name.length > 80 || !isEmail(email)
+    || !validTopics.has(topic) || message.length < 20 || message.length > 4000) {
+    return respond({ error: 'Проверьте имя, e-mail, тему и сообщение (20–4000 символов).', code: 'invalid_support_form' }, 400, origin, env);
+  }
+
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  if (!(await rateLimit(env, `support-ip:${ip}`, 5, 600))) {
+    return respond({ error: 'Слишком много обращений. Попробуйте позже.', code: 'support_rate_limited' }, 429, origin, env);
+  }
+  const emailBucket = await sha256Hex(email);
+  if (!(await rateLimit(env, `support-email:${emailBucket}`, 3, 3600))) {
+    return respond({ error: 'Слишком много обращений с этого адреса. Попробуйте позже.', code: 'support_rate_limited' }, 429, origin, env);
+  }
+
+  // Do not retain personal data or claim delivery: mailto fallback is the only active route.
+  return respond({ error: 'Отправка через сайт не настроена.', code: 'support_delivery_unconfigured' }, 503, origin, env);
+}
+
 /* ------------------------------- роутер ------------------------------- */
 
 export default {
@@ -490,6 +629,7 @@ export default {
     // ограничение методов и маршрутизация
     try {
       if (path === '/health') return respond({ ok: true, time: new Date().toISOString() }, 200, origin, env);
+      if (path === '/support' && request.method === 'POST') return handleSupport(request, env, origin);
 
       if (path === '/auth/register' && request.method === 'POST') return handleRegister(request, env, origin);
       if (path === '/auth/login' && request.method === 'POST') return handleLogin(request, env, origin);

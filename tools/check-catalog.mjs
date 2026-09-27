@@ -26,8 +26,9 @@ const problems = [...validate()];
 const numberKeys = ['y', 'pv', 'dif', 'pace', 'rat', 'coopQ'];
 for (const game of raw) {
   for (const key of numberKeys) {
-    if (game[key] !== undefined && typeof game[key] !== 'number') {
-      problems.push(`${game.t}: поле ${key} должно быть числом, получено ${JSON.stringify(game[key])}`);
+    const optionalUnknown = ['dif', 'pace'].includes(key) && game[key] === null;
+    if (game[key] !== undefined && !optionalUnknown && typeof game[key] !== 'number') {
+      problems.push(`${game.t}: поле ${key} должно быть числом${['dif', 'pace'].includes(key) ? ' или null' : ''}, получено ${JSON.stringify(game[key])}`);
     }
   }
   if (!Array.isArray(game.len) || game.len.length !== 2 || game.len.some((x) => typeof x !== 'number')) {

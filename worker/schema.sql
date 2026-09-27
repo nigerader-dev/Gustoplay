@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS reset_tokens (
 );
 CREATE INDEX IF NOT EXISTS idx_reset_user ON reset_tokens(user_id);
 
--- Rate limit: скользящее окно по ключу (IP или e-mail).
+-- Rate limit: фиксированное временное окно по IP или псевдонимизированному ключу e-mail.
 CREATE TABLE IF NOT EXISTS rate_limits (
   key         TEXT PRIMARY KEY,
   count       INTEGER NOT NULL DEFAULT 0,

@@ -8,7 +8,7 @@
  *
  * Безопасность на клиенте:
  *   • токен сессии храним в localStorage с пометкой срока действия;
- *   • все запросы идут с credentials: 'include' (для httpOnly-cookie варианта) и Bearer-заголовком;
+ *   • запросы используют явный Bearer-заголовок и credentials: 'omit'; cookies не нужны и не отправляются;
  *   • никаких паролей в открытом виде дольше одного запроса;
  *   • при 401 токен автоматически забывается.
  */
@@ -60,7 +60,8 @@ async function request(path, { method = 'GET', body, auth = true, timeout = 1200
     const response = await fetch(`${base}${path}`, {
       method,
       headers,
-      credentials: 'include',
+      // Authentication uses an explicit Bearer token; cookies are neither required nor sent.
+      credentials: 'omit',
       body: body ? JSON.stringify(body) : undefined,
       signal: controller.signal,
       // keepalive — для отправки профиля в момент ухода со страницы (pagehide):
@@ -125,6 +126,11 @@ export async function requestPasswordReset({ email, turnstileToken }) {
 /** Установка нового пароля по токену из письма */
 export async function confirmPasswordReset({ token, password }) {
   return request('/auth/reset-confirm', { method: 'POST', auth: false, body: { token, password } });
+}
+
+/** Send a support form to the API; current Worker intentionally does not deliver/store it. */
+export async function submitSupportMessage(fields) {
+  return request('/support', { method: 'POST', auth: false, body: fields });
 }
 
 export async function logout() {

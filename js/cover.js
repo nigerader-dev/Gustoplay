@@ -66,7 +66,7 @@ export function coverDataUri(game) {
   <rect width="480" height="640" fill="url(#dots)"/>
   <g transform="translate(240 265) scale(8.5) translate(-12 -12)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.2">${glyph}</g>
   <rect width="480" height="640" fill="url(#scrim)"/>
-  <text x="36" y="600" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="600" letter-spacing="3" fill="#ffffff" opacity="0.78">${game.y} · ${escapeText(game.dev.toUpperCase().slice(0, 24))}</text>
+  <text x="36" y="600" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="21" font-weight="600" letter-spacing="3" fill="#ffffff" opacity="0.78">${escapeText(game.y)} · ${escapeText(game.dev.toUpperCase().slice(0, 24))}</text>
   <text x="32" y="560" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="37" font-weight="800" fill="#ffffff">${title}</text>
 </svg>`;
 

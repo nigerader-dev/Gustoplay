@@ -17,7 +17,7 @@ const html = readFileSync(resolve(root, 'index.html'), 'utf8');
 const dom = new JSDOM(html, { url: 'http://localhost/', pretendToBeVisual: true });
 const { window } = dom;
 
-for (const key of ['document', 'localStorage', 'sessionStorage', 'CustomEvent', 'Event', 'HTMLElement', 'Node']) {
+for (const key of ['document', 'localStorage', 'sessionStorage', 'CustomEvent', 'Event', 'FormData', 'HTMLElement', 'Node']) {
   try { globalThis[key] = window[key]; } catch { /* ignore */ }
 }
 try { Object.defineProperty(globalThis, 'navigator', { value: window.navigator, configurable: true }); } catch { /* ignore */ }
@@ -48,7 +48,44 @@ const i18n = await import('../js/i18n.js');
 const taxonomy = await import('../js/taxonomy.js');
 const config = await import('../js/config.js');
 const { GAMES } = await import('../js/catalog/index.js');
+const { gameCard, storeLinks, jsonForHtmlScript, meters, ratingPill, adSlot } = await import('../js/views/components.js');
+const verifiedRecent = ['blue-prince', 'indiana-jones-and-the-great-circle', 'doom-the-dark-ages', 'avowed']
+  .map((slug) => GAMES.find((game) => game.slug === slug));
+check('four new fact-checked titles are registered with explicit unknown difficulty/pace',
+  verifiedRecent.every((game) => game && game.difficulty === null && game.pace === null));
+check('unknown difficulty and pace are omitted from meters, not shown as a fabricated midpoint',
+  verifiedRecent.every((game) => meters(game) === ''));
+check('new Steam ratings visibly identify their source and snapshot date',
+  verifiedRecent.every((game) => game.ratingSource?.ru?.includes('Steam') && game.ratingSource?.ru?.includes('27.09.2026')
+    && ratingPill(game).includes(game.ratingSource.ru)));
+check('unverified cloud availability is not inferred for the new games',
+  verifiedRecent.every((game) => !game.platforms.includes('cloud')));
+check('Switch 2 releases use a distinct, accurate platform filter',
+  GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch2')
+    && !GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch'));
+check('реклама остаётся mock без фиктивных сетевых ID и ads.txt',
+  config.ADS.mode === 'mock'
+    && config.ADS.rsya.clientId === ''
+    && Object.values(config.ADS.rsya.blocks).every((id) => id === '')
+    && config.ADS.adsense.client === ''
+    && Object.values(config.ADS.adsense.blocks).every((id) => id === '')
+    && config.ADS.adsense.autoAds === false
+    && config.ADS.adsTxt.length === 0);
+const mockSlot = adSlot('home-top');
+check('mock-слот явно помечен заглушкой и не содержит сетевых блоков',
+  mockSlot.includes('ad-mock') && mockSlot.includes('Тестовая заглушка')
+    && mockSlot.includes('рекламный запрос не отправляется')
+    && !mockSlot.includes('data-rsya') && !mockSlot.includes('adsbygoogle'));
 await import('../js/app.js');
+check('при mock-режиме приложение не загружает скрипты рекламных сетей',
+  !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]'));
+config.ADS.mode = 'rsya';
+window.dispatchEvent(new window.Event('gf:rerender'));
+check('режим сети без выданных ID также не создаёт внешних запросов',
+  !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
+    && !window.document.querySelector('#consent'));
+config.ADS.mode = 'mock';
+window.dispatchEvent(new window.Event('gf:rerender'));
 
 async function navigate(route) {
   nav.navigate(route.replace(/^#\/?/, ''));
@@ -479,11 +516,11 @@ check('сброс профиля ведёт в квиз с чистым проф
 console.log('\n9. Консент, тема, язык, 404');
 window.localStorage.removeItem('gf.consent.v1');
 await navigate('catalog');
-check('баннер согласия показывается', count('#consent') === 1);
-click('[data-action="consent-decline"]');
-await wait(30);
-check('отказ запоминается и прячет баннер',
-  window.localStorage.getItem('gf.consent.v1') === 'necessary' && count('#consent') === 0);
+check('без активной сети нет ненужного баннера cookie', count('#consent') === 0
+  && !window.document.querySelector('[data-action="consent-open"]'));
+store.setConsent('necessary');
+check('выбор cookie может храниться локально',
+  window.localStorage.getItem('gf.consent.v1') === 'necessary');
 click('[data-action="theme-toggle"]');
 await wait(20);
 check('переключение темы применяется и сохраняется',
@@ -697,6 +734,17 @@ console.log('\n12. Движок: детерминизм, фильтры, уст�
   const { score, neighbours } = eng.scoreGame(r1.list[0].game, p, eng.computeWeights(p));
   check('скоринг возвращает число и корректный neighbours',
     Number.isFinite(score) && (neighbours === null || typeof neighbours.slug === 'string'));
+  const orderedMarks = ['portal-2', 'stardew-valley', 'hades', 'outer-wilds', 'balatro'];
+  const recencyProfile = {
+    answers: {},
+    marks: Object.fromEntries(orderedMarks.map((slug, i) => [slug, { status: 'liked', ts: (i + 1) * 100 }])),
+    impressions: {},
+  };
+  const portalScore = eng.scoreGame(GAMES.find((g) => g.slug === 'portal-2'), recencyProfile,
+    eng.computeWeights(recencyProfile));
+  check('рекомендации используют актуальные отметки и возвращают ближайшую похожую игру',
+    portalScore.neighbours?.slug === 'outer-wilds' && portalScore.neighbours.sim > 0.12,
+    `сосед: ${portalScore.neighbours?.slug || 'нет'}`);
   const party = eng.recommendForParty({ players: 4, platforms: ['pc'], limit: 24, seed: 7 });
   check('подбор для компании возвращает игры', party.length > 0
     && party.every((g) => g.players[1] >= 4), `${party.length} шт.`);
@@ -845,7 +893,7 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
 
   // 3) отрисованные страницы: эмодзи не должны появляться и после подстановок
   const emojiInPage = [];
-  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms']) {
+  for (const route of ['', 'quiz', 'catalog', 'results', 'party', 'profile', 'about', 'terms', 'support']) {
     await navigate(route);
     const text = window.document.body.textContent || '';
     const ch = firstEmoji(text);
@@ -861,6 +909,87 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   check('иконки интерфейса — SVG-элементы', icons.length > 0, `${icons.length} шт.`);
   check('у SVG-иконок нет текстовых эмодзи внутри',
     icons.every((svg) => !firstEmoji(svg.textContent || '')));
+}
+
+// Support form: ru/en copy, browser validation, local anti-spam and mailto fallback.
+{
+  console.log('\nФорма поддержки');
+  const previousApiBase = config.SITE.apiBase;
+  config.SITE.apiBase = '';
+  window.sessionStorage.clear();
+  await navigate('support');
+  let form = window.document.querySelector('#support-form');
+  check('страница поддержки открывается с подписанными полями',
+    Boolean(form) && form.querySelectorAll('input[required], select[required], textarea[required]').length === 4
+      && form.querySelector('label[for="support-message"]'));
+  check('пустая форма не проходит браузерную валидацию', form?.checkValidity() === false);
+  i18n.setLang('en');
+  await navigate('support');
+  check('форма корректно отображается на английском',
+    window.document.querySelector('h1')?.textContent.includes('Contact support')
+      && window.document.querySelector('#support-submit')?.textContent.includes('Continue'));
+  i18n.setLang('ru');
+  await navigate('support');
+  form = window.document.querySelector('#support-form');
+  form.querySelector('#support-name').value = 'Тестовый игрок';
+  form.querySelector('#support-email').value = 'player@example.com';
+  form.querySelector('#support-topic').value = 'missing-game';
+  form.querySelector('#support-message').value = 'Подробное тестовое сообщение в службу поддержки.';
+  check('заполненные корректные данные проходят валидацию', form.checkValidity());
+  const startNow = Date.now();
+  const realDateNow = Date.now;
+  Date.now = () => startNow + 500;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(10);
+  check('слишком быстрая отправка отклоняется клиентским антиспамом',
+    window.document.querySelector('#support-status')?.textContent.includes('через несколько секунд'));
+  Date.now = () => startNow + 2500;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(35);
+  Date.now = realDateNow;
+  const fallback = window.document.querySelector('#support-mailto');
+  const mailtoHref = fallback?.getAttribute('href') || '';
+  check('без настроенного API виден явный mailto fallback с черновиком',
+    !fallback?.hidden && mailtoHref.startsWith('mailto:')
+      && decodeURIComponent(mailtoHref).includes('Подробное тестовое сообщение'));
+  const allStorage = [...Object.values(window.localStorage), ...Object.values(window.sessionStorage)].join(' ');
+  check('содержимое обращения не записывается в localStorage/sessionStorage',
+    !allStorage.includes('Подробное тестовое сообщение'));
+  Date.now = () => startNow + 2600;
+  form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
+  await wait(10);
+  Date.now = realDateNow;
+  check('повторные попытки блокируются коротким session-side лимитом',
+    window.document.querySelector('#support-status')?.textContent.includes('Слишком много обращений'));
+  config.SITE.apiBase = previousApiBase;
+}
+
+// HTML contexts are exercised with untrusted-looking catalog values, not only trusted fixtures.
+{
+  const payload = '\"><img src=x onerror=alert(1)><svg onload=alert(2)></svg>';
+  const hostileGame = {
+    slug: payload, t: payload, y: payload, dev: payload, cover: 'javascript:alert(3)',
+    rating: payload, modes: ['single'], players: [1, 1], genres: [], tags: [],
+    price: 'full', priceRub: payload, len: [1, 2], difficulty: 3, pace: 3,
+    desc: { ru: payload, en: payload }, links: { steam: 'javascript:alert(4)', official: 'data:text/html,x' },
+  };
+  const template = window.document.createElement('template');
+  template.innerHTML = gameCard(hostileGame);
+  const injectedNodes = template.content.querySelectorAll('img[onerror], svg[onload], script, iframe');
+  const unsafeUrls = [...template.content.querySelectorAll('[href], [src]')]
+    .some((node) => /^\s*javascript:/i.test(node.getAttribute('href') || node.getAttribute('src') || ''));
+  check('HTML-шаблон карточки экранирует payload в атрибутах и тексте',
+    injectedNodes.length === 0 && unsafeUrls === false
+      && template.content.querySelector('.game-card')?.getAttribute('data-slug') === payload);
+  check('storeLinks отбрасывает javascript: и не-HTTPS схемы', storeLinks(hostileGame) === '');
+  const jsonLdScript = window.document.createElement('script');
+  jsonLdScript.type = 'application/ld+json';
+  jsonLdScript.textContent = jsonForHtmlScript({ name: payload });
+  window.document.head.append(jsonLdScript);
+  check('JSON-LD остаётся валидным JSON и не закрывает script элемент',
+    JSON.parse(jsonLdScript.textContent).name === payload
+      && !window.document.head.innerHTML.includes('<img src=x onerror='));
+  jsonLdScript.remove();
 }
 
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);

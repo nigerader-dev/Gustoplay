@@ -90,7 +90,10 @@ export function render(ctx) {
     <div class="panel">
       <h2 class="h-lg">${icon('mail')} ${esc(t('about.support.title'))}</h2>
       <p>${esc(t('about.support.text'))}</p>
-      <p class="panel-actions"><a class="btn btn-outline btn-mail" href="mailto:${esc(SITE.email)}">${icon('mail')} ${esc(SITE.email)}</a></p>
+      <p class="panel-actions">
+        <a class="btn btn-primary" href="#/support" data-action="nav">${esc(t('common.support'))}</a>
+        <a class="btn btn-outline btn-mail" href="mailto:${esc(SITE.email)}">${icon('mail')} ${esc(SITE.email)}</a>
+      </p>
     </div>
 
     ${adSlot('home-top')}
@@ -126,7 +129,7 @@ function renderPrivacy(lang) {
   return `
   <section class="section about legal-page">
     <header class="section-head">
-      <h1>${heading}</h1>
+      <h1>${esc(heading)}</h1>
       <p class="muted">${esc(SITE.name)} · ${esc(SITE.email)}</p>
     </header>
     <div class="panel legal" id="privacy">

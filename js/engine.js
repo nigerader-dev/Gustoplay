@@ -319,11 +319,19 @@ function rng(seed) {
 /** Кандидаты «похоже на то, что вы лайкнули»: слаг → близость */
 function likedNeighbours(profile, limit = 4) {
   const liked = Object.entries(profile.marks || {})
-    .filter(([, m]) => m.status === 'liked' || m.status === 'wishlist')
-    .map(([slug, m]) => ({ slug, weight: m.status === 'liked' ? 1 : 0.7 }))
-    .filter((x) => byId(x.slug))
-    .slice(-24);
-  return liked.slice(0, limit);
+    .map(([slug, mark], index) => ({
+      slug,
+      weight: mark.status === 'liked' ? 1 : 0.7,
+      timestamp: Number.isFinite(mark.ts) ? mark.ts : 0,
+      index,
+      status: mark.status,
+    }))
+    .filter((mark) => (mark.status === 'liked' || mark.status === 'wishlist') && byId(mark.slug))
+    // Объект профиля сохраняет порядок первой отметки, а не последнего обновления.
+    // Поэтому используем ts и стабильный порядок как fallback для старых профилей.
+    .sort((a, b) => b.timestamp - a.timestamp || b.index - a.index)
+    .slice(0, Math.min(Math.max(0, limit), 24));
+  return liked.map(({ slug, weight }) => ({ slug, weight }));
 }
 
 /**
@@ -429,11 +437,14 @@ export function scoreGame(game, profile, weights, context = {}) {
     score += 1.2 * (novelty.genres || []).filter((g) => game.genres.includes(g)).length;
   }
 
-  // 8. Сложность и темп
-  if ((a.difficulty || []).includes('easy') && game.difficulty >= 4) score -= 6;
-  if ((a.difficulty || []).includes('hard') && game.difficulty <= 2) score -= 4;
-  if ((a.difficulty || []).includes('chill') && game.pace >= 5 && game.difficulty >= 4) score -= 5;
-  if ((a.difficulty || []).includes('souls') && game.difficulty >= 4) score += 4;
+  // 8. Сложность и темп. Неизвестные значения не подменяем нейтральной цифрой:
+  // такие записи не получают ни бонуса, ни штрафа за отсутствующий сигнал.
+  if (game.difficulty != null) {
+    if ((a.difficulty || []).includes('easy') && game.difficulty >= 4) score -= 6;
+    if ((a.difficulty || []).includes('hard') && game.difficulty <= 2) score -= 4;
+    if ((a.difficulty || []).includes('chill') && game.pace != null && game.pace >= 5 && game.difficulty >= 4) score -= 5;
+    if ((a.difficulty || []).includes('souls') && game.difficulty >= 4) score += 4;
+  }
 
   // 9. Отметки
   const mark = profile.marks?.[game.slug];
@@ -448,7 +459,7 @@ export function scoreGame(game, profile, weights, context = {}) {
   // 11. Негативные теги
   for (const t of weights.negativeTags || []) if (game.tags.includes(t)) score -= 7;
 
-  return { score, reasons, neighbours: bestSimilar > 0.12 ? { slug: bestSimilar, sim: bestSim } : null };
+  return { score, reasons, neighbours: bestSim > 0.12 ? { slug: bestSimilar, sim: bestSim } : null };
 }
 
 const IMPRESSION_HALF_LIFE_DAYS = 10;
