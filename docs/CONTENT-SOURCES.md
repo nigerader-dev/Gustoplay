@@ -242,7 +242,11 @@ Steam Store Search. Ничего не подставлялось руками.
   карточке (ITAD/HLTB 4 ч), completionist не голосован, 45 ч — середина
   оценки TrueAchievements 40–50 ч (прецедент Unspottable); Samurai Gunn 2
   [1, 1] — completionist не голосован, второе значение = main; Brawlhalla
-  [58, 451] — голосования HLTB (27/15 проголосовавших); ARK [73, 1105] —
+  [58, 451] — голосования HLTB (27/15 проголосовавших); Rivals of Aether
+  [2, 45] — main 2 ч по карточке HLTB 21713 (снимок 28.09.2026),
+  completionist не голосован → 45 ч как середина TrueAchievements
+  «40–50 hours» (мода 13 завершивших; прецедент Killer Queen Black);
+  ARK [73, 1105] —
   «сюжет» = все боссы, честное голосование 50/34 игроков; Pit People
   [9, 226] — карточка HLTB (completionist по 8 голосам, ачивки-гринд).
 - **`pl` с источником**: описания Steam — Jackbox PP1 [1, 100] (теглайн;
