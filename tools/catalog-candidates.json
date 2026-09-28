@@ -1,6 +1,6 @@
 {
   "_комментарий": "Кандидаты для расширения каталога. Сборщик tools/pull-catalog-candidates.mjs ищет каждую игру в Steam Store Search (точное совпадение нормализованного названия), берёт appdetails/appreviews и (по возможности) HowLongToBeat. Ничего не применяется автоматически: данные попадают в tools/catalog-batch-data.json, записи в каталог пишутся вручную по журналу источников docs/CONTENT-SOURCES.md. Приоритет батча 2026-09-29: диванный кооп до цели 400 (в каталоге 147 из 539) — файтинги, гонки, beat'em'up, двухэкранные кооп-головоломки; плюс повтор четырёх промахов прошлой доставки под точными именами Steam.",
-  "batch": "2026-09-29-couch-wave-2",
+  "batch": "2026-09-29-couch-wave-2-retry",
   "candidates": [
     "Haven",
     "Outward Definitive Edition",
