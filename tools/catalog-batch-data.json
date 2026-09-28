@@ -1,587 +1,26 @@
 {
- "batch": "2026-09-29-couch-wave-2-retry",
- "collectedAt": "2026-09-28T14:03:03.642Z",
+ "batch": "2026-09-29-couch-wave-3",
+ "collectedAt": "2026-09-28T16:20:58.467Z",
  "cbr": {
   "ok": true,
-  "rate": 84.3414,
-  "date": "26.09.2026",
+  "rate": 84.4075,
+  "date": "29.09.2026",
   "url": "https://www.cbr.ru/scripts/XML_daily.asp"
  },
  "entries": [
   {
-   "requested": "30XX",
-   "appid": 1029210,
-   "steamName": "30XX",
-   "year": 2023,
-   "releaseDate": "Aug 9, 2023",
+   "requested": "Aegis of Earth Protonovus Assault",
+   "appid": 450250,
+   "steamName": "Aegis of Earth: Protonovus Assault",
+   "year": 2016,
+   "releaseDate": "Jul 18, 2016",
    "developers": [
-    "Batterystaple Games"
+    "ACQUIRE Corp."
    ],
    "publishers": [
-    "Batterystaple Games"
+    "Aksys Games"
    ],
    "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Includes level editor",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Jump, shoot, and slash your way through 30XX, the roguelike action platformer you can play with a friend! Explore lush, ever-changing worlds that mix precise platforming with fevered combat. Destroy fearsome Guardians. Master unique Powers. Rediscover the thousand years we've lost.",
-   "shortRu": "Прыгай, стреляй и проруби свой путь через 30XX, &quot;рогалик&quot; экшн-прыгалка, в который можно играть с другом! Исследуй буйные, постоянно меняющиеся миры, в которых гармонично сочетаются прыжки с ожесточенным боем. Уничтожь их грозных Стражей. Овладей их уникальными Способностями.",
-   "detailEn": "Join us on Discord! Come and keep up to date on the latest in 30XX developments! About the Game The Year is... 30XX combines the crisp controls and fluid movement you love from action platformers like Mega Man X , the replayability of a modern Roguelike ( Binding of Isaac, Enter the Gungeon, Dead Cells , etc) and co-op play into a single gorgeous package. Awaken a thousand years after 20XX to realize the world that needed you is gone, changed irreversibly by the advent of the Synthetic Mind and a human race that's lost the will to reach for the stars. Explore the lush, verdant prison our world has become, and fight to save what remains. Rise. Fight. Fall. Adapt. There's a sublime meaning in this endless cycle, somewhere, buried deep. Features: Pulse-pounding action, precise platforming, and beautiful spritework Characters with fully distinct playstyles - master Ace's swift, combo-friendly Techniques and Nina's intricate Power Fusion system for even more replayability A fresh new set of levels, items, and powers every time you play - 30XX is never the same game twice! Roguelike-style progression that lets you tune the game's systems and difficulty as you play, even after you win A robust level editor - the same tools the developers use! - that lets you build single level chunks or entire custom campaigns Local and online multiplayer, so you can enjoy 30XX with a friend",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 799,
-    "discount": 60
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 82,
-   "steamReviewCount": 2516,
-   "reviews": {
-    "positive": 2547,
-    "total": 2820,
-    "ratio": 90
-   }
-  },
-  {
-   "requested": "Alien Hominid Invasion",
-   "appid": 843200,
-   "steamName": "Alien Hominid Invasion",
-   "year": 2023,
-   "releaseDate": "Nov 1, 2023",
-   "developers": [
-    "The Behemoth"
-   ],
-   "publishers": [
-    "The Behemoth"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Gamepad Recommended",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Steam Input API Support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Old friends and bitter enemies await as you invade Earth alongside a Mothership full of alien friends! Blast, beam, and bite your way through an endless swarm of enemies as you and up to three of your fellow hominids cause mayhem with a huge arsenal of weapons, mutations, and acrobatic maneuvers.",
-   "shortRu": "Старые друзья и ненавистные враги ждут, когда вы начнёте захватывать Землю в компании Материнского корабля, полного инопланетных друзей! Лазеры, плазма и зубы пойдут в ход против бесконечного потока врагов, пока вы и трое ваших товарищей-гоминидов учиняете погром вселенского масштаба при помощи мутаций, акробатических манёвров, и,...",
-   "detailEn": "Steal intel from your enemies to sabotage their plans, observe the oddities of human life, blow up bosses, and mutate into a variety of powerful alien forms in order to take down the not-so-secret agents that are dead set on ruining your day. Are you ready to assist your Mothership with the invasion of planet Earth? Invade with up to four players through online co-op, couch co-op, or both! Play across skill gaps with difficulty being set per player – one player can choose Friendly while another loses their mind on Insane! Choose from three difficulty levels and two life insurance modes: Mastery Mode - earn more experience and better drops, but lose it all on death… YOLO!! Permakeep - the standard alien invasion experience… There's nothing wrong with wanting to keep your stuff! Unlock and equip an astronomical arsenal of unique weapons, boosts, and cosmetics to customize your alien. Complete missions, level up, and mutate your alien to deploy new mechanics like super speed, healing, and flight! Discover your preferred weapon, boosts, alien head, and mutation combos by experimenting with all the buffs (and debuffs) alien technology has to offer! What playstyle will you choose? Remember: You can’t kill your agents if you don’t drink your juice! Determine your own gameplay path with a non-linear leveling experience. Invade randomly-assembled neighborhoods from hundreds of hand-craf",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 1570,
-   "reviews": {
-    "positive": 1535,
-    "total": 1731,
-    "ratio": 89
-   }
-  },
-  {
-   "requested": "Bokura",
-   "appid": 1801110,
-   "steamName": "BOKURA",
-   "year": 2023,
-   "releaseDate": "Aug 9, 2023",
-   "developers": [
-    "tokoronyori"
-   ],
-   "publishers": [
-    "Kodansha"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "LAN Co-op",
-    "Full controller support",
-    "Gamepad Recommended",
-    "Family Sharing"
-   ],
-   "shortEn": "BOKURA is a two-player puzzle adventure game. Play as two boys who ran away from their homes and work together to take yourselves somewhere far, far away. Relive the friendship of your childhood through the journey of two boys.",
-   "shortRu": "BOKURA is a two-player puzzle adventure game. Play as two boys who ran away from their homes and work together to take yourselves somewhere far, far away. Relive the friendship of your childhood through the journey of two boys.",
-   "detailEn": "the successor game『BOKURA: planet』 About the Game Are you and I really seeing the world the same way? An exclusively two-player puzzle adventure game that makes you question your reality. *Players must communicate with each other to play this game. If you are not playing in the same location, you will need another communication method, such as voice chat. Before buying the game, please keep in mind that the game itself does not provide a separate communication method. BOKURA is a puzzle adventure game that can only be played with two players. To play the game, two people must play on two separate machines. While you have to work together, what you see on your game screens is completely different. Even though the same character should be displayed on both of your screens, to one of you, they might look like an animal out of a picture book, while to the other, they might look like a robot. (The objects you can interact with might move differently for each of you too!) You will need to talk to each other to find out what you can and cannot see. Work together to solve the puzzles and continue your journey. You can play online in different locations while talking to each other over a call. Player 1: A world of animals Player 2: A world of machines Gameplay The game is a side-scrolling co-op puzzle adventure. You will be faced with a number of critical choices throughout the story wh",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 549,
-    "final": 549,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 10910,
-   "reviews": {
-    "positive": 11979,
-    "total": 13104,
-    "ratio": 91
-   }
-  },
-  {
-   "requested": "BLAZBLUE CENTRALFICTION",
-   "appid": 586140,
-   "steamName": "BlazBlue Centralfiction",
-   "year": 2017,
-   "releaseDate": "Apr 25, 2017",
-   "developers": [
-    "Arc System Works"
-   ],
-   "publishers": [
-    "Arc System Works"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Combining a 2D fighting game with a visual novel, the BlazBlue series continues on with massive fan support! The latest installation, BlazBlue: Centralfiction, serves as the ending to the Azure Saga, revealing the hidden truth of the world!",
-   "shortRu": "Combining a 2D fighting game with a visual novel, the BlazBlue series continues on with massive fan support! The latest installation, BlazBlue: Centralfiction, serves as the ending to the Azure Saga, revealing the hidden truth of the world!",
-   "detailEn": "Featured DLC Bonus content includes the Original Soundtrack and Memorial Book. The bonus contents will be placed in your Steam folder: ..\\Steam\\SteamApps\\common\\BlazBlue Centralfiction\\Digital Extras[/list] About the Game Re-live Arc System Works' trademark beautiful visuals and deep expressive combat, with improved netplay! Now is the perfect time for veterans and new challengers alike to return to the Azure! Choose from 35 unique anime-inspired characters utilizing various new and refined system mechanics. The Wheel of Fate turns again! A high-speed 2D fighting game combined with a breathtaking visual novel, the bookend to this chapter of the series breathes in new life...",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 9490,
-   "reviews": {
-    "positive": 11586,
-    "total": 12336,
-    "ratio": 94
-   }
-  },
-  {
-   "requested": "BlazeRush",
-   "appid": 302710,
-   "steamName": "BlazeRush",
-   "year": 2014,
-   "releaseDate": "Oct 28, 2014",
-   "developers": [
-    "Targem Games"
-   ],
-   "publishers": [
-    "Targem Games"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "9",
-     "en": "Racing",
-     "ru": "Гонки"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "LAN PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "VR Support",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "BlazeRush is a dynamic arcade racing survival game with no health, no levelling and no brakes! You can assemble a team of friends to play in local or online multiplayer, choose a car to your taste and chase, blow up and cut off! Adapt your style and tactics to new enemies, obstacles and tracks.",
-   "shortRu": "BlazeRush — это динамичные аркадные гонки на выживание без здоровья, без прокачки и без тормозов! Ты сможешь собрать команду друзей, играя в локальном или онлайн мультиплеере, выбрать тачку на свой вкус и гонять, взрывать и подрезать!",
-   "detailEn": "BlazeRush is a dynamic arcade racing survival game with no health, no levelling and no brakes! You can assemble a team of friends to play in local or online multiplayer, choose a car to your taste and chase, blow up and cut off! Adapt your style and tactics to new enemies, obstacles and tracks. Welcome to the World Of Racing and Frantic Fun! key Features: Simple multiplayer. Up to 4 players locally and up to 8 players over the Internet; Couch vs. couch. Start races with local players; Connect to the game at any time; Dozens of fun tracks on three planets, 16 cars and a variety of cool guns; Lots of medals for various tricks and antics.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": "full",
-   "metacritic": 66,
-   "steamReviewCount": 1032,
-   "reviews": {
-    "positive": 1523,
-    "total": 1733,
-    "ratio": 88
-   }
-  },
-  {
-   "requested": "Bopl Battle",
-   "appid": 1686940,
-   "steamName": "Bopl Battle",
-   "year": 2023,
-   "releaseDate": "Nov 16, 2023",
-   "developers": [
-    "Johan Grönvall"
-   ],
-   "publishers": [
-    "Zapray Games"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Partial Controller Support",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "A couch/online game where you battle your friends with unique and wild abilities. There are many choices such as a shrink ray, creating black holes, stopping time and attaching a rocket engine to the stage to send it flying. Choose a combination that synergizes well to win the round!",
-   "shortRu": "Играй онлайн или с друзьями, соревнуясь невероятными возможностями. Вам доступно множество вариантов, к примеру, уменьшающий луч, создание черных дыр, остановка времени и использование ракетного двигателя, чтобы избавиться от сцены. Выбирай выигрышные комбинации, чтобы победить в каждом раунде!",
-   "detailEn": "Bopl Battle is a couch/online game where you battle your friends as a goofy slime. Squish and splatter each other using a combination of wild and unique abilities/weapons. Last slime standing wins! Here are some things you can do in the game: Attach a rocket engine to platforms to send them flying away Cover the stage in flammable smoke Create a black hole and make it swallow the whole stage. Use a growth ray to permanently enlarge anything, including arrows, grenades, other players, even the stage itself Stop time and setup a deadly situation for all of your enemies as they are frozen Grab the stage and move it around Invent your own strategy with a unique ability combination create platform + control platform + attach big sword onto platform flammable smoke + throw grenade + turn into an invincible rock The combos get even wilder in the team vs team mode, as you cooperate with someone to really push the game to its limit. Disclaimers Warning : This game contains flashing lights that may make it unsuitable for people with photosensitive epilepsy or other photosensitive conditions. Player discretion is advised. Only one player can use keyboard + mouse per computer. So playing locally requires controllers for the other players. Bopl Battle is a multiplayer game. There is no singleplayer mode and no bots. Make sure to bring a friend or use the built in online matchmaking!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 21610,
-   "reviews": {
-    "positive": 25202,
-    "total": 25933,
-    "ratio": 97
-   }
-  },
-  {
-   "requested": "Cat Quest II",
-   "appid": 914710,
-   "steamName": "Cat Quest II",
-   "year": 2019,
-   "releaseDate": "Sep 24, 2019",
-   "developers": [
-    "The Gentlebros"
-   ],
-   "publishers": [
-    "Kepler Interactive"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Open-world action-RPG in a fantasy realm of cats and dogs. Sequel to the award-winning original, CAT QUEST II lets you play solo or with a friend, as both a cat and dog! Quest in a world filled with magic, defeat monsters and collect loot in a catventure like never before!",
-   "shortRu": "На волне успеха теперь уже всем известного CAT QUEST разработчики – The Gentlebros – возвращаются в Фелингард, добавив еще больше взрывных заклинаний, еще больше вариантов оружия, великолепную механику смены персонажа и совместную локальную игру!",
-   "detailEn": "CAT QUEST II is a 2D open-world action-RPG set in a fantasy realm of cats and dogs. Under threat from a continuing war between the cats of Felingard and the advancing dogs of the Lupus Empire, CAT QUEST II tells the tail of two kings, brought together against their will, on a journey of paw-some discovery to reclaim their thrones. Play as both a cat and dog as you explore their kingdoms solo or with a friend! Quest in a world filled with magic, curious monsters, and go on a catventure like never before! Following the success of the acclaimed CAT QUEST, developers The Gentlebros return to the world of Felingard to expand on the original with more explosive spells, expanded weapon options, an exciting new character switch mechanic, and local co-op! Features - Brand new story set in the world of Felingard - and beyond! - All new switch and local co-op gameplay. Play as both cat and dog, either alone or with a friend! - New weapons types – Master swords, staves and more to become a fur-midable fighter! - More spells bring even more furry judgement to your foes. - New passive abilities, whose attributes can be mixed and combined for endless paw-sibilities! - Exciting, and varied dungeons filled with new traps and obstacles, making every pounce into the unknown a fresh experience! - Em-bark on a litany of side quests, each telling its own story and expanding the lore and universe of ",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1499,
-    "final": 1499,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 76,
-   "steamReviewCount": 5865,
-   "reviews": {
-    "positive": 6896,
-    "total": 7242,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "Cat Quest III",
-   "appid": 2305840,
-   "steamName": "Cat Quest III",
-   "year": 2024,
-   "releaseDate": "Aug 8, 2024",
-   "developers": [
-    "The Gentlebros"
-   ],
-   "publishers": [
-    "Kepler Interactive"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Gamepad Recommended",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "In Cat Quest III you play as a purrivateer in a freely explorable 2.5D open-world swarming with Pi-rats. You can sail the seas in your ship for treasures galore! But prepare for peril, as the Pirate King aims to hunt you down...",
-   "shortRu": "В Cat Quest III вам предстоит стать настоящим мурр-ским разбойником в открытом 2,5 D-мире, кишащем крысами-пиратами. Бороздите моря в поисках сокровищ, но берегитесь! Король пиратов у вас на хвосте...",
-   "detailEn": "Get whiskered away on a hearty catventure in Cat Quest III, the third installment in the award-winning Cat Quest series! Play as a swashbuckling purrivateer in this 2.5D open-world action RPG set in a fantastical pirate-themed world – the Purribean - an archipelago swarming with Pi-rats searching for the Northern Star - a long-lost mythical treasure. Alongside your trusty spirit companion, set sail through the Purribean in your very own ship! But beware, the seas are dangerous, and a meow-tiny is nigh as the hordes of Pi-rats under the order of the Pirate King hunt you down… RETURN OF THE CAT The cutest action RPG you know and love returns for a colorful adventure filled with furr-iously fun gameplay! Delve into a paw-geous new world with varied dungeons and biomes to explore, and encounter fierce battles with the newly refined combat system featuring tighter attack combos and weapon swapping. Playable in either solo or local co-op! SAIL THROUGH THE PURRIBEAN For the furr-st time in the series, sail the seas and battle in your very own ship! Explore the waters on your ship, seamlessly zip to shore, and traverse the land on paw to hunt booty in the paw-esome pirate world - the Purribean! There's treasures galore to be found, including new weapons, like the blunderpuss, furr-ocious spells, gla-meow-rous costumes, and more! X MARKS THE SPOT Embark on your very own treasure hunt an",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 83,
-   "steamReviewCount": 3124,
-   "reviews": {
-    "positive": 4090,
-    "total": 4297,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "Conan Exiles Enhanced",
-   "appid": 440900,
-   "steamName": "Conan Exiles Enhanced",
-   "year": 2018,
-   "releaseDate": "May 8, 2018",
-   "developers": [
-    "Funcom",
-    "Inflexion Games"
-   ],
-   "publishers": [
-    "Funcom"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "29",
-     "en": "Massively Multiplayer",
-     "ru": "Многопользовательские игры"
-    },
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    },
-    {
-     "id": "28",
-     "en": "Simulation",
-     "ru": "Симуляторы"
-    },
     {
      "id": "2",
      "en": "Strategy",
@@ -590,27 +29,20 @@
    ],
    "categories": [
     "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Co-op",
-    "Online Co-op",
     "Steam Achievements",
     "Full controller support",
-    "Steam Trading Cards",
-    "Steam Workshop",
-    "Remote Play on Tablet",
+    "Steam Cloud",
     "Remote Play on TV",
     "Family Sharing"
    ],
-   "shortEn": "Conan Exiles Enhanced is an open world survival game set in the mythical lands of Hyboria, now fully upgraded to Unreal Engine 5 with stunning visuals and improved performance. SURVIVE, BUILD, and DOMINATE alone or with friends in a world brimming with adventure!",
-   "shortRu": "Conan Exiles Enhanced — это игра на выживание в открытом мире в землях Хайбории, теперь на Unreal Engine 5 с потрясающей графикой. ВЫЖИВАЙТЕ, СТРОЙТЕ и ДОМИНИРУЙТЕ в мире, полном приключений!",
-   "detailEn": "Free Visual Upgrade Out Now! About the Game Conan Exiles Enhanced is an Open World Survival game set in the mythical lands of Conan the Barbarian. In single-player, co-op, or persistent multiplayer, you must learn to survive the wilds of Hyboria before building your own home or even a shared city. Survive freezing cold temperatures, explore loot-filled dungeons, develop your character from scavenging survivor to mighty barbarian and powerful sorcerer, and fight to dominate your enemies in epic siege wars. Conan Exiles Enhanced includes a free Unreal Engine 5 upgrade that offers enhanced visuals, improved performance, and a more integrated world. After Conan himself saves your life by cutting you down from the corpse tree, you must quickly learn to survive. Weather scouring sandstorms, shield yourself from intense temperatures and hunt animals for food and resources. Explore a vast and seamless world, from the burning desert in the south to the snow-capped mountains of the north. Forge the legacy of your clan as you fight to reclaim and dominate the Exiled Lands. Use the powerful building system to create anything from a small home to entire cities piece by piece. Wage war using swords, sorcery, bows, and siege weapons, even taking control of giant avatars of the gods to crush the homes of your enemies in epic battles. STUNNING UNREAL 5 VISUALS Conan Exiles Enhanced brings the e",
+   "shortEn": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good!",
+   "shortRu": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good!",
+   "detailEn": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good! Command the last bastion of humanity as you fight for the survival of the species utilizing fantastic tech, cunning tactics and massive weapons in an all-out action strategy extravaganza!",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
+    "initial": 1999,
+    "final": 1999,
     "discount": 0
    },
    "platforms": {
@@ -619,260 +51,23 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 79830,
    "reviews": {
-    "positive": 93026,
-    "total": 117679,
-    "ratio": 79
+    "positive": 43,
+    "total": 68,
+    "ratio": 63
    }
   },
   {
-   "requested": "Contra: Operation Galuga",
-   "appid": 2235020,
-   "steamName": "Contra: Operation Galuga",
-   "year": 2024,
-   "releaseDate": "Mar 12, 2024",
-   "developers": [
-    "WayForward"
-   ],
-   "publishers": [
-    "KONAMI"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Custom Volume Controls",
-    "Adjustable Difficulty",
-    "Gamepad Recommended",
-    "Keyboard Only Option",
-    "Playable without Timed Input",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "The legendary Contra series returns! This reimagining of the classic run-'n'-gun action game from the ‘80s features new stages, new enemies, new play mechanics, and co-op combat for up to 4 players!",
-   "shortRu": "Легендарная серия Contra возвращается! В переосмыслении классического run-'n'-gun экшна из 80-х вас ждут новые этапы, новые враги, новые механики и совместный режим для 1-4 игроков!",
-   "detailEn": "A new entry in the legendary Contra series is here! Contra: Operation Galuga is a thorough reimagining of the classic run-'n'-gun action game from the '80s, featuring modern graphics and sound, new stages, new enemies and bosses, new play mechanics, an updated weapons system, and explosive co-op combat for up to two players in Story Mode or four players in Arcade Mode! When the Red Falcon terrorist group takes over the Galuga Islands off the coast of New Zealand, elite Contra commandos Bill Rizer and Lance Bean springs into action, initiating an all-out war in which the fate of mankind hangs in the balance! Run, jump, and shoot your way through eight levels using a devastating arsenal - including the spread shot, laser, and homing missiles - now with stackable upgrades and awesome Overload abilities! The intense action is customizable with three difficulty settings plus a variety of additional challenge options. The true Contra legacy begins now! Key Features: •The original run-'n'-gun game is back, reimagined and more action-packed than ever! •Attack aggressively across eight explosive stages! Infiltrate the jungle, ascend the waterfall, speed through an enemy base on a hovercycle, and more! •Multiple playable characters with distinct abilities! •Epic, screen-filling boss battles! •New and fan-favorite weapons, now with stackable upgrades and incredible Overload abilities! •Mu",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 813,
-   "reviews": {
-    "positive": 854,
-    "total": 979,
-    "ratio": 87
-   }
-  },
-  {
-   "requested": "Crash Bandicoot 4: It's About Time",
-   "appid": 1378990,
-   "steamName": "Crash Bandicoot™ 4: It’s About Time",
-   "year": 2022,
-   "releaseDate": "Oct 18, 2022",
-   "developers": [
-    "Toys for Bob",
-    "Beenox",
-    "Activision Shanghai",
-    "Hardsuit Labs",
-    "Iron Galaxy Studios"
-   ],
-   "publishers": [
-    "Activision"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Steam Achievements",
-    "Full controller support",
-    "Family Sharing"
-   ],
-   "shortEn": "It’s About Time - the critically-acclaimed Crash Bandicoot™ 4: It's About Time is now on Steam!",
-   "shortRu": "Это вопрос времени - получившая признание критиков игра Crash Bandicoot™ 4: Это вопрос времени теперь и в Steam!",
-   "detailEn": "It’s About Time - the critically-acclaimed Crash Bandicoot™ 4: It's About Time is now on Steam! Crash fourward into a time shattered adventure with your favorite marsupials. Neo Cortex and N. Tropy are back at it again and launching an all-out assault on not just this universe, but the entire multiverse! Crash and Coco are here to save the day by reuniting the four Quantum Masks and bending the rules of reality. New abilities? Check. More playable characters? Yep. Alternate dimensions? Obviously. Ridonkulous bosses? For sure. Same awesome sauce? You bet your sweet jorts. Wait, are they actually jorts? Not in this universe!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 4066,
-   "reviews": {
-    "positive": 3675,
-    "total": 4250,
-    "ratio": 86
-   }
-  },
-  {
-   "requested": "Crash Bandicoot N. Sane Trilogy",
-   "appid": 731490,
-   "steamName": "Crash Bandicoot™ N. Sane Trilogy",
+   "requested": "All-Star Fruit Racing",
+   "appid": 673190,
+   "steamName": "All-Star Fruit Racing",
    "year": 2018,
-   "releaseDate": "Jun 29, 2018",
+   "releaseDate": "Jul 13, 2018",
    "developers": [
-    "Vicarious Visions",
-    "Iron Galaxy Studios"
+    "3DClouds"
    ],
    "publishers": [
-    "Activision"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Steam Achievements",
-    "Steam Trading Cards",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Family Sharing"
-   ],
-   "shortEn": "Your favorite marsupial, Crash Bandicoot™, is back! He’s enhanced, entranced and ready-to-dance with the N. Sane Trilogy. Relive all your favorite moments in Crash Bandicoot™, Crash Bandicoot™ 2: Cortex Strikes Back and Crash Bandicoot™ 3: Warped, now in fully-remastered graphical glory!",
-   "shortRu": "Всеобщий сумчатый любимец Crash Bandicoot™ возвращается! В коллекции N. Sane Trilogy он стал еще шустрее, веселее и обаятельнее! Переживите заново любимые моменты игр Crash Bandicoot™, Crash Bandicoot™ 2: Cortex Strikes Back и Crash Bandicoot™ 3: Warped, увидев их во всем блеске полностью переработанной графики!",
-   "detailEn": "Your favorite marsupial, Crash Bandicoot™, is back! He’s enhanced, entranced and ready-to-dance with the N. Sane Trilogy game collection. Now you can experience Crash Bandicoot like never before. Spin, jump, wump and repeat as you take on the epic challenges and adventures through the three games that started it all, Crash Bandicoot™, Crash Bandicoot™ 2: Cortex Strikes Back and Crash Bandicoot™ 3: Warped. Relive all your favorite Crash moments in their fully-remastered graphical glory and get ready to put some UMPH in your WUMP! Crash Bandicoot™ N. Sane Trilogy Stormy Ascent Level Experience the notorious Stormy Ascent level from the original Crash Bandicoot game. Previously unfinished and unreleased, this level will challenge even the most hardcore of Crash fans! Do you have what it takes to tackle the fast retracting steps, vial throwing lab assistants, flying birds, moving platforms and iron spikes? Crash Bandicoot N. Sane Trilogy Future Tense Level Play the first-ever NEW level built for the original trilogy’s gameplay in almost 20 years. Drawing inspiration from the cut “Waterfall Level” from the first Crash Bandicoot game, Future Tense features several puzzles from the original level set in the futuristic setting from Crash Bandicoot 3: Warped. Discover a whole new level of difficulty for Crash Bandicoot N. Sane Trilogy as you dodge rockets, destroy robots and leaps laser",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 16704,
-   "reviews": {
-    "positive": 20562,
-    "total": 22354,
-    "ratio": 92
-   }
-  },
-  {
-   "requested": "Darksiders Genesis",
-   "appid": 710920,
-   "steamName": "Darksiders Genesis",
-   "year": 2019,
-   "releaseDate": "Dec 5, 2019",
-   "developers": [
-    "Airship Syndicate"
-   ],
-   "publishers": [
-    "THQ Nordic"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "DARKSIDERS: GENESIS gives players their first look at the world of DARKSIDERS before the events of the original game. Furthermore, it introduces the fourth and last horseman STRIFE, as well as Co-op gameplay for the first time in the history of the franchise.",
-   "shortRu": "Вы узнаете, что происходило в мире до начала событий DARKSIDERS, и сможете примерить роль четвертого всадника Апокалипсиса — РАЗДОРА.",
-   "detailEn": "From the dawn of creation, THE COUNCIL has maintained the Balance across existence. Carrying out their orders are THE HORSEMEN, Nephilim (powerful beings spawned from the unnatural union of angels and demons) who have pledged themselves to the Council and been granted immense power. However, this power came at a tragic cost: the Horsemen were ordered to use their newfound strength to wipe out the rest of their kind. What followed was a bloody battle on Eden where the Horsemen, obeying the will of the Council, annihilated the Nephilim. Still reeling from the events on Eden, WAR and STRIFE have been given a new assignment -- LUCIFER, the enigmatic and deceptive demon king, has been plotting to upset the Balance by granting power to master demons throughout Hell. War and Strife must hunt down these masters, gather information, and ultimately fight their way through a tangled, demonic conspiracy that threatens to forever upset the Balance and unravel all of creation. DARKSIDERS: GENESIS is an action/adventure game that tears its way through hordes of demons, angels, and everything in-between on its way to Hell and back with guns blazing and swords swinging. Genesis gives players their first look at the world of DARKSIDERS before the events of the original game. Furthermore, it introduces the fourth and last horseman STRIFE, as well as Co-op gameplay for the first time in the histor",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 449,
-    "discount": 85
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 77,
-   "steamReviewCount": 10403,
-   "reviews": {
-    "positive": 11237,
-    "total": 13747,
-    "ratio": 82
-   }
-  },
-  {
-   "requested": "Double Dragon: Neon",
-   "appid": 252350,
-   "steamName": "Double Dragon: Neon",
-   "year": 2014,
-   "releaseDate": "Feb 6, 2014",
-   "developers": [
-    "WayForward",
-    "Abstraction Games"
-   ],
-   "publishers": [
-    "Midnight City",
-    "Majesco Entertainment"
+    "3DClouds"
    ],
    "genres": [
     {
@@ -884,57 +79,7 @@
      "id": "23",
      "en": "Indie",
      "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "BRO-TACULAR! Legendary martial artists, Billy and Jimmy Lee return in this creative re-imagining of the classic beat ‘em up, Double Dragon Neon. Fight your way through countless henchmen including Linda and Abobo on your way to rescue the love of your life, Marian!",
-   "shortRu": "BRO-TACULAR! Legendary martial artists, Billy and Jimmy Lee return in this creative re-imagining of the classic beat ‘em up, Double Dragon Neon. Fight your way through countless henchmen including Linda and Abobo on your way to rescue the love of your life, Marian!",
-   "detailEn": "BRO-TACULAR! Legendary martial artists, Billy and Jimmy Lee return in this creative re-imagining of the classic beat ‘em up, Double Dragon Neon. Fight your way through countless henchmen including Linda and Abobo on your way to rescue the love of your life, Marian! Trained in the special form of martial arts called Sōsetsuken, hunt down and defeat the evil Skullmageddon! Classic beat ‘em up feel with new powers, new attacks, and a sinister new foe! Features Mix tape system lets you mix and match unique abilities and powerful new attacks. String together attacks for brutal combos to keep your foes down and out. Brawl through a variety of levels including dangerous city streets, twisted science labs, an evil stronghold, outer space and more! Use a variety of weapons including bats, knives, whips, and more to incapacitate unsuspecting enemies. Original soundtrack by award winning composer and sound designer Jake Kaufman. Developed by WayForward, the award winning team responsible for DuckTales: Remastered , BloodRayne: Betrayal , and A Boy and His Blob Steam adaptation and online co-op developed by Abstraction Games.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 1902,
-   "reviews": {
-    "positive": 1980,
-    "total": 2579,
-    "ratio": 77
-   }
-  },
-  {
-   "requested": "F1 25",
-   "appid": 3059520,
-   "steamName": "F1® 25",
-   "year": 2025,
-   "releaseDate": "May 30, 2025",
-   "developers": [
-    "Codemasters"
-   ],
-   "publishers": [
-    "Electronic Arts"
-   ],
-   "genres": [
+    },
     {
      "id": "9",
      "en": "Racing",
@@ -951,38 +96,24 @@
     "Multi-player",
     "PvP",
     "Online PvP",
-    "LAN PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "LAN Co-op",
-    "Shared/Split Screen Co-op",
     "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
     "Steam Achievements",
     "Full controller support",
-    "VR Supported",
-    "Steam Workshop",
-    "In-App Purchases",
-    "Adjustable Difficulty",
-    "Keyboard Only Option",
-    "Playable without Timed Input",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "Stereo Sound",
-    "Surround Sound",
+    "Steam Trading Cards",
     "Steam Cloud",
-    "HDR available",
+    "Stats",
+    "Remote Play on TV",
+    "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "Rewrite The Grid with the ultimate evolution in racing: EA SPORTS™ F1® 25: 2026 Season Edition. Get F1® 25 and the 2026 Season Pack in one bundle for the most complete Formula One® experience.",
-   "shortRu": "Перепишите гоночную историю с абсолютной гоночной эволюцией: EA SPORTS™ F1® 25: 2026 Season Edition. Приобретите F1® 25 и 2026 Season Pack в одном комплекте для максимально полного опыта Formula One®.",
-   "detailEn": "F1® 25: 2026 Season Edition Buy the 2026 Season Edition to receive: F1® 25 F1® 25: 2026 Season Pack Rewrite The Grid with the ultimate evolution in racing: EA SPORTS™ F1® 25: 2026 Season Edition. Get F1® 25 and the 2026 Season Pack in one bundle for the most complete Formula One® experience. Race through the action-packed 2025 season, then step into a new era with the ground breaking 2026 cars, the next generation of Grand Prix™ racing. F1® 25: 2026 Season Pack, Available Now! Rewrite the grid with the 2026 Season Pack for EA SPORTS™ F1® 25, the official video game of the 2026 FIA Formula One World Championship™. Audi, following its takeover of Sauber, and Cadillac, the first major American manufacturer in Formula One, join the grid to begin a new chapter in F1's history. Driver line-ups have shifted across the field, with rookie Arvid Lindblad racing alongside Liam Lawson at Racing Bulls, Isack Hadjar joining Oracle Red Bull Racing to partner Max Verstappen, and fan favourites Valtteri Bottas and Sergio Pérez leading Cadillac's debut entry. For the first time since 2023, a new circuit joins the calendar: MADRING. Set in Madrid, this hybrid street and purpose-built track delivers high-speed action across 5.4 km and 22 adrenaline-filled corners. To master it, step into the cockpit of next-generation cars shaped by the biggest regulatory overhaul in F1 history. These new machines",
+   "shortEn": "A high-speed multiplayer racer with a unique power-up system! Combine different juices for a range of attacking and defensive abilities. Drift through looping bends. Soar over monumental jumps, and defy gravity around tubular tracks in an explosively colorful racer!",
+   "shortRu": "All-Star Fruit Racing переносит игроков в увлекательные миры, полные невероятной динамики: дрифтуй по закольцованным виражам, пари в затяжных прыжках над бездонными пропастями и бросай вызов самой гравитации, прокладывая курс на треках, полных сюрпризов!",
+   "detailEn": "Go bananas for a jaw-dropping, lightning-fast kart racer for all ages and abilities! All-Star Fruit Racing propels players into vibrant worlds filled with incredible action: drift through looping bends, soar over monumental jumps and defy gravity itself around tubular tracks in an explosively colorful racer bursting with championships, modes and awe-inspiring sights! Jump into a bumper career mode! Pick your favourite character and battle for the first place trophy in a series of testing championships. Balance speed and skill as you battle nine other racers in a frantically fruity scrap for the podium and the all-important winner's prizes, unlocking new characters, championships and kart parts along the way! Master all the modes! Called yourself the champion of the champion? The journey has just begun! Create Custom Championships and select between three different difficulty settings and speeds to fine-tune your challenge, or dive into a range of different gametypes including Dragster races, Hill Climbs, Elimination races, Time Attacks and even modifier-filled modes that rewrite the rulebook! Dominate the seasons! Burn rubber in 21 incredible courses spread across five stunning worlds: Spring, Summer, Fall, Winter and Special Islands. Speed up volcanoes, around the twisting bodies of giant snakes and between giant, kart-crushing snowballs on some of the craziest racing tracks e",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 4999,
-    "final": 4999,
+    "initial": 999,
+    "final": 999,
     "discount": 0
    },
    "platforms": {
@@ -991,30 +122,151 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 25695,
+   "steamReviewCount": 188,
    "reviews": {
-    "positive": 26313,
-    "total": 30267,
-    "ratio": 87
+    "positive": 209,
+    "total": 324,
+    "ratio": 65
    }
   },
   {
-   "requested": "For The King",
-   "appid": 527230,
-   "steamName": "For The King",
-   "year": 2018,
-   "releaseDate": "Apr 19, 2018",
+   "requested": "Batora: Lost Haven",
+   "appid": 1506440,
+   "steamName": "Batora: Lost Haven",
+   "year": 2022,
+   "releaseDate": "Oct 20, 2022",
    "developers": [
-    "IronOak Games"
+    "Stormind Games"
    ],
    "publishers": [
-    "Curve Games"
+    "Team17"
    ],
    "genres": [
     {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "3",
+     "en": "RPG",
+     "ru": "Ролевые игры"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Captions available",
+    "Steam Cloud",
+    "Family Sharing"
+   ],
+   "shortEn": "Batora: Lost Haven® is a choice-driven isometric action adventure with RPG elements and a unique duality system affecting combat, story, dialogues, puzzles, and endings, that will make you question the meaning of sacrifice.",
+   "shortRu": "Batora: Lost Haven — это захватывающая ролевая игра в изометрическом стиле, в которой все решения игрока имеют далеко идущие последствия. Система двойственности влияет на все аспекты игры: бои, сюжет, диалоги, загадки и даже концовки, которые помогут вам узнать истинное значение жертвенности.",
+   "detailEn": "Review Scores About the Game Batora: Lost Haven® is a choice-driven isometric action adventure with RPG elements and a unique duality system affecting combat, story, dialogues, puzzles, and endings, that will make you question the meaning of sacrifice. Throughout Batora: Lost Haven®, you will navigate your way through a range of unique alien planets and discover a galaxy in which morals are blurred, and the line between right and wrong is mercilessly thin. Wield unique abilities and perfect different combat styles to defeat deadly foes, solve intricate puzzles, and take on quests from curious alien inhabitants. Every choice you make will shape your journey and forge the way you carry out your final mission... Restoring your Lost Haven. THE CALL OF DESTINY After losing her entire family, Avril has learned to be a survivor. She never imagined what her future would hold. To fulfill her destiny, she must journey across the universe to uncover ancient secrets, while making life-changing decisions. MULTI-LAYERED COMBAT Harness the dual powers of Sun and Moon and leverage the power of your mind and body in frenetic battles against deadly enemies and unearthly foes. CHOOSE YOUR PATH With multiple endings, the choices you make decide the fate of the universe and those who inhabit it. What are you willing to sacrifice for what you love? PUT YOUR MIND TO THE TEST Solve intricate and other",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 3499,
+    "final": 349,
+    "discount": 90
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "steamReviewCount": 212,
+   "reviews": {
+    "positive": 295,
+    "total": 453,
+    "ratio": 65
+   }
+  },
+  {
+   "requested": "Diner Bros",
+   "appid": 846800,
+   "steamName": "Diner Bros",
+   "year": 2018,
+   "releaseDate": "Jul 6, 2018",
+   "developers": [
+    "JAYFLGAMES"
+   ],
+   "publishers": [
+    "JAYFLGAMES"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "4",
+     "en": "Casual",
+     "ru": "Казуальные игры"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Shared/Split Screen PvP",
+    "Co-op",
+    "Shared/Split Screen Co-op",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Diner Bros is a cooking and restaurant management game. Cook and serve meals as fast as you can, but don’t get the orders wrong or else your customers will get angry – and hungry! Upgrade your restaurant and hire staff to help you… or play with your friends in 2-4 local co-op!",
+   "shortRu": "Diner Bros - это игра-экшен о приготовлении пищи и управлении рестораном. Готовьте и подавайте блюда быстро, но не ошибаясь в заказах или клиенты рассердятся и останутся голодными! Обновляйте ресторан и нанимайте персонал для обслуживания или играйте с друзьями на 2-4 игрока в совместном экшене!",
+   "detailEn": "More Party Games! About the Game HECTIC KITCHEN ACTION Diner Bros is a frantic cooking and restaurant management game where you must cook and serve meals to your customers before they get too hungry. You just opened your diner. As the first customers take their seats, you rush to the kitchen. One customer doesn’t want tomato in his burger, while the other one wants a drink. Those tables won’t clean up themselves either… If you take too long, your customers will leave angry and hungry, and you’ll soon go out of business! UPGRADE YOUR RESTAURANT Start off small, cooking burgers and serving drinks to a few curious customers. By upgrading your restaurant with new recipes, expanding the dining area, hiring staff, and impressing your customers, your diner may quickly become a bustling hot spot. With many different equipment to get and recipe types to learn, can your business earn the coveted 3-star award? KNOW YOUR CUSTOMERS You have your everyday patrons, but special customers with specific quirks and fixations will also visit. You have the construction workers, for instance: they’re always hungry and will order 2 courses. Or the runner, always in a hurry, who usually orders a salad. Keep an eye on any punks or thiefs: they will try to sneak away without paying, or will outright try to rob you! Then you have the divas, hipsters, lumberjacks... it takes all sorts to make a world, as ",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 999,
+    "final": 999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "steamReviewCount": 818,
+   "reviews": {
+    "positive": 808,
+    "total": 898,
+    "ratio": 90
+   }
+  },
+  {
+   "requested": "Dungeon Defenders",
+   "appid": 65800,
+   "steamName": "Dungeon Defenders",
+   "year": 2011,
+   "releaseDate": "Oct 18, 2011",
+   "developers": [
+    "Chromatic Games"
+   ],
+   "publishers": [
+    "Chromatic Games"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
     },
     {
      "id": "23",
@@ -1035,62 +287,57 @@
    "categories": [
     "Single-player",
     "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
     "Co-op",
     "Online Co-op",
-    "Shared/Split Screen Co-op",
     "Shared/Split Screen",
     "Steam Achievements",
     "Full controller support",
     "Steam Trading Cards",
-    "Adjustable Difficulty",
-    "Keyboard Only Option",
-    "Mouse Only Option",
-    "Save Anytime",
+    "Steam Workshop",
     "Steam Cloud",
+    "Valve Anti-Cheat enabled",
+    "Steam Leaderboards",
     "Remote Play on Phone",
     "Remote Play on Tablet",
     "Remote Play on TV",
     "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "For The King is a strategic RPG that blends tabletop and roguelike elements in a challenging adventure that spans the realms. Set off on a single player experience or play cooperatively both online and locally.",
-   "shortRu": "For The King — это стратегическая RPG, которая сочетает в себе элементы настолки и рогалика в захватывающем приключении, меняющем судьбы королевств. Можно играть в одиночку или в компании с другими игроками как онлайн, так и по локальной сети.",
-   "detailEn": "The King is dead, murdered by an unknown assailant. Now the once peaceful kingdom of Fahrul is in chaos. With nowhere left to turn and stretched beyond her means, the queen has put out a desperate plea to the citizens of the land to rise-up and help stem the tide of impending doom. Will you brave the relentless elements, fight the wicked creatures, sail the seas and delve into the dark underworld? None before you have returned from their journey. Can you be the one to put an end to the Chaos? For The King is a challenging blend of Strategy, JRPG Combat, and Roguelike elements. Unique Dice-Roll Inspired Combat System Fight and die as a party in fast paced and brutal turn-based combat using a unique slot system for attacks and special abilities. Find and gather herbs for your trusty pipe to heal your wounds and cure your maladies. Set up safe camps or brave the horrors that nightfall brings. Rogue-lite Replayability Every playthrough is made unique with procedurally generated maps, quests, loots and events for you to tackle. Use Lore between playthroughs to purchase Weapons, Items, NPCs, Classes, Events, and more! Multiple ways to play Play either single player, local co-operative play, or online co-operative play. Choose to split your party up and cover more ground or stick together for protection! A sound strategy can mean the difference between life and death. Plethora of addi",
+   "shortEn": "Create a hero from one of four classes to save Etheria in this 4-player coop Tower Defense Action-RPG. Includes Steam exclusive Portal gun &amp; TF2 familiars!",
+   "shortRu": "Создайте героя для спасения Этерии в этом ролевом кооперативном экшене жанра «защита башен». Эксклюзивное предложение с пушкой Portal и персонажами из TF2!",
+   "detailEn": "Dungeon Defenders is a Tower Defense Action-RPG where you must save the land of Etheria from an Ancient Evil! Create a hero from one of four distinct classes to fight back wave after wave of enemies by summoning defenses and directly participating in the action-packed combat! Customize and level your character, forge equipment, gather loot, collect pets and more! Take your hero through multiple difficulty modes and challenge/survival missions to earn more experience &amp; even better treasure. Join your friends with 4-player online and local (splitscreen) co-op to plan your strategies together or compete in PvP Deathmatch. Key Features 4-player Online and Local Co-Op - Team-up with up to 3 friends to defend cooperatively, with character classes that support each other’s strengths and weaknesses. Dynamically combine local (splitscreen) and online players and leave/join any time, so that the game’s always full. Tower-Defense Meets Action-RPG - Choose your class, customize your character &amp; equipment, strategically assemble your defenses, and participate directly in action-packed battle to preserve your castle against the invading horde! 4 Distinct Character Classes - Each character class has a different skill tree, set of towers, and even basic attacks! You can choose if you want to play stealthy, turn invisible, and plant traps behind enemy lines with the Huntress or go all o",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 1999,
-    "final": 399,
-    "discount": 80
+    "initial": 1499,
+    "final": 1499,
+    "discount": 0
    },
    "platforms": {
     "windows": true,
-    "mac": true,
-    "linux": true
+    "mac": false,
+    "linux": false
    },
    "controller": "full",
-   "metacritic": 79,
-   "steamReviewCount": 31068,
+   "metacritic": 81,
+   "steamReviewCount": 12158,
    "reviews": {
-    "positive": 38432,
-    "total": 43829,
-    "ratio": 88
+    "positive": 17695,
+    "total": 19012,
+    "ratio": 93
    }
   },
   {
-   "requested": "GUILTY GEAR Xrd REV 2",
-   "appid": 520440,
-   "steamName": "GUILTY GEAR Xrd REV 2",
-   "year": 2016,
-   "releaseDate": "Dec 14, 2016",
+   "requested": "Earth Defense Force 5",
+   "appid": 1007040,
+   "steamName": "EARTH DEFENSE FORCE 5",
+   "year": 2019,
+   "releaseDate": "Jul 11, 2019",
    "developers": [
-    "Arc System Works"
+    "SANDLOT"
    ],
    "publishers": [
-    "Arc System Works"
+    "D3PUBLISHER"
    ],
    "genres": [
     {
@@ -1104,28 +351,29 @@
     "Multi-player",
     "PvP",
     "Online PvP",
-    "Shared/Split Screen PvP",
+    "Co-op",
+    "Online Co-op",
+    "Shared/Split Screen Co-op",
     "Shared/Split Screen",
     "Steam Achievements",
     "Full controller support",
     "Steam Trading Cards",
     "Steam Cloud",
-    "Steam Leaderboards",
     "Remote Play on Phone",
     "Remote Play on Tablet",
     "Remote Play on TV",
     "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "Astonishing 3D cell animations and overwhelming content volume, the next-generation fighting game &quot;GUILTY GEAR Xrd REV 2&quot; is now out on Steam! Total cast of 25 unique characters, and tons of game modes, get ready to ROCK!",
-   "shortRu": "Astonishing 3D cell animations and overwhelming content volume, the next-generation fighting game &quot;GUILTY GEAR Xrd REV 2&quot; is now out on Steam! Total cast of 25 unique characters, and tons of game modes, get ready to ROCK!",
-   "detailEn": "Get ready to rock again! Guilty Gear Xrd REV 2 includes new fighters, moves, story chapters and more! It’s never been a better time to be a 2.5D brawler in the post apocalypse! Hone your skills with an eclectic cast of 25 insane fighters and prove your mettle as the ultimate fighting master. Revolutionary 3D cell-animation graphics further refined, and more game contents added! The next-generation fighting game &quot;Guilty Gear Xrd REV 2&quot; is now out on Steam! Carrying on the legacy from 1998, comes the next addition to the &quot;Guilty Gear&quot; series! All visuals have been tweaked to the finest detail and hand-polished by the animation masters to produce the top quality hand-drawn anime effect! Game contents revamped to provide for gamers of all skill levels, you cannot miss out on this one! Totally unique cast of 25 characters! In &quot;REVELATOR&quot; we have 6 new characters from the previous of the series, namely &quot;Johnny&quot;, &quot;Jack-O'&quot;, &quot;Kuradoberi Jam&quot;, &quot;Kum Haehyun&quot;, &quot;Raven&quot; and &quot;Dizzy&quot;. Followed by an upgrade to &quot;REV 2&quot;, featuring 2 more new characters &quot;Baiken&quot; and &quot;Answer&quot;, coming to a total of 25 characters! Extensive Game Modes Beginners can feel at ease with our step-by-step training program, from Tutorial Mode being remodified into an action game to learn the ropes, to th",
+   "shortEn": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth.",
+   "shortRu": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth.",
+   "detailEn": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth. Make way for the series' first humanoid aliens. Just what is this intelligent, extraterrestrial civilization that has attacked our own, known only as the Primers? Matching their intelligence, they bring the series' first humanoid alien foes. Battling against these intelligent foes will bring you to the depths of yet-unknown despair, and the heights of joy. Face the enemy with wisdom and courage! The most jam-packed entry yet, with online co-op play! This entry has more missions and weapons than any before it. On top of that, all missions support online co-op of up to 4 players, as well as local split-screen. Control the 4 classes and play with EDF soldiers all over the world. STORY This is no training exercise. This is the living nightmare we'd all feared. It all started in Japan, 2022. An immense fleet of starships laid siege to an EDF base located in the rough city outskirts in the Kanto region. This was an enemy humanity had never encountered, the Primers. Even worse, enormous insects attack the EDF base built even further underground. The EDF fights back. Even more realistic battles Armor will peel off where you sho",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
+    "initial": 5999,
+    "final": 2459,
+    "discount": 59
    },
    "platforms": {
     "windows": true,
@@ -1133,24 +381,25 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 8004,
+   "metacritic": 76,
+   "steamReviewCount": 9383,
    "reviews": {
-    "positive": 10470,
-    "total": 11097,
+    "positive": 10876,
+    "total": 11549,
     "ratio": 94
    }
   },
   {
-   "requested": "Gauntlet: Slayer Edition",
-   "appid": 258970,
-   "steamName": "Gauntlet™ Slayer Edition",
+   "requested": "Mercenary Kings: Reloaded Edition",
+   "appid": 218820,
+   "steamName": "Mercenary Kings: Reloaded Edition",
    "year": 2014,
-   "releaseDate": "Sep 23, 2014",
+   "releaseDate": "Mar 25, 2014",
    "developers": [
-    "Arrowhead Game Studios"
+    "Tribute Games Inc."
    ],
    "publishers": [
-    "WB Games"
+    "Tribute Games Inc."
    ],
    "genres": [
     {
@@ -1164,6 +413,11 @@
      "ru": "Приключенческие игры"
     },
     {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
      "id": "3",
      "en": "RPG",
      "ru": "Ролевые игры"
@@ -1174,21 +428,18 @@
     "Multi-player",
     "Co-op",
     "Shared/Split Screen",
+    "Cross-Platform Multiplayer",
     "Steam Achievements",
     "Full controller support",
     "Steam Trading Cards",
     "Steam Cloud",
-    "Stats",
-    "Steam Leaderboards",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
     "Remote Play on TV",
     "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "The classic Gauntlet 4-player co-op action gameplay returns in a completely new experience! Battle the endless hordes of foes as you and your friends fight for treasure and glory via both local and online co-op multiplayer. Invade the Darkness!",
-   "shortRu": "Встречайте полностью обновленную версию классической многопользовательской кооперативной игры Gauntlet! Вы можете играть с друзьями в кооперативном режиме через Интернет или локальную сеть. Покорите тьму этим летом на ПК и Steam!",
-   "detailEn": "The classic Gauntlet 4-player co-op action gameplay returns in a completely new experience! Play as one of four distinct heroes in an intense monster filled dungeon brawler with a combination of both uniquely built and randomly generated levels to explore. Battle the endless hordes of foes as you and your friends fight for treasure and glory via both local and online co-op multiplayer. Invade the Darkness! New Gauntlet Experience Classic dungeon crawling action is melded with innovative new features for the ultimate Gauntlet challenge. Online and Couch Co-op Multiplayer Explore on your own if you dare or play with friends in 4-player same-screen and online co-op. Your friends can become foes as you compete to see who can claim the most kills and the most gold. Four Classic Characters Gauntlet’s four classic characters: Warrior, Valkyrie, Elf, and Wizard return but with more distinctive play styles and their own unique skills. Discover New Powers Players can scour the dungeons for gold and loot to unlock mystical Relics that grant the holder deadly new abilities. But beware – if used incorrectly they can be detrimental to your party’s health! How Will You Die? Fiendish traps, monstrous hordes, epic bosses and even your own friends will cause you to die in confounding and extraordinary ways. Accolades: “An idealized reboot of the series – immediately familiar yet totally fresh.” ",
+   "shortEn": "Craft your arsenal to avenge your fallen comrades and save the world from the fearsome forces of CLAW!",
+   "shortRu": "Отточи свой арсенал и отомсти за павших товарищей, спаси мир от зловещих полчищ CLAW!",
+   "detailEn": "In this frantic 2D action game, you are part of the Mercenary Kings, the most skilled team of warriors-for-hire on Earth, but when your comrades have fallen and the fearsome forces of CLAW have seized an island-wide top secret Laboratory Base, you must do what it takes to stop them. But you're not going in unprepared! Your back-up is made of a crew of rogue geniuses and experts of their field! Able to craft &amp; customize guns'n'blades or upgrading body armor, you've never been this ready to join the fight. Whether its solo or with friends, move out, cut down CLAW and save the world!",
    "free": false,
    "price": {
     "currency": "USD",
@@ -1198,143 +449,27 @@
    },
    "platforms": {
     "windows": true,
-    "mac": false,
-    "linux": false
+    "mac": true,
+    "linux": true
    },
    "controller": "full",
-   "steamReviewCount": 6695,
-   "reviews": {
-    "positive": 8460,
-    "total": 10299,
-    "ratio": 82
-   }
-  },
-  {
-   "requested": "Granblue Fantasy Versus: Rising",
-   "appid": 2157560,
-   "steamName": "Granblue Fantasy Versus: Rising",
-   "year": 2023,
-   "releaseDate": "Dec 13, 2023",
-   "developers": [
-    "Cygames, Inc.",
-    "Arc System Works"
-   ],
-   "publishers": [
-    "Cygames, Inc."
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Rise to the challenge in Granblue Fantasy Versus: Rising! This powered up, revamped sequel to GBVS is more enjoyable and accessible than ever before. With simplified input options, even newcomers can engage in thrilling and strategic matches!",
-   "shortRu": "Rise to the challenge in Granblue Fantasy Versus: Rising! This powered up, revamped sequel to GBVS is more enjoyable and accessible than ever before. With simplified input options, even newcomers can engage in thrilling and strategic matches!",
-   "detailEn": "Standard Edition ■Content ・Granblue Fantasy Versus: Rising Game Granblue Special Item Set: GBVSR Pack is not included in the Steam version of Granblue Fantasy Versus: Rising Standard Edition. Legendary Edition ■Set Contents: • Granblue Fantasy Versus: Rising base game • Deluxe Character Pass 1 • Deluxe Character Pass 2 • Additional Character Set (Id) Purchase Bonus: GBVSR - Character Costume: Reverent Attire (Sandalphon) • Unlocks the Reverent Attire costume for Sandalphon for use in battle and the Figure Studio. - This purchase bonus is available until 7 a.m., Jan 12, 2027 (PT). - Character Costume: Reverent Attire (Sandalphon) is planned to be sold separately after the purchase bonus period has ended. - The latest update may be required in order to access this content. Free Edition ■Content ・Granblue Fantasy Versus: Rising Game Online play is available across all editions, and you will be able to transfer your save data if you upgrade to another edition. Some features are unavailable in the Free Edition. About the Game The latest installment in the GBVS series is taking the genre to new heights! Rise to glory in the definitive fighting game experience for beginners and veterans alike. It's a Party! Claim Your Crown in Grand Bruise Legends! Need a break from matches? Take a breather and experience a one-of-a-kind island lobby filled with fun attractions. You can even go head-t",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2499,
-    "final": 2499,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 5956,
-   "reviews": {
-    "positive": 5908,
-    "total": 7106,
-    "ratio": 83
-   }
-  },
-  {
-   "requested": "HELLDIVERS: Dive Harder Edition",
-   "appid": 394510,
-   "steamName": "HELLDIVERS™ Dive Harder Edition",
-   "year": 2015,
-   "releaseDate": "Dec 7, 2015",
-   "developers": [
-    "Arrowhead Game Studios"
-   ],
-   "publishers": [
-    "PlayStation Publishing LLC"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "DualShock Controller Support",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Valve Anti-Cheat enabled",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "HELLDIVERS™ is a hardcore, cooperative, twin stick shooter. As part of the elite unit called the HELLDIVERS, players must work together to protect SUPER EARTH and defeat the enemies of mankind in an intense intergalactic war.",
-   "shortRu": "HELLDIVERS™ — это хардкорный, использующий оба мини-джойстика шутер для совместной игры. Игроки управляют Адскими Десантниками, элитными бойцами, вместе защищающими Супер-Землю и истребляющими врагов человечества в напряженной межгалактической войне.",
-   "detailEn": "Just Updated The celebration of Liberty Day 2019 is upon us! Super Earth Command have made a new training area available for Helldivers in an all new game mode called Proving Grounds. These challenging, repeatable, missions have unique modifiers that will put your skills to the test! We're also introducing a new loadout system with random- and favorite- loadouts. Are you ready to DIVE HARDER? Just Updated To commemorate Liberty Day 2018, Super Earth Command is giving you more Freedom. More Democracy. MORE LIBERTY. Are you ready to dive into A New Hell? 3 NEW Difficulties have been added beyond HELLDIVE! 3 NEW Enemies have been added. A NEW Stratagem has been added (MGX-42 Machinegun). Just Updated In celebration of Liberty Day 2017, new FREE equipment has been added to the Helldivers arsenal. To protect Super Earth from all threats and spread managed democracy, unlock the 3 new Stratagems (Heavy Strafing Run, 'Thunderer' Smoke Round, A/GL-8 Launcher Turret) by liberating planets. For Super Earth! Just Updated Celebrate the 2 year Anniversary of HELLDIVERS with a FREE new HELLDIVER 'Next-Gen' Armor and Helmet! Simply start the game and the new content will be in your armory. Just Updated In celebration of Liberty Day 2016, we are giving away free equipment to all Helldivers. Simply start the game and the new 'M2016 CONSTITUTION' rifle and 'Liberty' cape content will be in your a",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "metacritic": 83,
+   "metacritic": 76,
    "requiredAge": "12",
-   "steamReviewCount": 25672,
+   "steamReviewCount": 1192,
    "reviews": {
-    "positive": 30231,
-    "total": 33444,
-    "ratio": 90
+    "positive": 1721,
+    "total": 2448,
+    "ratio": 70
    }
   },
   {
-   "requested": "HUNTDOWN",
-   "appid": 598550,
-   "steamName": "HUNTDOWN",
-   "year": 2021,
-   "releaseDate": "May 12, 2021",
+   "requested": "Sanctum 2",
+   "appid": 210770,
+   "steamName": "Sanctum 2",
+   "year": 2013,
+   "releaseDate": "May 15, 2013",
    "developers": [
-    "Easy Trigger Games"
+    "Coffee Stain Studios"
    ],
    "publishers": [
     "Coffee Stain Publishing"
@@ -1349,36 +484,34 @@
      "id": "23",
      "en": "Indie",
      "ru": "Инди"
+    },
+    {
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
     }
    ],
    "categories": [
     "Single-player",
     "Multi-player",
     "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
+    "Online Co-op",
     "Steam Achievements",
     "Full controller support",
     "Steam Trading Cards",
-    "Captions available",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
     "Steam Cloud",
     "Steam Leaderboards",
     "Remote Play on TV",
-    "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "In the mayhem-filled streets of the future where criminal gangs rule and cops fear to tread, only the bounty hunters can free the city from the corrupt fist of felony. Lay waste to the criminal underworld and make a killing in this hard boiled action comedy arcade shooter.",
-   "shortRu": "In the mayhem-filled streets of the future where criminal gangs rule and cops fear to tread, only the bounty hunters can free the city from the corrupt fist of felony. Lay waste to the criminal underworld and make a killing in this hard boiled action comedy arcade shooter.",
-   "detailEn": "In the mayhem-filled streets of the future where criminal gangs rule and cops fear to tread, only the bounty hunters can free the city from the corrupt fist of felony. Lay waste to the criminal underworld and make a killing in this hard boiled action comedy arcade shooter. KICK-ASS CO-OP, FROM NEAR AND FAR Hunt solo or give suppressive fire and advance on the enemy together as you run, jump, and take cover in the mayhem-filled streets of the future. Whether your buddy is in the same room or on the other side of the planet, wreak havoc as a team through couch co-op or Steam Remote Play. NEW ACTION-PACKED ARCADE MODE It’s you versus the world as you’re pitted against players from all corners of the globe in a brutal battle to pummel your way up the leaderboards. Innovate and invent new ways to pulverize your foes to rack up your score, whether you make use of combo-kills, quickdraw weapon-swap bonuses, or just hurl criminals off the rooftops. In this nail-biting race against the clock, collect as many bounties as you can while you watch the numbers roll and strive to be the apex bounty hunter. PLAY AS THREE LEGENDARY BOUNTY HUNTERS Anna Conda: Ex-commando, firearms expert, and full-time loose-cannon, Anna will assassinate without question or mercy, as long as you don’t mind the collateral damage. John Sawyer: Once a Special Forces cop who left the law behind. This scarred veteran",
+   "shortEn": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence.",
+   "shortRu": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence.",
+   "detailEn": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence. Outfit your character exactly the way you want through the new and extensive customization system. Choose your own loadout of towers, weapons and perks, but choose wisely because you are humanity’s last defense against the unrelenting hordes set out to destroy it. Sanctum 2 is a new game completely rebuilt from the ground up using community feedback and innovative design to really push the bar of what an independent studio can do. Intense Action – Deep Strategy In Sanctum 2, you will utilize elements from multiple gameplay genres to succeed. Construct towers and walls during the building phase before the enemies attack, then jump into the fray and blast everything to pieces in FPS mode. You can progress through the single-player campaign yourself, or play with up to four friends in co-op to discover the secrets of the planet LOEK III and learn the backstory on why the aliens are so intent on destroying the Cores you are sworn to protect. Key Features Building on the success of the original game, Sanctum 2 stands alone as the only true FPS/Tower Defense hybrid. No other title delivers gameplay that seamlessly combines both genres. Tower ",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 1999,
-    "final": 399,
+    "initial": 1499,
+    "final": 299,
     "discount": 80
    },
    "platforms": {
@@ -1387,25 +520,25 @@
     "linux": true
    },
    "controller": "full",
-   "metacritic": 85,
-   "steamReviewCount": 4073,
+   "metacritic": 77,
+   "steamReviewCount": 7454,
    "reviews": {
-    "positive": 4204,
-    "total": 4435,
-    "ratio": 95
+    "positive": 12937,
+    "total": 14390,
+    "ratio": 90
    }
   },
   {
-   "requested": "Hammerwatch",
-   "appid": 239070,
-   "steamName": "Hammerwatch",
-   "year": 2013,
-   "releaseDate": "Aug 12, 2013",
+   "requested": "Streets of Rogue",
+   "appid": 512900,
+   "steamName": "Streets of Rogue",
+   "year": 2019,
+   "releaseDate": "Jul 12, 2019",
    "developers": [
-    "Crackshell"
+    "Matt Dabrowski"
    ],
    "publishers": [
-    "Team17"
+    "tinyBuild"
    ],
    "genres": [
     {
@@ -1432,26 +565,40 @@
    "categories": [
     "Single-player",
     "Multi-player",
+    "PvP",
+    "Online PvP",
+    "LAN PvP",
+    "Shared/Split Screen PvP",
     "Co-op",
     "Online Co-op",
+    "LAN Co-op",
     "Shared/Split Screen Co-op",
     "Shared/Split Screen",
+    "Cross-Platform Multiplayer",
     "Steam Achievements",
+    "Full controller support",
     "Steam Trading Cards",
     "Steam Workshop",
-    "Partial Controller Support",
+    "DualShock Controller Support",
+    "DualShock Controller Support",
+    "DualSense Controller Support",
+    "DualSense Controller Support",
+    "Steam Cloud",
     "Includes level editor",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
+    "Remote Play on TV",
     "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "A hack and slash action adventure, set in a fantasy pixel art environment. Play solo or co-op in this adventure from bottom to top of Castle Hammerwatch. Kill hordes of enemies with varied looks and features through four unique environments with traps, hidden secrets and puzzles.",
-   "shortRu": "A hack and slash action adventure, set in a fantasy pixel art environment. Play solo or co-op in this adventure from bottom to top of Castle Hammerwatch. Kill hordes of enemies with varied looks and features through four unique environments with traps, hidden secrets and puzzles.",
-   "detailEn": "A hack and slash action adventure, set in a fantasy pixel art environment. Play solo or co-op in this adventure from bottom to top of Castle Hammerwatch. Kill hordes of enemies with varied looks and features through four unique environments with traps, hidden secrets and puzzles. Key Features 6 different classes, with unique features and skills Character development through unlocks and upgrades Hard, medium and easy of course Customize difficulty with several different modifiers Controller support, supports various different gamepads Multiplayer COOP, for up to four players, online, LAN and local PC, MAC and Linux support Mod and editing support, make your own levels and change other things to your liking",
+   "shortEn": "Fight, sneak, and hack your way through randomly generated cities. It's like Nuclear Throne meets Deus Ex, mixed with the anarchy of GTA. Rogue-lite meets immersive sim, and goes completely insane.",
+   "shortRu": "Покоряй случайно сгенерированные города: грубой силой, скрытностью или хакерством — решать только тебе! Эта игра — коктейль из Nuclear Throne и Deus Ex с изрядной примесью анархии в духе GTA. В ней облегченный роглайк скрестили с симулятором в отлично проработанном мире и замешали все это на чистом безумии.",
+   "detailEn": "Streets of Rogue is a rogue-lite about player choice, freedom, and anarchic fun. The game takes inspiration from fast-paced top-down rogue-lites like Binding of Isaac and Nuclear Throne , and adds free-form, experimentation-driven, emergent gameplay elements of RPGs like Deus Ex . Rather than taking place in a dungeon, the game is set in a functioning, procedurally generated city , where complex AI informs denizens from all walks of life, who are just trying to get by in their daily activities. In order to progress, the player will need to accomplish specific mission goals in any way they see fit through use of their special character traits, items, and the environment. Will you play as a soldier who shoots first and asks questions later? A stealthy doctor who uses chloroform and tranquilizer darts to silently take down the opposition? A genial bartender who can talk his way past the most intimidating of guards? Or how about a hyper-intelligent gorilla , rescuing other caged gorillas to form a small mobilized gorilla army? The Mighty Feature-List Play the game YOUR way! Don’t want to kill anybody? That’s cool! Want to hack computers? Got ya covered! Random world generation and TOTALLY EXTREME gameplay variety means you can play for 600 hours and not get bored! Seriously though, go outside!!! Super-advanced artificial intelligence that won’t put up with your crap! Outsmart these",
    "free": false,
    "price": {
     "currency": "USD",
-    "initial": 999,
-    "final": 999,
+    "initial": 1999,
+    "final": 1999,
     "discount": 0
    },
    "platforms": {
@@ -1459,39 +606,28 @@
     "mac": true,
     "linux": true
    },
-   "controller": null,
-   "metacritic": 72,
-   "steamReviewCount": 3669,
+   "controller": "full",
+   "steamReviewCount": 17242,
    "reviews": {
-    "positive": 5814,
-    "total": 6516,
-    "ratio": 89
+    "positive": 22182,
+    "total": 23098,
+    "ratio": 96
    }
   },
   {
-   "requested": "How 2 Escape",
-   "appid": 2264140,
-   "steamName": "How 2 Escape",
-   "year": 2023,
-   "releaseDate": "Aug 31, 2023",
+   "requested": "The Escapists 2",
+   "appid": 641990,
+   "steamName": "The Escapists 2",
+   "year": 2017,
+   "releaseDate": "Aug 21, 2017",
    "developers": [
-    "Breakfirst Games"
+    "Team17",
+    "Mouldy Toof Studios"
    ],
    "publishers": [
-    "Maximum Entertainment",
-    "Breakfirst Games"
+    "Team17"
    ],
    "genres": [
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
     {
      "id": "23",
      "en": "Indie",
@@ -1501,1990 +637,56 @@
      "id": "28",
      "en": "Simulation",
      "ru": "Симуляторы"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Family Sharing"
-   ],
-   "shortEn": "How 2 Escape is an escape-simulation game where two players will need to cooperate on asymmetrical gameplay and devices. &quot;Talk together. Help each other.&quot; will be your new motto to survive in How 2 Escape.",
-   "shortRu": "How 2 Escape is an escape-simulation game where two players will need to cooperate on asymmetrical gameplay and devices. &quot;Talk together. Help each other.&quot; will be your new motto to survive in How 2 Escape.",
-   "detailEn": "How 2 Escape is an escape-simulation game where two players will need to cooperate on asymmetrical gameplay and devices. 2 players, 2 ways to play. First player on PC embodies the character trapped in the train, exploring and playing with the environment. Second player will use the dedicated free companion app* to get various information and try to understand how to help the first player and be able to escape from this unfortunate travel… *Read more on our website or get the free How 2 Escape Companion App on iOs and Android. Each wagon is timed in different ways that you’ll discover. Running out of time means defeat. The longer you wait, the more difficult it is to see clearly... Both players will need to interact with each other and focus on their sense. Puzzles will require logic, coordination, observation and listening but most of all: communication! No time to chitchat. Get out of the trapped train. Every second is counted. Emy wakes up, trapped in a speeding train filled with traps and enigmatic puzzles. Her only way out? Reach the brake lever of the locomotive to stop the train. Her brother, Johann, on the other end of the phone, is the sole possessor of information that will aid Emy in navigating through the various carriages and escaping from this train. Will you be able to save Emy in time?",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1299,
-    "final": 1299,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 684,
-   "reviews": {
-    "positive": 592,
-    "total": 837,
-    "ratio": 71
-   }
-  },
-  {
-   "requested": "Jamestown+",
-   "appid": 377950,
-   "steamName": "Jamestown+",
-   "year": 2019,
-   "releaseDate": "Dec 12, 2019",
-   "developers": [
-    "Final Form Games"
-   ],
-   "publishers": [
-    "Batterystaple Games"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
     },
     {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
     }
    ],
    "categories": [
     "Single-player",
     "Multi-player",
+    "PvP",
+    "Online PvP",
+    "Shared/Split Screen PvP",
     "Co-op",
+    "Online Co-op",
     "Shared/Split Screen Co-op",
     "Shared/Split Screen",
     "Steam Achievements",
     "Full controller support",
+    "Steam Trading Cards",
     "Steam Cloud",
     "Steam Leaderboards",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
     "Remote Play on TV",
     "Remote Play Together",
     "Family Sharing"
    ],
-   "shortEn": "Set sail for 17th-century British Colonial Mars in Jamestown+: a cooperative shoot-em-up for 1-4 brave souls, designed to be exciting for players of all skill levels.",
-   "shortRu": "Set sail for 17th-century British Colonial Mars in Jamestown+: a cooperative shoot-em-up for 1-4 brave souls, designed to be exciting for players of all skill levels.",
-   "detailEn": "Built from the ground up to be an exciting experience for players of all skill levels , Jamestown+ is friendly to shoot 'em up newcomers while also offering the full-throttle challenge that die-hard fans of the genre crave. Set on 17th-century British colonial Mars, Jamestown+ is a neoclassical cooperative shoot-em-up for up to four players. Lush pixelart and an award-winning orchestral soundtrack immerse you in Raleigh’s battle to protect Britain’s last bastion: Jamestown colony. Jamestown+ features all the intensity, depth, and lovingly handcrafted pixels of a classic arcade shooter, with a modern twist: deeply-integrated cooperative gameplay. Eight years in the making, this is the definitive expanded and remastered edition of the critically-acclaimed debut title from Final Form Games. Fun for all: Jamestown's wide array of difficulty levels gives newcomers an exciting way to get into the shoot 'em up genre while also offering experts the crisply-controlling intense action they crave. Jamestown+ plays beautifully at any number of players - you'll only lose a credit when the whole team is destroyed at once, so you're always happy to have a bonus friend in on the action! Play with up to four of literally any type of controller! Jamestown+'s controller detection &amp; key rebinds let you and your friends get into the game with whatever you've got on hand. Four mice? Check. A mou",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1799,
-    "final": 1799,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 234,
-   "reviews": {
-    "positive": 219,
-    "total": 250,
-    "ratio": 88
-   }
-  },
-  {
-   "requested": "Lara Croft and the Temple of Osiris",
-   "appid": 289690,
-   "steamName": "LARA CROFT AND THE TEMPLE OF OSIRIS™",
-   "year": 2014,
-   "releaseDate": "Dec 8, 2014",
-   "developers": [
-    "Crystal Dynamics"
-   ],
-   "publishers": [
-    "Crystal Dynamics"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Leaderboards",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Lara Croft and the Temple of Osiris is the sequel to the critically-acclaimed Lara Croft and the Guardian of Light, and the first-ever four-player co-op experience with Lara Croft.",
-   "shortRu": "Lara Croft and the Temple of Osiris is the sequel to the critically-acclaimed Lara Croft and the Guardian of Light, and the first-ever four-player co-op experience with Lara Croft.",
-   "detailEn": "Lara Croft and the Temple of Osiris is the sequel to the critically-acclaimed Lara Croft and the Guardian of Light, and the first-ever four-player co-op experience with Lara Croft. Featuring stunning visuals and a brand-new story, players must work together to explore the temple, defeat hordes of enemies from the Egyptian underworld, solve devious puzzles, and avoid deadly traps. All the while, players will compete for treasure, powerful artifacts, and ultimate bragging rights. Lara Croft and the Temple of Osiris takes place deep in the deserts of Egypt. In her new adventure, Lara must join forces with rival treasure hunter Carter Bell and imprisoned gods Horus and Isis, to defeat the evil god Set. As Lara and her companions fight the elements of nature across the sands and through ancient tombs, they will battle legendary deities and creatures of myth. With the fate of the world at stake, Lara must recover the fragments of Osiris to stop Set from enslaving all mankind. Key Features: Critically Acclaimed Franchise – Sequel to the award winning Lara Croft and the Guardian of Light, one of the best-selling digital titles of all time. All-New Adventure – Lara must overcome deadly traps and forsaken gods to uncover the missing pieces of Osiris and change her fate. Classic Arcade Action - First ever 4 player co-op multiplayer experience featuring Lara Croft. Have your friends play a",
+   "shortEn": "Craft, Steal, Brawl and Escape! It’s time to bust out of the toughest prisons in the world as you return to the life of an inmate in The Escapists 2, now with multiplayer! Have you got what it takes to escape?",
+   "shortRu": "Мастерите, воруйте, деритесь и убегайте! Совершите побег из строгих тюрем мира, вернувшись к жизни заключенных в The Escapists 2. Теперь и с возможностью игры по сети! А у вас хватит сил на побег?",
+   "detailEn": "Just Updated Snow Way Out Available Now! Prepare for a frosty reception in the North Pole this year - in this free festive Escapists 2 update you’ll be having a woeful Christmas time. Rumours have been circulating that since becoming a .com millionaire Santa’s a little past his prime, and his booming online empire has replaced all joy and cheer with cold hard cash and a regime of fear. The grotto’s become a warehouse and the elves have all been replaced by robots, with one exception – you! Santa’s firmly keeping the work in workshop this Christmas with a list of new jobs to keep you busy while incarcerated. The reindeers need feeding, Christmas lists need incinerating and you’re just the elf to do it. Faced with a lifetime of hard labour, it’s time to plan your next daring escape and earn your festive freedom. You’ve been put in the nick by St. Nick, have you got what it takes or is there Snow Way Out? Just Updated Festive fun in free Santa’s Shakedown update Deck the cells with bars and escape attempts! Christmas has come early in the latest free game update to The Escapists 2, featuring a brand new map – Santa’s Shakedown. Not content with life in a perpetually festive lock-up, you must devise ingenious new ways of getting out of prison without getting caught in the tinsel! Featuring brand new items and some very unique craftables, you must pitch in with new prison jobs such ",
    "free": false,
    "price": {
     "currency": "USD",
     "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 73,
-   "requiredAge": "13",
-   "steamReviewCount": 1264,
-   "reviews": {
-    "positive": 3044,
-    "total": 4423,
-    "ratio": 69
-   }
-  },
-  {
-   "requested": "LEGO Batman 2: DC Super Heroes",
-   "appid": 213330,
-   "steamName": "LEGO® Batman™ 2: DC Super Heroes",
-   "year": 2012,
-   "releaseDate": "Jun 22, 2012",
-   "developers": [
-    "TT Games"
-   ],
-   "publishers": [
-    "Warner Bros. Interactive Entertainment"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Shared/Split Screen",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Legends Unite! The Dynamic Duo of Batman and Robin join other famous super heroes from the DC Universe including Superman, Wonder Woman and Green Lantern to save Gotham City from destruction at the hands of the notorious villains Lex Luthor and the Joker.",
-   "shortRu": "Легенды объединяются! К динамичному дуэту Бэтмена и Робина присоединяются знаменитые супергерои, такие как Супермен, Чудо-Женщина, Зеленый Фонарь, а значит, отъявленным злодеям Джокеру и Лексу Лютеру, задумавшим разрушить Готэм, несдобровать.",
-   "detailEn": "Legends Unite! The Dynamic Duo of Batman and Robin join other famous super heroes from the DC Universe including Superman, Wonder Woman and Green Lantern to save Gotham City from destruction at the hands of the notorious villains Lex Luthor and the Joker. Key Features Collect 50 DC Comics characters and flex your new super abilities--soar through the air with free-roaming flight, freeze and push objects with Super-Breath, and heat up and cut holes through objects with Heat Vision. Master new suits and gadgets such as Batman’s Power Suit and Robin’s Hazard Suit equipped with a Pressure Cannon that can absorb and dispense hazardous liquids. Players can also explore Gotham City by walking, flying or unlocking and controlling a variety of cool vehicles including the Batmobile, Batwing and Batboat. For the first time in a LEGO video game, hear the LEGO characters talk! Enjoy the game with friends and family using easy drop-in/drop-out co-op play that features dynamic split screen.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 81,
-   "steamReviewCount": 7492,
-   "reviews": {
-    "positive": 9144,
-    "total": 9647,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "LEGO City Undercover",
-   "appid": 578330,
-   "steamName": "LEGO® City Undercover",
-   "year": 2017,
-   "releaseDate": "Apr 4, 2017",
-   "developers": [
-    "Traveller's Tales"
-   ],
-   "publishers": [
-    "TT Games"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Join the Chase! In LEGO® CITY Undercover, play as Chase McCain, a police officer who's been tasked with going undercover to hunt down the notorious – and recently escaped – criminal Rex Fury and putting an end to his city-wide crime wave.",
-   "shortRu": "Присоединяйтесь к Чейзу! В игре LEGO® CITY Undercover вы примерите на себя роль Чейза Маккейна — офицера полиции, которому поручена операция под прикрытием по поиску преступника Рекса Фьюри.",
-   "detailEn": "Join the Chase! In LEGO® CITY Undercover, play as Chase McCain, a police officer who's been tasked with going undercover to hunt down the notorious – and recently escaped – criminal Rex Fury and putting an end to his city-wide crime wave. With two player co-op, friends can explore the sprawling open-world metropolis that is LEGO® City, with more than 20 unique districts to investigate, car thieves to bust, hilarious movie references to discover, vehicles to drive, and hundreds of collectibles. LEGO CITY Undercover brings together witty, original storytelling with signature LEGO humor to create a fun-filled experience for players of all ages to enjoy.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 80,
-   "steamReviewCount": 7419,
-   "reviews": {
-    "positive": 10540,
-    "total": 11537,
-    "ratio": 91
-   }
-  },
-  {
-   "requested": "LEGO DC Super-Villains",
-   "appid": 829110,
-   "steamName": "LEGO® DC Super-Villains",
-   "year": 2018,
-   "releaseDate": "Oct 16, 2018",
-   "developers": [
-    "TT Games",
-    "Feral Interactive (Mac)"
-   ],
-   "publishers": [
-    "Warner Bros. Interactive Entertainment",
-    "Feral Interactive (Mac)"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "It's good to be bad… Embark on an all-new DC/LEGO® adventure by becoming the best villain the universe has seen. Players will create and play as an all-new super-villain throughout the game, unleashing mischievous antics and wreaking havoc in an action-packed story.",
-   "shortRu": "Погрузитесь в новые приключения LEGO®, став лучшим злодеем во вселенной DC. Игроки смогут создавать новых суперзлодеев и управлять ими. К армии суперзлодеев присоединятся: Джокер, Харли Квинн и бесчисленное множество членов Лиги Несправедливости. Всех игроков ждут грандиозные приключения.",
-   "detailEn": "Digital Deluxe Edition It's good to be bad… Get the Deluxe Edition now and gain access to the main game and season pass content. Embark on an all-new DC/LEGO® adventure by becoming the best villain the universe has seen in LEGO® DC Super-Villains. About the Game It's good to be bad… Embark on an all-new DC/LEGO® adventure by becoming the best villain the universe has seen. Players will create and play as an all-new super-villain throughout the game, unleashing mischievous antics and wreaking havoc in an action-packed story. Set in an open world experience within the DC universe, the Justice League has disappeared, leaving Earth's protection to their counterparts, who have proclaimed themselves as the &quot;Justice Syndicate&quot;. It's up to you and a crazy group of misfits to uncover the intentions of Earth's new, strange, wannabe superheroes. Joined by renowned DC Super-Villains: The Joker, Harley Quinn, and countless others from the Injustice League, players will set out on an epic adventure.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 76,
-   "steamReviewCount": 5802,
-   "reviews": {
-    "positive": 7520,
-    "total": 8245,
-    "ratio": 91
-   }
-  },
-  {
-   "requested": "LEGO Marvel Super Heroes 2",
-   "appid": 647830,
-   "steamName": "LEGO® Marvel Super Heroes 2",
-   "year": 2017,
-   "releaseDate": "Nov 14, 2017",
-   "developers": [
-    "TT Games",
-    "Feral Interactive (Mac)"
-   ],
-   "publishers": [
-    "Warner Bros. Interactive",
-    "Feral Interactive (Mac)"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "It's about TIME! Join your favorite Super Heroes and Super Villains from different eras and realities as they go head-to-head with the time-traveling Kang the Conqueror in the all-new, original adventure, LEGO® Marvel Super Heroes 2!",
-   "shortRu": "ВРЕМЯ наконец настало! Вместе с любимыми супергероями и суперзлодеями сразитесь с путешествующим во времени Кангом Завоевателем в этой новой оригинальной приключенческой игре — LEGO® Marvel Super Heroes 2!",
-   "detailEn": "It's about TIME! Join your favorite Super Heroes and Super Villains from different eras and realities as they go head-to-head with the time-traveling Kang the Conqueror in the all-new, original adventure, LEGO® Marvel Super Heroes 2! Play as the Guardians of the Galaxy, Spider-Man, Thor, Hulk, Black Panther, Captain Marvel, Doctor Strange, Green Goblin and dozens of other Marvel Super Heroes and Villains in this cosmic battle across the time-tossed city of Chronopolis! Travel across lands -- from Ancient Egypt to The Old West, Sakaar and New York City in 2099 -- and transport objects or characters through the centuries! And, with new battle modes, friends and family can play against each other in a series of themed challenges and battle arenas!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 7462,
-   "reviews": {
-    "positive": 8799,
-    "total": 10290,
-    "ratio": 86
-   }
-  },
-  {
-   "requested": "Lara Croft and the Guardian of Light",
-   "appid": 35130,
-   "steamName": "Lara Croft and the Guardian of Light",
-   "year": 2010,
-   "releaseDate": "Sep 28, 2010",
-   "developers": [
-    "Crystal Dynamics"
-   ],
-   "publishers": [
-    "Crystal Dynamics"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Stats",
-    "Steam Leaderboards",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Take control of Lara and her new partner Totec, a Mayan tribesman, and uncover the ancient artifact known as the &quot;Mirror of Smoke&quot; in this all new action adventure game.",
-   "shortRu": "Take control of Lara and her new partner Totec, a Mayan tribesman, and uncover the ancient artifact known as the &quot;Mirror of Smoke&quot; in this all new action adventure game.",
-   "detailEn": "Lara Croft and the Guardian of Light is an action/adventure game featuring Lara Croft. This brand extension combines the hallmarks of the Tomb Raider franchise including exploration &amp; discovery, platforming, and puzzle solving combined with character progression, fun fast-paced combat, and elements of human cooperation and competition. Key features: First downloadable only title from Crystal Dynamics, and first downloadable only Lara Croft game. A classic formula of puzzles, combat, exploration, and breathtaking visuals put through the lens of an isometric fast-paced gaming experience. A wide range of options for solving puzzles and traversing deadly environmental traps, offering players an unprecedented level of freedom to choose their own solutions and explore various paths through the dense jungles of Central America. Crystal Dynamics' proprietary engine delivers sprawling environments with no load-times and unbelievable vertical gameplay through tombs reaching deep into the Earth. Face off against a myriad of undead warriors brought to life by the evil Xolotl, including a number of boss battles that are not to be missed!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 82,
-   "steamReviewCount": 3573,
-   "reviews": {
-    "positive": 4390,
-    "total": 4799,
-    "ratio": 91
-   }
-  },
-  {
-   "requested": "MELTY BLOOD: TYPE LUMINA",
-   "appid": 1372280,
-   "steamName": "MELTY BLOOD: TYPE LUMINA",
-   "year": 2021,
-   "releaseDate": "Sep 29, 2021",
-   "developers": [
-    "FRENCH-BREAD",
-    "TYPE-MOON",
-    "Lasengle Inc.",
-    "TAMSOFT CORPORATION",
-    "GameLoop Inc."
-   ],
-   "publishers": [
-    "Lasengle Inc."
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Steam Trading Cards",
-    "Gamepad Recommended",
-    "Partial Controller Support",
-    "Family Sharing"
-   ],
-   "shortEn": "This is the latest addition to the series of 2D fighting games based on TYPE-MOON's visual novel, Tsukihime. The curtain rises once more on dramatic battles played out with familiar characters from Tsukihime: A Piece of Blue Glass Moon.",
-   "shortRu": "Новая игра в серии 2D-файтингов, созданная TYPE-MOON, нарисована в фантастическом мире полнометражного причудливого визуального романа &quot;Цукихимэ&quot;. Продолжение истории, в которой сражаются персонажи &quot;Tsukihime -A piece of blue glass moon-&quot;.",
-   "detailEn": "6th October 2025 MELTY BLOOD ARCHIVES has been updated to address the recently identified Unity vulnerability. Please note that MELTY BLOOD: TYPE LUMINA was not developed using Unity. Therefore, it is not affected by this vulnerability and does not require an update. MELTY BLOOD is reborn. Based on Tsukihime: A Piece of Blue Glass Moon, this is new 2D fighting game, featuring new scenarios and characters. ◆ Iconic Battle Systems In addition to the systems inherited from the MELTY BLOOD series, it has new systems such as Moon Skill, that unleashes powerful techniques with simple inputs. We have pursued a battle system that allows you to enjoy intense battles with simple controls, that can be enjoyed not only by experienced players, but also by beginners who will touch MELTY BLOOD for the first time. ◆ Online battles using Rollback Netcode MELTY BLOOD: TYPE LUMINA utilizes Rollback Netcode for stable online battles against other players. ◆ All-New Stories, Visuals, &amp; Characters Explore an all-new MELTY BLOOD world from scenario writer Kinoko Nasu. Unique story events for each character give each playthrough its own feel, adding to the overall experience. The dialogue is fully voiced and changes depending on the combination of characters during battle, giving more insight into their relationship. In addition, the visuals have been renewed for the HD environment. And each chara",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 4999,
-    "final": 1499,
-    "discount": 70
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 9156,
-   "reviews": {
-    "positive": 9428,
-    "total": 10632,
-    "ratio": 89
-   }
-  },
-  {
-   "requested": "METAL SLUG 3",
-   "appid": 250180,
-   "steamName": "METAL SLUG 3",
-   "year": 2014,
-   "releaseDate": "Feb 14, 2014",
-   "developers": [
-    "SNK CORPORATION",
-    "Dotemu"
-   ],
-   "publishers": [
-    "SNK CORPORATION"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "“METAL SLUG 3”, the masterpiece in SNK’s emblematic 2D run &amp; gun action shooting game series, still continues to fascinate millions of fans worldwide to this day for its intricate dot-pixel graphics, and simple and intuitive game controls, heads out to the Steam gaming platform!",
-   "shortRu": "“METAL SLUG 3”, the masterpiece in SNK’s emblematic 2D run &amp; gun action shooting game series, still continues to fascinate millions of fans worldwide to this day for its intricate dot-pixel graphics, and simple and intuitive game controls, heads out to the Steam gaming platform!",
-   "detailEn": "“METAL SLUG 3” , the masterpiece in SNK’s emblematic 2D run &amp; gun action shooting game series, still continues to fascinate millions of fans worldwide to this day for its intricate dot-pixel graphics, and simple and intuitive game controls! The most highly praised title in the series among Metal Slug fans for its refined balance and game volume, heads out to the Steam gaming platform! MAIN FEATURES ・ARCADE MODE (MAIN MISSION): Play the arcade version of “METAL SLUG 3” from the beginning, and explore 5 immense challenging stages featuring multiple branching paths to explore exciting new areas! Make your way through the deluge of fire and fight off gigantic boss characters! ・MISSION MODE (STAGE SELECT): Play your favorite stages at will and train alone or with a brother-in-arms on the missions you have unlocked so far! ・ONLINE MISSION (ONLINE MULTIPLAYER): Connect to Steam and clear missions with friends far away via Online Co-Op Play. Find a fellow countryman or foreign ally and let the mission begin! ・SETTINGS: Configure display, control, and language settings. ・GALLERY: View original illustrations of the game that you've unlocked. ・LEADERBOARDS Check your current rank and score in “METAL SLUG 3” at any time, and compete with other players to become the world's No. 1 soldier! ** WILL NOT RUN ON XP **",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 799,
-    "final": 799,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 6989,
-   "reviews": {
-    "positive": 8252,
-    "total": 9195,
-    "ratio": 90
-   }
-  },
-  {
-   "requested": "Outward Definitive Edition",
-   "appid": 794260,
-   "steamName": "Outward Definitive Edition",
-   "year": 2022,
-   "releaseDate": "May 17, 2022",
-   "developers": [
-    "Nine Dots Studio"
-   ],
-   "publishers": [
-    "Prime Matter",
-    "Deep Silver"
-   ],
-   "genres": [
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "Stats",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "No remarkable journey is achieved without great effort. In Outward, the cold of the night or an infected wound can be as dangerous as a predator lurking in the dark. Explore the vast world of Aurai solo or in Co-op. The Definitive Edition features both DLCs and quality of life improvements.",
-   "shortRu": "Ни один великий путь не был пройден без великого труда. В Outward холод ночи или загноившаяся рана могут быть так же опасны, как скрывающиеся во тьме хищники. Исследуйте огромный мир Аурайи в одиночку или в режиме совместной игры. Definitive Edition включает в себя оба дополнения и общие улучшения.",
-   "detailEn": "Special Offer If you own the original base game and The Three Brothers DLC on PC, you can redeem a free digital copy of Outward Definitive Edition. About the Game The Definitive Edition delivers the ultimate experience for Outward players. Experience the overhauled and complete Outward experience in the Definitive Edition, which natively includes the content of The Soroboreans and The Three Brothers. Beside the new weapons, dungeons and unique mechanics, you can also expect quality of life improvements. Adventurers, now is your best chance to explore the world of Aurai! Outward delivers an immersive RPG experience coupled with survival gameplay, offering a deeply-rewarding challenge for the most avid gamers. Just your everyday traveler As an ordinary adventurer, you’ll not only have to hide or defend yourself against threatening creatures, but also brave the hazardous environmental conditions, protect yourself against infectious diseases, make sure you get enough sleep, and stay hydrated. Embark on perilous expeditions across untamed lands to reach new cities, undertake varied missions and discover hidden dungeons crawling with formidable enemies. Tackle the challenges solo or co-op In order to survive in the dazzling yet deadly world of Aurai, you’ll have to be cunning, clever and prepared. Devise diverse strategies to defeat your foes and don’t neglect your basic needs, shari",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 24661,
-   "reviews": {
-    "positive": 22842,
-    "total": 31427,
-    "ratio": 73
-   }
-  },
-  {
-   "requested": "Prince of Persia: The Lost Crown",
-   "appid": 2751000,
-   "steamName": "Prince of Persia The Lost Crown",
-   "year": 2024,
-   "releaseDate": "Aug 8, 2024",
-   "developers": [
-    "Ubisoft Montpellier"
-   ],
-   "publishers": [
-    "Ubisoft"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Steam Achievements",
-    "Full controller support",
-    "Captions available",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support"
-   ],
-   "shortEn": "Dash into a stylish and thrilling action-adventure platformer set in a mythological Persian world where the boundaries of time and space are yours to manipulate.",
-   "shortRu": "Отправьтесь навстречу приключениям в захватывающем платформере, действие которого разворачивается в мифологическом мире Персии.",
-   "detailEn": "Comparison Grid Complete Edition Discover the critically acclaimed Metroidvania with the Complete Edition. The Complete Edition includes: • Prince of Persia™: The Lost Crown main game • Mask of Darkness Story DLC • Two Thrones outfit • Dark Prince outfit • Immortals outfit • Prosperity Bird amulet • Fariba's Notebook digital adventure guide* MASTER A DEEP AND FUN COMBAT SYSTEM Use your Time Powers, combat, and platforming skills to perform stylish combos. Defeat a huge variety of enemies and challenging mythological bosses in Souls-like combats. EXPLORE THE MANY BIOMES OF MOUNT QAF Discover a unique Persian-inspired world filled with mythological landmarks. Find your way into a variety of interconnected biomes with their own identity and level design. Use your wits to solve puzzles and find hidden treasures. BE PART OF A CAPTIVATING STORY Immerse yourself in the story of Sargon, a young member of The Immortals. Travel to the time-cursed citadel of Mount Qaf to rescue the kidnapped Prince Ghassan. INNOVATIVE QUALITY-OF-LIFE FEATURES Get the thrill of exploration without frustration thanks to master level design and optional accessibility features. Remember locations easily with the innovative Eye of the Wanderer, a feature that allows you to take a screenshot and pin it to the map as a visual reminder. *Available for download and streaming from the official website, , in Chinese",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 899,
-    "discount": 70
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 85,
-   "steamReviewCount": 6890,
-   "reviews": {
-    "positive": 6118,
-    "total": 7256,
-    "ratio": 84
-   }
-  },
-  {
-   "requested": "Ravenswatch",
-   "appid": 2071280,
-   "steamName": "Ravenswatch",
-   "year": 2024,
-   "releaseDate": "Sep 26, 2024",
-   "developers": [
-    "Passtech Games"
-   ],
-   "publishers": [
-    "Nacon"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Steam Achievements",
-    "Full controller support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "Steam Cloud",
-    "Family Sharing"
-   ],
-   "shortEn": "Fallen heroes of old folk tales and legends: you are on the verge of a crucial battle against the Nightmare invading and corrupting your world. A roguelike action game from the creators of Curse of the Dead Gods©, playable solo or in online co-op.",
-   "shortRu": "Павшие герои из забытых легенд вернулись, чтобы сразиться с захватившим мир Кошмаром. Близится час решающей битвы! В этом приключенческом roguelike от создателей Curse of the Dead Gods© доступна как одиночная игра, так и онлайн-кооператив.",
-   "detailEn": "Roadmap About the Game Ravenswatch is a top-down roguelike action game in which you play as heroes of tales and legends that must slay hordes of nightmarish creatures in nerve-racking fights. After the success of Curse of the Dead Gods©, Passtech Games returns with an improved formula and an addictive game experience with endless replay value. It can be played solo or with up to four players in co-op. Play as 9 heroes, each with a unique twist and individual gameplay, including Little Red Riding Hood, who suffers from lycanthropy; Sun Wukong, the fallen monkey king; the Snow Queen with her evil powers; and many other familiar characters who have a darker side and are more violent than you might remember. The Nightmare has invaded the world of dreams and is corrupting everything in its wake. Faced with this evil, the Ravenswatch is gathering heroes from tales and legends from all over the world to lead a crucial battle and restore the fragile balance. But the heroes themselves have been corrupted. How deep do the roots of this evil go? Explore 3 open maps filled with activities and inspired by enchanted forests and marshes, One Thousand and One Nights, and Arthurian legends respectively. Help the inhabitants of Reverie, such as the Three Little Pigs, Sinbad the Sailor and Morgan the fairy, and earn valuable rewards to help you in your future battles. Reveal the story of each cha",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2499,
-    "final": 2499,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 84,
-   "requiredAge": "13",
-   "steamReviewCount": 16982,
-   "reviews": {
-    "positive": 18247,
-    "total": 22809,
-    "ratio": 80
-   }
-  },
-  {
-   "requested": "Sonic Superstars",
-   "appid": 2022670,
-   "steamName": "SONIC SUPERSTARS",
-   "year": 2023,
-   "releaseDate": "Oct 16, 2023",
-   "developers": [
-    "SEGA"
-   ],
-   "publishers": [
-    "SEGA"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Adventure through the mystical Northstar Islands in this all-new take on classic 2D Sonic high-speed action platforming in Sonic Superstars.",
-   "shortRu": "В новом платформере в стиле классических игр Соник, Тейлз, Наклз и Эми отправляются на острова Северной Звезды Пробегитесь по живописным местам и остановите коварный план Эггмана, Фэнга и загадочного врага!",
-   "detailEn": "Feature List Digital Deluxe Edition The SONIC SUPERSTARS Digital Deluxe Edition featuring LEGO® contains SONIC SUPERSTARS and the Digital Deluxe Upgrade featuring LEGO®, which includes: -LEGO® Fun Pack -Sonic Rabbit Skin -Mecha Sonic Skin for Battle Mode -Bonus Main Menu Wallpapers​ -Digital Artbook &amp; Mini Original Soundtrack About the Game Adventure through the mystical Northstar Islands in this all-new take on classic 2D Sonic high-speed action platforming. Play as Sonic, Tails, Knuckles, and Amy and harness all-new Emerald powers to move and attack in dynamic new ways. Navigate gorgeous, never-before-seen environments solo or with up to 3 other players and stop Dr. Eggman, Fang, and a mysterious new adversary from converting the islands’ giant animals into Badniks before it’s too late! A new Spin on a Classic: The 2D Sonic high-speed sidescrolling action platforming is reimagined with fully 3D graphics, new powers and abilities, an all-new setting, and new ways to play! You’ve never played classic Sonic like this before! Play as your Favorite Characters: Choose from Sonic, Tails, Knuckles, and Amy and take advantage of their unique abilities to blaze a path across the Northstar Islands as they race to defeat Dr. Eggman, who has teamed up with an old nemesis, Fang, and a mysterious new armored adversary. Harness the Power of the Chaos Emeralds: With the new Emerald Powers",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 2976,
-   "reviews": {
-    "positive": 2681,
-    "total": 3927,
-    "ratio": 68
-   }
-  },
-  {
-   "requested": "SOULCALIBUR VI",
-   "appid": 544750,
-   "steamName": "SOULCALIBUR VI",
-   "year": 2018,
-   "releaseDate": "Oct 18, 2018",
-   "developers": [
-    "BANDAI NAMCO Studios Inc.",
-    "Dimps Corporation"
-   ],
-   "publishers": [
-    "BANDAI NAMCO Entertainment"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Bring more than your fists to the fight! Featuring all-new battle mechanics and characters, SOULCALIBUR VI marks a new era of the historic franchise. Welcome back to the stage of history!",
-   "shortRu": "В бою пригодятся не только кулаки! Благодаря новым боевым механикам и персонажам SOULCALIBUR VI выводит знаменитую серию игр на новый уровень. Творите историю!",
-   "detailEn": "Digital Deluxe Edition The SOULCALIBUR VI Deluxe Edition includes SOULCALIBUR VI and a season pass. About the Game Introducing the newest entry in the SOULCALIBUR series! Experience all-new gameplay mechanics with the most beautiful graphics the weapons-based fighting genre has ever seen! ■All-New Battle Mechanics! Reversal Edge: Block your opponent’s assault and counterattack! A fusion of offense and defense. Soul Charge: Enjoy a temporary power-up to turn the tide of the battle. Unleash additional attacks in this state! Wield Lethal Hits to deal huge combo damage and take down fearsome opponents! ■A full assortment of single-player modes! STORY: Taking place in the 16th century, revisit the events of the very first SOULCALIBUR in Soul Chronicle mode. ■ A wide variety of game modes! Clash with players around the world in Online mode! Create your own character to suit your tastes in Creation mode! ■Guest Character Geralt from CD Projekt Red’s Witcher series joins the fray!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 8999,
-    "final": 1439,
-    "discount": 84
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "metacritic": 80,
-   "steamReviewCount": 9777,
-   "reviews": {
-    "positive": 11898,
-    "total": 14382,
-    "ratio": 83
-   }
-  },
-  {
-   "requested": "Scott Pilgrim vs. The World: The Game Complete Edition",
-   "appid": 2215260,
-   "steamName": "Scott Pilgrim vs. The World™: The Game – Complete Edition",
-   "year": 2023,
-   "releaseDate": "Jan 5, 2023",
-   "developers": [
-    "Engine Software",
-    "Ubisoft Montreal",
-    "Ubisoft Chengdu",
-    "Ubisoft Pune Production"
-   ],
-   "publishers": [
-    "Ubisoft"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Remote Play Together"
-   ],
-   "shortEn": "Rediscover the beloved 2D arcade-style beat 'em up inspired by the iconic comic and movie Scott Pilgrim vs. The World!",
-   "shortRu": "Откройте для себя заново популярную аркаду-файтинг по мотивам фильма и культового комикса «Скотт Пилигрим против всех»!",
-   "detailEn": "Rediscover the beloved 2D arcade-style beat 'em up inspired by the iconic comic book series and movie Scott Pilgrim vs. The World in this Complete Edition! This Complete Edition includes the original Scott Pilgrim vs. The World™: The Game, as well as its original DLCs, the Knives Chau and Wallace Add-On Packs. Play as your favorite characters – Scott Pilgrim, Ramona Flowers, Knives Chau, Stephen Stills, and more. Level up and learn new awesome abilities, unlock secret items and modes, summon powerful allies, and more! Team up with friends and combine your skills to battle your way through waves of tough enemies, or compete with them in awesome mini-games like Dodgeball – all on your way to defeat the League of Ramona's Evil Exes!",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1499,
-    "final": 494,
-    "discount": 67
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 3275,
-   "reviews": {
-    "positive": 2737,
-    "total": 3663,
-    "ratio": 75
-   }
-  },
-  {
-   "requested": "SERIOUS SAM 3: BFE",
-   "appid": 41070,
-   "steamName": "Serious Sam 3: BFE",
-   "year": 2011,
-   "releaseDate": "Nov 22, 2011",
-   "developers": [
-    "Croteam"
-   ],
-   "publishers": [
-    "Devolver Digital"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Workshop",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Includes level editor",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Serious Sam 3: BFE is a prequel to the original indie fast action FPS and Game of the Year sensation - Serious Sam: The First Encounter!",
-   "shortRu": "Новый загружаемый контент, Jewel of the Nile, уже доступен!",
-   "detailEn": "Serious Sam 3: BFE is a first-person action shooter, a glorious throwback to the golden age of first-person shooters where men were men, cover was for amateurs and pulling the trigger made things go boom. Serving as a prequel to the original indie and Game of the Year sensation, Serious Sam: The First Encounter, Serious Sam 3 takes place during the Earth’s final struggle against Mental’s invading legions of beasts and mercenaries. Key Features Frantic Arcade-Style Action – Hold down the trigger and lay waste to a never-ending onslaught of attackers or face being overrun by Mental’s savage beasts. No cover systems, no camping – it’s just you against them. All of them! Fearsome Enemy Creatures – A new battalion of unforgettable minions including the rumbling Scrapjack and towering Khnum join the legendary Headless Kamikaze, Gnaar and Sirian Werebull to create the fiercest opposition you’ve ever had the pleasure of mowing down! Spectacular Environments – Battle across the expansive battlefields of near-future Egypt bursting at the seams with total chaos. The shattered cities of tomorrow lined with the crumbling temples of an ancient world become your destructible playground! Destructive Arsenal – Unleash Serious Sam’s arsenal of weapons including a scoped assault rifle, the double-barreled shotgun, the explosive automatic shotgun, the punishing minigun, and the almighty barrage of",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": "full",
-   "metacritic": 72,
-   "steamReviewCount": 21853,
-   "reviews": {
-    "positive": 25350,
-    "total": 28749,
-    "ratio": 88
-   }
-  },
-  {
-   "requested": "Sky Force Reloaded",
-   "appid": 667600,
-   "steamName": "Sky Force Reloaded",
-   "year": 2017,
-   "releaseDate": "Nov 29, 2017",
-   "developers": [
-    "Infinite Dreams"
-   ],
-   "publishers": [
-    "Infinite Dreams"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Steam Leaderboards",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Sky Force Reloaded is a classic shoot ‘em up experience packed in gorgeous visuals and excellent gameplay. Enjoy flashy explosions, beautiful scenery and massive bosses in single player or local cooperative modes.",
-   "shortRu": "Sky Force Reloaded – это классическая стрелялка с шикарной графикой и великолепным геймплеем. Кровавые взрывы, красивые пейзажи и мощные боссы в режиме одиночной игры или локальном кооперативном режиме.",
-   "detailEn": "The shoot ‘em up you were looking for! Sky Force Reloaded is the spirit of the classic arcade shoot ‘em ups, captured with modern visuals and design. New entry in the series will keep you entertained with all the things you’ve came to love in scrolling shooters. Meaty explosions, incinerating lasers, collosal bosses and diverse aircrafts to pilot. Sky Force Reloaded is not your average scrolling shooter. It will draw you in with its beautiful environments and intense effects. It will keep you with its superb gameplay mechanics, progression system and in-game collectibles. It will leave you wishing for more, once it’s over. Fortunately, there’s a lot to do before that happens. Master 15 beautiful and immersive stages with challenging missions to complete. Battle enormous and intimidating bosses, laugh when they explode and cry when you explode. Unlock new difficulty modes, all the way from Normal to Nightmare. Put yourself in danger to rescue missing operatives from the battlefield. Assemble and test 9 different aircrafts. Pick your favorite, with its unique features and play style. Hunt down 30 elusive bonus cards to add even more depth to the gameplay. Some of them will grant permanent benefits, while others will boost your abilities only temporarily. Install hundreds of upgrades to your weapons, shields and other equipment. Turn your plane into a flying tank. Complete in-game",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": "full",
-   "steamReviewCount": 2698,
-   "reviews": {
-    "positive": 2579,
-    "total": 2778,
-    "ratio": 93
-   }
-  },
-  {
-   "requested": "Slap City",
-   "appid": 725480,
-   "steamName": "Slap City",
-   "year": 2020,
-   "releaseDate": "Sep 17, 2020",
-   "developers": [
-    "Ludosity"
-   ],
-   "publishers": [
-    "Ludosity"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
-    "Full controller support",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Slap City is a Seriously Fun platform fighter with a perfect mix of characters from the Ludosity universe. Play Locally or Online. Slap it hard in Ranked or fast and loose in Slap Ball game mode. We are the original inventors of Clutch Technology.",
-   "shortRu": "Slap City is a Seriously Fun platform fighter with a perfect mix of characters from the Ludosity universe. Play Locally or Online. Slap it hard in Ranked or fast and loose in Slap Ball game mode. We are the original inventors of Clutch Technology.",
-   "detailEn": "Slap City is a Seriously Fun platform fighter with a perfect mix of characters from the Ludosity universe. Play Locally or Online . Slap it hard in Ranked or fast and loose in Slap Ball game mode. We are the original inventors of Clutch Technology . Seriously Fun - We have designed Slap City to have the full depth platform fighters fans wish for, while being easily picked up by new players. A perfect mix of characters - Each character offers a completely different innovative playstyle. Play with up to four players locally or online with a variety of game modes, options, and computer controlled opponents, or play for points in online 1 on 1 ranked battles. Save replays of your greatest moments! Want a break from fighting? Try Slap Ball ! (Note: there will be no breaks from fighting.) In this team-based game mode, players slap the ball into the opponent's basket to score. The more the ball gets juggled in the air without touching the ground, the more points it'll be worth, allowing for some serious plays and comebacks. Don't forget to rest near your goal to recover some damage, or each hit from your opponent will soon send you several laps around the court! Clutch Technology - A new innovation in platform fighting games, it's button that Does Things! Try it out. Story Mode - Want to explore the city on your own? No worries! We got you covered with a single-player platforming stor",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 2409,
-   "reviews": {
-    "positive": 2730,
-    "total": 2882,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "Spyro Reignited Trilogy",
-   "appid": 996580,
-   "steamName": "Spyro™ Reignited Trilogy",
-   "year": 2019,
-   "releaseDate": "Sep 3, 2019",
-   "developers": [
-    "Toys for Bob",
-    "Iron Galaxy Studios"
-   ],
-   "publishers": [
-    "Activision"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Family Sharing"
-   ],
-   "shortEn": "Same sick burns, same smoldering attitude, now all scaled up in stunning HD, Spyro is back in the Spyro™ Reignited Trilogy! Rekindle the fire with remastered versions of the original three games, Spyro™ the Dragon, Spyro™ 2: Ripto's Rage! and Spyro™: Year of the Dragon.",
-   "shortRu": "В коллекции Spyro™ Reignited Trilogy вы сможете любоваться чешуей и огненным дыханием дракончика Spyro в разрешении HD. Дайте волю его пламени в трех обновленных играх Spyro™ the Dragon, Spyro™ 2: Ripto's Rage! и Spyro™: Year of the Dragon.",
-   "detailEn": "The original roast master is back! Same sick burns, same smoldering attitude, now all scaled up in stunning HD. Spyro is bringing the heat like never before in the Spyro™ Reignited Trilogy game collection. Rekindle the fire with the original three games, Spyro™ the Dragon , Spyro™ 2: Ripto's Rage! and Spyro™: Year of the Dragon . Explore the expansive realms, re-encounter the fiery personalities and relive the adventure in fully remastered glory. Because when there’s a realm that needs saving, there’s only one dragon to call.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 14252,
-   "reviews": {
-    "positive": 20959,
-    "total": 22418,
-    "ratio": 93
-   }
-  },
-  {
-   "requested": "THE KING OF FIGHTERS XV",
-   "appid": 1498570,
-   "steamName": "THE KING OF FIGHTERS XV",
-   "year": 2024,
-   "releaseDate": "Dec 12, 2024",
-   "developers": [
-    "SNK CORPORATION"
-   ],
-   "publishers": [
-    "SNK CORPORATION"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "SHATTER ALL EXPECTATIONS! Transcend beyond your limits with KOF XV!",
-   "shortRu": "SHATTER ALL EXPECTATIONS Новая The King of Fighters XV выходит на новый уровень!",
-   "detailEn": "THE KING OF FIGHTERS XV Standard Edition [Product Contents] - &quot;THE KING OF FIGHTERS XV&quot; Base game [Special Bonus] - Exclusive Bonus KOF XV DLC Costume &quot;CLASSIC LEONA&quot; ------------------ THE KING OF FIGHTERS XV Deluxe Edition [Product Contents] - &quot;THE KING OF FIGHTERS XV&quot; Base game - KOF XV DLC Characters &quot;Team GAROU&quot; - KOF XV DLC Characters &quot;Team SOUTH TOWN&quot; [Special Bonus] - Exclusive Bonus KOF XV DLC Costume &quot;CLASSIC LEONA&quot; ------------------ THE KING OF FIGHTERS XV Ultimate Edition [Product Contents] - &quot;THE KING OF FIGHTERS XV&quot; Base game - KOF XV Team Pass 1 - KOF XV Team Pass 2 - KOF XV Fighter Pass - KOF XV DLC Character &quot;MATURE&quot; and &quot;VICE&quot; - KOF XV DLC Costume &quot;GAROU: MotW TERRY&quot; - KOF XV DLC Costume &quot;CLASSIC LEONA&quot; ------------------ [Game Content] SHATTER ALL EXPECTATIONS! Transcend beyond your limits with KOF XV! Since its debut in 1994, the KOF fighting game series has been driving the world to new heights of excitement with its appealing characters and unique game system. Six years have passed since the last title in the series, and now KOF XV surpasses all of its predecessors in terms of graphics, systems, and online experience! - A total of 39 playable fighters at launch! Classic popular characters, heroes and villains revived from the dead, new challengers",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 999,
+    "final": 499,
     "discount": 75
    },
    "platforms": {
     "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 85,
-   "steamReviewCount": 8445,
-   "reviews": {
-    "positive": 7780,
-    "total": 9293,
-    "ratio": 84
-   }
-  },
-  {
-   "requested": "Teenage Mutant Ninja Turtles: The Cowabunga Collection",
-   "appid": 1659600,
-   "steamName": "Teenage Mutant Ninja Turtles: The Cowabunga Collection",
-   "year": 2022,
-   "releaseDate": "Aug 30, 2022",
-   "developers": [
-    "Digital Eclipse"
-   ],
-   "publishers": [
-    "KONAMI"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Steam Trading Cards",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Teenage Mutant Ninja Turtles: The Cowabunga Collection contains thirteen prior released classic games. This collection is a great place for gamers to experience these popular titles on Steam.",
-   "shortRu": "Teenage Mutant Ninja Turtles: The Cowabunga Collection состоит из тринадцати ранее выпущенных популярных классических игр, которыми теперь можно насладиться в Steam.",
-   "detailEn": "Teenage Mutant Ninja Turtles: The Cowabunga Collection assembles thirteen classic TMNT games by Konami in one incredible package. This collection provides a unique opportunity for gamers to experience these immensely popular and very influential games on Steam and includes a fantastic set of new quality of life features: Added Online Play* for certain games and Local Couch Play Save Anytime and Rewind Eleven Japanese Regional Version Releases Button Mapping Unique Development Art &amp; Sketches Historic TMNT Media Content The games are based on the characters and themes from on the 80's children's cartoon and comic book series, The Teenage Mutant Ninja Turtles. The game often takes place in a fictionalized New York city, in the sewers, inside futuristic enemy bases and even across time itself! Teenage Mutant Ninja Turtles: The Cowabunga Collection will be available on Steam/PC in 2022! • Teenage Mutant Ninja Turtles* (Arcade) • Teenage Mutant Ninja Turtles: Turtles in Time* (Arcade) • Teenage Mutant Ninja Turtles (N) • Teenage Mutant Ninja Turtles II: The Arcade Game (N) • Teenage Mutant Ninja Turtles III: The Manhattan Project (N) • Teenage Mutant Ninja Turtles: Tournament Fighters (N) • Teenage Mutant Ninja Turtles IV: Turtles in Time (SN) • Teenage Mutant Ninja Turtles: Tournament Fighters* (SN) • Teenage Mutant Ninja Turtles: The Hyperstone Heist* (SG) • Teenage Mutant Ninj",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 3999,
-    "final": 3999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 789,
-   "reviews": {
-    "positive": 911,
-    "total": 1037,
-    "ratio": 88
-   }
-  },
-  {
-   "requested": "The Jackbox Party Pack 10",
-   "appid": 2216830,
-   "steamName": "The Jackbox Party Pack 10",
-   "year": 2023,
-   "releaseDate": "Oct 18, 2023",
-   "developers": [
-    "Jackbox Games, Inc."
-   ],
-   "publishers": [
-    "Jackbox Games, Inc."
-   ],
-   "genres": [
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "2",
-     "en": "Strategy",
-     "ru": "Стратегии"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Become a party legend! The celebrated franchise returns with epic drawing battles in Tee K.O. 2, chaotic type-offs in FixyText, time-travel trivia in Timejinx, hidden identity intrigue in Hypnotorious, and group music-making in Dodo Re Mi.",
-   "shortRu": "Станьте легендой вечеринок! Знаменитая франшиза возвращается! Эпические рисовальные поединки в Tee K.O. 2, хаотичные перестрелки сообщениями в FixyText, викторина с путешествиями во времени Timejinx, скрытая личность в Hypnotorious и совместное создание музыки в Dodo Re Mi.",
-   "detailEn": "Become a party legend with The Jackbox Party Pack 10. Start Your Party The celebrated franchise returns with 5 new party games in 1 hilarious pack. Reunion? Work Party? Hanging with pals? There's a game for everyone and every occasion, from strategy, drawing, trivia or music! Play with your phone or tablet - no special controller required. Games support up to 9 players and 10,000 audience members. Ready to take things global? All Party Pack 10 games can be played in English, French, Italian, German, or Spanish. Choose Your Game Tee K.O. 2 (Drawing, Writing): In Tee K.O. 2, return to T-Shirt Island, where the most hardened warriors in the world compete in a deadly fighting tournament. The drawing finger–not the fist–decides the victory! FixyText (Writing, Teamwork): FixyText is the Wild West of text-editing. In this chaotic game, everyone’s in group chat, typing all at once to make the most memorable statement. And there’s no delete key. Take that auto-correct! Hypnotorious (Hidden Identity, Roleplaying): Hypnotorious is a game with secret roles, tentative alliances and of course, silly answers to ridiculous questions. Who is on your side? Timejinx (Trivia): In Timejinx, you’re a time traveler from the future competing in a high-stakes trivia night. Save your current timeline by answering questions about the past. Dodo Re Mi (Music, Teamwork): In Dodo Re Mi, your phone is your i",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": null,
-   "steamReviewCount": 500,
-   "reviews": {
-    "positive": 412,
-    "total": 627,
-    "ratio": 66
-   }
-  },
-  {
-   "requested": "The Jackbox Party Pack 7",
-   "appid": 1211630,
-   "steamName": "The Jackbox Party Pack 7",
-   "year": 2020,
-   "releaseDate": "Oct 14, 2020",
-   "developers": [
-    "Jackbox Games, Inc."
-   ],
-   "publishers": [
-    "Jackbox Games, Inc."
-   ],
-   "genres": [
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "2",
-     "en": "Strategy",
-     "ru": "Стратегии"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Five new games: the hit threequel Quiplash 3, the collaborative chaos of The Devils and the Details, the fierce drawing game Champ’d Up, the speech game Talking Points and the guessing game Blather 'Round. Use phones or tablets as controllers and play with up to 8 players, and an audience of 10,000!",
-   "shortRu": "Five new games: the hit threequel Quiplash 3, the collaborative chaos of The Devils and the Details, the fierce drawing game Champ’d Up, the speech game Talking Points and the guessing game Blather 'Round. Use phones or tablets as controllers and play with up to 8 players, and an audience of 10,000!",
-   "detailEn": "Five new incredible party games to bring the fun! 1. The say-anything threequel Quiplash 3 (3-8 players). Get big laughs answering the quirkiest prompts. 2. The collaborative chaos game The Devils and the Details (3-8 players). Can you survive the daily torture of human life? 3. The drawing fighting game Champ’d Up (3-8 players) . Can you take down the heavy favorite? 4. The on-the-spot speech game Talking Points (3-8 players). Just keep talking whether it makes sense or not. 5. The pop culture guessing game Blather 'Round (2-6 players). It’s a good fun time experience. Play using phones, tablets or computers. No extra controllers needed! NOTE: The Jackbox Party Pack 7 is in English only. NOTE: The game is local multiplayer but can be enjoyed over streams with remote players. How to Play Remotely Players use any web-enabled device (like a smartphone or tablet) to join the game and play along. When playing with remote players, you can use a video conferencing tool like Zoom, Steam Broadcast, Google Hangouts, Discord, and more to connect with others! Just share your screen while on a call and make sure you look for prompts to share audio.",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
     "mac": true,
     "linux": true
    },
    "controller": "full",
-   "steamReviewCount": 4004,
+   "metacritic": 75,
+   "steamReviewCount": 26480,
    "reviews": {
-    "positive": 4778,
-    "total": 4959,
-    "ratio": 96
-   }
-  },
-  {
-   "requested": "The Jackbox Party Pack 8",
-   "appid": 1552350,
-   "steamName": "The Jackbox Party Pack 8",
-   "year": 2021,
-   "releaseDate": "Oct 13, 2021",
-   "developers": [
-    "Jackbox Games, Inc."
-   ],
-   "publishers": [
-    "Jackbox Games, Inc."
-   ],
-   "genres": [
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "2",
-     "en": "Strategy",
-     "ru": "Стратегии"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "PvP",
-    "Shared/Split Screen PvP",
-    "Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Partial Controller Support",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Plan your next game night! Jackbox Games is back with 5 hilarious new party games including Drawful Animate, Job Job, The Poll Mine, Weapons Drawn, and The Wheel of Enormous Proportions.",
-   "shortRu": "Plan your next game night! Jackbox Games is back with 5 hilarious new party games including Drawful Animate, Job Job, The Poll Mine, Weapons Drawn, and The Wheel of Enormous Proportions.",
-   "detailEn": "About The Jackbox Party Pack 8 The eighth installment of the beloved Jackbox Party Pack franchise is here! Five hilarious new games will energize your next game night, holiday party, happy hour, or video call. No extra controllers needed - players use their phones or tablets to play along! Got a bigger group? Play with up to 10 players and up to 10,000 audience members. The Jackbox Party Pack 8 is currently in English only. This game does not support online matchmaking but can still be enjoyed remotely using livestreaming services or video conferencing tools. About Each Game Drawful Animate (3 -10 players) - It’s alive! The guessing game with terrible drawings and hilariously wrong answers makes a dynamic return. In this revamped title, players create looping, two-frame animations based on weird and random titles. . The Wheel of Enormous Proportions (2-8 players) - Trivia has never been so large! A fantastic, mystical wheel challenges you with a variety of trivia prompts. Winners are awarded slices of the Wheel’s face with a chance to win big with each nail-biting spin. In the end, one player will have their most burning question answered by the great Wheel. . Job Job (3-10 players) - Use other people’s words to create unique and funny answers to classic job interview questions. Go head to head to see who scores the job! . The Poll Mine (2-10 players) - A survey game that’s all",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": null,
-   "steamReviewCount": 1136,
-   "reviews": {
-    "positive": 1292,
-    "total": 1435,
-    "ratio": 90
-   }
-  },
-  {
-   "requested": "The Past Within",
-   "appid": 1515210,
-   "steamName": "The Past Within",
-   "year": 2022,
-   "releaseDate": "Nov 2, 2022",
-   "developers": [
-    "Rusty Lake"
-   ],
-   "publishers": [
-    "Rusty Lake"
-   ],
-   "genres": [
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Steam Cloud",
-    "Family Sharing"
-   ],
-   "shortEn": "The Past Within is the new co-op experience from Rusty Lake! Play together with someone you deem trustworthy: one in The Past, the other in The Future. Observe and communicate what you see around you. Solve the puzzles and uncover Albert Vanderboom’s plan.",
-   "shortRu": "The Past Within — новый кооперативный опыт от Rusty Lake! Играйте вместе с надежным человеком: один будет в Прошлом, другой — в Будущем. Изучайте окружение и передавайте информацию партнеру. Решайте головоломки и раскройте план Альберта Вандербума.",
-   "detailEn": "Note: The Past Within is a co-op-only game. Both players need to own a copy of the game and a way to communicate with each other. Play with a friend or find a partner on our official Discord, which is linked in the sidebar! The past and future cannot be explored alone! Team up with a friend and piece together the mysteries surrounding Albert Vanderboom. Communicate what you see around you to help one another solve various puzzles and explore the worlds from different perspectives! The Past Within is the first co-op only point-and-click adventure set in the mysterious world of Rusty Lake. Features A co-op experience Play together with a friend, one in The Past, the other in The Future. Work together to solve the puzzles and help Rose set her father’s plan in motion! Two worlds - Two perspectives Both players will experience their environments in two different dimensions: 2D as well as in 3D - a first-time experience in the Rusty Lake universe! Cross-platform play As long as you can communicate with each other, you and your partner of choice can each play The Past Within on your preferred platform: PC, Mac, iOS, Android and (very soon) Nintendo Switch! Playtime &amp; Replayability The game contains 2 chapters and has an average play-time of 2 hours . For the full experience, we recommend replaying the game from the other perspective. Plus you can use our replayability feature for",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 599,
-    "final": 599,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 14694,
-   "reviews": {
-    "positive": 15970,
-    "total": 16877,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "Trine 2: Complete Story",
-   "appid": 35720,
-   "steamName": "Trine 2: Complete Story",
-   "year": 2013,
-   "releaseDate": "Jun 6, 2013",
-   "developers": [
-    "Frozenbyte"
-   ],
-   "publishers": [
-    "Frozenbyte"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Workshop",
-    "Custom Volume Controls",
-    "Adjustable Difficulty",
-    "Stereo Sound",
-    "Steam Cloud",
-    "Includes level editor",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Three heroes make their way through a fairytale world of forgotten ruins, scheming goblins and impossible contraptions. Play alone and switch between wizard, knight and thief at will, or bring up to two friends, in online or local co-op.",
-   "shortRu": "Трем героям предстоит совершить полное опасностей путешествие в фантастическом сказочном мире. Решайте задачки, наслаждайтесь графикой и не забудьте про друзей!",
-   "detailEn": "Three heroes, one artifact Amadeus the Wizard conjures boxes and planks out of thin air. Pontius the Knight charges through what stands in the way. Zoya the Thief slips past it with rope and arrow. Play together, or on your own 1–3 players, in online or local co-op, and the whole campaign works either way. Play alone and switch heroes freely, or bring two friends and watch each of them reach for a different answer. Puzzles with more than one answer Twenty levels of physics-based puzzles, hazards, enemies and contraptions. Turn goblins to ice with frost arrows, levitate a monster to a great height and then trap it in a box, fly across a chasm on the Kitesail Shield, or slow the world down with the time-bending gravity bubble. A fairytale world worth the trip Travel through a castle by the treacherous sea, a burning desert, snowy ice mountains, and all the way to the insides of a giant worm. Features 1–3 player co-op, online and local Play as wizard, knight and thief, switching freely at any time Twenty levels of puzzles, platforming and combat, including the Goblin Menace expansion campaign Award-winning soundtrack by Ari Pulkkinen",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": "full",
-   "metacritic": 84,
-   "steamReviewCount": 15283,
-   "reviews": {
-    "positive": 21018,
-    "total": 22064,
-    "ratio": 95
-   }
-  },
-  {
-   "requested": "Trine Enchanted Edition",
-   "appid": 35700,
-   "steamName": "Trine Enchanted Edition",
-   "year": 2009,
-   "releaseDate": "Jul 2, 2009",
-   "developers": [
-    "Frozenbyte"
-   ],
-   "publishers": [
-    "Frozenbyte"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "3",
-     "en": "RPG",
-     "ru": "Ролевые игры"
-    },
-    {
-     "id": "2",
-     "en": "Strategy",
-     "ru": "Стратегии"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Shared/Split Screen Co-op",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Trading Cards",
-    "Steam Workshop",
-    "Custom Volume Controls",
-    "Adjustable Difficulty",
-    "Stereo Sound",
-    "Steam Cloud",
-    "Includes level editor",
-    "Remote Play on Phone",
-    "Remote Play on Tablet",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "Bound together by the magical artifact Trine, a wizard, a knight and a thief journey through a fairytale world of great castles and strange machinery. Solve puzzles, overcome obstacles and battle the undead! Play solo or in 1–3 player online or local co-op.",
-   "shortRu": "Bound together by the magical artifact Trine, a wizard, a knight and a thief journey through a fairytale world of great castles and strange machinery. Solve puzzles, overcome obstacles and battle the undead! Play solo or in 1–3 player online or local co-op.",
-   "detailEn": "Three heroes, bound by one artifact A wizard, a knight and a thief each reach for a mysterious device called Trine at the same moment, and it binds their fates together. Set in a world of great castles and strange machinery, their quest is to save a kingdom fallen to the undead. There is always another way through The world runs on fully interactive physics, and each hero meets it differently. Amadeus the Wizard summons objects out of thin air to solve puzzles and open new routes. Zoya the Thief uses agility and dead-on accuracy to surprise the monsters and cross the widest gaps by grappling hook. Pontius the Knight unleashes mayhem and physical destruction wherever he goes. Choose whoever suits the challenge ahead, and switch between them whenever you like. Play it alone or together 1–3 players, in online or local co-op. Alone, you hold all three heroes and swap between them freely. With others, each player takes a hero and you combine their skills to get through. Castles, caverns and dragon graveyards Journey through fifteen levels with their own distinct atmospheres and challenges, including the Astral Academy, Crystal Caverns, Dragon Graveyard, Forsaken Dungeons, Fangle Forest and the Ruins of the Perished. Along the way, earn experience to upgrade your heroes' abilities and collect items that give them a helping hand. A fairytale world, rebuilt The Enchanted Edition remake",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1499,
-    "final": 1499,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": true
-   },
-   "controller": "full",
-   "metacritic": 80,
-   "steamReviewCount": 12848,
-   "reviews": {
-    "positive": 15258,
-    "total": 15960,
-    "ratio": 96
-   }
-  },
-  {
-   "requested": "We Were Here",
-   "appid": 582500,
-   "steamName": "We Were Here",
-   "year": 2017,
-   "releaseDate": "Feb 3, 2017",
-   "developers": [
-    "Total Mayhem Games"
-   ],
-   "publishers": [
-    "Total Mayhem Games"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    },
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "37",
-     "en": "Free To Play",
-     "ru": "Бесплатные"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Custom Volume Controls",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Subtitle Options",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Family Sharing"
-   ],
-   "shortEn": "Lost in a frozen wasteland and split up from your partner inside an abandoned castle, the only possession you have left is a walkie-talkie with a familiar voice on the other end. Can the two of you find your way out in time?",
-   "shortRu": "Вы заблудились в ледяной пустоши и оказались в заброшенном замке без своего спутника. Единственное, что у вас осталось, — это рация и знакомый голос в ней. Сможете ли вы вдвоем вовремя найти выход?",
-   "detailEn": "Lost in a frozen wasteland and split up from your partner inside an abandoned castle, the only possession you have left is a walkie-talkie with a familiar voice on the other end. Can the two of you find your way out in time? Note: This game requires both players to have a working PC-compatible microphone. We Were Here is the free pilot episode in a series of cooperative standalone puzzle adventures. Two players are trapped inside an abandoned castle, with Player One confined to a small secluded part of the castle as Player Two roams the halls trying to find Player One. Every room challenges your wits and ability to communicate clearly, using only your voice. Are you ready to find out how well you and your friends work together? If you like living on the edge, try playing it with a complete stranger! Atmospheric thriller setting that will keep you on the edge of your seat. Overcome challenging puzzles by working together - each player has a completely different game experience. Explore intriguing environments and search for clues in a fictional castle inspired by Castle Rock, Antarctica. Inspired by games such as: Myst, Amnesia: The Dark Descent, and real-life escape rooms.",
-   "free": true,
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": null,
-   "steamReviewCount": 1754,
-   "reviews": {
-    "positive": 29728,
-    "total": 33301,
-    "ratio": 89
-   }
-  },
-  {
-   "requested": "We Were Here Too",
-   "appid": 677160,
-   "steamName": "We Were Here Too",
-   "year": 2018,
-   "releaseDate": "Feb 2, 2018",
-   "developers": [
-    "Total Mayhem Games"
-   ],
-   "publishers": [
-    "Total Mayhem Games"
-   ],
-   "genres": [
-    {
-     "id": "25",
-     "en": "Adventure",
-     "ru": "Приключенческие игры"
-    },
-    {
-     "id": "4",
-     "en": "Casual",
-     "ru": "Казуальные игры"
-    },
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    }
-   ],
-   "categories": [
-    "Multi-player",
-    "Co-op",
-    "Online Co-op",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Steam Trading Cards",
-    "Custom Volume Controls",
-    "DualShock Controller Support",
-    "DualShock Controller Support",
-    "DualSense Controller Support",
-    "DualSense Controller Support",
-    "Subtitle Options",
-    "Partial Controller Support",
-    "Steam Cloud",
-    "Family Sharing"
-   ],
-   "shortEn": "As your final hour approaches, a large structure looms up in the distance, towering above the relentless storm. Discover the truth behind this dark castle in a communication-based, cooperative puzzle adventure.",
-   "shortRu": "Вам грозит смертельная опасность, и вдруг вы замечаете вдалеке огромное сооружение, которое возвышается среди беспощадной бури. Раскройте тайны мрачного замка, общаясь с напарником в этой кооперативной приключенческой игре.",
-   "detailEn": "We Were Here Too is an online first-person cooperative adventure set in a fictional medieval castle. A new standalone entry in the We Were Here series, We Were Here Too is all about cooperative discovery, immersion and teamwork through communication. You and a partner must solve puzzles through smart communication and observation. Trapped in different parts of an ancient castle, only your walkie-talkies will allow you to figure out how to escape. NOTE: This game requires both players to have a working PC-compatible microphone. As your final hour approaches, a large structure looms up in the distance - towering above the relentless storm. With nowhere else to go, you decide to enter this mysterious place, only to find yourself trapped inside… Will you be able to find a way out? Cooperative – Your voice will have to lead the way. Placed in the shoes of explorers with only walkie-talkies in hand, you are lost in a castle frozen in time. Immersive – The warmth of life abandoned the halls of Castle Rock long ago Immerse yourself in a thrilling experience as you and your partner puzzle your way through this abandoned fortress. Lose yourself in brand new environments and an original soundtrack. Mysterious – We were not alone... Darkness took over these once magnificent halls. Can you discover the truth behind the grim fate of Castle Rock? We Were Here Too features: Communication-based",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 999,
-    "final": 999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": true,
-    "linux": false
-   },
-   "controller": null,
-   "metacritic": 69,
-   "steamReviewCount": 9027,
-   "reviews": {
-    "positive": 8825,
-    "total": 11316,
-    "ratio": 78
-   }
-  },
-  {
-   "requested": "Windjammers 2",
-   "appid": 1114290,
-   "steamName": "Windjammers 2",
-   "year": 2022,
-   "releaseDate": "Jan 20, 2022",
-   "developers": [
-    "Dotemu"
-   ],
-   "publishers": [
-    "Dotemu"
-   ],
-   "genres": [
-    {
-     "id": "23",
-     "en": "Indie",
-     "ru": "Инди"
-    },
-    {
-     "id": "18",
-     "en": "Sports",
-     "ru": "Спорт"
-    },
-    {
-     "id": "2",
-     "en": "Strategy",
-     "ru": "Стратегии"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Shared/Split Screen PvP",
-    "Shared/Split Screen",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Remote Play on TV",
-    "Remote Play Together",
-    "Family Sharing"
-   ],
-   "shortEn": "The best flying disc game of all time is back, with amazing hand-drawn graphics, crazy new moves, gameplay mechanics and awesome characters and stages! New update brings new playable characters, new training mode, full crossplay support and more.",
-   "shortRu": "Лучшая в мире игра в фрисби снова прилетела к вам, а вместе с ней — потрясающая рисованная от руки графика, удивительные новые приемы, улучшенный геймплей и красивые персонажи на красивых площадках! В обновлении вас ждут новые игровые персонажи, режим обучения, поддержка кроссплатформенной игры и др.",
-   "detailEn": "25 years later, throwing flying discs at your opponents is still as cool as back in the days. Sequel to the NEOGEO cult classic Windjammers, Windjammers 2 is the perfect mix between what you loved about the classic title and brand-new mechanics. Fast-paced, strategic, easy to learn but hard to master: Windjammers 2 follows the steps of the first episode and brings back what makes the Windjammers series an amazing fun and competitive game! A brand new, free update brings two new playable characters, Jamma GX03 and Anna Szalinski, a new training mode with dedicated lessons and customizable training course and a reworked online system, now with full crossplay, dedicated lobbies and spectator mode. Game on! New challengers, new stages, brand-new mechanics and awesome new power moves will make your head spin and enhance your windjammin’ experience. Master the slapshot, dropshot, the jump, the smash and the powerful super moves, and enjoy the kickass soundtrack coming straight out of the ’90s. Sophie De Lys &quot;Soyez prêts !&quot; It's time to meet the French fashionable fast and furious Sophie De Lys and her super moves. One simple advice: choose the right way to go. Max Hurricane With his impressive silhouette, the Canadian champion isn’t here to joke around. He’s ready to blow anything out of his way with only one throw. Klaus Wessel, you’ve been warned. Jao Raposa Absolute fan ",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 1999,
-    "final": 1999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "metacritic": 79,
-   "steamReviewCount": 547,
-   "reviews": {
-    "positive": 677,
-    "total": 767,
-    "ratio": 88
-   }
-  },
-  {
-   "requested": "World War Z",
-   "appid": 699130,
-   "steamName": "World War Z",
-   "year": 2021,
-   "releaseDate": "Sep 21, 2021",
-   "developers": [
-    "Saber Interactive Inc"
-   ],
-   "publishers": [
-    "Saber Interactive Inc"
-   ],
-   "genres": [
-    {
-     "id": "1",
-     "en": "Action",
-     "ru": "Экшены"
-    }
-   ],
-   "categories": [
-    "Single-player",
-    "Multi-player",
-    "PvP",
-    "Online PvP",
-    "Co-op",
-    "Online Co-op",
-    "Cross-Platform Multiplayer",
-    "Steam Achievements",
-    "Full controller support",
-    "Steam Cloud",
-    "Family Sharing"
-   ],
-   "shortEn": "World War Z is a heart-pounding coop third-person shooter for up to 4 players featuring massive swarms of hundreds of zombies, focused on fast-paced, gruesomely spectacular action.",
-   "shortRu": "World War Z — ураганный, динамичный и кровавый шутер от третьего лица против полчищ зомби (до 4 игроков).",
-   "detailEn": "WORLD WAR Z: AFTERMATH Experience 6 new zombie-ravaged missions from around the world and a heart-pounding new perspective with Aftermath’s immersive new First-Person Mode. About the Game World War Z is a heart-pounding co-op third-person shooter for up to 4 players featuring swarms of hundreds of zombies that has now captivated over 25 million players. Based on the Paramount Pictures film, World War Z focuses on fast-paced gameplay while exploring new storylines from around the world. Humanity is on the brink of extinction. From New York to Moscow to Japan and Jerusalem, the undead apocalypse continues to spread. As the end looms, a hardened few band together to defeat the horde and outlive the dead. Battle swarms of hundreds of zombies The Swarm Engine™ seamlessly renders hordes of zombies in incredible firefights. Advanced gore systems offer gruesomely satisfying action. In-game Zombie Hordes behave like real crowds, getting stuck in narrow corridors and climbing on top of each other to reach players on higher levels. Hordes become increasingly more difficult to defeat and behave like single entity bosses as players progress through the game. Coop story-driven campaigns Survive around the world, as unique groups tell their stories of perseverance. Choose Your Class Level up to 8 unique classes – Gunslinger, Hellraiser, Slasher, Medic, Fixer, Exterminator, Dronemaster and the",
-   "free": false,
-   "price": {
-    "currency": "USD",
-    "initial": 2999,
-    "final": 2999,
-    "discount": 0
-   },
-   "platforms": {
-    "windows": true,
-    "mac": false,
-    "linux": false
-   },
-   "controller": "full",
-   "steamReviewCount": 24969,
-   "reviews": {
-    "positive": 27072,
-    "total": 32841,
-    "ratio": 82
+    "positive": 30639,
+    "total": 33834,
+    "ratio": 91
    }
   }
  ]

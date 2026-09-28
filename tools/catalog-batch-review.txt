@@ -1,6 +1,8 @@
-# catalog-batch-review.txt (batch=2026-09-29-couch-wave-2-retry, собрано 2026-09-28T14:03:03.642Z)
-# Собрано: 54 из 55 кандидатов (0 уже были в каталоге)
-# Цена (price_overview): 53 · рейтинг отзывов: 54 · HLTB: 0
-# Курс ЦБ РФ: 84.3414 ₽/$ на 26.09.2026
+# catalog-batch-review.txt (batch=2026-09-29-couch-wave-3, собрано 2026-09-28T16:20:58.467Z)
+# Собрано: 10 из 13 кандидатов (43 уже были в каталоге)
+# Цена (price_overview): 10 · рейтинг отзывов: 10 · HLTB: 0
+# Курс ЦБ РФ: 84.4075 ₽/$ на 29.09.2026
 # MISS — точного совпадения в Steam нет, ERR/SKIP — данные не получены/не игра, HLTB — времени нет
-MISS Haven — точного совпадения нет; кандидаты: Sun Haven (1432860) | Teddy's Haven (3615160) | Space Haven (979110) | DreadHaven: The Last Colony (4244420)
+MISS Expendabros — точного совпадения нет; кандидаты: The Expendabros (312990)
+MISS Ragdoll Kung Fu: Fists of Plastic — точного совпадения нет; кандидаты: нет
+MISS Worms W.M.D: Mobilize — точного совпадения нет; кандидаты: нет
