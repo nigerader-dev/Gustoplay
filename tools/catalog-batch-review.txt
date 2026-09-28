@@ -1,0 +1,8 @@
+# catalog-batch-review.txt (batch=2026-09-29-couch-wave-3, собрано 2026-09-28T16:20:58.467Z)
+# Собрано: 10 из 13 кандидатов (43 уже были в каталоге)
+# Цена (price_overview): 10 · рейтинг отзывов: 10 · HLTB: 0
+# Курс ЦБ РФ: 84.4075 ₽/$ на 29.09.2026
+# MISS — точного совпадения в Steam нет, ERR/SKIP — данные не получены/не игра, HLTB — времени нет
+MISS Expendabros — точного совпадения нет; кандидаты: The Expendabros (312990)
+MISS Ragdoll Kung Fu: Fists of Plastic — точного совпадения нет; кандидаты: нет
+MISS Worms W.M.D: Mobilize — точного совпадения нет; кандидаты: нет

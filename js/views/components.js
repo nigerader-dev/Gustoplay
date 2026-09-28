@@ -62,6 +62,7 @@ export const priceLabel = (game) => {
 
 export const lengthLabel = (game) => {
   const [a, b] = game.len;
+  if (a == null || b == null) return t('game.lengthUnknown');
   if (b >= 400) return `${a}+ ${t('common.hours')}`;
   return `${a}–${b} ${t('common.hours')}`;
 };
@@ -200,8 +201,10 @@ export const modeOptionList = () => Object.keys(MODES).map((id) => ({ id, label:
 export function adSlot(slotId) {
   const slot = AD_SLOTS[slotId];
   if (!slot) return '';
+  // Высота креатива резервируется всегда — и в mock, и в реальной сети
+  const reserve = `style="--ad-height: ${Number(slot.h) || 90}px"`;
   if (ADS.mode === 'mock') {
-    return `<aside class="ad-slot ad-mock" data-slot="${slotId}">
+    return `<aside class="ad-slot ad-mock" data-slot="${slotId}" ${reserve}>
       <span class="ad-label">${esc(t('ad.mockLabel'))}</span>
       <div class="ad-body">
         <strong>${esc(t('ad.placeholder', { size: slot.size }))}</strong>
@@ -225,7 +228,7 @@ export function adSlot(slotId) {
       data-ad-slot="${esc(adsense)}" data-ad-format="auto" data-full-width-responsive="true"></ins>`);
   }
   if (!parts.length) return '';
-  return `<aside class="ad-slot" data-slot="${slotId}">
+  return `<aside class="ad-slot" data-slot="${slotId}" ${reserve}>
     <span class="ad-label">${esc(t('ad.label'))}</span>
     ${parts.join('')}
   </aside>`;

@@ -920,14 +920,19 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   await navigate('support');
   let form = window.document.querySelector('#support-form');
   check('страница поддержки открывается с подписанными полями',
-    Boolean(form) && form.querySelectorAll('input[required], select[required], textarea[required]').length === 4
+    Boolean(form) && form.querySelectorAll('input[required], select[required], textarea[required]').length === 5
       && form.querySelector('label[for="support-message"]'));
   check('пустая форма не проходит браузерную валидацию', form?.checkValidity() === false);
+  check('форма содержит обязательное согласие на обработку данных',
+    Boolean(form?.querySelector('#support-consent[type="checkbox"][required]'))
+      && (form?.querySelector('label[for="support-consent"] span')?.textContent || '').includes('данных'));
   i18n.setLang('en');
   await navigate('support');
   check('форма корректно отображается на английском',
     window.document.querySelector('h1')?.textContent.includes('Contact support')
       && window.document.querySelector('#support-submit')?.textContent.includes('Continue'));
+  check('согласие переведено на английский',
+    (window.document.querySelector('#support-consent')?.closest('label')?.textContent || '').includes('processing of my data'));
   i18n.setLang('ru');
   await navigate('support');
   form = window.document.querySelector('#support-form');
@@ -935,6 +940,9 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   form.querySelector('#support-email').value = 'player@example.com';
   form.querySelector('#support-topic').value = 'missing-game';
   form.querySelector('#support-message').value = 'Подробное тестовое сообщение в службу поддержки.';
+  check('без согласия на обработку данных форма не проходит валидацию',
+    form.checkValidity() === false && !form.querySelector('#support-consent').checked);
+  form.querySelector('#support-consent').checked = true;
   check('заполненные корректные данные проходят валидацию', form.checkValidity());
   const startNow = Date.now();
   const realDateNow = Date.now;

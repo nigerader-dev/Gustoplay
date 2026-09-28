@@ -652,8 +652,16 @@ document.addEventListener('click', (event) => {
 
 (function init() {
   const profile = getProfile();
-  const lang = profile.meta?.lang || SITE.defaultLang || 'ru';
+  // ?lang=en|ru в ссылке — явный выбор языка: он применяется и запоминается
+  // в профиле. Это шаг к раздельным URL языков (без него EN-версию неошарить);
+  // пока сайт один и тот же URL для ru/en, поэтому hreflang не излучается —
+  // его некуда указывать (см. docs/SEO.md).
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  const lang = (SITE.languages || []).includes(urlLang)
+    ? urlLang
+    : profile.meta?.lang || SITE.defaultLang || 'ru';
   setLang(lang);
+  if (urlLang && profile.meta?.lang !== lang) setMeta({ lang });
   document.documentElement.dataset.theme = profile.meta?.theme || 'light';
   document.documentElement.lang = lang;
 

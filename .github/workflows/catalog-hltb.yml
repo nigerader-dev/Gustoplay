@@ -1,0 +1,78 @@
+name: GustoPlay — HLTB для доставленного батча
+
+on:
+  push:
+    branches: [arena/01a0e3da-gustoplay]
+    paths:
+      - 'tools/catalog-batch-data.json'
+      - 'tools/pull-hltb-pages.mjs'
+      - '.github/workflows/catalog-hltb.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: gustoplay-catalog-hltb
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  hltb:
+    name: HLTB (headless, независимый этап)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Установить Puppeteer Core
+        run: npm i --no-save puppeteer-core
+      - name: Собрать HLTB
+        continue-on-error: true
+        run: |
+          rm -f tools/hltb-data.json
+          timeout 15m node tools/pull-hltb-pages.mjs
+      - name: Проверить свежесть результата
+        if: always()
+        run: |
+          if [ ! -f tools/hltb-data.json ]; then
+            node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('tools/catalog-batch-data.json'));
+          fs.writeFileSync('tools/hltb-data.json', JSON.stringify({batch:data.batch,collectedAt:new Date().toISOString(),entries:[],misses:['HLTB runner did not produce a result']}, null, 1)+'\\n');
+          NODE
+          fi
+          node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('tools/catalog-batch-data.json'));
+          const hltb = JSON.parse(fs.readFileSync('tools/hltb-data.json'));
+          if (hltb.batch !== data.batch) throw new Error(`HLTB batch ${hltb.batch} != Steam batch ${data.batch}`);
+          console.log(`HLTB batch актуален: ${hltb.batch}; записей: ${hltb.entries.length}`);
+          NODE
+      - name: Сохранить результат
+        if: always()
+        run: |
+          git config user.name "gustoplay-bot"
+          git config user.email "gustoplay-bot@users.noreply.github.com"
+          git add tools/hltb-data.json
+          if git diff --cached --quiet; then
+            echo "изменений нет"
+          else
+            git commit -m "chore(catalog): оценки времени HLTB (headless-сборщик)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
+          fi
+      - name: Артефакты HLTB
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-hltb-data
+          path: |
+            tools/hltb-data.json
+            tools/hltb-pages/
+          if-no-files-found: ignore

@@ -1,0 +1,85 @@
+name: GustoPlay — сбор данных каталога (кандидаты)
+
+# Собирает проверяемые данные Steam + HowLongToBeat + курс ЦБ РФ для кандидатов
+# из tools/catalog-candidates.json (см. tools/pull-catalog-candidates.mjs).
+# В песочнице разработки сети к Steam нет (ответ 000), поэтому шаг живёт в Actions —
+# так же, как обложки (covers.yml) и требования к ПК (sysreq.yml).
+#
+# Запуск вручную:
+#   gh workflow run catalog-batch.yml --ref <ветка>
+#
+# Результат коммитится в ветку (tools/catalog-batch-data.json + отчёт) и дублируется
+# артефактом прогона. Записи в каталог данные НЕ пишут — это делает человек по
+# правилам docs/CONTENT.md с журналом источников docs/CONTENT-SOURCES.md.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - arena/01a0e3da-gustoplay
+    paths:
+      - 'tools/catalog-candidates.json'
+      - 'tools/pull-catalog-candidates.mjs'
+      - 'tools/pull-hltb-pages.mjs'
+      - '.github/workflows/catalog-batch.yml'
+
+concurrency:
+  group: gustoplay-catalog-batch
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    name: Steam/HLTB-данные кандидатов
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          ref: ${{ github.ref_name }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Сбор данных кандидатов
+        run: node tools/pull-catalog-candidates.mjs --delay=120
+
+      # Steam-результат сохраняем до браузерного этапа: зависший HLTB не должен
+      # блокировать доставку проверенных карточек и цен.
+      - name: Коммит Steam-результата
+        run: |
+          git config user.name "gustoplay-bot"
+          git config user.email "gustoplay-bot@users.noreply.github.com"
+          git add tools/catalog-batch-data.json tools/catalog-batch-review.txt
+          if git diff --cached --quiet; then
+            echo "изменений нет"
+          else
+            git commit -m "chore(catalog): данные кандидатов из Steam (сборщик)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
+          fi
+
+      - name: Данные (артефакт)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: catalog-batch-data
+          path: |
+            tools/catalog-batch-data.json
+            tools/catalog-batch-review.txt
+          if-no-files-found: ignore
+
+      - name: Сводка прогона
+        if: always()
+        run: |
+          {
+            echo "### Каталог: сбор данных кандидатов"
+            echo '```'
+            cat tools/catalog-batch-review.txt 2>/dev/null || echo "(отчёта нет)"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"

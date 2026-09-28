@@ -45,7 +45,7 @@ export function render() {
     <header class="section-head">
       <h1>${esc(title)}</h1>
       <p>${esc(lead)}</p>
-      <p class="muted">${esc(lang === 'ru' ? 'Обновлено' : 'Updated')}: ${new Date().toISOString().slice(0, 10)} · ${esc(SITE.domain)}</p>
+      <p class="muted">${esc(lang === 'ru' ? 'Обновлено' : 'Updated')}: ${esc(SITE.legalRevision)} · ${esc(SITE.domain)}</p>
     </header>
 
     <div class="panel legal">

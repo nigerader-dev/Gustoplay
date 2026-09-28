@@ -1,0 +1,693 @@
+{
+ "batch": "2026-09-29-couch-wave-3",
+ "collectedAt": "2026-09-28T16:20:58.467Z",
+ "cbr": {
+  "ok": true,
+  "rate": 84.4075,
+  "date": "29.09.2026",
+  "url": "https://www.cbr.ru/scripts/XML_daily.asp"
+ },
+ "entries": [
+  {
+   "requested": "Aegis of Earth Protonovus Assault",
+   "appid": 450250,
+   "steamName": "Aegis of Earth: Protonovus Assault",
+   "year": 2016,
+   "releaseDate": "Jul 18, 2016",
+   "developers": [
+    "ACQUIRE Corp."
+   ],
+   "publishers": [
+    "Aksys Games"
+   ],
+   "genres": [
+    {
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Cloud",
+    "Remote Play on TV",
+    "Family Sharing"
+   ],
+   "shortEn": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good!",
+   "shortRu": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good!",
+   "detailEn": "Aegis of Earth: Protonovus Assault is a frenetic and explosive new spin on action strategy gaming. Plan out and build up your defenses as hordes of hulking monstrosities bombard your heavily fortified city in an attempt to wipe you off the Earth for good! Command the last bastion of humanity as you fight for the survival of the species utilizing fantastic tech, cunning tactics and massive weapons in an all-out action strategy extravaganza!",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1999,
+    "final": 1999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "reviews": {
+    "positive": 43,
+    "total": 68,
+    "ratio": 63
+   }
+  },
+  {
+   "requested": "All-Star Fruit Racing",
+   "appid": 673190,
+   "steamName": "All-Star Fruit Racing",
+   "year": 2018,
+   "releaseDate": "Jul 13, 2018",
+   "developers": [
+    "3DClouds"
+   ],
+   "publishers": [
+    "3DClouds"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "9",
+     "en": "Racing",
+     "ru": "Гонки"
+    },
+    {
+     "id": "18",
+     "en": "Sports",
+     "ru": "Спорт"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Online PvP",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Cloud",
+    "Stats",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "A high-speed multiplayer racer with a unique power-up system! Combine different juices for a range of attacking and defensive abilities. Drift through looping bends. Soar over monumental jumps, and defy gravity around tubular tracks in an explosively colorful racer!",
+   "shortRu": "All-Star Fruit Racing переносит игроков в увлекательные миры, полные невероятной динамики: дрифтуй по закольцованным виражам, пари в затяжных прыжках над бездонными пропастями и бросай вызов самой гравитации, прокладывая курс на треках, полных сюрпризов!",
+   "detailEn": "Go bananas for a jaw-dropping, lightning-fast kart racer for all ages and abilities! All-Star Fruit Racing propels players into vibrant worlds filled with incredible action: drift through looping bends, soar over monumental jumps and defy gravity itself around tubular tracks in an explosively colorful racer bursting with championships, modes and awe-inspiring sights! Jump into a bumper career mode! Pick your favourite character and battle for the first place trophy in a series of testing championships. Balance speed and skill as you battle nine other racers in a frantically fruity scrap for the podium and the all-important winner's prizes, unlocking new characters, championships and kart parts along the way! Master all the modes! Called yourself the champion of the champion? The journey has just begun! Create Custom Championships and select between three different difficulty settings and speeds to fine-tune your challenge, or dive into a range of different gametypes including Dragster races, Hill Climbs, Elimination races, Time Attacks and even modifier-filled modes that rewrite the rulebook! Dominate the seasons! Burn rubber in 21 incredible courses spread across five stunning worlds: Spring, Summer, Fall, Winter and Special Islands. Speed up volcanoes, around the twisting bodies of giant snakes and between giant, kart-crushing snowballs on some of the craziest racing tracks e",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 999,
+    "final": 999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "steamReviewCount": 188,
+   "reviews": {
+    "positive": 209,
+    "total": 324,
+    "ratio": 65
+   }
+  },
+  {
+   "requested": "Batora: Lost Haven",
+   "appid": 1506440,
+   "steamName": "Batora: Lost Haven",
+   "year": 2022,
+   "releaseDate": "Oct 20, 2022",
+   "developers": [
+    "Stormind Games"
+   ],
+   "publishers": [
+    "Team17"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "3",
+     "en": "RPG",
+     "ru": "Ролевые игры"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Captions available",
+    "Steam Cloud",
+    "Family Sharing"
+   ],
+   "shortEn": "Batora: Lost Haven® is a choice-driven isometric action adventure with RPG elements and a unique duality system affecting combat, story, dialogues, puzzles, and endings, that will make you question the meaning of sacrifice.",
+   "shortRu": "Batora: Lost Haven — это захватывающая ролевая игра в изометрическом стиле, в которой все решения игрока имеют далеко идущие последствия. Система двойственности влияет на все аспекты игры: бои, сюжет, диалоги, загадки и даже концовки, которые помогут вам узнать истинное значение жертвенности.",
+   "detailEn": "Review Scores About the Game Batora: Lost Haven® is a choice-driven isometric action adventure with RPG elements and a unique duality system affecting combat, story, dialogues, puzzles, and endings, that will make you question the meaning of sacrifice. Throughout Batora: Lost Haven®, you will navigate your way through a range of unique alien planets and discover a galaxy in which morals are blurred, and the line between right and wrong is mercilessly thin. Wield unique abilities and perfect different combat styles to defeat deadly foes, solve intricate puzzles, and take on quests from curious alien inhabitants. Every choice you make will shape your journey and forge the way you carry out your final mission... Restoring your Lost Haven. THE CALL OF DESTINY After losing her entire family, Avril has learned to be a survivor. She never imagined what her future would hold. To fulfill her destiny, she must journey across the universe to uncover ancient secrets, while making life-changing decisions. MULTI-LAYERED COMBAT Harness the dual powers of Sun and Moon and leverage the power of your mind and body in frenetic battles against deadly enemies and unearthly foes. CHOOSE YOUR PATH With multiple endings, the choices you make decide the fate of the universe and those who inhabit it. What are you willing to sacrifice for what you love? PUT YOUR MIND TO THE TEST Solve intricate and other",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 3499,
+    "final": 349,
+    "discount": 90
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "steamReviewCount": 212,
+   "reviews": {
+    "positive": 295,
+    "total": 453,
+    "ratio": 65
+   }
+  },
+  {
+   "requested": "Diner Bros",
+   "appid": 846800,
+   "steamName": "Diner Bros",
+   "year": 2018,
+   "releaseDate": "Jul 6, 2018",
+   "developers": [
+    "JAYFLGAMES"
+   ],
+   "publishers": [
+    "JAYFLGAMES"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "4",
+     "en": "Casual",
+     "ru": "Казуальные игры"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Shared/Split Screen PvP",
+    "Co-op",
+    "Shared/Split Screen Co-op",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Diner Bros is a cooking and restaurant management game. Cook and serve meals as fast as you can, but don’t get the orders wrong or else your customers will get angry – and hungry! Upgrade your restaurant and hire staff to help you… or play with your friends in 2-4 local co-op!",
+   "shortRu": "Diner Bros - это игра-экшен о приготовлении пищи и управлении рестораном. Готовьте и подавайте блюда быстро, но не ошибаясь в заказах или клиенты рассердятся и останутся голодными! Обновляйте ресторан и нанимайте персонал для обслуживания или играйте с друзьями на 2-4 игрока в совместном экшене!",
+   "detailEn": "More Party Games! About the Game HECTIC KITCHEN ACTION Diner Bros is a frantic cooking and restaurant management game where you must cook and serve meals to your customers before they get too hungry. You just opened your diner. As the first customers take their seats, you rush to the kitchen. One customer doesn’t want tomato in his burger, while the other one wants a drink. Those tables won’t clean up themselves either… If you take too long, your customers will leave angry and hungry, and you’ll soon go out of business! UPGRADE YOUR RESTAURANT Start off small, cooking burgers and serving drinks to a few curious customers. By upgrading your restaurant with new recipes, expanding the dining area, hiring staff, and impressing your customers, your diner may quickly become a bustling hot spot. With many different equipment to get and recipe types to learn, can your business earn the coveted 3-star award? KNOW YOUR CUSTOMERS You have your everyday patrons, but special customers with specific quirks and fixations will also visit. You have the construction workers, for instance: they’re always hungry and will order 2 courses. Or the runner, always in a hurry, who usually orders a salad. Keep an eye on any punks or thiefs: they will try to sneak away without paying, or will outright try to rob you! Then you have the divas, hipsters, lumberjacks... it takes all sorts to make a world, as ",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 999,
+    "final": 999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "steamReviewCount": 818,
+   "reviews": {
+    "positive": 808,
+    "total": 898,
+    "ratio": 90
+   }
+  },
+  {
+   "requested": "Dungeon Defenders",
+   "appid": 65800,
+   "steamName": "Dungeon Defenders",
+   "year": 2011,
+   "releaseDate": "Oct 18, 2011",
+   "developers": [
+    "Chromatic Games"
+   ],
+   "publishers": [
+    "Chromatic Games"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "3",
+     "en": "RPG",
+     "ru": "Ролевые игры"
+    },
+    {
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "Co-op",
+    "Online Co-op",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Workshop",
+    "Steam Cloud",
+    "Valve Anti-Cheat enabled",
+    "Steam Leaderboards",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Create a hero from one of four classes to save Etheria in this 4-player coop Tower Defense Action-RPG. Includes Steam exclusive Portal gun &amp; TF2 familiars!",
+   "shortRu": "Создайте героя для спасения Этерии в этом ролевом кооперативном экшене жанра «защита башен». Эксклюзивное предложение с пушкой Portal и персонажами из TF2!",
+   "detailEn": "Dungeon Defenders is a Tower Defense Action-RPG where you must save the land of Etheria from an Ancient Evil! Create a hero from one of four distinct classes to fight back wave after wave of enemies by summoning defenses and directly participating in the action-packed combat! Customize and level your character, forge equipment, gather loot, collect pets and more! Take your hero through multiple difficulty modes and challenge/survival missions to earn more experience &amp; even better treasure. Join your friends with 4-player online and local (splitscreen) co-op to plan your strategies together or compete in PvP Deathmatch. Key Features 4-player Online and Local Co-Op - Team-up with up to 3 friends to defend cooperatively, with character classes that support each other’s strengths and weaknesses. Dynamically combine local (splitscreen) and online players and leave/join any time, so that the game’s always full. Tower-Defense Meets Action-RPG - Choose your class, customize your character &amp; equipment, strategically assemble your defenses, and participate directly in action-packed battle to preserve your castle against the invading horde! 4 Distinct Character Classes - Each character class has a different skill tree, set of towers, and even basic attacks! You can choose if you want to play stealthy, turn invisible, and plant traps behind enemy lines with the Huntress or go all o",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1499,
+    "final": 1499,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "metacritic": 81,
+   "steamReviewCount": 12158,
+   "reviews": {
+    "positive": 17695,
+    "total": 19012,
+    "ratio": 93
+   }
+  },
+  {
+   "requested": "Earth Defense Force 5",
+   "appid": 1007040,
+   "steamName": "EARTH DEFENSE FORCE 5",
+   "year": 2019,
+   "releaseDate": "Jul 11, 2019",
+   "developers": [
+    "SANDLOT"
+   ],
+   "publishers": [
+    "D3PUBLISHER"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Online PvP",
+    "Co-op",
+    "Online Co-op",
+    "Shared/Split Screen Co-op",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Cloud",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth.",
+   "shortRu": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth.",
+   "detailEn": "Stand and fight for humanity. This arcade shooter takes place in the year 2022, as the Earth Defense Force fends off an all-out attack by unknown life forms. Become an EDF soldier, battle against endless hordes of immense enemies, and restore peace to the earth. Make way for the series' first humanoid aliens. Just what is this intelligent, extraterrestrial civilization that has attacked our own, known only as the Primers? Matching their intelligence, they bring the series' first humanoid alien foes. Battling against these intelligent foes will bring you to the depths of yet-unknown despair, and the heights of joy. Face the enemy with wisdom and courage! The most jam-packed entry yet, with online co-op play! This entry has more missions and weapons than any before it. On top of that, all missions support online co-op of up to 4 players, as well as local split-screen. Control the 4 classes and play with EDF soldiers all over the world. STORY This is no training exercise. This is the living nightmare we'd all feared. It all started in Japan, 2022. An immense fleet of starships laid siege to an EDF base located in the rough city outskirts in the Kanto region. This was an enemy humanity had never encountered, the Primers. Even worse, enormous insects attack the EDF base built even further underground. The EDF fights back. Even more realistic battles Armor will peel off where you sho",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 5999,
+    "final": 2459,
+    "discount": 59
+   },
+   "platforms": {
+    "windows": true,
+    "mac": false,
+    "linux": false
+   },
+   "controller": "full",
+   "metacritic": 76,
+   "steamReviewCount": 9383,
+   "reviews": {
+    "positive": 10876,
+    "total": 11549,
+    "ratio": 94
+   }
+  },
+  {
+   "requested": "Mercenary Kings: Reloaded Edition",
+   "appid": 218820,
+   "steamName": "Mercenary Kings: Reloaded Edition",
+   "year": 2014,
+   "releaseDate": "Mar 25, 2014",
+   "developers": [
+    "Tribute Games Inc."
+   ],
+   "publishers": [
+    "Tribute Games Inc."
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "25",
+     "en": "Adventure",
+     "ru": "Приключенческие игры"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "3",
+     "en": "RPG",
+     "ru": "Ролевые игры"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "Co-op",
+    "Shared/Split Screen",
+    "Cross-Platform Multiplayer",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Cloud",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Craft your arsenal to avenge your fallen comrades and save the world from the fearsome forces of CLAW!",
+   "shortRu": "Отточи свой арсенал и отомсти за павших товарищей, спаси мир от зловещих полчищ CLAW!",
+   "detailEn": "In this frantic 2D action game, you are part of the Mercenary Kings, the most skilled team of warriors-for-hire on Earth, but when your comrades have fallen and the fearsome forces of CLAW have seized an island-wide top secret Laboratory Base, you must do what it takes to stop them. But you're not going in unprepared! Your back-up is made of a crew of rogue geniuses and experts of their field! Able to craft &amp; customize guns'n'blades or upgrading body armor, you've never been this ready to join the fight. Whether its solo or with friends, move out, cut down CLAW and save the world!",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1999,
+    "final": 1999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": true,
+    "linux": true
+   },
+   "controller": "full",
+   "metacritic": 76,
+   "requiredAge": "12",
+   "steamReviewCount": 1192,
+   "reviews": {
+    "positive": 1721,
+    "total": 2448,
+    "ratio": 70
+   }
+  },
+  {
+   "requested": "Sanctum 2",
+   "appid": 210770,
+   "steamName": "Sanctum 2",
+   "year": 2013,
+   "releaseDate": "May 15, 2013",
+   "developers": [
+    "Coffee Stain Studios"
+   ],
+   "publishers": [
+    "Coffee Stain Publishing"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "Co-op",
+    "Online Co-op",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Cloud",
+    "Steam Leaderboards",
+    "Remote Play on TV",
+    "Family Sharing"
+   ],
+   "shortEn": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence.",
+   "shortRu": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence.",
+   "detailEn": "Sanctum 2 is the sequel to the world’s first Tower Defense/FPS hybrid game. Pick from four unique character classes and embark on a mission to protect the oxygen-producing Cores from hordes of deadly aliens who are threatened by their existence. Outfit your character exactly the way you want through the new and extensive customization system. Choose your own loadout of towers, weapons and perks, but choose wisely because you are humanity’s last defense against the unrelenting hordes set out to destroy it. Sanctum 2 is a new game completely rebuilt from the ground up using community feedback and innovative design to really push the bar of what an independent studio can do. Intense Action – Deep Strategy In Sanctum 2, you will utilize elements from multiple gameplay genres to succeed. Construct towers and walls during the building phase before the enemies attack, then jump into the fray and blast everything to pieces in FPS mode. You can progress through the single-player campaign yourself, or play with up to four friends in co-op to discover the secrets of the planet LOEK III and learn the backstory on why the aliens are so intent on destroying the Cores you are sworn to protect. Key Features Building on the success of the original game, Sanctum 2 stands alone as the only true FPS/Tower Defense hybrid. No other title delivers gameplay that seamlessly combines both genres. Tower ",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1499,
+    "final": 299,
+    "discount": 80
+   },
+   "platforms": {
+    "windows": true,
+    "mac": true,
+    "linux": true
+   },
+   "controller": "full",
+   "metacritic": 77,
+   "steamReviewCount": 7454,
+   "reviews": {
+    "positive": 12937,
+    "total": 14390,
+    "ratio": 90
+   }
+  },
+  {
+   "requested": "Streets of Rogue",
+   "appid": 512900,
+   "steamName": "Streets of Rogue",
+   "year": 2019,
+   "releaseDate": "Jul 12, 2019",
+   "developers": [
+    "Matt Dabrowski"
+   ],
+   "publishers": [
+    "tinyBuild"
+   ],
+   "genres": [
+    {
+     "id": "1",
+     "en": "Action",
+     "ru": "Экшены"
+    },
+    {
+     "id": "25",
+     "en": "Adventure",
+     "ru": "Приключенческие игры"
+    },
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "3",
+     "en": "RPG",
+     "ru": "Ролевые игры"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Online PvP",
+    "LAN PvP",
+    "Shared/Split Screen PvP",
+    "Co-op",
+    "Online Co-op",
+    "LAN Co-op",
+    "Shared/Split Screen Co-op",
+    "Shared/Split Screen",
+    "Cross-Platform Multiplayer",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Workshop",
+    "DualShock Controller Support",
+    "DualShock Controller Support",
+    "DualSense Controller Support",
+    "DualSense Controller Support",
+    "Steam Cloud",
+    "Includes level editor",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Fight, sneak, and hack your way through randomly generated cities. It's like Nuclear Throne meets Deus Ex, mixed with the anarchy of GTA. Rogue-lite meets immersive sim, and goes completely insane.",
+   "shortRu": "Покоряй случайно сгенерированные города: грубой силой, скрытностью или хакерством — решать только тебе! Эта игра — коктейль из Nuclear Throne и Deus Ex с изрядной примесью анархии в духе GTA. В ней облегченный роглайк скрестили с симулятором в отлично проработанном мире и замешали все это на чистом безумии.",
+   "detailEn": "Streets of Rogue is a rogue-lite about player choice, freedom, and anarchic fun. The game takes inspiration from fast-paced top-down rogue-lites like Binding of Isaac and Nuclear Throne , and adds free-form, experimentation-driven, emergent gameplay elements of RPGs like Deus Ex . Rather than taking place in a dungeon, the game is set in a functioning, procedurally generated city , where complex AI informs denizens from all walks of life, who are just trying to get by in their daily activities. In order to progress, the player will need to accomplish specific mission goals in any way they see fit through use of their special character traits, items, and the environment. Will you play as a soldier who shoots first and asks questions later? A stealthy doctor who uses chloroform and tranquilizer darts to silently take down the opposition? A genial bartender who can talk his way past the most intimidating of guards? Or how about a hyper-intelligent gorilla , rescuing other caged gorillas to form a small mobilized gorilla army? The Mighty Feature-List Play the game YOUR way! Don’t want to kill anybody? That’s cool! Want to hack computers? Got ya covered! Random world generation and TOTALLY EXTREME gameplay variety means you can play for 600 hours and not get bored! Seriously though, go outside!!! Super-advanced artificial intelligence that won’t put up with your crap! Outsmart these",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1999,
+    "final": 1999,
+    "discount": 0
+   },
+   "platforms": {
+    "windows": true,
+    "mac": true,
+    "linux": true
+   },
+   "controller": "full",
+   "steamReviewCount": 17242,
+   "reviews": {
+    "positive": 22182,
+    "total": 23098,
+    "ratio": 96
+   }
+  },
+  {
+   "requested": "The Escapists 2",
+   "appid": 641990,
+   "steamName": "The Escapists 2",
+   "year": 2017,
+   "releaseDate": "Aug 21, 2017",
+   "developers": [
+    "Team17",
+    "Mouldy Toof Studios"
+   ],
+   "publishers": [
+    "Team17"
+   ],
+   "genres": [
+    {
+     "id": "23",
+     "en": "Indie",
+     "ru": "Инди"
+    },
+    {
+     "id": "28",
+     "en": "Simulation",
+     "ru": "Симуляторы"
+    },
+    {
+     "id": "2",
+     "en": "Strategy",
+     "ru": "Стратегии"
+    }
+   ],
+   "categories": [
+    "Single-player",
+    "Multi-player",
+    "PvP",
+    "Online PvP",
+    "Shared/Split Screen PvP",
+    "Co-op",
+    "Online Co-op",
+    "Shared/Split Screen Co-op",
+    "Shared/Split Screen",
+    "Steam Achievements",
+    "Full controller support",
+    "Steam Trading Cards",
+    "Steam Cloud",
+    "Steam Leaderboards",
+    "Remote Play on Phone",
+    "Remote Play on Tablet",
+    "Remote Play on TV",
+    "Remote Play Together",
+    "Family Sharing"
+   ],
+   "shortEn": "Craft, Steal, Brawl and Escape! It’s time to bust out of the toughest prisons in the world as you return to the life of an inmate in The Escapists 2, now with multiplayer! Have you got what it takes to escape?",
+   "shortRu": "Мастерите, воруйте, деритесь и убегайте! Совершите побег из строгих тюрем мира, вернувшись к жизни заключенных в The Escapists 2. Теперь и с возможностью игры по сети! А у вас хватит сил на побег?",
+   "detailEn": "Just Updated Snow Way Out Available Now! Prepare for a frosty reception in the North Pole this year - in this free festive Escapists 2 update you’ll be having a woeful Christmas time. Rumours have been circulating that since becoming a .com millionaire Santa’s a little past his prime, and his booming online empire has replaced all joy and cheer with cold hard cash and a regime of fear. The grotto’s become a warehouse and the elves have all been replaced by robots, with one exception – you! Santa’s firmly keeping the work in workshop this Christmas with a list of new jobs to keep you busy while incarcerated. The reindeers need feeding, Christmas lists need incinerating and you’re just the elf to do it. Faced with a lifetime of hard labour, it’s time to plan your next daring escape and earn your festive freedom. You’ve been put in the nick by St. Nick, have you got what it takes or is there Snow Way Out? Just Updated Festive fun in free Santa’s Shakedown update Deck the cells with bars and escape attempts! Christmas has come early in the latest free game update to The Escapists 2, featuring a brand new map – Santa’s Shakedown. Not content with life in a perpetually festive lock-up, you must devise ingenious new ways of getting out of prison without getting caught in the tinsel! Featuring brand new items and some very unique craftables, you must pitch in with new prison jobs such ",
+   "free": false,
+   "price": {
+    "currency": "USD",
+    "initial": 1999,
+    "final": 499,
+    "discount": 75
+   },
+   "platforms": {
+    "windows": true,
+    "mac": true,
+    "linux": true
+   },
+   "controller": "full",
+   "metacritic": 75,
+   "steamReviewCount": 26480,
+   "reviews": {
+    "positive": 30639,
+    "total": 33834,
+    "ratio": 91
+   }
+  }
+ ]
+}

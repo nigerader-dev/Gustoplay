@@ -175,7 +175,8 @@ const RULES = [
     // «btn btn-primary» и подобные списки классов — не текст; названия игр
     // (Goose Goose Duck, Bang Bang) — тоже не опечатка
     test: (t) => !/^[a-z0-9\s-]+$/.test(t) && /\b([\p{L}]{3,})\s+\1\b/iu.test(t)
-      && !GAME_TITLES.some((title) => title.includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0])),
+      && !GAME_TITLES.some((title) => title.includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0]))
+      && !['Job Job'].includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)?.[0]),
     detail: (t) => `«${t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0]}»`,
   },
   {
@@ -288,6 +289,9 @@ const RU_STEMS = [
   'дубликант', 'дварфов', 'дварф', 'джедай', 'ситх', 'зорг', 'терран', 'протосс', 'ксеноморф',
   'некроморф', 'аниматроник', 'биом', 'воксел', 'гача', 'гач', 'идл', 'слэшер', 'броубол',
   'кайдзю', 'синерги', 'стакаю', 'стимпак', 'кросс', 'кроссплей', 'кроссплатфор', 'роge',
+  // лендинги таксономии (js/views/landing-texts.js): термины, проверенные вручную
+  'геймпад', 'хардкорн', 'микроплатеж', 'гринд', 'челлендж', 'катсцен', 'аркадн',
+  'платформер', 'колодостро', 'тайм-гейт', 'хотсит', 'туториал', 'пазл', 'квиз',
 ];
 
 const RU_SKIP = new Set([
@@ -299,6 +303,8 @@ const RU_SKIP = new Set([
   'роуглайк', 'спидран', 'спидраннер', 'спидранер', 'платформер', 'платформере',
   'скоростной', 'боссфайт', 'боссы', 'крафт', 'крафтить', 'сэндбокс', 'песочница',
   'панчлайн', 'нарратив', 'нарративный', 'арт-дирекшн', 'саундтрек', 'синтвейв',
+  // лендинги таксономии (js/views/landing-texts.js): формы, не покрытые стемами
+  'сейв', 'сейвы', 'ачивки', 'ачивка', 'сплит-скрин', 'тайминг', 'дрифт', 'скейтбординг',
 ]);
 
 const EN_SKIP = new Set([
@@ -312,7 +318,8 @@ const EN_SKIP = new Set([
   'shinobi', 'noir', 'gothic', 'esport', 'crossplay', 'crossplatform', 'artbook', 'newgame',
   'lore', 'lorebook', 'storydriven', 'endless', 'coop',
   'hitbox', 'hitboxes', 'checkbox', 'dropdown', 'changelog', 'email', 'screenshot', 'screenshots',
-  'eshop', 'co-op',
+  'eshop', 'co-op', 'subgenre', 'subgenres', 'rulebook', 'karting', 'microtransactions', 'royales',
+  'jumpscare', 'jumpscares', 'deckbuilding', 'deckbuilders', 'completionist', 'completionists',
 ]);
 
 const wordStats = { ru: new Map(), en: new Map() };

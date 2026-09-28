@@ -242,6 +242,15 @@ check('у каждого color-mix есть plain-фолбэк', noFallback.leng
   noFallback.map((e) => e.selectors.join(',')).join(' ') || `${colorMixRules.length} мест`);
 check('@supports для backdrop-filter', cssText.includes('@supports not (backdrop-filter'));
 
+/* ---------- 9. Рекламные слоты: зарезервированная высота (CLS 0) ---------- */
+console.log('\n9. Реклама: зарезервированная высота слотов');
+const { AD_SLOTS } = await import('../js/config.js');
+const slotHeightsOk = Object.values(AD_SLOTS).every((s) => Number.isFinite(s.h) && s.h >= 90);
+check('каждый слот объявляет высоту креатива (h ≥ 90px)', slotHeightsOk,
+  Object.entries(AD_SLOTS).map(([id, s]) => `${id}=${s.h}px`).join(' '));
+check('высота резервируется через min-height: var(--ad-h)',
+  flat.some((e) => e.selectors.includes('.ad-slot .ad-network') && e.declarations.some((d) => d.property === 'min-height' && d.value.includes('var(--ad-h'))));
+
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
 if (failures.length) {
   console.log(failures.map((f) => ` - ${f}`).join('\n'));

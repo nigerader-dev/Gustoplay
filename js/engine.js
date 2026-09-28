@@ -274,10 +274,10 @@ export function hardFilter(game, profile) {
   }
 
   // время до финала: сравниваем по «часам до титров» (game.len[0])
-  if (a.time === 'tiny' && game.len[0] > 8) return false;
-  if (a.time === 'short' && game.len[0] > 20) return false;
-  if (a.time === 'medium' && (game.len[0] > 60 || game.len[1] < 15)) return false;
-  if (a.time === 'long' && game.len[1] < 40) return false;
+  if (a.time === 'tiny' && game.len[0] != null && game.len[0] > 8) return false;
+  if (a.time === 'short' && game.len[0] != null && game.len[0] > 20) return false;
+  if (a.time === 'medium' && (game.len[0] != null && game.len[0] > 60 || game.len[1] != null && game.len[1] < 15)) return false;
+  if (a.time === 'long' && game.len[1] != null && game.len[1] < 40) return false;
 
   // «чего не хочу»: полностью исключаем такие игры
   for (const id of a.avoid || []) {
@@ -285,7 +285,7 @@ export function hardFilter(game, profile) {
     if (!rule) continue;
     if (rule.tags.length && game.tags.some((t) => rule.tags.includes(t))) return false;
     if (rule.genres.length && game.genres.some((g) => rule.genres.includes(g))) return false;
-    if (rule.long && game.len[0] > 50 && !game.tags.includes('endless')) return false;
+    if (rule.long && game.len[0] != null && game.len[0] > 50 && !game.tags.includes('endless')) return false;
     if (rule.pvpOnly && !game.modes.some((m) => ['solo', 'coopOnline', 'coopLocal'].includes(m))) return false;
   }
 
@@ -423,10 +423,10 @@ export function scoreGame(game, profile, weights, context = {}) {
   // 7. Мягкие предпочтения: сессия, свежесть, цена-настроение
   const session = a.session;
   if (session === 'quick') {
-    if (game.len[1] <= 12) { score += 5; reasons.push({ type: 'session', kind: 'quick' }); }
-    else if (game.len[0] > 25) score -= 5;
+    if (game.len[1] != null && game.len[1] <= 12) { score += 5; reasons.push({ type: 'session', kind: 'quick' }); }
+    else if (game.len[0] != null && game.len[0] > 25) score -= 5;
   }
-  if (session === 'evening' && game.len[1] >= 40) { score += 3; reasons.push({ type: 'session', kind: 'evening' }); }
+  if (session === 'evening' && game.len[1] != null && game.len[1] >= 40) { score += 3; reasons.push({ type: 'session', kind: 'evening' }); }
 
   const novelty = PREFERENCES.novelty[a.novelty];
   if (novelty) {
@@ -621,7 +621,7 @@ function explain(item, profile, weights) {
   if (a.players > 1 && game.coopQ >= 8) out.push({ ru: `Хорошо играется компанией до ${game.players[1]}`, en: `Great with up to ${game.players[1]} players` });
   else if (a.players > 1 && game.players[1] <= a.players * 2) out.push({ ru: `Как раз на ${game.players[1]} игроков`, en: `Fits exactly ${game.players[1]} players` });
   if (a.players > 1 && game.modes.includes('coopLocal') && (a.platforms || []).length) out.push({ ru: 'Есть кооп за одним экраном', en: 'Has local co-op' });
-  if (a.session === 'quick' && game.len[1] <= 12) out.push({ ru: `Короткая: около ${game.len[0]}–${game.len[1]} ч`, en: `Short: about ${game.len[0]}–${game.len[1]} h` });
+  if (a.session === 'quick' && game.len[1] != null && game.len[1] <= 12) out.push({ ru: `Короткая: около ${game.len[0]}–${game.len[1]} ч`, en: `Short: about ${game.len[0]}–${game.len[1]} h` });
   if (a.novelty === 'classic' && game.y <= 2016) out.push({ ru: `Проверенная классика (${game.y})`, en: `A proven classic (${game.y})` });
   if (a.novelty === 'new' && game.y >= 2022) out.push({ ru: `Свежая игра (${game.y})`, en: `Recent release (${game.y})` });
   if (game.price === 'free') out.push({ ru: 'Бесплатная', en: 'Free to play' });

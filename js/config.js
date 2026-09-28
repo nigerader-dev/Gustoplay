@@ -24,6 +24,12 @@ export const SITE = {
   // Основная почта сайта: поддержка, фидбек, сообщения об ошибках и вопросы по игре.
   // Показывается в подвале, в FAQ «Как это работает», в политике и в условиях.
   email: 'gustoplaysupport@gmail.com',
+  /**
+   * Дата текущей редакции юридических текстов (условия, политика конфиденциальности).
+   * Показывается на /terms и /privacy вместо «сегодняшней даты»: дата меняется только
+   * при фактическом изменении текстов, а не при каждом рендере (честность редакции).
+   */
+  legalRevision: '2026-09-28',
   telegram: 'https://t.me/+K915edYs7C1iNTEy',
   languages: ['ru', 'en'],
   defaultLang: 'ru',
@@ -117,10 +123,12 @@ export const ADS = {
 
 /** Слоты рекламы: где именно на страницах что показываем. */
 export const AD_SLOTS = {
-  'home-top':       { size: '970×90', formats: ['rsya', 'adsense'], label: { ru: 'Горизонтальный баннер', en: 'Leaderboard' } },
-  'results-inline': { size: '728×90', formats: ['rsya', 'adsense'], label: { ru: 'Блок в ленте результатов', en: 'In-feed unit' } },
-  'catalog-inline': { size: '728×90', formats: ['rsya', 'adsense'], label: { ru: 'Блок в каталоге', en: 'Catalog unit' } },
-  'game-side':      { size: '300×250', formats: ['rsya', 'adsense'], label: { ru: 'Блок на странице игры', en: 'Game page unit' } },
+  // h — высота креатива в px: резервируется заранее (CSS min-height), чтобы
+  // подгрузка реальной рекламы не сдвигала контент (CLS = 0).
+  'home-top':       { size: '970×90',  h: 90,  formats: ['rsya', 'adsense'], label: { ru: 'Горизонтальный баннер', en: 'Leaderboard' } },
+  'results-inline': { size: '728×90',  h: 90,  formats: ['rsya', 'adsense'], label: { ru: 'Блок в ленте результатов', en: 'In-feed unit' } },
+  'catalog-inline': { size: '728×90',  h: 90,  formats: ['rsya', 'adsense'], label: { ru: 'Блок в каталоге', en: 'Catalog unit' } },
+  'game-side':      { size: '300×250', h: 250, formats: ['rsya', 'adsense'], label: { ru: 'Блок на странице игры', en: 'Game page unit' } },
 };
 
 /** Аналитика (необязательно). */

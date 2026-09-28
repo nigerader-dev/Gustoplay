@@ -28,7 +28,7 @@ const rules = [
   ['pf', (v) => Array.isArray(v) && v.length > 0],
   ['pr', (v) => typeof v === 'string'],
   ['pv', (v) => typeof v === 'number'],
-  ['len', (v) => Array.isArray(v) && v.length === 2 && v.every((x) => typeof x === 'number')],
+  ['len', (v) => Array.isArray(v) && v.length === 2 && v.every((x) => x === null || typeof x === 'number')],
   ['dif', (v) => v === null || (Number.isInteger(v) && v >= 1 && v <= 5)],
   ['pace', (v) => v === null || (Number.isInteger(v) && v >= 1 && v <= 5)],
   ['rat', (v) => Number.isInteger(v) && v >= 20 && v <= 100],
