@@ -1,6 +1,6 @@
 {
  "batch": "2026-09-29-couch-wave-2-retry",
- "collectedAt": "2026-09-28T13:13:46.408Z",
+ "collectedAt": "2026-09-28T13:31:06.654Z",
  "cbr": {
   "ok": true,
   "rate": 84.3414,
@@ -251,8 +251,8 @@
    "controller": "full",
    "steamReviewCount": 9490,
    "reviews": {
-    "positive": 11585,
-    "total": 12335,
+    "positive": 11586,
+    "total": 12336,
     "ratio": 94
    }
   },
@@ -621,8 +621,8 @@
    "controller": "full",
    "steamReviewCount": 79830,
    "reviews": {
-    "positive": 93025,
-    "total": 117678,
+    "positive": 93026,
+    "total": 117679,
     "ratio": 79
    }
   },
@@ -3480,7 +3480,7 @@
     "linux": false
    },
    "controller": "full",
-   "steamReviewCount": 24970,
+   "steamReviewCount": 24969,
    "reviews": {
     "positive": 27071,
     "total": 32840,
