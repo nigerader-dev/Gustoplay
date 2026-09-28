@@ -40,6 +40,13 @@ jobs:
       - name: Проверить свежесть результата
         if: always()
         run: |
+          if [ ! -f tools/hltb-data.json ]; then
+            node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('tools/catalog-batch-data.json'));
+          fs.writeFileSync('tools/hltb-data.json', JSON.stringify({batch:data.batch,collectedAt:new Date().toISOString(),entries:[],misses:['HLTB runner did not produce a result']}, null, 1)+'\\n');
+          NODE
+          fi
           node - <<'NODE'
           const fs = require('fs');
           const data = JSON.parse(fs.readFileSync('tools/catalog-batch-data.json'));
