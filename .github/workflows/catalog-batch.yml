@@ -34,7 +34,7 @@ jobs:
   collect:
     name: Steam/HLTB-данные кандидатов
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v5
         with:
