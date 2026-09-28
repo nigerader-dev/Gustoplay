@@ -34,7 +34,19 @@ jobs:
         run: npm i --no-save puppeteer-core
       - name: Собрать HLTB
         continue-on-error: true
-        run: timeout 15m node tools/pull-hltb-pages.mjs
+        run: |
+          rm -f tools/hltb-data.json
+          timeout 15m node tools/pull-hltb-pages.mjs
+      - name: Проверить свежесть результата
+        if: always()
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('tools/catalog-batch-data.json'));
+          const hltb = JSON.parse(fs.readFileSync('tools/hltb-data.json'));
+          if (hltb.batch !== data.batch) throw new Error(`HLTB batch ${hltb.batch} != Steam batch ${data.batch}`);
+          console.log(`HLTB batch актуален: ${hltb.batch}; записей: ${hltb.entries.length}`);
+          NODE
       - name: Сохранить результат
         if: always()
         run: |
