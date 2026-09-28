@@ -95,7 +95,7 @@ jobs:
           timeout 12m node tools/pull-hltb-pages.mjs 2>&1 | tee /tmp/hltb-run.log
 
       - name: Коммит результата HLTB
-        if: steps.hltb.outcome == 'success'
+        if: always()
         continue-on-error: true
         run: |
           git config user.name "gustoplay-bot"
