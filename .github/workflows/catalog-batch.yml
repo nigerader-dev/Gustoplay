@@ -46,7 +46,21 @@ jobs:
           node-version: '22'
 
       - name: Сбор данных кандидатов
-        run: node tools/pull-catalog-candidates.mjs --delay=350
+        run: node tools/pull-catalog-candidates.mjs --delay=120
+
+      # Steam-результат сохраняем до браузерного этапа: зависший HLTB не должен
+      # блокировать доставку проверенных карточек и цен.
+      - name: Коммит Steam-результата
+        run: |
+          git config user.name "gustoplay-bot"
+          git config user.email "gustoplay-bot@users.noreply.github.com"
+          git add tools/catalog-batch-data.json tools/catalog-batch-review.txt
+          if git diff --cached --quiet; then
+            echo "изменений нет"
+          else
+            git commit -m "chore(catalog): данные кандидатов из Steam (сборщик)"
+            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
+          fi
 
       # Диагностика разбора HLTB: сырой HTML не виден из песочницы (артефакт —
       # Azure Blob, лог — results-receiver; оба недоступны из закрытой среды),
@@ -78,7 +92,7 @@ jobs:
             echo "::notice::hltb-fatal: npm i puppeteer-core не удался"
             exit 1
           fi
-          node tools/pull-hltb-pages.mjs 2>&1 | tee /tmp/hltb-run.log
+          timeout 12m node tools/pull-hltb-pages.mjs 2>&1 | tee /tmp/hltb-run.log
 
       - name: Коммит результата HLTB
         if: steps.hltb.outcome == 'success'
