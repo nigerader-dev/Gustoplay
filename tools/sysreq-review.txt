@@ -1,83 +1,57 @@
-Требования к ПК: 501 из 504 игр со steamId
+Требования к ПК: 558 из 558 игр со steamId
 Состояние после прохода 3
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
-Данные не получены (нет pc_requirements или запрос не прошёл): 3
-Причины: запрос не прошёл — 23
-Как получены: первый проход — 672 | повторный проход (2) — 197 | повторный проход (3) — 36
-По проходам: проход 1 — 363 игр | проход 2 — 100 игр | проход 3 — 18 игр
-DIAG slay-the-spire (646570) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG dead-cells (588650) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG balatro (2379780) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG the-binding-of-isaac-repentance (1426300) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG return-of-the-obra-dinn (653530) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG outer-wilds (753640) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG undertale (391540) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG yakuza-like-a-dragon (1235140) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG a-short-hike (1055540) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG journey (638230) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG firewatch (383870) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-DIAG what-remains-of-edith-finch (501300) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
-Запросов, которые не прошли (сеть/HTTP/разбор JSON): 23
-MISS what-remains-of-edith-finch (501300) What Remains of Edith Finch
-MISS assassins-creed-odyssey (812140) Assassin’s Creed Odyssey
-MISS octopath-traveler (921570) OCTOPATH TRAVELER
+Данные не получены (нет pc_requirements или запрос не прошёл): 0
+Причины: нет
+Как получены: первый проход — 701 | повторный проход (2) — 243 | повторный проход (3) — 126
+По проходам: проход 1 — 373 игр | проход 2 — 122 игр | проход 3 — 63 игр
+Запросов, которые не прошли (сеть/HTTP/разбор JSON): 0
+LANG sea-of-thieves: язык магазина отдал данные только на en
 LANG dead-by-daylight: язык магазина отдал данные только на en
-LANG fightn-rage: язык магазина отдал данные только на ru
+LANG pit-people: язык магазина отдал данные только на en
+LANG brawlhalla: язык магазина отдал данные только на en
+LANG team-sonic-racing: язык магазина отдал данные только на en
+LANG crash-bandicoot-n-sane-trilogy: язык магазина отдал данные только на en
+LANG for-the-king: язык магазина отдал данные только на en
+LANG granblue-fantasy-versus-rising: язык магазина отдал данные только на en
+LANG spyro-reignited-trilogy: язык магазина отдал данные только на en
 LANG the-witcher-3-wild-hunt: язык магазина отдал данные только на en
-LANG lies-of-p: язык магазина отдал данные только на en
-LANG black-myth-wukong: язык магазина отдал данные только на en
-LANG god-of-war-2018: язык магазина отдал данные только на en
-LANG god-of-war-ragnar-k: язык магазина отдал данные только на en
-LANG grand-theft-auto-v: язык магазина отдал данные только на en
-LANG horizon-forbidden-west: язык магазина отдал данные только на en
-LANG control: язык магазина отдал данные только на en
-LANG resident-evil-4-remake: язык магазина отдал данные только на en
-LANG resident-evil-2-remake: язык магазина отдал данные только на en
-LANG alien-isolation: язык магазина отдал данные только на en
-LANG dead-space-2023: язык магазина отдал данные только на en
-LANG soma: язык магазина отдал данные только на en
-LANG subnautica: язык магазина отдал данные только на en
-LANG hades: язык магазина отдал данные только на en
-LANG hades-ii: язык магазина отдал данные только на en
-LANG disco-elysium: язык магазина отдал данные только на en
-LANG persona-5-royal: язык магазина отдал данные только на en
-LANG nier-automata: язык магазина отдал данные только на en
-LANG stardew-valley: язык магазина отдал данные только на en
-LANG detroit-become-human: язык магазина отдал данные только на en
-LANG until-dawn: язык магазина отдал данные только на en
-LANG dragon-age-the-veilguard: язык магазина отдал данные только на en
-LANG the-elder-scrolls-v-skyrim: язык магазина отдал данные только на en
-LANG green-hell: язык магазина отдал данные только на en
-LANG ark-survival-evolved: язык магазина отдал данные только на en
-LANG v-rising: язык магазина отдал данные только на en
-LANG the-outlast-trials: язык магазина отдал данные только на en
-LANG factorio: язык магазина отдал данные только на en
-LANG frostpunk: язык магазина отдал данные только на en
-LANG crusader-kings-iii: язык магазина отдал данные только на ru
-LANG stellaris: язык магазина отдал данные только на en
-LANG marvel-rivals: язык магазина отдал данные только на en
-LANG aliens-dark-descent: язык магазина отдал данные только на ru
-LANG mafia-definitive-edition: язык магазина отдал данные только на en
-LANG deus-ex-mankind-divided: язык магазина отдал данные только на en
-LANG bioshock-infinite: язык магазина отдал данные только на en
-LANG half-life-alyx: язык магазина отдал данные только на en
-LANG hitman-world-of-assassination: язык магазина отдал данные только на en
-LANG tom-clancys-ghost-recon-wildlands: язык магазина отдал данные только на en
-LANG assassins-creed-mirage: язык магазина отдал данные только на en
-LANG nine-sols: язык магазина отдал данные только на en
-LANG children-of-morta: язык магазина отдал данные только на en
-LANG divinity-original-sin-2: язык магазина отдал данные только на en
-LANG pathfinder-wrath-of-the-righteous: язык магазина отдал данные только на ru
-LANG mass-effect-legendary-edition: язык магазина отдал данные только на en
-LANG final-fantasy-xvi: язык магазина отдал данные только на en
-LANG persona-3-reload: язык магазина отдал данные только на en
-LANG shin-megami-tensei-v-vengeance: язык магазина отдал данные только на en
-LANG sea-of-stars: язык магазина отдал данные только на en
-LANG elden-ring-nightreign: язык магазина отдал данные только на en
-LANG timberborn: язык магазина отдал данные только на en
-LANG redout-enhanced-edition: язык магазина отдал данные только на ru
+LANG cyberpunk-2077: язык магазина отдал данные только на en
+LANG elden-ring: язык магазина отдал данные только на en
 LANG the-last-of-us-part-i: язык магазина отдал данные только на en
-LANG metaphor-refantazio: язык магазина отдал данные только на ru
-Минимальные и рекомендуемые есть у: 422
-Только минимальные: 79
+LANG the-last-of-us-part-ii-remastered: язык магазина отдал данные только на en
+LANG red-dead-redemption-2: язык магазина отдал данные только на en
+LANG batman-arkham-knight: язык магазина отдал данные только на en
+LANG horizon-forbidden-west: язык магазина отдал данные только на en
+LANG control: язык магазина отдал данные только на ru
+LANG alien-isolation: язык магазина отдал данные только на en
+LANG age-of-empires-iv: язык магазина отдал данные только на en
+LANG the-sims-4: язык магазина отдал данные только на en
+LANG forza-horizon-5: язык магазина отдал данные только на en
+LANG marvel-rivals: язык магазина отдал данные только на en
+LANG tom-clancys-rainbow-six-siege: язык магазина отдал данные только на en
+LANG enshrouded: язык магазина отдал данные только на en
+LANG sons-of-the-forest: язык магазина отдал данные только на ru
+LANG icarus: язык магазина отдал данные только на en
+LANG core-keeper: язык магазина отдал данные только на en
+LANG escape-simulator: язык магазина отдал данные только на en
+LANG no-mans-sky: язык магазина отдал данные только на en
+LANG watch-dogs-2: язык магазина отдал данные только на en
+LANG half-life-2: язык магазина отдал данные только на ru
+LANG metal-gear-solid-v-the-phantom-pain: язык магазина отдал данные только на en
+LANG quantum-break: язык магазина отдал данные только на en
+LANG inside: язык магазина отдал данные только на en
+LANG hatsune-miku-project-diva-mega-mix: язык магазина отдал данные только на ru
+LANG multiversus: язык магазина отдал данные только на en
+LANG beamng-drive: язык магазина отдал данные только на en
+LANG golf-it: язык магазина отдал данные только на en
+LANG splinter-cell-chaos-theory: язык магазина отдал данные только на ru
+LANG shadow-tactics-blades-of-the-shogun: язык магазина отдал данные только на en
+LANG cookie-clicker: язык магазина отдал данные только на en
+LANG gloomhaven: язык магазина отдал данные только на en
+LANG black-desert-online: язык магазина отдал данные только на en
+LANG path-of-exile: язык магазина отдал данные только на ru
+LANG portal-2: язык магазина отдал данные только на en
+Минимальные и рекомендуемые есть у: 467
+Только минимальные: 91
 Только рекомендуемые: 0
