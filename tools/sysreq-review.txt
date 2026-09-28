@@ -2,56 +2,44 @@
 Состояние после прохода 3
 Игр без steamId (данные недоступны через Store API): 35 — minecraft, world-of-warcraft, valorant, league-of-legends, bloodborne, alan-wake-2, animal-crossing-new-horizons, gran-turismo-7, football-manager-2024, mario-kart-8-deluxe, genshin-impact, honkai-star-rail, brawl-stars, roblox, fortnite, clash-of-clans, arknights, super-mario-party-jamboree, alan-wake-remastered, xenoblade-chronicles-3, fire-emblem-three-houses, starcraft-ii, clash-royale, mobile-legends-bang-bang, call-of-duty-mobile, free-fire, pok-mon-tcg-pocket, whiteout-survival, warcraft-iii-reforged, project-sekai-colorful-stage, castlevania-symphony-of-the-night, metroid-dread, super-smash-bros-ultimate, pubg-mobile, monopoly-go
 Данные не получены (нет pc_requirements или запрос не прошёл): 0
-Причины: нет
-Как получены: первый проход — 701 | повторный проход (2) — 243 | повторный проход (3) — 126
-По проходам: проход 1 — 373 игр | проход 2 — 122 игр | проход 3 — 63 игр
-Запросов, которые не прошли (сеть/HTTP/разбор JSON): 0
+Причины: запрос не прошёл — 19
+Как получены: первый проход — 648 | повторный проход (2) — 329 | повторный проход (3) — 79
+По проходам: проход 1 — 334 игр | проход 2 — 165 игр | проход 3 — 40 игр
+DIAG the-planet-crafter (1284190) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG midnight-ghost-hunt (915810) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG goose-goose-duck (1568590) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG aliens-dark-descent (1150440) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG streets-of-rage-4 (985890) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG max-payne-3 (204100) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG sleeping-dogs (202170) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG far-cry-3 (220240) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG far-cry-5 (552520) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG dishonored-2 (403640) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG deus-ex-mankind-divided (337000) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+DIAG bioshock-infinite (8870) ru[HTTP 429 HTTP 429 → нет] en[HTTP 429 HTTP 429 → нет]
+Запросов, которые не прошли (сеть/HTTP/разбор JSON): 19
 LANG sea-of-thieves: язык магазина отдал данные только на en
 LANG dead-by-daylight: язык магазина отдал данные только на en
-LANG pit-people: язык магазина отдал данные только на en
-LANG brawlhalla: язык магазина отдал данные только на en
-LANG team-sonic-racing: язык магазина отдал данные только на en
-LANG crash-bandicoot-n-sane-trilogy: язык магазина отдал данные только на en
-LANG for-the-king: язык магазина отдал данные только на en
-LANG granblue-fantasy-versus-rising: язык магазина отдал данные только на en
-LANG spyro-reignited-trilogy: язык магазина отдал данные только на en
 LANG the-witcher-3-wild-hunt: язык магазина отдал данные только на en
-LANG cyberpunk-2077: язык магазина отдал данные только на en
-LANG elden-ring: язык магазина отдал данные только на en
-LANG the-last-of-us-part-i: язык магазина отдал данные только на en
 LANG the-last-of-us-part-ii-remastered: язык магазина отдал данные только на en
-LANG red-dead-redemption-2: язык магазина отдал данные только на en
-LANG batman-arkham-knight: язык магазина отдал данные только на en
-LANG horizon-forbidden-west: язык магазина отдал данные только на en
-LANG control: язык магазина отдал данные только на ru
-LANG alien-isolation: язык магазина отдал данные только на en
+LANG uncharted-4-a-thiefs-end: язык магазина отдал данные только на en
+LANG grand-theft-auto-v: язык магазина отдал данные только на en
 LANG age-of-empires-iv: язык магазина отдал данные только на en
 LANG the-sims-4: язык магазина отдал данные только на en
 LANG forza-horizon-5: язык магазина отдал данные только на en
 LANG marvel-rivals: язык магазина отдал данные только на en
 LANG tom-clancys-rainbow-six-siege: язык магазина отдал данные только на en
-LANG enshrouded: язык магазина отдал данные только на en
-LANG sons-of-the-forest: язык магазина отдал данные только на ru
-LANG icarus: язык магазина отдал данные только на en
-LANG core-keeper: язык магазина отдал данные только на en
-LANG escape-simulator: язык магазина отдал данные только на en
+LANG dying-light-2-stay-human: язык магазина отдал данные только на ru
+LANG beat-saber: язык магазина отдал данные только на en
 LANG no-mans-sky: язык магазина отдал данные только на en
+LANG golf-with-your-friends: язык магазина отдал данные только на en
+LANG sunkenland: язык магазина отдал данные только на en
 LANG watch-dogs-2: язык магазина отдал данные только на en
-LANG half-life-2: язык магазина отдал данные только на ru
-LANG metal-gear-solid-v-the-phantom-pain: язык магазина отдал данные только на en
-LANG quantum-break: язык магазина отдал данные только на en
-LANG inside: язык магазина отдал данные только на en
-LANG hatsune-miku-project-diva-mega-mix: язык магазина отдал данные только на ru
-LANG multiversus: язык магазина отдал данные только на en
-LANG beamng-drive: язык магазина отдал данные только на en
-LANG golf-it: язык магазина отдал данные только на en
-LANG splinter-cell-chaos-theory: язык магазина отдал данные только на ru
-LANG shadow-tactics-blades-of-the-shogun: язык магазина отдал данные только на en
-LANG cookie-clicker: язык магазина отдал данные только на en
-LANG gloomhaven: язык магазина отдал данные только на en
-LANG black-desert-online: язык магазина отдал данные только на en
-LANG path-of-exile: язык магазина отдал данные только на ru
-LANG portal-2: язык магазина отдал данные только на en
+LANG mafia-definitive-edition: язык магазина отдал данные только на en
+LANG half-life-alyx: язык магазина отдал данные только на en
+LANG muse-dash: язык магазина отдал данные только на en
+LANG prey: язык магазина отдал данные только на ru
+LANG hitman-world-of-assassination: язык магазина отдал данные только на ru
 Минимальные и рекомендуемые есть у: 467
 Только минимальные: 91
 Только рекомендуемые: 0
