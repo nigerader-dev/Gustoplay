@@ -278,10 +278,14 @@ for (const cand of candidates) {
       }
     } catch (e) { review.push(`WARN ${cand.name} — appreviews недоступны: ${String(e.message || e)}`); }
 
-    // 4) HowLongToBeat
-    const hltb = await fetchHltb(exact.name);
-    if (hltb.matched) line.hltb = hltb;
-    else review.push(`HLTB ${cand.name} — ${hltb.error || hltb.note}`);
+    // 4) HowLongToBeat собирается отдельным браузерным этапом workflow.
+    // Не смешиваем его с быстрым Steam-потоком: иначе один зависший HLTB
+    // задерживает и не даёт закоммитить проверенные Steam-факты.
+    if (process.env.GUSTOPLAY_FETCH_HLTB === '1') {
+      const hltb = await fetchHltb(exact.name);
+      if (hltb.matched) line.hltb = hltb;
+      else review.push(`HLTB ${cand.name} — ${hltb.error || hltb.note}`);
+    }
 
     data.entries.push(line);
     console.log(`  ✅ ${cand.name} → ${exact.id} (${year}) ${line.reviews ? `rat=${line.reviews.ratio}` : ''}${line.hltb ? ' hltb✓' : ''}`);
