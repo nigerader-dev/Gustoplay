@@ -44,6 +44,7 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
+          cache: npm
 
       - name: Сбор данных кандидатов
         run: node tools/pull-catalog-candidates.mjs --delay=120
@@ -59,65 +60,7 @@ jobs:
             echo "изменений нет"
           else
             git commit -m "chore(catalog): данные кандидатов из Steam (сборщик)"
-            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
-          fi
-
-      # Диагностика разбора HLTB: сырой HTML не виден из песочницы (артефакт —
-      # Azure Blob, лог — results-receiver; оба недоступны из закрытой среды),
-      # поэтому фрагмент первой сохранённой страницы уходит аннотациями — их
-      # читает api.github.com (проверено конвейерами обложек/sysreq).
-      - name: Диагностика страницы HLTB
-        if: always()
-        run: |
-          f=$(ls tools/hltb-pages/*.html 2>/dev/null | head -1)
-          if [ -n "$f" ]; then
-            echo "::notice::hltb-page: $(basename "$f") — $(wc -c < "$f") байт"
-            head -c 6000 "$f" | base64 -w 3000 | while read -r chunk; do
-              echo "::notice::hltb-html-b64: $chunk"
-            done
-          else
-            echo "::notice::hltb-page: ни одной страницы не сохранено"
-          fi
-
-      # Страница поиска HLTB — клиентское Next.js-приложение, текстовые времена
-      # видит только браузер. На раннере есть системный Chrome; puppeteer-core —
-      # лёгкий пакет без своей копии Chromium. Результат уходит аннотациями
-      # (hltb-b64) и пишется в tools/hltb-data.json (коммит/артефакт).
-      - name: Время прохождения из HowLongToBeat (headless Chrome)
-        id: hltb
-        continue-on-error: true
-        run: |
-          set -o pipefail
-          if ! npm i --no-save puppeteer-core 2>&1 | tail -3; then
-            echo "::notice::hltb-fatal: npm i puppeteer-core не удался"
-            exit 1
-          fi
-          timeout 12m node tools/pull-hltb-pages.mjs 2>&1 | tee /tmp/hltb-run.log
-
-      - name: Коммит результата HLTB
-        if: always()
-        continue-on-error: true
-        run: |
-          git config user.name "gustoplay-bot"
-          git config user.email "gustoplay-bot@users.noreply.github.com"
-          git add tools/hltb-data.json
-          if git diff --cached --quiet; then
-            echo "изменений нет"
-          else
-            git commit -m "chore(catalog): оценки времени HLTB (headless-сборщик)"
-            git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
-          fi
-
-      - name: Коммит результата
-        continue-on-error: true
-        run: |
-          git config user.name "gustoplay-bot"
-          git config user.email "gustoplay-bot@users.noreply.github.com"
-          git add tools/catalog-batch-data.json tools/catalog-batch-review.txt
-          if git diff --cached --quiet; then
-            echo "изменений нет"
-          else
-            git commit -m "chore(catalog): данные кандидатов из Steam/HLTB (сборщик)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin HEAD:refs/heads/${GITHUB_REF_NAME}
           fi
 
@@ -129,8 +72,6 @@ jobs:
           path: |
             tools/catalog-batch-data.json
             tools/catalog-batch-review.txt
-            tools/hltb-data.json
-            tools/hltb-pages/
           if-no-files-found: ignore
 
       - name: Сводка прогона
