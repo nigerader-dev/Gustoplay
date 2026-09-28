@@ -31,8 +31,8 @@ for (const game of raw) {
       problems.push(`${game.t}: поле ${key} должно быть числом${['dif', 'pace'].includes(key) ? ' или null' : ''}, получено ${JSON.stringify(game[key])}`);
     }
   }
-  if (!Array.isArray(game.len) || game.len.length !== 2 || game.len.some((x) => typeof x !== 'number')) {
-    problems.push(`${game.t}: len должен быть массивом из двух чисел, получено ${JSON.stringify(game.len)}`);
+  if (!Array.isArray(game.len) || game.len.length !== 2 || game.len.some((x) => x !== null && typeof x !== 'number')) {
+    problems.push(`${game.t}: len должен быть массивом из двух чисел или [null, null], получено ${JSON.stringify(game.len)}`);
   }
   if (!Array.isArray(game.mood)) problems.push(`${game.t}: mood должен быть массивом`);
   if (Array.isArray(game.pl) === false) problems.push(`${game.t}: pl должен быть массивом`);

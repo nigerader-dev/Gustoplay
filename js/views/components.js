@@ -62,6 +62,7 @@ export const priceLabel = (game) => {
 
 export const lengthLabel = (game) => {
   const [a, b] = game.len;
+  if (a == null || b == null) return t('game.lengthUnknown');
   if (b >= 400) return `${a}+ ${t('common.hours')}`;
   return `${a}–${b} ${t('common.hours')}`;
 };

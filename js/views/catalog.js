@@ -18,7 +18,7 @@ const POPULAR_TAGS = [
 const SORTS = {
   rating: (a, b) => b.rating - a.rating,
   year: (a, b) => b.y - a.y,
-  short: (a, b) => a.len[1] - b.len[1],
+  short: (a, b) => (a.len[1] ?? Infinity) - (b.len[1] ?? Infinity),
   players: (a, b) => b.players[1] - a.players[1],
   title: (a, b) => a.t.localeCompare(b.t, getLang()),
 };
@@ -60,10 +60,10 @@ const priceOk = (game, price) => {
 
 const timeOk = (game, time) => {
   if (!time || time === 'any') return true;
-  if (time === 'tiny') return game.len[0] <= 8;
-  if (time === 'short') return game.len[0] <= 20;
-  if (time === 'medium') return game.len[0] <= 60 && game.len[1] >= 15;
-  if (time === 'long') return game.len[1] >= 40;
+  if (time === 'tiny') return game.len[0] != null && game.len[0] <= 8;
+  if (time === 'short') return game.len[0] != null && game.len[0] <= 20;
+  if (time === 'medium') return game.len[0] != null && game.len[1] != null && game.len[0] <= 60 && game.len[1] >= 15;
+  if (time === 'long') return game.len[1] != null && game.len[1] >= 40;
   return true;
 };
 

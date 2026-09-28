@@ -61,7 +61,7 @@ function normalize(g) {
   // Старые записи используют эвристику каталога; cloud:false запрещает неподтверждённое добавление для новой игры.
   if (platforms.includes('pc') && g.cloud !== false && g.rat >= 80 && !platforms.includes('cloud')) platforms.push('cloud');
 
-  const len = g.len || [10, 20];
+  const len = g.len || [null, null];
   const tags = (g.tg || []).filter((t) => TAGS[t]);
   const genres = (g.gr || []).filter((x) => GENRES[x]);
 
@@ -93,8 +93,8 @@ function normalize(g) {
     // теги, которые генерируются автоматически (пригодятся для SEO-страниц и фильтров)
     allTags: [
       ...tags,
-      ...(len[1] <= 12 || tags.includes('short') ? ['short'] : []),
-      ...(len[1] >= 60 ? ['long'] : []),
+      ...(len[1] != null && (len[1] <= 12 || tags.includes('short')) ? ['short'] : []),
+      ...(len[1] != null && len[1] >= 60 ? ['long'] : []),
     ],
     // Ссылки на конкретные страницы магазинов. Поисковых ссылок-заглушек нет:
     // если страницы игры в Steam нет (Nintendo, мобильные, Battle.net), кнопка Steam
