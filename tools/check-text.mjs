@@ -175,7 +175,8 @@ const RULES = [
     // «btn btn-primary» и подобные списки классов — не текст; названия игр
     // (Goose Goose Duck, Bang Bang) — тоже не опечатка
     test: (t) => !/^[a-z0-9\s-]+$/.test(t) && /\b([\p{L}]{3,})\s+\1\b/iu.test(t)
-      && !GAME_TITLES.some((title) => title.includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0])),
+      && !GAME_TITLES.some((title) => title.includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0]))
+      && !['Job Job'].includes(t.match(/\b([\p{L}]{3,})\s+\1\b/iu)?.[0]),
     detail: (t) => `«${t.match(/\b([\p{L}]{3,})\s+\1\b/iu)[0]}»`,
   },
   {
