@@ -1,4 +1,4 @@
-# catalog-batch-review.txt (batch=2026-09-29-couch-wave-2-retry, собрано 2026-09-28T13:31:06.654Z)
+# catalog-batch-review.txt (batch=2026-09-29-couch-wave-2-retry, собрано 2026-09-28T14:03:03.642Z)
 # Собрано: 54 из 55 кандидатов (0 уже были в каталоге)
 # Цена (price_overview): 53 · рейтинг отзывов: 54 · HLTB: 0
 # Курс ЦБ РФ: 84.3414 ₽/$ на 26.09.2026
