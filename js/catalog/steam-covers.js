@@ -591,5 +591,6 @@ export const STEAM_COVERS = {
   "xcom-2": {"steamId":268500,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/268500/library_600x900_2x.jpg","src":"steam"},
   "xenoblade-chronicles-3": {"cover":"https://assets.nintendo.com/image/upload/q_auto/f_auto/store/software/switch/70010000053336/e933b48650b33b355e9cf2583da5c94b77180e40fb02d050041083dd62f4df39","src":"nintendo"},
   "yakuza-like-a-dragon": {"steamId":1235140,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/1235140/library_600x900_2x.jpg","src":"steam"},
+  "scott-pilgrim-vs-the-world-the-game-complete-edition": {"steamId":2215260,"cover":"https://cdn.akamai.steamstatic.com/steam/apps/2215260/library_600x900_2x.jpg","src":"steam"},
   "zenless-zone-zero": {"steamId":4162040,"cover":"https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4162040/285a6967d0efc7e37dad0e6a2d5ec3f0139915fc/header_alt_assets_1.jpg?t=1788905636","src":"steam"},
 };
