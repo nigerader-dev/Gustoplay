@@ -1,70 +1,6 @@
 # cover-review.txt (part=all)
 # CHECK — совпадение с несколькими кандидатами (проверить вручную)
 # MISS — точного совпадения нет (добавить в tools/steam-overrides.json)
-CHECK 30xx — «30XX»: выбрано 30XX (1029210); кандидаты: 30XX (1029210) | 30XX Original Soundtrack (1553350) | 30XX - Feline Fury DLC (3154420)
-CHECK 30xx — «30XX»: выбрано 30XX (1029210); кандидаты: 30XX (1029210) | 30XX Original Soundtrack (1553350) | 30XX - Feline Fury DLC (3154420)
-CHECK blazblue-centralfiction — «BlazBlue Centralfiction»: выбрано BlazBlue Centralfiction (586140); кандидаты: BlazBlue Centralfiction (586140) | BlazBlue Centralfiction - Additional Playable Character JUBEI (708880)
-CHECK blazblue-centralfiction — «BlazBlue Centralfiction»: выбрано BlazBlue Centralfiction (586140); кандидаты: BlazBlue Centralfiction (586140) | BlazBlue Centralfiction - Additional Playable Character JUBEI (708880)
-CHECK blazerush — «BlazeRush»: выбрано BlazeRush (302710); кандидаты: BlazeRush (302710) | BlazeRush - Star Track (2934580)
-CHECK blazerush — «BlazeRush»: выбрано BlazeRush (302710); кандидаты: BlazeRush (302710) | BlazeRush - Star Track (2934580)
-CHECK bokura — «BOKURA»: выбрано BOKURA (1801110); кандидаты: BOKURA: planet (3126150) | BOKURA (1801110) | Bokura: planet Original Soundtrack (3670090) | BOKURA: planet  Special Demo (3442630)
-CHECK bokura — «BOKURA»: выбрано BOKURA (1801110); кандидаты: BOKURA: planet (3126150) | BOKURA (1801110) | Bokura: planet Original Soundtrack (3670090) | BOKURA: planet  Special Demo (3442630)
-CHECK bopl-battle — «Bopl Battle»: выбрано Bopl Battle (1686940); кандидаты: Bopl Battle (1686940) | Bopl Battle Soundtrack (3634530) | Bopl Battle Demo (2494960)
-CHECK bopl-battle — «Bopl Battle»: выбрано Bopl Battle (1686940); кандидаты: Bopl Battle (1686940) | Bopl Battle Soundtrack (3634530) | Bopl Battle Demo (2494960)
-CHECK cat-quest-ii — «Cat Quest II»: выбрано Cat Quest II (914710); кандидаты: Cat Quest II (914710) | Cat Quest II Demo (1179900) | Cat Quest III (2305840) | Cat Quest III: The World of Cat Quest Artbook (3126830)
-CHECK cat-quest-ii — «Cat Quest II»: выбрано Cat Quest II (914710); кандидаты: Cat Quest II (914710) | Cat Quest II Demo (1179900) | Cat Quest III (2305840) | Cat Quest III: The World of Cat Quest Artbook (3126830)
-CHECK cat-quest-iii — «Cat Quest III»: выбрано Cat Quest III (2305840); кандидаты: Cat Quest III (2305840) | Cat Quest III: The World of Cat Quest Artbook (3126830) | Cat Quest III: Demo (2921660)
-CHECK cat-quest-iii — «Cat Quest III»: выбрано Cat Quest III (2305840); кандидаты: Cat Quest III (2305840) | Cat Quest III: The World of Cat Quest Artbook (3126830) | Cat Quest III: Demo (2921660)
-CHECK conan-exiles-enhanced — «Conan Exiles Enhanced»: выбрано Conan Exiles Enhanced (440900); кандидаты: Conan Exiles Enhanced (440900) | Conan Exiles Enhanced: Isle of Siptah (1206200) | Conan Exiles Enhanced - Architects of Argos Pack (1265640) | Conan Exiles Enhanced - Debaucheries of Derketo Pack (1147100)
-CHECK contra-operation-galuga — «Contra: Operation Galuga»: выбрано Contra: Operation Galuga (2235020); кандидаты: Contra: Operation Galuga (2235020) | Contra: Operation Galuga Demo (2400350) | Contra: Operation Galuga Special Soundtrack (3099720)
-CHECK darksiders-genesis — «Darksiders Genesis»: выбрано Darksiders Genesis (710920); кандидаты: Darksiders Genesis (710920) | Darksiders Genesis - Digital Extras (1203440)
-CHECK f1-25 — «F1® 25»: выбрано F1® 25 (3059520); кандидаты: F1® 25 (3059520) | F1® 25: 2026 Season Pack (4148930) | F1® 25 Iconic Edition Upgrade (3493820) | F1® 25: F1® The Movie - Chapter Scenarios (3335220)
-CHECK f1-25 — «F1® 25»: выбрано F1® 25 (3059520); кандидаты: F1® 25 (3059520) | F1® 25: 2026 Season Pack (4148930) | F1® 25 Iconic Edition Upgrade (3493820) | F1® 25: F1® The Movie - Chapter Scenarios (3335220)
-CHECK for-the-king — «For The King»: выбрано For The King (527230); кандидаты: For The King (527230) | For The King II (1676840) | For The King II: Into The Wild Character Pack (4354810) | For The King II: Fallen Oaths Character Pack (3840400)
-CHECK for-the-king — «For The King»: выбрано For The King (527230); кандидаты: For The King (527230) | For The King II (1676840) | For The King II: Into The Wild Character Pack (4354810) | For The King II: Fallen Oaths Character Pack (3840400)
-CHECK granblue-fantasy-versus-rising — «Granblue Fantasy Versus: Rising»: выбрано Granblue Fantasy Versus: Rising (2157560); кандидаты: Granblue Fantasy Versus: Rising (2157560) | GBVSR - Character Costume: Lady Serenity (Katalina) (2844760) | Granblue Fantasy Versus: Rising - Additional Character (2B) (2718990) | GBVSR - Additional Character Set (Beatrix) (2720390)
-CHECK granblue-fantasy-versus-rising — «Granblue Fantasy Versus: Rising»: выбрано Granblue Fantasy Versus: Rising (2157560); кандидаты: Granblue Fantasy Versus: Rising (2157560) | GBVSR - Character Costume: Lady Serenity (Katalina) (2844760) | Granblue Fantasy Versus: Rising - Additional Character (2B) (2718990) | GBVSR - Additional Character Set (Beatrix) (2720390)
-CHECK guilty-gear-xrd-rev-2 — «GUILTY GEAR Xrd REV 2»: выбрано GUILTY GEAR Xrd REV 2 (520440); кандидаты: GUILTY GEAR Xrd REV 2 (520440) | GUILTY GEAR Xrd REV 2 Upgrade (631560)
-CHECK guilty-gear-xrd-rev-2 — «GUILTY GEAR Xrd REV 2»: выбрано GUILTY GEAR Xrd REV 2 (520440); кандидаты: GUILTY GEAR Xrd REV 2 (520440) | GUILTY GEAR Xrd REV 2 Upgrade (631560)
-CHECK hammerwatch — «Hammerwatch»: выбрано Hammerwatch (239070); кандидаты: Heroes of Hammerwatch II (619820) | Heroes of Hammerwatch (677120) | Heroes of Hammerwatch II - Celestial Ruins (4805300) | Hammerwatch II (1538970)
-CHECK hammerwatch — «Hammerwatch»: выбрано Hammerwatch (239070); кандидаты: Heroes of Hammerwatch II (619820) | Heroes of Hammerwatch (677120) | Heroes of Hammerwatch II - Celestial Ruins (4805300) | Hammerwatch II (1538970)
-CHECK how-2-escape — «How 2 Escape»: выбрано How 2 Escape (2264140); кандидаты: How 2 Escape (2264140) | How 2 Escape: Lost Submarine (3530680) | How 2 Escape - Free Companion App (2378710) | Free Companion App & Demo - How 2 Escape: Lost Submarine   (3694360)
-CHECK how-2-escape — «How 2 Escape»: выбрано How 2 Escape (2264140); кандидаты: How 2 Escape (2264140) | How 2 Escape: Lost Submarine (3530680) | How 2 Escape - Free Companion App (2378710) | Free Companion App & Demo - How 2 Escape: Lost Submarine   (3694360)
-CHECK huntdown — «HUNTDOWN»: выбрано HUNTDOWN (598550); кандидаты: HUNTDOWN: OVERTIME (2473350) | HUNTDOWN (598550) | HUNTDOWN Soundtrack (1621040) | Hunt Down The Freeman (723390)
-CHECK huntdown — «HUNTDOWN»: выбрано HUNTDOWN (598550); кандидаты: HUNTDOWN: OVERTIME (2473350) | HUNTDOWN (598550) | HUNTDOWN Soundtrack (1621040) | Hunt Down The Freeman (723390)
-CHECK jamestown — «Jamestown+»: выбрано Jamestown+ (377950); кандидаты: Jamestown: Gunpowder, Treason, & Plot (94202) | Jamestown+ (377950) | Jamestown (94200) | Jamestown+ OST (1207660)
-CHECK jamestown — «Jamestown+»: выбрано Jamestown+ (377950); кандидаты: Jamestown: Gunpowder, Treason, & Plot (94202) | Jamestown+ (377950) | Jamestown (94200) | Jamestown+ OST (1207660)
-CHECK lara-croft-and-the-guardian-of-light — «Lara Croft and the Guardian of Light»: выбрано Lara Croft and the Guardian of Light (35130); кандидаты: Lara Croft and the Guardian of Light (35130) | Lara Croft and the Guardian of Light Demo (35150)
-CHECK lara-croft-and-the-guardian-of-light — «Lara Croft and the Guardian of Light»: выбрано Lara Croft and the Guardian of Light (35130); кандидаты: Lara Croft and the Guardian of Light (35130) | Lara Croft and the Guardian of Light Demo (35150)
-CHECK lara-croft-and-the-temple-of-osiris — «LARA CROFT AND THE TEMPLE OF OSIRIS™»: выбрано LARA CROFT AND THE TEMPLE OF OSIRIS™ (289690); кандидаты: LARA CROFT AND THE TEMPLE OF OSIRIS™ (289690) | Lara Croft and the Temple of Osiris - Legend Pack (318872) | Lara Croft and the Temple of Osiris - Icy Death Pack (318874) | Lara Croft and the Temple of Osiris - Twisted Gears Pack (318875)
-CHECK lara-croft-and-the-temple-of-osiris — «LARA CROFT AND THE TEMPLE OF OSIRIS™»: выбрано LARA CROFT AND THE TEMPLE OF OSIRIS™ (289690); кандидаты: LARA CROFT AND THE TEMPLE OF OSIRIS™ (289690) | Lara Croft and the Temple of Osiris - Legend Pack (318872) | Lara Croft and the Temple of Osiris - Icy Death Pack (318874) | Lara Croft and the Temple of Osiris - Twisted Gears Pack (318875)
-CHECK lego-dc-super-villains — «LEGO® DC Super-Villains»: выбрано LEGO® DC Super-Villains (829110); кандидаты: LEGO® DC Super-Villains (829110) | LEGO® DC Super-Villains Season Pass (870270) | LEGO® DC Super-Villains Justice League Dark (870273) | LEGO® DC Super-Villains Aquaman Bundle Pack (949220)
-CHECK lego-marvel-super-heroes-2 — «LEGO® Marvel Super Heroes 2»: выбрано LEGO® Marvel Super Heroes 2 (647830); кандидаты: LEGO® Marvel Super Heroes 2 (647830) | LEGO® Marvel Super Heroes 2 - Runaways (720770) | LEGO® Marvel Super Heroes 2 - Season Pass (720680) | LEGO® Marvel Super Heroes 2 - Cloak and Dagger (720760)
-CHECK melty-blood-type-lumina — «MELTY BLOOD: TYPE LUMINA»: выбрано MELTY BLOOD: TYPE LUMINA (1372280); кандидаты: MELTY BLOOD: TYPE LUMINA (1372280) | MELTY BLOOD: TYPE LUMINA - Saber Round Announcements (1645550) | MELTY BLOOD: TYPE LUMINA - Ushiwakamaru Round Announcements (2172450) | MELTY BLOOD: TYPE LUMINA - Hisui Round Announcements (1645460)
-CHECK melty-blood-type-lumina — «MELTY BLOOD: TYPE LUMINA»: выбрано MELTY BLOOD: TYPE LUMINA (1372280); кандидаты: MELTY BLOOD: TYPE LUMINA (1372280) | MELTY BLOOD: TYPE LUMINA - Saber Round Announcements (1645550) | MELTY BLOOD: TYPE LUMINA - Ushiwakamaru Round Announcements (2172450) | MELTY BLOOD: TYPE LUMINA - Hisui Round Announcements (1645460)
-CHECK metal-slug-3 — «METAL SLUG 3»: выбрано METAL SLUG 3 (250180); кандидаты: METAL SLUG 3 (250180) | METAL SLUG 3 Soundtrack (1921810) | METAL SLUG DEFENSE - “Morden Army Pack” Vol.3 (362590)
-CHECK metal-slug-3 — «METAL SLUG 3»: выбрано METAL SLUG 3 (250180); кандидаты: METAL SLUG 3 (250180) | METAL SLUG 3 Soundtrack (1921810) | METAL SLUG DEFENSE - “Morden Army Pack” Vol.3 (362590)
-CHECK prince-of-persia-the-lost-crown — «Prince of Persia The Lost Crown»: выбрано Prince of Persia The Lost Crown (2751000); кандидаты: Prince of Persia The Lost Crown (2751000) | Prince of Persia: The Lost Crown - Complete Upgrade Pack (3140380) | Prince of Persia™: The Lost Crown - Mask of Darkness (3102580) | Prince of Persia™: The Lost Crown - Dark Prince Skin (3102620)
-CHECK ravenswatch — «Ravenswatch»: выбрано Ravenswatch (2071280); кандидаты: Ravenswatch (2071280) | Ravenswatch - Kintaro (4809870) | Ravenswatch - Merlin (3607950) | Ravenswatch - Timeless Skin Pack (3607940)
-CHECK serious-sam-3-bfe — «Serious Sam 3: BFE»: выбрано Serious Sam 3: BFE (41070); кандидаты: Serious Sam 3: BFE (41070) | Serious Sam 3 VR: BFE (567670)
-CHECK sky-force-reloaded — «Sky Force Reloaded»: выбрано Sky Force Reloaded (667600); кандидаты: Sky Force Reloaded (667600) | Sky Force Reloaded - Original Soundtrack (735270)
-CHECK slap-city — «Slap City»: выбрано Slap City (725480); кандидаты: Slap City (725480) | Slap City Soundtrack (1450580)
-CHECK slap-city — «Slap City»: выбрано Slap City (725480); кандидаты: Slap City (725480) | Slap City Soundtrack (1450580)
-CHECK sonic-superstars — «SONIC SUPERSTARS»: выбрано SONIC SUPERSTARS (2022670); кандидаты: SONIC SUPERSTARS (2022670) | SONIC SUPERSTARS - LEGO® Sonic Skin (2376683) | SONIC SUPERSTARS - LEGO® Fun Pack (2376681) | SONIC SUPERSTARS - Sonic Holiday Costume (2376685)
-CHECK soulcalibur-vi — «SOULCALIBUR VI»: выбрано SOULCALIBUR VI (544750); кандидаты: SOULCALIBUR VI (544750) | SOULCALIBUR VI Season Pass (874360) | SOULCALIBUR VI - DLC6: Cassandra (874342) | SOULCALIBUR VI - DLC11: Setsuka (1162204)
-CHECK the-jackbox-party-pack-10 — «The Jackbox Party Pack 10»: выбрано The Jackbox Party Pack 10 (2216830); кандидаты: The Jackbox Party Pack 10 (2216830) | The Jackbox Party Pack 10 Soundtrack (2636220) | The Jackbox Party Pack 10 Demo (2561940)
-CHECK the-jackbox-party-pack-10 — «The Jackbox Party Pack 10»: выбрано The Jackbox Party Pack 10 (2216830); кандидаты: The Jackbox Party Pack 10 (2216830) | The Jackbox Party Pack 10 Soundtrack (2636220) | The Jackbox Party Pack 10 Demo (2561940)
-CHECK the-jackbox-party-pack-7 — «The Jackbox Party Pack 7»: выбрано The Jackbox Party Pack 7 (1211630); кандидаты: The Jackbox Party Pack 7 (1211630) | The Jackbox Party Pack 7 - Soundtrack (1438160)
-CHECK the-jackbox-party-pack-7 — «The Jackbox Party Pack 7»: выбрано The Jackbox Party Pack 7 (1211630); кандидаты: The Jackbox Party Pack 7 (1211630) | The Jackbox Party Pack 7 - Soundtrack (1438160)
-CHECK the-jackbox-party-pack-8 — «The Jackbox Party Pack 8»: выбрано The Jackbox Party Pack 8 (1552350); кандидаты: The Jackbox Party Pack 8 (1552350) | The Jackbox Party Pack 8 - Soundtrack (1784010)
-CHECK the-jackbox-party-pack-8 — «The Jackbox Party Pack 8»: выбрано The Jackbox Party Pack 8 (1552350); кандидаты: The Jackbox Party Pack 8 (1552350) | The Jackbox Party Pack 8 - Soundtrack (1784010)
-CHECK the-king-of-fighters-xv — «THE KING OF FIGHTERS XV»: выбрано THE KING OF FIGHTERS XV (1498570); кандидаты: THE KING OF FIGHTERS XV (1498570) | THE KING OF FIGHTERS XV - DLC Costume "CLASSIC LEONA" (1835741) | THE KING OF FIGHTERS XV - DLC Characters "Team GAROU" (1835750) | THE KING OF FIGHTERS XV - DLC Costume "GAROU: MotW TERRY" (1835740)
-CHECK the-king-of-fighters-xv — «THE KING OF FIGHTERS XV»: выбрано THE KING OF FIGHTERS XV (1498570); кандидаты: THE KING OF FIGHTERS XV (1498570) | THE KING OF FIGHTERS XV - DLC Costume "CLASSIC LEONA" (1835741) | THE KING OF FIGHTERS XV - DLC Characters "Team GAROU" (1835750) | THE KING OF FIGHTERS XV - DLC Costume "GAROU: MotW TERRY" (1835740)
-CHECK the-past-within — «The Past Within»: выбрано The Past Within (1515210); кандидаты: The Past Within (1515210) | The Past Within Soundtrack (2249650) | The Past Within Demo (1905120)
-CHECK the-past-within — «The Past Within»: выбрано The Past Within (1515210); кандидаты: The Past Within (1515210) | The Past Within Soundtrack (2249650) | The Past Within Demo (1905120)
-CHECK we-were-here — «We Were Here»: выбрано We Were Here (582500); кандидаты: We Were Here (582500) | We Were Here Tomorrow (2315050) | We Were Here Forever (1341290) | We Were Here Together (865360)
-CHECK we-were-here-too — «We Were Here Too»: выбрано We Were Here Too (677160); кандидаты: We Were Here Too (677160) | We Were Here Too: Supporter Edition (712130) | We Were Here Too: The Soundtrack (712201)
-CHECK world-war-z — «World War Z»: выбрано World War Z (699130); кандидаты: World War Z (699130) | World War Z: Aftermath Upgrade (2243210) | World War Z x The Walking Dead (4057370) | World War Z: Valley of the Zeke Episode (2614650)
 MISS scott-pilgrim-vs-the-world-the-game-complete-edition — «Scott Pilgrim vs. The World™: The Game – Complete Edition» (part-a): кандидаты нет
 
 # ---- check:covers (exit=1) ----
@@ -72,22 +8,21 @@ MISS scott-pilgrim-vs-the-world-the-game-complete-edition — «Scott Pilgrim vs
 > gustoplay@1.0.0 check:covers
 > node tools/check-covers.mjs
 
-Проверяю обложки 626 игр (заполнено: 625)…
-  …проверено 50/625
-  …проверено 100/625
-  …проверено 150/625
-  …проверено 200/625
-  …проверено 250/625
-  …проверено 300/625
-  …проверено 350/625
-  …проверено 400/625
-  …проверено 450/625
-  …проверено 500/625
-  …проверено 550/625
-  …проверено 600/625
+Проверяю обложки 593 игр (заполнено: 592)…
+  …проверено 50/592
+  …проверено 100/592
+  …проверено 150/592
+  …проверено 200/592
+  …проверено 250/592
+  …проверено 300/592
+  …проверено 350/592
+  …проверено 400/592
+  …проверено 450/592
+  …проверено 500/592
+  …проверено 550/592
 
 ❌ Без обложки (1):
   • scott-pilgrim-vs-the-world-the-game-complete-edition — Scott Pilgrim vs. The World™: The Game – Complete Edition
 Запустите: npm run covers:resolve (или GitHub Actions → Covers)
 
-❌ Обложек в порядке: 625/625 (без обложки: 1, заглушек: 0, битых: 0).
+❌ Обложек в порядке: 592/592 (без обложки: 1, заглушек: 0, битых: 0).
