@@ -405,7 +405,7 @@ export const STRINGS = {
     'support.consent': 'Согласен на обработку моих данных (имя, e-mail и текст обращения), чтобы получить ответ.',
     'support.tooFast': 'Проверьте сообщение и нажмите кнопку ещё раз через пару секунд.',
     'support.rateLimited': 'Письмо уже подготовлено — воспользуйтесь кнопкой «Открыть письмо» ниже.',
-    'support.fallback': 'Письмо подготовлено. Если почтовая программа не открылась сама, нажмите кнопку ниже или напишите нам на адрес из подвала сайта.',
+    'support.fallback': 'Письмо подготовлено, но пока никуда не отправлено: нажмите «Отправить» в открывшейся почтовой программе. Если почта не открылась, нажмите кнопку ниже.',
     'support.openMail': 'Открыть письмо',
     'support.apiQueued': 'Обращение принято.',
 
@@ -832,7 +832,7 @@ export const STRINGS = {
     'support.consent': 'I agree to the processing of my data (name, e-mail and message) so you can reply.',
     'support.tooFast': 'Check your message and press the button again in a couple of seconds.',
     'support.rateLimited': 'Your email is already prepared — use the “Open email” button below.',
-    'support.fallback': 'Your email is ready. If your email app didn’t open, press the button below or write to the address in the site footer.',
+    'support.fallback': 'Your email is ready but has not been sent yet: press “Send” in your email app. If it didn’t open, use the button below.',
     'support.openMail': 'Open email',
     'support.apiQueued': 'Your request was received.',
 
