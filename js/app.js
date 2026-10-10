@@ -169,8 +169,8 @@ let consentReopen = false;
 
 function activeAdNetworks() {
   return {
+    // для РСЯ достаточно ID блоков (R-A-…): ID партнёра уже входит в них
     rsya: (ADS.mode === 'rsya' || ADS.mode === 'both')
-      && Boolean(ADS.rsya.clientId)
       && Object.values(ADS.rsya.blocks || {}).some(Boolean),
     adsense: (ADS.mode === 'adsense' || ADS.mode === 'both')
       && Boolean(ADS.adsense.client)
@@ -242,7 +242,7 @@ document.addEventListener('error', (event) => {
  * Рендер страницы
  * ------------------------------------------------------------------ */
 
-function setHead(titleText, description) {
+function setHead(titleText, description, image = '') {
   document.title = titleText;
   const metaDesc = document.head.querySelector('meta[name="description"]') || document.createElement('meta');
   metaDesc.setAttribute('name', 'description');
@@ -256,7 +256,9 @@ function setHead(titleText, description) {
   canonical.setAttribute('href', pageUrl);
   if (!canonical.parentNode) document.head.append(canonical);
 
-  const og = [['og:title', titleText], ['og:description', description || ''], ['og:type', 'website'], ['og:url', pageUrl]];
+  // Картинка превью ссылки: обложка игры на её странице, иначе общая картинка сайта
+  const ogImage = image || `${siteOrigin()}/icons/og.jpg`;
+  const og = [['og:title', titleText], ['og:description', description || ''], ['og:type', 'website'], ['og:url', pageUrl], ['og:image', ogImage]];
   for (const [prop, value] of og) {
     let node = document.head.querySelector(`meta[property="${prop}"]`);
     if (!node) { node = document.createElement('meta'); node.setAttribute('property', prop); document.head.append(node); }
@@ -307,7 +309,7 @@ function render(scroll = true) {
   // и в PATH-режиме не работали вовсе.
   const page = `${header(ctx)}${storageWarning()}<main id="main" class="main">${html}</main>${footer()}${consentBanner()}`;
   app.innerHTML = PATH_MODE ? page.replace(/href="#\/([^"]*)"/g, (_, rest) => `href="${link(rest)}"`) : page;
-  setHead(titleText, description);
+  setHead(titleText, description, view?.image?.(ctx) || '');
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
   injectJsonLd(ctx, view);
   view?.mount?.(app);
@@ -352,14 +354,47 @@ function injectJsonLd(ctx, view) {
 
 let adScriptsLoaded = false;
 
+/**
+ * Скрипты сетей грузим один раз, а блоки заполняем после КАЖДОЙ отрисовки страницы.
+ * Раньше и то и другое жило за флагом «скрипты уже загружены»: реклама появлялась
+ * только на первой открытой странице, а после переходов внутри SPA слоты пустели.
+ * Вызов РСЯ ставим в очередь yaContextCb — она выполнится, когда context.js загрузится
+ * (вместо прежнего setTimeout на 400 мс, который на медленной сети не успевал).
+ */
 function ensureAdScripts() {
-  if (adScriptsLoaded) return;
   const networks = activeAdNetworks();
   if (!networks.rsya && !networks.adsense) return;
   if (ADS.consentRequired && getConsent() !== 'all') return;
+  if (!adScriptsLoaded) loadAdScripts(networks);
+  renderAdBlocks();
+}
+
+let adPageNumber = 0;
+
+function renderAdBlocks() {
+  adPageNumber += 1;
+  const pageNumber = adPageNumber;
+  document.querySelectorAll('[data-rsya]:not([data-ad-done])').forEach((node) => {
+    node.dataset.adDone = '1';
+    const blockId = node.dataset.rsya;
+    window.yaContextCb = window.yaContextCb || [];
+    window.yaContextCb.push(() => {
+      // контейнер мог исчезнуть, если человек успел уйти на другую страницу
+      if (!document.getElementById(node.id)) return;
+      try { window.Ya.Context.AdvManager.render({ blockId, renderTo: node.id, pageNumber }); } catch { /* блок не отрисован */ }
+    });
+  });
+  document.querySelectorAll('ins.adsbygoogle:not([data-ad-done])').forEach((node) => {
+    node.dataset.adDone = '1';
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* ignore */ }
+  });
+}
+
+function loadAdScripts(networks) {
   adScriptsLoaded = true;
 
   if (networks.rsya) {
+    window.yaContextCb = window.yaContextCb || [];
     const s = document.createElement('script');
     s.src = 'https://yandex.ru/ads/system/context.js';
     s.async = true;
@@ -384,19 +419,6 @@ function ensureAdScripts() {
       });
     }
   }
-
-  // Инициализация блоков после загрузки скриптов
-  setTimeout(() => {
-    document.querySelectorAll('[data-rsya]').forEach((node) => {
-      const blockId = node.dataset.rsya;
-      if (window.Ya?.Context?.AdvManager) {
-        try { window.Ya.Context.AdvManager.render({ blockId, renderTo: node.id, async: true }); } catch { /* блок уже отрисован */ }
-      }
-    });
-    document.querySelectorAll('ins.adsbygoogle').forEach(() => {
-      try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch { /* ignore */ }
-    });
-  }, 400);
 }
 
 /* ------------------------------------------------------------------ *
@@ -539,7 +561,6 @@ document.addEventListener('click', (event) => {
       setConsent('all');
       consentReopen = false;
       initAnalytics({ consent: 'all' });
-      adScriptsLoaded = false;
       render(false);
       break;
     }

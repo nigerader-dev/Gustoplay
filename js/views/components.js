@@ -195,7 +195,22 @@ export const modeOptionList = () => Object.keys(MODES).map((id) => ({ id, label:
  * ------------------------------------------------------------------ */
 
 /**
- * Рекламный блок. Пока ADS.mode = 'mock' — аккуратная заглушка (видно место и размер).
+ * Заглушки рекламы видны только при локальной разработке. Раньше в режиме 'mock'
+ * они показывались и на боевом сайте: посетители видели «Тестовая заглушка»,
+ * а поисковики индексировали её текст в пре-рендере.
+ */
+export const isDevPreview = () => {
+  if (globalThis.__GP_PRERENDER__) return false;
+  try {
+    return /^(localhost|127\.0\.0\.1|\[::1\]|.+\.localhost)$/.test(globalThis.location?.hostname || '');
+  } catch { return false; }
+};
+
+/** Сквозной номер отрисовки: у каждого контейнера РСЯ должен быть уникальный id */
+let adSeq = 0;
+
+/**
+ * Рекламный блок. ADS.mode = 'mock' — заглушка (только в разработке, на сайте — ничего).
  * С реальными ID подключается РСЯ и/или AdSense, учитывая согласие на cookie и лимит блоков на страницу.
  */
 export function adSlot(slotId) {
@@ -204,6 +219,7 @@ export function adSlot(slotId) {
   // Высота креатива резервируется всегда — и в mock, и в реальной сети
   const reserve = `style="--ad-height: ${Number(slot.h) || 90}px"`;
   if (ADS.mode === 'mock') {
+    if (!isDevPreview()) return '';
     return `<aside class="ad-slot ad-mock" data-slot="${slotId}" ${reserve}>
       <span class="ad-label">${esc(t('ad.mockLabel'))}</span>
       <div class="ad-body">
@@ -221,7 +237,10 @@ export function adSlot(slotId) {
   const adsense = ADS.adsense.blocks?.[slotId];
   const parts = [];
   if ((ADS.mode === 'rsya' || ADS.mode === 'both') && rsya) {
-    parts.push(`<div id="yandex_rtb_${slotId}" class="ad-network" data-rsya="${esc(rsya)}"></div>`);
+    // SPA: при переходе страница не перезагружается, и контейнер с тем же id
+    // РСЯ второй раз не заполняет — id делаем уникальным для каждой отрисовки
+    adSeq += 1;
+    parts.push(`<div id="yandex_rtb_${esc(slotId)}-${adSeq}" class="ad-network" data-rsya="${esc(rsya)}"></div>`);
   }
   if ((ADS.mode === 'adsense' || ADS.mode === 'both') && adsense) {
     parts.push(`<ins class="adsbygoogle ad-network" style="display:block" data-ad-client="${esc(ADS.adsense.client)}"

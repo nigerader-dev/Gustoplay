@@ -98,6 +98,8 @@ const server = http.createServer((req, res) => {
   }
 
   if (existsSync(target) && statSync(target).isFile()) return serveFile(res, target);
+  // Сборка кладёт страницы как /genre/rpg.html (так их без редиректа отдаёт Cloudflare Pages)
+  if (!extname(target) && existsSync(`${target}.html`)) return serveFile(res, `${target}.html`);
 
   // Ассеты из вложенных путей: при ЧПУ вида /catalog относительные ссылки превращаются
   // в /catalog/css/styles.css. Если файла там нет — ищем его от корня (как это делает Cloudflare Pages).

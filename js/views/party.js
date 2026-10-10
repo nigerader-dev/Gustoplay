@@ -91,5 +91,5 @@ export function updateParty(patch) {
   navigate(`party${params.toString() ? `?${params}` : ''}`, { replace: true });
 }
 
-export const title = () => `${t('party.title')} — ${t('site.name')}`;
+export const title = () => `${t('party.metaTitle')} — ${t('site.name')}`;
 export const description = () => t('party.subtitle');

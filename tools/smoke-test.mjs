@@ -77,7 +77,7 @@ console.log('\n1b. Ссылки шапки (регресс: в PATH-режиме
 
 console.log('\n2. Квиз');
 await navigate('quiz');
-check('первый вопрос про настроение', text().includes('Что сейчас хочется'));
+check('первый вопрос про настроение', text().includes('Чего хочется от игры'));
 check('вариантов ответа 10+', count('.opt') >= 10, `${count('.opt')} шт.`);
 // выбираем два настроения и идём дальше
 const firstTwo = [...window.document.querySelectorAll('.opt')].slice(0, 2);
@@ -86,7 +86,7 @@ await new Promise((r) => setTimeout(r, 20));
 check('выбор настроений подсвечен', count('.opt.on') === 2);
 window.document.querySelector('[data-action="quiz-next"]').dispatchEvent(new window.MouseEvent('click', { bubbles: true }));
 await new Promise((r) => setTimeout(r, 20));
-check('перешли к вопросу о режимах', text().includes('Как будете играть'));
+check('перешли к вопросу о режимах', text().includes('Как хотите играть'));
 
 console.log('\n2b. Ветвление квиза и живой счётчик');
 check('есть живой счётчик пула', count('.quiz-pool') === 1 && /\d/.test(window.document.querySelector('.quiz-pool')?.textContent || ''));

@@ -6,6 +6,7 @@ import { t, tl, getLang } from '../i18n.js';
 import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
+import { publicUrl } from '../nav.js';
 import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
 import { mountPcfit, pcfitBlock } from './pcfit.js';
 
@@ -184,18 +185,34 @@ export function jsonLd(ctx) {
     genre: game.genres.map((id) => tl(GENRES, id)),
     gamePlatform: game.platforms.map((id) => tl(PLATFORMS, id)),
     applicationCategory: 'Game',
-    aggregateRating: { '@type': 'AggregateRating', ratingValue: game.rating / 10, bestRating: 10, ratingCount: 1200 },
+    // aggregateRating намеренно не выводим: рейтинг каталога — редакционная оценка,
+    // а не отзывы пользователей. Раньше здесь стояло выдуманное ratingCount: 1200 —
+    // за поддельную разметку отзывов Google снимает расширенные сниппеты со всего сайта.
     description: fullDescription || game.desc?.[lang] || game.desc?.ru,
+    url: publicUrl(`game/${game.slug}`),
   };
   // официальная обложка — в JSON-LD, чтобы поисковики показывали реальный арт
   if (game.cover) data.image = game.cover;
-  if (game.steamId) data.url = `https://store.steampowered.com/app/${game.steamId}/`;
+  // страница в магазине — это «та же сущность в другом месте», а не адрес нашей страницы
+  if (game.steamId) data.sameAs = `https://store.steampowered.com/app/${game.steamId}/`;
   return data;
 }
 
+/** Обложка игры для превью ссылки (og:image) — только официальный арт по https */
+export const image = (ctx) => {
+  const game = byId(ctx?.params?.slug);
+  return game && typeof game.cover === 'string' && game.cover.startsWith('https://') ? game.cover : '';
+};
+
 export const title = (ctx) => {
   const game = byId(ctx?.params?.slug);
-  return game ? `${game.t} — ${t('game.about')} · ${t('site.name')}` : t('common.notFound');
+  if (!game) return t('common.notFound');
+  // Заголовок под реальные запросы: «<игра> системные требования», «игры похожие на <игра>»
+  const ru = getLang() === 'ru';
+  const parts = [ru ? 'описание' : 'overview'];
+  if (game.sysreq) parts.push(ru ? 'системные требования' : 'PC requirements');
+  parts.push(ru ? 'похожие игры' : 'similar games');
+  return `${game.t}: ${parts.join(', ')} — ${t('site.name')}`;
 };
 
 export const description = (ctx) => {

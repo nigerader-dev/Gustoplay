@@ -84,6 +84,32 @@ window.dispatchEvent(new window.Event('gf:rerender'));
 check('режим сети без выданных ID также не создаёт внешних запросов',
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
     && !window.document.querySelector('#consent'));
+{
+  // РСЯ с выданными ID: блоки заполняются на каждой странице SPA, а не только на первой
+  const savedBlocks = { ...config.ADS.rsya.blocks };
+  const savedConsent = window.localStorage.getItem('gf.consent.v1');
+  config.ADS.rsya.blocks['home-top'] = 'R-A-000000-1';
+  config.ADS.rsya.blocks['catalog-inline'] = 'R-A-000000-2';
+  window.localStorage.setItem('gf.consent.v1', 'all');
+  window.yaContextCb = [];
+  nav.navigate('');
+  await new Promise((r) => setTimeout(r, 30));
+  const firstIds = [...window.document.querySelectorAll('[data-rsya]')].map((n) => n.id);
+  nav.navigate('catalog');
+  await new Promise((r) => setTimeout(r, 30));
+  const secondIds = [...window.document.querySelectorAll('[data-rsya]')].map((n) => n.id);
+  check('РСЯ: скрипт сети подключается один раз',
+    window.document.querySelectorAll('script[src*="yandex.ru/ads/system/context.js"]').length === 1);
+  check('РСЯ: блоки ставятся в очередь yaContextCb на каждой странице SPA',
+    firstIds.length >= 1 && secondIds.length >= 1 && window.yaContextCb.length >= firstIds.length + secondIds.length,
+    `очередь: ${window.yaContextCb.length}`);
+  check('РСЯ: id контейнеров уникальны между переходами',
+    secondIds.every((id) => !firstIds.includes(id)), `${firstIds} → ${secondIds}`);
+  config.ADS.rsya.blocks = savedBlocks;
+  if (savedConsent === null) window.localStorage.removeItem('gf.consent.v1');
+  else window.localStorage.setItem('gf.consent.v1', savedConsent);
+  window.document.querySelectorAll('script[src*="yandex.ru/ads"]').forEach((n) => n.remove());
+}
 config.ADS.mode = 'mock';
 window.dispatchEvent(new window.Event('gf:rerender'));
 
