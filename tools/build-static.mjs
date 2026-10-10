@@ -25,6 +25,9 @@ import { SITE, ADS } from '../js/config.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
 const noPrerender = process.argv.includes('--no-prerender');
+// --noindex: сборка зеркала (GitHub Pages). Все страницы закрываются от индексации,
+// иначе копия сайта на чужом домене конкурирует в поиске с основным gustoplay.ru.
+const noIndexAll = process.argv.includes('--noindex') || process.env.GUSTOPLAY_NOINDEX === '1';
 // Адрес API для сборки: --api-base=/api (или GUSTOPLAY_API_BASE). Пусто — локальный режим.
 const apiBaseArg = process.argv.find((a) => a.startsWith('--api-base='));
 const apiBase = apiBaseArg ? apiBaseArg.slice('--api-base='.length) : (process.env.GUSTOPLAY_API_BASE || '');
@@ -259,7 +262,9 @@ const shell = readFileSync(join(root, 'index.html'), 'utf8')
   // Подтверждение прав в Яндекс Вебмастере и Google Search Console (SITE.verification)
   .replace('</head>', `${verificationMeta()}${modulePreloads()}</head>`);
 
-writeFileSync(join(dist, 'index.html'), shell);
+writeFileSync(join(dist, 'index.html'), noIndexAll
+  ? shell.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, follow">')
+  : shell);
 
 /* ------------------------------------------------------------------ *
  * 3. Пре-рендер (jsdom) — готовый HTML для поисковиков
@@ -276,7 +281,7 @@ function absolutize(html, route) {
     .replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${url}">`);
 
   // персональные страницы (результаты, профиль, аккаунт) закрываем от индексации
-  if (route.noindex) {
+  if (route.noindex || noIndexAll) {
     out = out
       .replace(/<meta name="robots"[^>]*>/, '')
       .replace('</head>', '  <meta name="robots" content="noindex, follow">\n</head>');

@@ -86,7 +86,8 @@ jobs:
         continue-on-error: true
 
       - name: Сборка сайта для GitHub Pages
-        run: node tools/build-static.mjs --site-url="$SITE_URL" --trailing-slash
+        # --noindex: зеркало не должно конкурировать в поиске с основным доменом gustoplay.ru
+        run: node tools/build-static.mjs --site-url="$SITE_URL" --trailing-slash --noindex
 
       - name: Проверка собранного сайта
         run: npm run verify:build
