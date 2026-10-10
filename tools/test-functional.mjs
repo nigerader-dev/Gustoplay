@@ -553,9 +553,13 @@ check('сброс профиля ведёт в квиз с чистым проф
 /* ============================ 9. Консент, тема, язык ============================ */
 console.log('\n9. Консент, тема, язык, 404');
 window.localStorage.removeItem('gf.consent.v1');
+// баннер нужен, только когда есть что-то с cookie (сеть рекламы или Метрика)
+const savedMetrika = config.ANALYTICS.yandexMetrika;
+config.ANALYTICS.yandexMetrika = '';
 await navigate('catalog');
 check('без активной сети нет ненужного баннера cookie', count('#consent') === 0
   && !window.document.querySelector('[data-action="consent-open"]'));
+config.ANALYTICS.yandexMetrika = savedMetrika;
 store.setConsent('necessary');
 check('выбор cookie может храниться локально',
   window.localStorage.getItem('gf.consent.v1') === 'necessary');
