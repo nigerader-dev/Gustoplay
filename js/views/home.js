@@ -49,8 +49,8 @@ export function render() {
   return `
   <section class="hero">
     <div class="hero-copy">
-      <span class="pill">${esc(t('site.tagline'))}</span>
-      <h1>${esc(t('site.name'))} — ${esc(t('home.hero.title'))}</h1>
+      <span class="pill">${esc(t('home.hero.pill'))}</span>
+      <h1>${esc(t('home.hero.title'))}</h1>
       <p class="lead">${esc(t('home.hero.lead'))}</p>
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="#/quiz" data-action="nav">${icon('sparkles')} ${esc(t('home.cta.start'))}</a>
@@ -124,5 +124,6 @@ export function render() {
   `;
 }
 
-export const title = () => `${t('site.name')} — ${t('site.tagline')}`;
+// В заголовке — то, что люди набирают в поиске («во что поиграть»), а не только название бренда
+export const title = () => t('home.meta.title');
 export const description = () => t('site.description');

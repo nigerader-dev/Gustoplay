@@ -153,6 +153,11 @@ jobs:
             npm run deploy:purge || echo "::warning::повторный purge не выполнен (нет права Zone → Cache Purge?)"
           fi
 
+      # Яндекс и Bing узнают об обновлённых страницах сразу, а не при следующем обходе
+      - name: IndexNow — сообщить поисковикам об обновлении
+        continue-on-error: true
+        run: node tools/indexnow.mjs
+
       - name: Итог
         run: |
           {

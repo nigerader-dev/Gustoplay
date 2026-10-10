@@ -82,6 +82,9 @@ export function render(ctx) {
       <button type="button" class="btn btn-ghost" data-action="quiz-skip">${esc(t('quiz.skip'))}</button>
       <button type="button" class="btn btn-primary" data-action="quiz-next" id="quiz-next-btn"></button>
     </div>
+    <div class="quiz-finish-now" id="quiz-finish-now" hidden>
+      <button type="button" class="btn btn-link" data-action="quiz-finish-now">${esc(t('quiz.finishNow'))} →</button>
+    </div>
   </section>`;
 }
 
@@ -100,6 +103,17 @@ export function mount(root) {
     goNext(root, true);
   });
   root.querySelector('[data-action="quiz-next"]').addEventListener('click', () => goNext(root));
+  // Вопросов 15, а главное (настроение, режим, число игроков) — первые три.
+  // Кто ответил на них, может сразу смотреть игры, не проходя остальное.
+  root.querySelector('[data-action="quiz-finish-now"]').addEventListener('click', () => finish());
+}
+
+function finish() {
+  setAnswers(answers);
+  window.dispatchEvent(new CustomEvent('gf:track', {
+    detail: { name: 'quiz_complete', params: { marks: Object.keys(getProfile().marks || {}).length } },
+  }));
+  navigate('results');
 }
 
 function goNext(root, skipped = false) {
@@ -110,11 +124,7 @@ function goNext(root, skipped = false) {
     return;
   }
   if (step >= flow().length - 1) {
-    setAnswers(answers);
-    window.dispatchEvent(new CustomEvent('gf:track', {
-      detail: { name: 'quiz_complete', params: { marks: Object.keys(getProfile().marks || {}).length } },
-    }));
-    navigate('results');
+    finish();
     return;
   }
   step += 1;
@@ -136,6 +146,8 @@ function renderStep(root, scroll = true) {
   root.querySelector('#quiz-progress-bar').style.width = `${progress(answers)}%`;
   root.querySelector('#quiz-next-btn').textContent = step === questions.length - 1 ? t('quiz.finish') : t('quiz.next');
   root.querySelector('[data-action="quiz-back"]').disabled = step === 0;
+  const finishNow = root.querySelector('#quiz-finish-now');
+  if (finishNow) finishNow.hidden = step < 2 || step >= questions.length - 1;
 
   const body = root.querySelector('#quiz-body');
   const hint = q.type === 'single' ? t('quiz.single.hint') : t('quiz.multi.hint');

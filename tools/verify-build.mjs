@@ -48,7 +48,7 @@ function walk(dir, out = []) {
 
 const htmlFiles = walk(dist);
 const urlOf = (file) => {
-  const rel = relative(dist, file).split(sep).join('/').replace(/index\.html$/, '');
+  const rel = relative(dist, file).split(sep).join('/').replace(/index\.html$/, '').replace(/\.html$/, '');
   return `/${rel}`.replace(/\/$/, '/') || '/';
 };
 
@@ -172,7 +172,8 @@ const wrongHost = urls.filter((u) => !(u === siteUrl || u.startsWith(`${siteUrl}
 check('все адреса sitemap на сайте из конфига', wrongHost.length === 0, wrongHost.slice(0, 3).join(', '));
 const sitemapMissing = urls.filter((url) => {
   const path = stripBase(url.replace(/^https?:\/\/[^/]+/, '').split('?')[0]);
-  return !existsSync(join(dist, path, 'index.html')) && !existsSync(join(dist, path));
+  return !existsSync(join(dist, path, 'index.html')) && !existsSync(join(dist, `${path}.html`))
+    && !(existsSync(join(dist, path)) && statSync(join(dist, path)).isFile());
 });
 check('все адреса из sitemap существуют в сборке', sitemapMissing.length === 0, sitemapMissing.slice(0, 3).join(', '));
 check('персональные страницы закрыты от индексации',

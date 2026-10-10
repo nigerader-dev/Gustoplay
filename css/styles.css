@@ -657,6 +657,8 @@ span.chip-active { cursor: default; }
 .opt-icon { font-size: 1.15rem; }
 .quiz-nav { display: flex; gap: 10px; align-items: center; }
 .quiz-nav .btn-primary { margin-left: auto; }
+.quiz-finish-now { display: flex; justify-content: flex-end; margin-top: 10px; }
+.quiz-finish-now[hidden] { display: none; }
 
 .seed { grid-column: 1 / -1; }
 .seed-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(210px, 100%), 1fr)); gap: 10px; max-height: 420px; overflow: auto; padding-right: 4px; }

@@ -311,7 +311,30 @@ export function removeFilter(kind, id, current) {
   }
 }
 
-export const title = (ctx) => `${ctx?.preset?.heading || t('catalog.title')} — ${t('site.name')}`;
+/** Заголовок вкладки и сниппета: формулировки, по которым ищут («игры в жанре RPG»), а не голое «RPG» */
+const TITLE_TEMPLATES = {
+  ru: {
+    genre: (h) => `Игры в жанре «${h}»`,
+    mode: (h) => `${h}: список игр`,
+    mood: (h) => `Игры под настроение «${h}»`,
+    tag: (h) => `«${h}»: подборка игр`,
+    platform: (h) => `Игры для платформы «${h}»`,
+    catalog: () => 'Каталог игр с фильтрами',
+  },
+  en: {
+    genre: (h) => `${h} games`,
+    mode: (h) => `${h}: game list`,
+    mood: (h) => `Games for the mood: ${h}`,
+    tag: (h) => `${h}: game collection`,
+    platform: (h) => `Games on ${h}`,
+    catalog: () => 'Game catalog with filters',
+  },
+};
+export const title = (ctx) => {
+  const set = TITLE_TEMPLATES[getLang()] || TITLE_TEMPLATES.ru;
+  const make = set[ctx?.name] || set.catalog;
+  return `${ctx?.preset?.heading ? make(ctx.preset.heading) : set.catalog()} — ${t('site.name')}`;
+};
 export const description = (ctx) => {
   // На лендингах жанров/режимов/настроений — уникальное мета-описание вместо шаблонного
   const landing = landingFor(ctx);

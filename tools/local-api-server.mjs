@@ -199,6 +199,8 @@ async function handle(req, res) {
     return send(res, 200, `<!doctype html><meta charset=utf-8><h1>${escHtml(decoded)}</h1><ul>${items}</ul>`, MIME['.html']);
   }
   if (existsSync(target) && statSync(target).isFile()) return serveFile(res, target);
+  // Сборка кладёт страницы как /genre/rpg.html (так их без редиректа отдаёт Cloudflare Pages)
+  if (!extname(target) && existsSync(`${target}.html`)) return serveFile(res, `${target}.html`);
 
   if (extname(target)) {
     const segments = url.pathname.split('/').filter(Boolean);

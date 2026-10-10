@@ -25,6 +25,9 @@ import { SITE, ADS } from '../js/config.js';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
 const noPrerender = process.argv.includes('--no-prerender');
+// --noindex: сборка зеркала (GitHub Pages). Все страницы закрываются от индексации,
+// иначе копия сайта на чужом домене конкурирует в поиске с основным gustoplay.ru.
+const noIndexAll = process.argv.includes('--noindex') || process.env.GUSTOPLAY_NOINDEX === '1';
 // Адрес API для сборки: --api-base=/api (или GUSTOPLAY_API_BASE). Пусто — локальный режим.
 const apiBaseArg = process.argv.find((a) => a.startsWith('--api-base='));
 const apiBase = apiBaseArg ? apiBaseArg.slice('--api-base='.length) : (process.env.GUSTOPLAY_API_BASE || '');
@@ -57,6 +60,36 @@ if (siteUrlRaw || baseRaw || trailingSlashFlag) {
   else if (siteUrlRaw) {
     try { SITE.base = normalizeBase(new URL(siteUrlRaw).pathname); } catch { SITE.base = ''; }
   }
+}
+/**
+ * modulepreload для всех статически импортируемых модулей приложения. Без него браузер
+ * узнаёт о модулях по цепочке import → import (3–4 последовательных запроса до первого
+ * рендера); с ним все ~40 файлов запрашиваются параллельно сразу из HTML.
+ */
+function modulePreloads() {
+  const seen = new Set();
+  const walk = (rel) => {
+    if (seen.has(rel)) return;
+    seen.add(rel);
+    const src = readFileSync(join(root, rel), 'utf8');
+    for (const m of src.matchAll(/^\s*(?:import|export)\b[^'"]*?from\s*['"](\.{1,2}\/[^'"]+)['"]/gm)) {
+      const next = join(dirname(rel), m[1]).replace(/\\/g, '/');
+      if (existsSync(join(root, next))) walk(next);
+    }
+  };
+  walk('js/app.js');
+  seen.delete('js/app.js'); // сам вход уже подключён <script type="module">
+  return [...seen].sort().map((rel) => `  <link rel="modulepreload" href="${basePath()}/${rel}">\n`).join('');
+}
+
+/** Мета-теги подтверждения прав на сайт: только безопасные символы кода */
+function verificationMeta() {
+  const v = SITE.verification || {};
+  const safe = (code) => String(code || '').trim().replace(/[^A-Za-z0-9_-]/g, '');
+  const tags = [];
+  if (safe(v.yandex)) tags.push(`  <meta name="yandex-verification" content="${safe(v.yandex)}">\n`);
+  if (safe(v.google)) tags.push(`  <meta name="google-site-verification" content="${safe(v.google)}">\n`);
+  return tags.join('');
 }
 /** Корень сайта без завершающего слэша: https://user.github.io/mydev */
 const siteRoot = () => String(SITE.url).replace(/\/+$/, '');
@@ -205,18 +238,33 @@ if (existsSync(join(root, 'sw.js'))) {
   writeFileSync(join(dist, 'sw.js'), sw);
 }
 if (existsSync(join(root, 'covers'))) cpSync(join(root, 'covers'), join(dist, 'covers'), { recursive: true });
+// Иконки сайта и картинка для превью ссылок (og:image)
+if (existsSync(join(root, 'icons'))) cpSync(join(root, 'icons'), join(dist, 'icons'), { recursive: true });
+if (existsSync(join(root, 'favicon.ico'))) cpSync(join(root, 'favicon.ico'), join(dist, 'favicon.ico'));
+// Ключ IndexNow (<32 hex>.txt): поисковик проверяет его на домене (tools/indexnow.mjs)
+for (const f of readdirSync(root)) if (/^[0-9a-f]{32}\.txt$/.test(f)) cpSync(join(root, f), join(dist, f));
 
 const shell = readFileSync(join(root, 'index.html'), 'utf8')
   .replaceAll('href="css/', `href="${basePath()}/css/`)
   .replaceAll('src="js/', `src="${basePath()}/js/`)
   .replaceAll('href="manifest.webmanifest"', `href="${basePath()}/manifest.webmanifest"`)
   .replaceAll('src="covers/', `src="${basePath()}/covers/`)
+  .replaceAll('href="icons/', `href="${basePath()}/icons/`)
+  .replaceAll('href="/favicon.ico"', `href="${basePath()}/favicon.ico"`)
+  .replaceAll('href="/catalog"', `href="${basePath()}/catalog"`)
+  .replaceAll('href="/party"', `href="${basePath()}/party"`)
+  .replaceAll('href="/about"', `href="${basePath()}/about"`)
+  .replaceAll('content="https://gustoplay.ru/icons/og.jpg"', `content="${siteRoot()}/icons/og.jpg"`)
   // canonical/og:url/JSON-LD в оболочке — адресом текущего сайта (важно для зеркал)
   .replace(/<link rel="canonical" href="[^"]*">/, `<link rel="canonical" href="${urlFor('/')}">`)
   .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${urlFor('/')}">`)
-  .replace(/("url":\s*")[^"]*(")/, `$1${urlFor('/')}$2`);
+  .replace(/("url":\s*")[^"]*(")/, `$1${urlFor('/')}$2`)
+  // Подтверждение прав в Яндекс Вебмастере и Google Search Console (SITE.verification)
+  .replace('</head>', `${verificationMeta()}${modulePreloads()}</head>`);
 
-writeFileSync(join(dist, 'index.html'), shell);
+writeFileSync(join(dist, 'index.html'), noIndexAll
+  ? shell.replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, follow">')
+  : shell);
 
 /* ------------------------------------------------------------------ *
  * 3. Пре-рендер (jsdom) — готовый HTML для поисковиков
@@ -233,12 +281,26 @@ function absolutize(html, route) {
     .replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${url}">`);
 
   // персональные страницы (результаты, профиль, аккаунт) закрываем от индексации
-  if (route.noindex) {
+  if (route.noindex || noIndexAll) {
     out = out
       .replace(/<meta name="robots"[^>]*>/, '')
       .replace('</head>', '  <meta name="robots" content="noindex, follow">\n</head>');
   }
   return out;
+}
+
+/**
+ * Файл страницы в dist/. Без стиля «слэш в конце» страница кладётся как /genre/rpg.html:
+ * Cloudflare Pages отдаёт её по адресу /genre/rpg без редиректа. Раньше это был
+ * /genre/rpg/index.html — и каждый адрес из sitemap и canonical отвечал 308 на /genre/rpg/,
+ * а canonical той страницы указывал обратно на адрес с редиректом (противоречивый сигнал
+ * для поисковиков и лишний редирект на каждом переходе).
+ * Со стилем слэша (зеркало на GitHub Pages) — папка с index.html, как ждёт тот хостинг.
+ */
+function pageFile(path) {
+  const rel = String(path).replace(/^\/+/, '').replace(/\/+$/, '');
+  if (!rel) return join(dist, 'index.html');
+  return styleOn() ? join(dist, rel, 'index.html') : join(dist, `${rel}.html`);
 }
 
 let prerendered = 0;
@@ -259,6 +321,8 @@ if (!noPrerender) {
     window.confirm = () => true;
     window.prompt = () => null;
 
+    // Пре-рендер = боевой сайт: заглушки рекламы и прочие dev-подсказки не попадают в HTML
+    globalThis.__GP_PRERENDER__ = true;
     await import('../js/app.js');
     const tick = () => new Promise((r) => setTimeout(r, 20));
 
@@ -267,14 +331,14 @@ if (!noPrerender) {
       window.dispatchEvent(new window.CustomEvent('gf:navigate', { detail: { path: route.path, replace: true } }));
       await tick();
       const html = `<!DOCTYPE html>\n${window.document.documentElement.outerHTML}`;
-      const out = route.path === '/' ? join(dist, 'index.html') : join(dist, route.path.replace(/^\//, ''), 'index.html');
+      const out = pageFile(route.path);
       mkdirSync(dirname(out), { recursive: true });
       writeFileSync(out, absolutize(html, route));
       prerendered += 1;
     }
     // Самопроверка: страница игры обязана содержать название игры, иначе пре-рендер «сломался»
     const probe = GAMES[0];
-    const probeHtml = readFileSync(join(dist, 'game', probe.slug, 'index.html'), 'utf8');
+    const probeHtml = readFileSync(pageFile(`/game/${probe.slug}`), 'utf8');
     if (!probeHtml.includes(probe.t)) {
       throw new Error(`пре-рендер сломан: на странице /game/${probe.slug} нет названия игры`);
     }
@@ -300,6 +364,15 @@ User-agent: *
 Allow: /
 Disallow: ${basePath()}/results
 Disallow: ${basePath()}/profile
+Disallow: ${basePath()}/account
+
+# Яндекс: параметры фильтров не создают новых страниц (canonical — адрес без них)
+User-agent: Yandex
+Allow: /
+Disallow: ${basePath()}/results
+Disallow: ${basePath()}/profile
+Disallow: ${basePath()}/account
+Clean-param: q&page&sort&mode&platform&platforms&genre&tag&mood&players&price&time&coopLocal&free&lang
 
 # Sitemap
 Sitemap: ${siteRoot()}/sitemap.xml

@@ -29,7 +29,15 @@ export const SITE = {
    * Показывается на /terms и /privacy вместо «сегодняшней даты»: дата меняется только
    * при фактическом изменении текстов, а не при каждом рендере (честность редакции).
    */
-  legalRevision: '2026-09-28',
+  legalRevision: '2026-10-10',
+  /**
+   * Коды подтверждения прав на сайт в поисковиках (только значение content из выданного
+   * мета-тега). Сборка вставит их в <head> всех страниц. Как получить — docs/OWNER-STEPS.md.
+   */
+  verification: {
+    yandex: '',   // Яндекс Вебмастер → «Мета-тег»: <meta name="yandex-verification" content="ВОТ_ЭТО">
+    google: '',   // Google Search Console → «Тег HTML»: <meta name="google-site-verification" content="ВОТ_ЭТО">
+  },
   telegram: 'https://t.me/+K915edYs7C1iNTEy',
   languages: ['ru', 'en'],
   defaultLang: 'ru',
@@ -71,7 +79,13 @@ export const AUTH = {
 };
 
 export const ADS = {
-  /** 'mock' | 'rsya' | 'adsense' | 'both' — какая сеть реально показывается */
+  /**
+   * 'mock' | 'rsya' | 'adsense' | 'both' — какая сеть реально показывается.
+   * 'mock' — сети нет: на боевом сайте слоты не выводятся вовсе, заглушки видны только
+   * при локальной разработке (localhost). Для владельца из Беларуси подходит только РСЯ
+   * (AdSense там отключён с 12.2024) — пошагово: docs/OWNER-STEPS.md, раздел 1.
+   * Включение: mode: 'rsya' и ID блоков вида 'R-A-1234567-1' в rsya.blocks.
+   */
   mode: 'mock',
   /** Согласие на cookie: без него реклама не грузится, показывается баннер. */
   consentRequired: true,
@@ -85,7 +99,7 @@ export const ADS = {
 
   // Идентификаторы намеренно пусты: их нельзя подменять примерами или включать без согласования.
   rsya: {
-    clientId: '',
+    clientId: '',   // необязательно: ID партнёра уже входит в ID блока (R-A-<партнёр>-<блок>)
     blocks: {
       'home-top': '',
       'results-inline': '',
@@ -111,10 +125,10 @@ export const ADS = {
   /** Своя реклама (например, свой Telegram-канал) — показывается, если сеть не подключена. */
   house: {
     enabled: true,
-    title: { ru: 'Новая подборка каждую неделю', en: 'Fresh picks every week' },
+    title: { ru: 'GustoPlay в Telegram', en: 'GustoPlay on Telegram' },
     text: {
-      ru: 'Мы добавляем игры в каталог и публикуем разборы подборок. Загляните в наш Telegram.',
-      en: 'We keep adding games and posting curated picks. Join our Telegram.',
+      ru: 'Новости сайта и новые игры в каталоге — в нашем Telegram-канале.',
+      en: 'Site news and new catalog games — on our Telegram channel.',
     },
     url: 'https://t.me/+K915edYs7C1iNTEy',
     cta: { ru: 'Открыть Telegram', en: 'Open Telegram' },
