@@ -2,7 +2,6 @@
 import { t, getLang } from '../i18n.js';
 import { SITE } from '../config.js';
 import { esc } from './components.js';
-import { submitSupportMessage } from '../api.js';
 
 export function render() {
   const lang = getLang();
@@ -63,7 +62,6 @@ export function mount(root) {
   if (!form) return;
   const status = form.querySelector('#support-status');
   const mailto = form.querySelector('#support-mailto');
-  const submit = form.querySelector('#support-submit');
   const lang = getLang();
   const copy = (key) => t(key);
   const startedAt = Date.now();
@@ -98,23 +96,10 @@ export function mount(root) {
       message: String(fields.get('message') || '').trim(),
     };
     safeSessionSet('gustoplay.support.attempt.v1', now);
-    submit.disabled = true;
-    try {
-      const result = await submitSupportMessage(payload);
-      if (result?.sent === true) {
-        status.textContent = copy('support.apiQueued');
-        form.reset();
-        return;
-      }
-      // A successful response without an explicit delivery receipt is not called "sent".
-      showMailtoFallback({ status, mailto, payload, lang });
-    } catch (error) {
-      if (error?.status === 429) status.textContent = copy('support.rateLimited');
-      else if (error?.status === 400) status.textContent = error.message || copy('support.tooFast');
-      else showMailtoFallback({ status, mailto, payload, lang });
-    } finally {
-      submit.disabled = false;
-    }
+    // Обращение уходит письмом из почты пользователя: серверная доставка не подключена,
+    // и прежний запрос к API всегда заканчивался сообщением «отправка недоступна».
+    showMailtoFallback({ status, mailto, payload, lang });
+    try { mailto.click(); } catch { /* почтовая программа не открылась — остаётся кнопка */ }
   });
 }
 

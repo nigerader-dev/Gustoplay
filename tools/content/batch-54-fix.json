@@ -1,0 +1,2295 @@
+{
+  "30xx": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "procedural",
+      "replayable",
+      "pixelart",
+      "controller",
+      "coopfocused",
+      "endlessloop"
+    ],
+    "mood": [
+      "adrenaline",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Платформер-рогалик в духе Mega Man X: уровни каждый раз собираются заново, а пройти забег можно вдвоём.",
+      "en": "A roguelike platformer in the spirit of Mega Man X: levels are rebuilt every run, and you can play through with a friend."
+    },
+    "about": {
+      "ru": "Два героя с разным стилем боя пробиваются через случайно собранные уровни, побеждают боссов и забирают их способности. После каждого забега открываются улучшения, а сложность можно настраивать под себя. Есть редактор уровней и кооператив вдвоём — за одним экраном или по сети.",
+      "en": "Two heroes with different fighting styles battle through randomly assembled levels, defeat bosses and take their powers. Every run unlocks upgrades, and the difficulty can be tuned to taste. There is a level editor and two-player co-op, on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Точное управление классических экшен-платформеров",
+        "Каждый забег не похож на предыдущий",
+        "Кооператив вдвоём локально и по сети"
+      ],
+      "en": [
+        "Tight controls of classic action platformers",
+        "Every run is different",
+        "Two-player co-op, local and online"
+      ]
+    }
+  },
+  "alien-hominid-invasion": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "funny",
+      "wacky",
+      "handdrawn",
+      "lobby4",
+      "replayable",
+      "controller"
+    ],
+    "mood": [
+      "laugh",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Рисованный «беги и стреляй» от авторов Castle Crashers: инопланетяне против спецслужб, до четырёх игроков.",
+      "en": "A hand-drawn run-and-gun from the makers of Castle Crashers: aliens versus federal agents, for up to four players."
+    },
+    "about": {
+      "ru": "Продолжение культовой флеш-игры: маленькие пришельцы крушат город и охотятся на агентов в чёрном. Миссии короткие, оружие и способности меняются от захода к заходу, а в компании до четырёх человек на экране творится весёлый хаос.",
+      "en": "A follow-up to the cult Flash game: little aliens wreck the city and hunt agents in black suits. Missions are short, weapons and abilities change from run to run, and with up to four players the screen turns into joyful chaos."
+    },
+    "feats": {
+      "ru": [
+        "Узнаваемый рисованный стиль The Behemoth",
+        "Короткие миссии — удобно играть урывками",
+        "Кооператив до четырёх игроков"
+      ],
+      "en": [
+        "The Behemoth’s recognisable hand-drawn style",
+        "Short missions that suit quick sessions",
+        "Co-op for up to four players"
+      ]
+    }
+  },
+  "bokura": {
+    "md": [
+      "coopOnline"
+    ],
+    "pl": [
+      2,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "friendlier2",
+      "coopfocused",
+      "storyrich",
+      "pixelart",
+      "voicechat",
+      "short"
+    ],
+    "mood": [
+      "think",
+      "story"
+    ],
+    "desc": {
+      "ru": "Приключение строго для двоих: каждый видит мир по-своему, и пройти дальше можно, только описывая друг другу увиденное.",
+      "en": "An adventure strictly for two: each player sees the world differently, and you only progress by describing what you see."
+    },
+    "about": {
+      "ru": "Два друга попадают в странный мир, но видят его по-разному: там, где одному открыт путь, другому мешает препятствие. Головоломки решаются только общением, поэтому нужен голосовой чат. Короткая история на пару вечеров с несколькими финалами.",
+      "en": "Two friends end up in a strange world but see it differently: where one sees an open path, the other faces an obstacle. Puzzles are solved only by talking, so voice chat is a must. A short story for a couple of evenings, with several endings."
+    },
+    "feats": {
+      "ru": [
+        "Каждый игрок видит свою версию мира",
+        "Головоломки на общение и доверие",
+        "Короткая история с несколькими финалами"
+      ],
+      "en": [
+        "Each player sees their own version of the world",
+        "Puzzles built on communication and trust",
+        "A short story with several endings"
+      ]
+    }
+  },
+  "blazblue-centralfiction": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "anime",
+      "storyrich",
+      "pvpfocused",
+      "difficult",
+      "controller",
+      "soundtrack"
+    ],
+    "mood": [
+      "compete",
+      "story"
+    ],
+    "desc": {
+      "ru": "Аниме-файтинг от Arc System Works с огромным сюжетным режимом и глубокой боевой системой.",
+      "en": "An anime fighting game from Arc System Works with a huge story mode and a deep combat system."
+    },
+    "about": {
+      "ru": "Завершение основной истории серии BlazBlue: десятки часов сюжета в формате визуальной новеллы и большой состав бойцов с непохожими механиками. Для новичков есть обучение и упрощённое управление, для опытных — сетевые бои и рейтинговые матчи.",
+      "en": "The conclusion of the main BlazBlue storyline: dozens of hours of visual-novel story and a large roster of fighters with very different mechanics. Newcomers get tutorials and simplified controls; veterans get online and ranked matches."
+    },
+    "feats": {
+      "ru": [
+        "Большой сюжетный режим",
+        "Бойцы с совершенно разными механиками",
+        "Обучение для новичков"
+      ],
+      "en": [
+        "A big story mode",
+        "Fighters with completely different mechanics",
+        "Tutorials for newcomers"
+      ]
+    }
+  },
+  "blazerush": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "driving",
+      "wacky",
+      "splitscreen",
+      "lobby4",
+      "short",
+      "controller"
+    ],
+    "mood": [
+      "adrenaline",
+      "laugh",
+      "compete"
+    ],
+    "desc": {
+      "ru": "Аркадные гонки на выживание с видом сверху: оружие, выталкивание с трассы и до четырёх игроков на одном экране.",
+      "en": "Top-down arcade survival racing: weapons, knocking rivals off the track and up to four players on one screen."
+    },
+    "about": {
+      "ru": "Машинки разгоняются по трассе, подбирают оружие и сталкивают соперников в пропасть. Заезды длятся пару минут, правила понятны сразу, а вчетвером за одним экраном это быстрое и шумное развлечение для компании.",
+      "en": "Little cars speed around the track, grab weapons and push rivals into the abyss. Races last a couple of minutes and the rules are obvious from the start; with four people on one screen it’s fast, noisy fun for a group."
+    },
+    "feats": {
+      "ru": [
+        "Заезды на пару минут",
+        "Оружие и столкновения вместо идеальных траекторий",
+        "До четырёх игроков на одном экране"
+      ],
+      "en": [
+        "Races that last a couple of minutes",
+        "Weapons and collisions instead of perfect racing lines",
+        "Up to four players on one screen"
+      ]
+    }
+  },
+  "bopl-battle": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "funny",
+      "pvpfocused",
+      "splitscreen",
+      "lobby4",
+      "physics",
+      "easytolearn",
+      "cute"
+    ],
+    "mood": [
+      "laugh",
+      "compete"
+    ],
+    "desc": {
+      "ru": "Платформенный файтинг для четверых: милые колобки, набор способностей перед раундом и неожиданные комбинации.",
+      "en": "A platform fighter for four: cute blobs, a set of abilities picked before each round and surprising combinations."
+    },
+    "about": {
+      "ru": "Каждый игрок собирает тройку способностей — от телепорта до чёрной дыры — и пытается выбить соперников с арены. Раунды короткие, правила простые, а сочетания способностей каждый раз дают новые ситуации. Играть можно за одним экраном или по сети.",
+      "en": "Each player picks three abilities — from teleports to black holes — and tries to knock everyone else off the arena. Rounds are short, the rules are simple, and ability combinations keep creating new situations. Play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Свой набор способностей в каждом раунде",
+        "Короткие и понятные матчи",
+        "До четырёх игроков локально и по сети"
+      ],
+      "en": [
+        "A new ability set every round",
+        "Short, easy-to-grasp matches",
+        "Up to four players, local and online"
+      ]
+    }
+  },
+  "cat-quest-ii": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "cute",
+      "funny",
+      "fantasy",
+      "short",
+      "family",
+      "easytolearn",
+      "friendlier2",
+      "splitscreen"
+    ],
+    "mood": [
+      "relax",
+      "laugh",
+      "explore"
+    ],
+    "desc": {
+      "ru": "Лёгкая экшен-RPG про кота и пса — королей, которые вместе возвращают свои троны. Можно играть вдвоём за одним экраном.",
+      "en": "A light action RPG about a cat king and a dog king winning back their thrones together. Two can play on one screen."
+    },
+    "about": {
+      "ru": "Открытый мир с подземельями, сундуками и десятками побочных заданий, полных кошачьих каламбуров. Бои быстрые, прокачка понятная, а второй игрок может в любой момент взять управление псом. Хватает на несколько уютных вечеров.",
+      "en": "An open world full of dungeons, chests and dozens of side quests packed with animal puns. Combat is quick, progression is simple, and a second player can take control of the dog at any time. Enough for a few cosy evenings."
+    },
+    "feats": {
+      "ru": [
+        "Кооператив вдвоём за одним экраном",
+        "Простая и быстрая боевая система",
+        "Подходит детям и тем, кто редко играет"
+      ],
+      "en": [
+        "Two-player co-op on one screen",
+        "Simple, fast combat",
+        "Good for kids and casual players"
+      ]
+    }
+  },
+  "cat-quest-iii": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "pirates",
+      "cute",
+      "funny",
+      "openworld",
+      "family",
+      "short",
+      "friendlier2",
+      "splitscreen"
+    ],
+    "mood": [
+      "relax",
+      "explore",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Пиратская часть серии: кот-капитан плавает между островами, ищет сокровища и сражается на суше и на море.",
+      "en": "The pirate entry in the series: a cat captain sails between islands, hunts for treasure and fights on land and at sea."
+    },
+    "about": {
+      "ru": "Острова можно посещать в любом порядке, а между ними — сражаться на корабле. Как и в прошлых частях, бои быстрые, задания полны шуток, а второй игрок присоединяется за тем же экраном. Хорошая игра на несколько вечеров без стресса.",
+      "en": "Islands can be visited in any order, with ship battles in between. As in earlier games, combat is fast, quests are full of jokes and a second player can join on the same screen. A good stress-free game for a few evenings."
+    },
+    "feats": {
+      "ru": [
+        "Морские бои и свободное исследование островов",
+        "Кооператив вдвоём за одним экраном",
+        "Лёгкая сложность и юмор"
+      ],
+      "en": [
+        "Naval battles and free island exploration",
+        "Two-player co-op on one screen",
+        "Gentle difficulty and humour"
+      ]
+    }
+  },
+  "conan-exiles-enhanced": {
+    "md": [
+      "solo",
+      "coopOnline",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      40
+    ],
+    "tg": [
+      "crafting",
+      "basebuilding",
+      "openworld",
+      "grind",
+      "long",
+      "dark",
+      "mods",
+      "clan"
+    ],
+    "mood": [
+      "progress",
+      "explore",
+      "create"
+    ],
+    "desc": {
+      "ru": "Выживание в суровом мире Конана-варвара: строите крепость, добываете ресурсы и сражаетесь в одиночку или на серверах.",
+      "en": "Survival in Conan the Barbarian’s harsh world: build a fortress, gather resources and fight alone or on servers."
+    },
+    "about": {
+      "ru": "Вы начинаете изгнанником в пустыне и постепенно обустраиваете базу, подчиняете рабов-ремесленников и исследуете огромную карту. Играть можно одному, с друзьями на своём сервере или на общих серверах с режимами PvE и PvP. Игра рассчитана на десятки часов и требует терпения к добыче ресурсов.",
+      "en": "You start as an exile in the desert and gradually build a base, enslave craftsmen and explore a huge map. Play solo, with friends on your own server or on public servers with PvE and PvP rules. Built for dozens of hours, and it takes patience with resource gathering."
+    },
+    "feats": {
+      "ru": [
+        "Строительство крепостей из сотен деталей",
+        "Одиночная игра, свой сервер или общие серверы",
+        "Поддержка модов"
+      ],
+      "en": [
+        "Build fortresses from hundreds of pieces",
+        "Solo, private server or public servers",
+        "Mod support"
+      ]
+    }
+  },
+  "contra-operation-galuga": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "nostalgia",
+      "difficult",
+      "controller",
+      "short",
+      "splitscreen",
+      "lobby4"
+    ],
+    "mood": [
+      "adrenaline",
+      "nostalgia"
+    ],
+    "desc": {
+      "ru": "Переосмысление классической Contra от WayForward: стрельба на бегу, боссы и кооператив за одним экраном.",
+      "en": "WayForward’s reimagining of classic Contra: run-and-gun action, bosses and couch co-op."
+    },
+    "about": {
+      "ru": "Сюжет и уровни опираются на первую Contra, но графика и управление современные: есть рывки, улучшения и настройка сложности. Сюжетную кампанию можно пройти вдвоём, а в аркадном режиме за одним экраном играют до четырёх человек.",
+      "en": "The story and stages draw on the original Contra, but the graphics and controls are modern, with dashes, upgrades and adjustable difficulty. The story campaign supports two players, and the arcade mode up to four on one screen."
+    },
+    "feats": {
+      "ru": [
+        "Классическая Contra в современном виде",
+        "Настраиваемая сложность",
+        "Кооператив за одним экраном"
+      ],
+      "en": [
+        "Classic Contra brought up to date",
+        "Adjustable difficulty",
+        "Couch co-op"
+      ]
+    }
+  },
+  "crash-bandicoot-4-its-about-time": {
+    "md": [
+      "solo",
+      "pvpLocal"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "colorful",
+      "difficult",
+      "controller",
+      "linear",
+      "collect",
+      "funny"
+    ],
+    "mood": [
+      "adrenaline",
+      "collect"
+    ],
+    "desc": {
+      "ru": "Новая часть Crash Bandicoot: сложные и яркие уровни-полосы препятствий, маски с особыми способностями и много секретов.",
+      "en": "A new Crash Bandicoot game: tough, colourful obstacle-course levels, masks with special powers and plenty of secrets."
+    },
+    "about": {
+      "ru": "Продолжение оригинальной трилогии: Крэш и Коко путешествуют по разным измерениям, а маски замедляют время, меняют гравитацию и убирают препятствия. Пройти сюжет несложно, а вот собрать всё — серьёзное испытание. Есть режим, где игроки передают друг другу геймпад, и соревнования для двоих.",
+      "en": "A sequel to the original trilogy: Crash and Coco travel across dimensions, while masks slow time, flip gravity and phase out obstacles. Finishing the story is manageable; collecting everything is a serious challenge. There’s a pass-the-controller mode and two-player competitions."
+    },
+    "feats": {
+      "ru": [
+        "Маски, меняющие правила уровня",
+        "Много секретов для коллекционеров",
+        "Режим с передачей геймпада для компании"
+      ],
+      "en": [
+        "Masks that change the rules of a level",
+        "Lots of secrets for collectors",
+        "Pass-the-controller mode for groups"
+      ]
+    }
+  },
+  "crash-bandicoot-n-sane-trilogy": {
+    "md": [
+      "solo"
+    ],
+    "pl": [
+      1,
+      1
+    ],
+    "tg": [
+      "nostalgia",
+      "colorful",
+      "difficult",
+      "controller",
+      "linear",
+      "collect"
+    ],
+    "mood": [
+      "nostalgia",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Три первые игры о Крэше, полностью перерисованные заново: та же сложность и уровни, новая графика.",
+      "en": "The first three Crash games fully remade: the same levels and difficulty with new graphics."
+    },
+    "about": {
+      "ru": "В сборник вошли Crash Bandicoot, Cortex Strikes Back и Warped. Уровни повторяют оригинал, но графика и звук сделаны с нуля, добавлены сохранения и игра за Коко. Хорошая возможность вернуться в детство — или узнать, почему эти платформеры считаются сложными.",
+      "en": "The collection includes Crash Bandicoot, Cortex Strikes Back and Warped. The levels match the originals, but graphics and audio were rebuilt from scratch, with added saves and Coco as a playable character. A chance to revisit childhood — or to learn why these platformers are known to be hard."
+    },
+    "feats": {
+      "ru": [
+        "Три игры в одном сборнике",
+        "Оригинальные уровни в новой графике",
+        "Классическая сложность"
+      ],
+      "en": [
+        "Three games in one collection",
+        "Original levels with new graphics",
+        "Classic difficulty"
+      ]
+    }
+  },
+  "darksiders-genesis": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "demons",
+      "dark",
+      "loot",
+      "friendlier2",
+      "splitscreen",
+      "fantasy"
+    ],
+    "mood": [
+      "adrenaline",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Экшен с видом сверху во вселенной Darksiders: всадники Война и Раздор против демонов, можно вдвоём.",
+      "en": "A top-down action game in the Darksiders universe: horsemen War and Strife against demons, playable as a duo."
+    },
+    "about": {
+      "ru": "Один герой силён в ближнем бою, другой стреляет издалека — в одиночку между ними можно переключаться, а вдвоём каждый играет за своего. Уровни сочетают бои, головоломки и поиск секретов, а прокачка строится на системе ядер существ.",
+      "en": "One hero excels in melee, the other shoots from range; solo you switch between them, and in co-op each player takes one. Levels mix combat, puzzles and secrets, and progression is built around creature cores."
+    },
+    "feats": {
+      "ru": [
+        "Два героя с разным стилем боя",
+        "Кооператив вдвоём за одним экраном и по сети",
+        "Бои, головоломки и секреты"
+      ],
+      "en": [
+        "Two heroes with different combat styles",
+        "Two-player co-op, local and online",
+        "Combat, puzzles and secrets"
+      ]
+    }
+  },
+  "double-dragon-neon": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "nostalgia",
+      "funny",
+      "splitscreen",
+      "short",
+      "friendlier2",
+      "controller"
+    ],
+    "mood": [
+      "nostalgia",
+      "laugh",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Ироничный ремейк классического битэмапа: братья Ли, восьмидесятые и драки вдвоём за одним экраном.",
+      "en": "A tongue-in-cheek remake of the classic beat ’em up: the Lee brothers, the eighties and two-player couch brawling."
+    },
+    "about": {
+      "ru": "Игра с любовью высмеивает боевики восьмидесятых: неоновые цвета, синтвейв-саундтрек и злодеи с нелепыми репликами. Приёмы и улучшения собираются с кассет, а проходится всё за пару вечеров — лучше вдвоём.",
+      "en": "The game lovingly mocks eighties action films: neon colours, a synthwave soundtrack and villains with silly one-liners. Moves and upgrades come from cassette tapes, and the whole thing takes a couple of evenings — best played as a duo."
+    },
+    "feats": {
+      "ru": [
+        "Юмор и атмосфера восьмидесятых",
+        "Кооператив вдвоём за одним экраном",
+        "Короткая — на пару вечеров"
+      ],
+      "en": [
+        "Eighties humour and atmosphere",
+        "Two-player couch co-op",
+        "Short — a couple of evenings"
+      ]
+    }
+  },
+  "f1-25": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      20
+    ],
+    "tg": [
+      "driving",
+      "realistic",
+      "splitscreen",
+      "photomode",
+      "gpuheavy",
+      "crosplay"
+    ],
+    "mood": [
+      "compete",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Официальный симулятор Формулы-1 сезона 2025: карьера, свой гоночный коллектив и онлайн-заезды.",
+      "en": "The official Formula 1 sim for the 2025 season: career, your own team and online races."
+    },
+    "about": {
+      "ru": "Все команды, пилоты и трассы сезона, режим «Мой коллектив» и сюжетная кампания Braking Point. Помощники и настройки сложности позволяют начать без опыта, а в сети можно гоняться с другими игроками. Двое могут соревноваться и на разделённом экране.",
+      "en": "Every team, driver and track of the season, the My Team mode and the Braking Point story campaign. Assists and difficulty settings let beginners start right away, and online you can race other players. Two people can also compete on split screen."
+    },
+    "feats": {
+      "ru": [
+        "Официальные команды и трассы сезона",
+        "Гибкие помощники для новичков",
+        "Разделённый экран и онлайн-заезды"
+      ],
+      "en": [
+        "The season’s official teams and tracks",
+        "Flexible assists for beginners",
+        "Split screen and online racing"
+      ]
+    }
+  },
+  "for-the-king": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      3
+    ],
+    "tg": [
+      "tbs",
+      "procedural",
+      "difficult",
+      "permadeath",
+      "fantasy",
+      "replayable",
+      "coopfocused"
+    ],
+    "mood": [
+      "think",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Пошаговая RPG с духом настольной игры: отряд из трёх героев, случайная карта и бросок кубиков в каждом бою.",
+      "en": "A turn-based RPG with a board-game feel: a party of three heroes, a random map and dice rolls in every fight."
+    },
+    "about": {
+      "ru": "Королевство в опасности, и отряд отправляется в путь по процедурно собранной карте. Каждое действие — проверка удачи и характеристик, а смерть героя серьёзно осложняет поход. Втроём можно играть за одним экраном или по сети: решения принимаются вместе.",
+      "en": "The kingdom is in danger, and the party sets out across a procedurally built map. Every action is a test of luck and stats, and losing a hero makes the journey much harder. Three people can play on one screen or online, deciding together."
+    },
+    "feats": {
+      "ru": [
+        "Атмосфера настольной игры",
+        "Случайная карта в каждом прохождении",
+        "Кооператив втроём локально и по сети"
+      ],
+      "en": [
+        "A tabletop game atmosphere",
+        "A random map on every run",
+        "Three-player co-op, local and online"
+      ]
+    }
+  },
+  "guilty-gear-xrd-rev-2": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "anime",
+      "pvpfocused",
+      "difficult",
+      "soundtrack",
+      "controller"
+    ],
+    "mood": [
+      "compete"
+    ],
+    "desc": {
+      "ru": "Аниме-файтинг Arc System Works с рисованной в 3D графикой и тяжёлым рок-саундтреком.",
+      "en": "An Arc System Works anime fighter with 3D graphics that look hand-drawn and a heavy rock soundtrack."
+    },
+    "about": {
+      "ru": "Xrd стал известен тем, что трёхмерные модели здесь выглядят как рисованная анимация. Бойцы быстрые и техничные, поэтому новичкам стоит пройти подробное обучение и миссии. Сражаться можно с другом за одним экраном или в сети.",
+      "en": "Xrd became famous for 3D models that look like hand-drawn animation. The fighters are fast and technical, so newcomers should go through the detailed tutorial and missions. Fight a friend on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Графика, похожая на рисованное аниме",
+        "Быстрые и технические бои",
+        "Подробное обучение и миссии"
+      ],
+      "en": [
+        "Visuals that look like hand-drawn anime",
+        "Fast, technical fights",
+        "Detailed tutorial and missions"
+      ]
+    }
+  },
+  "gauntlet-slayer-edition": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "loot",
+      "lobby4",
+      "splitscreen",
+      "fantasy",
+      "nostalgia",
+      "coopfocused"
+    ],
+    "mood": [
+      "adrenaline",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Возрождение аркадной классики: четыре героя пробиваются через подземелья, полные монстров, и спорят за золото.",
+      "en": "A revival of the arcade classic: four heroes battle through monster-filled dungeons and fight over the gold."
+    },
+    "about": {
+      "ru": "Воин, валькирия, маг и эльф отличаются стилем боя, и вчетвером они дополняют друг друга. Подземелья забиты врагами, а золото достаётся тому, кто первым его подберёт, — отсюда дружеское соперничество. Играть можно за одним экраном или по сети.",
+      "en": "The warrior, valkyrie, wizard and elf all fight differently, and as a team of four they complement each other. Dungeons are packed with enemies, and gold goes to whoever grabs it first — hence the friendly rivalry. Play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Четыре героя с разными ролями",
+        "Кооператив до четырёх игроков",
+        "Соперничество за золото внутри команды"
+      ],
+      "en": [
+        "Four heroes with different roles",
+        "Co-op for up to four players",
+        "Rivalry over gold within the team"
+      ]
+    }
+  },
+  "granblue-fantasy-versus-rising": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "anime",
+      "easytolearn",
+      "pvpfocused",
+      "fantasy",
+      "storyrich"
+    ],
+    "mood": [
+      "compete",
+      "story"
+    ],
+    "desc": {
+      "ru": "Доступный аниме-файтинг по вселенной Granblue Fantasy: простое управление для новичков и глубина для опытных.",
+      "en": "An accessible anime fighter set in the Granblue Fantasy universe: simple controls for beginners and depth for veterans."
+    },
+    "about": {
+      "ru": "Приёмы можно выполнять одной кнопкой, поэтому драться интересно с первых минут, а классическое управление открывает больше возможностей. Есть сюжетный режим, сетевые бои с откатом задержки (rollback) и мини-игры в онлайн-лобби.",
+      "en": "Special moves can be done with a single button, so fights are fun from the start, while classic controls open up more options. There’s a story mode, rollback netcode online play and mini-games in online lobbies."
+    },
+    "feats": {
+      "ru": [
+        "Упрощённое управление для новичков",
+        "Сюжетный режим",
+        "Стабильные сетевые бои"
+      ],
+      "en": [
+        "Simplified controls for beginners",
+        "A story mode",
+        "Stable online fights"
+      ]
+    }
+  },
+  "helldivers-dive-harder-edition": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "coopfocused",
+      "difficult",
+      "scifi",
+      "squad",
+      "lobby4",
+      "splitscreen",
+      "funny"
+    ],
+    "mood": [
+      "adrenaline",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Кооперативный шутер с видом сверху: отряд до четырёх бойцов, вызов подкреплений кодами и случайный огонь по своим.",
+      "en": "A top-down co-op shooter: a squad of up to four, reinforcements called in with codes and plenty of friendly fire."
+    },
+    "about": {
+      "ru": "Предшественник Helldivers 2: бойцы Супер-Земли выполняют задания на планетах с жуками, киборгами и иллюминатами. Огонь по своим включён всегда, поэтому слаженность команды важнее меткости. Играть можно за одним экраном или по сети.",
+      "en": "The predecessor to Helldivers 2: Super Earth’s troopers take on missions across planets of bugs, cyborgs and Illuminate. Friendly fire is always on, so teamwork matters more than aim. Play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Огонь по своим всегда включён",
+        "До четырёх игроков локально и по сети",
+        "Высокая сложность для слаженной команды"
+      ],
+      "en": [
+        "Friendly fire is always on",
+        "Up to four players, local and online",
+        "High difficulty for a coordinated team"
+      ]
+    }
+  },
+  "huntdown": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "pixelart",
+      "cyberpunk",
+      "difficult",
+      "friendlier2",
+      "soundtrack",
+      "controller"
+    ],
+    "mood": [
+      "adrenaline",
+      "nostalgia"
+    ],
+    "desc": {
+      "ru": "Пиксельный боевик в духе фильмов восьмидесятых: охотники за головами против банд будущего, можно вдвоём.",
+      "en": "A pixel-art shooter inspired by eighties action films: bounty hunters versus gangs of the future, playable as a duo."
+    },
+    "about": {
+      "ru": "Три охотника за головами зачищают улицы от уличных банд, у каждой из которых свои боссы. Перестрелки требуют укрытий и точности, а синтвейв-музыка и пиксельная графика создают атмосферу боевиков на видеокассетах. Второй игрок присоединяется за тем же экраном.",
+      "en": "Three bounty hunters clean the streets of gangs, each with its own bosses. Gunfights demand cover and precision, while synthwave music and pixel art capture the feel of VHS action films. A second player can join on the same screen."
+    },
+    "feats": {
+      "ru": [
+        "Атмосфера боевиков восьмидесятых",
+        "Перестрелки с укрытиями и боссами",
+        "Кооператив вдвоём за одним экраном"
+      ],
+      "en": [
+        "Eighties action-film atmosphere",
+        "Cover-based gunfights and bosses",
+        "Two-player couch co-op"
+      ]
+    }
+  },
+  "hammerwatch": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "pixelart",
+      "fantasy",
+      "loot",
+      "lobby4",
+      "difficult",
+      "coopfocused"
+    ],
+    "mood": [
+      "adrenaline",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Пиксельный слэшер в духе Gauntlet: огромные толпы врагов в замке и кооператив до четырёх игроков.",
+      "en": "A pixel-art hack-and-slash in the spirit of Gauntlet: huge enemy hordes in a castle and co-op for up to four."
+    },
+    "about": {
+      "ru": "Герой оказывается заперт в замке и пробивается наверх через этажи, полные монстров, ловушек и секретов. Классы заметно отличаются, улучшения покупаются у торговцев, а вчетвером сражения превращаются в весёлую мясорубку. Играть можно за одним экраном или по сети.",
+      "en": "The hero is trapped in a castle and fights upward through floors full of monsters, traps and secrets. Classes play very differently, upgrades are bought from vendors, and with four players battles become a glorious brawl. Play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Толпы врагов и ловушки на каждом этаже",
+        "Классы с разным стилем игры",
+        "Кооператив до четырёх игроков"
+      ],
+      "en": [
+        "Hordes of enemies and traps on every floor",
+        "Classes with distinct play styles",
+        "Co-op for up to four players"
+      ]
+    }
+  },
+  "how-2-escape": {
+    "md": [
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      2,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "friendlier2",
+      "coopfocused",
+      "voicechat",
+      "short"
+    ],
+    "mood": [
+      "think",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Квест-побег для двоих: один играет на компьютере или консоли, второй — в бесплатном приложении на телефоне.",
+      "en": "An escape game for two: one player is on PC or console, the other uses a free phone app."
+    },
+    "about": {
+      "ru": "Игроки видят разные части головоломок, поэтому выбраться получится, только постоянно объясняя друг другу, что происходит. Второму участнику не нужно покупать игру — достаточно приложения-компаньона. Проходится за один-два вечера.",
+      "en": "Players see different parts of each puzzle, so the only way out is to keep explaining what’s going on. The second player doesn’t need to buy the game — the companion app is enough. It takes an evening or two."
+    },
+    "feats": {
+      "ru": [
+        "Второму игроку хватит телефона",
+        "Головоломки только на общение",
+        "Короткая — на один-два вечера"
+      ],
+      "en": [
+        "The second player only needs a phone",
+        "Puzzles built purely on communication",
+        "Short — one or two evenings"
+      ]
+    }
+  },
+  "jamestown": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "bullethell",
+      "pixelart",
+      "lobby4",
+      "splitscreen",
+      "difficult",
+      "short"
+    ],
+    "mood": [
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Вертикальный шутер-«пулевой ад» в альтернативной истории, где колонисты сражаются на Марсе. До четырёх игроков за одним экраном.",
+      "en": "A vertical bullet-hell shooter set in an alternate history where colonists fight on Mars. Up to four players on one screen."
+    },
+    "about": {
+      "ru": "Корабли уворачиваются от плотных потоков снарядов, а особая механика на время даёт щит и умножает очки, если рискнуть и подобрать достаточно золота. Уровней немного, но каждый хочется пройти на более высокой сложности. Лучше всего играется компанией за одним экраном.",
+      "en": "Ships dodge dense streams of bullets, and a special mechanic grants a brief shield and a score multiplier if you take the risk of collecting enough gold. There aren’t many stages, but each one begs to be replayed on a higher difficulty. Best enjoyed with a group on one screen."
+    },
+    "feats": {
+      "ru": [
+        "Классический «пулевой ад»",
+        "Необычный сеттинг альтернативной истории",
+        "До четырёх игроков за одним экраном"
+      ],
+      "en": [
+        "Classic bullet hell",
+        "An unusual alternate-history setting",
+        "Up to four players on one screen"
+      ]
+    }
+  },
+  "lara-croft-and-the-temple-of-osiris": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "puzzles",
+      "mythology",
+      "lobby4",
+      "short",
+      "loot",
+      "coopfocused"
+    ],
+    "mood": [
+      "explore",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Изометрическое приключение Лары Крофт в египетских гробницах: головоломки, ловушки и кооператив до четырёх игроков.",
+      "en": "An isometric Lara Croft adventure in Egyptian tombs: puzzles, traps and co-op for up to four players."
+    },
+    "about": {
+      "ru": "Лара и её спутники ищут части Осириса, решая головоломки, которые меняются в зависимости от числа игроков. В гробницах хватает перестрелок и ловушек, а за находки соревнуются даже союзники. Короткая игра на несколько вечеров.",
+      "en": "Lara and her companions search for the pieces of Osiris, solving puzzles that change depending on the number of players. Tombs are full of firefights and traps, and even allies compete for the loot. A short game for a few evenings."
+    },
+    "feats": {
+      "ru": [
+        "Головоломки подстраиваются под число игроков",
+        "Египетские гробницы и мифология",
+        "Кооператив до четырёх игроков"
+      ],
+      "en": [
+        "Puzzles adapt to the number of players",
+        "Egyptian tombs and mythology",
+        "Co-op for up to four players"
+      ]
+    }
+  },
+  "lego-batman-2-dc-super-heroes": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "superhero",
+      "family",
+      "funny",
+      "splitscreen",
+      "collect",
+      "friendlier2",
+      "openworld"
+    ],
+    "mood": [
+      "laugh",
+      "collect"
+    ],
+    "desc": {
+      "ru": "LEGO-приключение Бэтмена и Супермена против Лекса Лютора и Джокера, с открытым Готэмом и игрой вдвоём.",
+      "en": "A LEGO adventure with Batman and Superman against Lex Luthor and the Joker, with an open Gotham and two-player co-op."
+    },
+    "about": {
+      "ru": "В сюжете участвуют десятки героев и злодеев DC, у каждого свои способности. Между миссиями можно свободно летать по Готэму и собирать секреты. Как и во всех LEGO-играх, второй игрок подключается в любой момент, а умереть по-настоящему нельзя.",
+      "en": "Dozens of DC heroes and villains appear, each with their own abilities. Between missions you can freely explore Gotham and hunt for secrets. As in every LEGO game, a second player can drop in at any time, and you can never truly fail."
+    },
+    "feats": {
+      "ru": [
+        "Открытый Готэм для исследования",
+        "Десятки героев DC",
+        "Кооператив вдвоём, подходит детям"
+      ],
+      "en": [
+        "An open Gotham to explore",
+        "Dozens of DC heroes",
+        "Two-player co-op, kid-friendly"
+      ]
+    }
+  },
+  "lego-city-undercover": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "openworld",
+      "family",
+      "funny",
+      "crime",
+      "splitscreen",
+      "collect",
+      "friendlier2"
+    ],
+    "mood": [
+      "laugh",
+      "explore"
+    ],
+    "desc": {
+      "ru": "Комедийный детектив в открытом LEGO-городе: полицейский под прикрытием ловит преступника, можно играть вдвоём.",
+      "en": "A comedy detective story in an open LEGO city: an undercover cop chases a criminal, and two can play together."
+    },
+    "about": {
+      "ru": "Чейз Маккейн переодевается в разные костюмы — от вора до пожарного — и получает их способности. Большой город полон секретов, машин и пародий на известные фильмы. Второй игрок присоединяется за тем же экраном, а сложность рассчитана на всю семью.",
+      "en": "Chase McCain switches between disguises — from burglar to firefighter — and gains their abilities. The big city is full of secrets, vehicles and parodies of famous films. A second player joins on the same screen, and the difficulty suits the whole family."
+    },
+    "feats": {
+      "ru": [
+        "Большой открытый город",
+        "Пародии на известные фильмы",
+        "Кооператив вдвоём за одним экраном"
+      ],
+      "en": [
+        "A big open city",
+        "Parodies of famous films",
+        "Two-player couch co-op"
+      ]
+    }
+  },
+  "lego-dc-super-villains": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "superhero",
+      "family",
+      "funny",
+      "splitscreen",
+      "collect",
+      "openworld",
+      "friendlier2"
+    ],
+    "mood": [
+      "laugh",
+      "collect"
+    ],
+    "desc": {
+      "ru": "LEGO-игра, где главные герои — злодеи DC: Джокер, Харли Квинн, Лекс Лютор и созданный вами персонаж.",
+      "en": "A LEGO game starring DC’s villains: the Joker, Harley Quinn, Lex Luthor and a character you create."
+    },
+    "about": {
+      "ru": "Супергерои исчезли, и злодеям приходится спасать мир по-своему. В редакторе можно создать собственного злодея, а большой открытый мир хранит сотни секретов. Второй игрок подключается в любой момент, игра подойдёт и детям.",
+      "en": "The superheroes have vanished, and the villains must save the world their own way. You can design your own villain in the editor, and the large open world hides hundreds of secrets. A second player can drop in at any time, and it’s suitable for kids."
+    },
+    "feats": {
+      "ru": [
+        "Игра за суперзлодеев DC",
+        "Редактор собственного персонажа",
+        "Кооператив вдвоём за одним экраном"
+      ],
+      "en": [
+        "Play as DC super-villains",
+        "Create your own character",
+        "Two-player couch co-op"
+      ]
+    }
+  },
+  "lego-marvel-super-heroes-2": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "pvpLocal"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "superhero",
+      "family",
+      "funny",
+      "splitscreen",
+      "collect",
+      "openworld"
+    ],
+    "mood": [
+      "laugh",
+      "collect"
+    ],
+    "desc": {
+      "ru": "LEGO-приключение героев Marvel в городе, собранном из разных эпох и миров, с кооперативом и битвами на арене.",
+      "en": "A LEGO Marvel adventure in a city stitched together from different eras and worlds, with co-op and arena battles."
+    },
+    "about": {
+      "ru": "Злодей Канг Завоеватель соединяет разные места и времена в один город Хронополис, и героям Marvel предстоит всё вернуть на места. Сюжет проходится вдвоём за одним экраном, а в режиме сражений на арене соревнуются до четырёх игроков.",
+      "en": "Kang the Conqueror merges places and eras into the city of Chronopolis, and Marvel’s heroes must set things right. The story can be played by two on one screen, and the arena battle mode supports up to four competing players."
+    },
+    "feats": {
+      "ru": [
+        "Сотни персонажей Marvel",
+        "Открытый город из разных эпох",
+        "Кооператив вдвоём и битвы до четырёх игроков"
+      ],
+      "en": [
+        "Hundreds of Marvel characters",
+        "An open city made of different eras",
+        "Two-player co-op and battles for up to four"
+      ]
+    }
+  },
+  "lara-croft-and-the-guardian-of-light": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "mythology",
+      "friendlier2",
+      "short",
+      "coopfocused"
+    ],
+    "mood": [
+      "explore",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Изометрическое приключение Лары Крофт для двоих: майянские гробницы, головоломки и бои с духами.",
+      "en": "An isometric Lara Croft adventure for two: Mayan tombs, puzzles and battles with spirits."
+    },
+    "about": {
+      "ru": "Лара объединяется с древним воином Тотеком, чтобы остановить духа тьмы. Головоломки рассчитаны на совместные действия: один держит канат, другой идёт по нему, — но пройти можно и одному. Короткая и динамичная игра на пару вечеров.",
+      "en": "Lara teams up with the ancient warrior Totec to stop a spirit of darkness. Puzzles are designed around teamwork — one holds a rope while the other walks across — but it can be played solo too. A short, fast-paced game for a couple of evenings."
+    },
+    "feats": {
+      "ru": [
+        "Головоломки на совместные действия",
+        "Короткая — на пару вечеров",
+        "Кооператив вдвоём"
+      ],
+      "en": [
+        "Puzzles built on teamwork",
+        "Short — a couple of evenings",
+        "Two-player co-op"
+      ]
+    }
+  },
+  "melty-blood-type-lumina": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "anime",
+      "pvpfocused",
+      "difficult",
+      "storyrich",
+      "controller"
+    ],
+    "mood": [
+      "compete"
+    ],
+    "desc": {
+      "ru": "Быстрый аниме-файтинг по вселенной Tsukihime с сюжетным режимом и сетевыми боями.",
+      "en": "A fast anime fighter set in the Tsukihime universe, with a story mode and online fights."
+    },
+    "about": {
+      "ru": "Возрождение серии Melty Blood от French-Bread: стремительные бои, яркие персонажи и сюжет, связанный с ремейком визуальной новеллы Tsukihime. Для новичков есть упрощённые комбинации, а сетевой код с откатом задержки (rollback) делает бои в сети стабильными.",
+      "en": "French-Bread’s revival of the Melty Blood series: lightning-fast fights, vivid characters and a story tied to the Tsukihime visual novel remake. Newcomers get simplified combos, and rollback netcode keeps online fights stable."
+    },
+    "feats": {
+      "ru": [
+        "Очень быстрые бои",
+        "Сюжет по вселенной Tsukihime",
+        "Упрощённые комбинации для новичков"
+      ],
+      "en": [
+        "Very fast fights",
+        "A story set in the Tsukihime universe",
+        "Simplified combos for newcomers"
+      ]
+    }
+  },
+  "metal-slug-3": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "nostalgia",
+      "pixelart",
+      "difficult",
+      "short",
+      "friendlier2",
+      "funny"
+    ],
+    "mood": [
+      "nostalgia",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Легендарный аркадный «беги и стреляй» SNK: детальная пиксельная графика, безумные враги и игра вдвоём.",
+      "en": "SNK’s legendary arcade run-and-gun: detailed pixel art, crazy enemies and two-player action."
+    },
+    "about": {
+      "ru": "Одна из лучших частей Metal Slug: солдаты сражаются с армией, зомби, мутантами и пришельцами, пересаживаясь в танки, самолёты и даже верблюдов. Уровни ветвятся, а патронов и жизней всегда не хватает. Играть можно вдвоём за одним экраном или по сети.",
+      "en": "One of the best Metal Slug games: soldiers battle an army, zombies, mutants and aliens, jumping into tanks, planes and even camels. Stages branch, and ammo and lives are always scarce. Two can play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Знаменитая пиксельная анимация",
+        "Танки, самолёты и прочая техника",
+        "Вдвоём за одним экраном и по сети"
+      ],
+      "en": [
+        "Famous pixel-art animation",
+        "Tanks, planes and other vehicles",
+        "Two players, local and online"
+      ]
+    }
+  },
+  "outward-definitive-edition": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "hardcoresim",
+      "crafting",
+      "difficult",
+      "openworld",
+      "fantasy",
+      "friendlier2",
+      "splitscreen"
+    ],
+    "mood": [
+      "explore",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Хардкорная RPG о выживании: вы не избранный герой, а обычный путешественник, которому нужны еда, сон и тёплая одежда.",
+      "en": "A hardcore survival RPG: you’re not a chosen hero but an ordinary traveller who needs food, sleep and warm clothes."
+    },
+    "about": {
+      "ru": "Магию нужно изучать долго, вещи весят, а поражение не заканчивает игру — героя может спасти незнакомец или ограбить бандит. Мир открыт для исследования, но к нему нужно готовиться. Вдвоём можно играть на разделённом экране или по сети. В издание входят все дополнения.",
+      "en": "Magic takes effort to learn, items have weight, and defeat doesn’t end the game — a stranger might rescue you or a bandit might rob you. The world is open to explore but demands preparation. Two can play on split screen or online. The edition includes all expansions."
+    },
+    "feats": {
+      "ru": [
+        "Выживание: еда, сон, холод и вес вещей",
+        "Поражение не конец игры",
+        "Кооператив вдвоём на разделённом экране и по сети"
+      ],
+      "en": [
+        "Survival: food, sleep, cold and carry weight",
+        "Defeat isn’t game over",
+        "Two-player co-op on split screen and online"
+      ]
+    }
+  },
+  "prince-of-persia-the-lost-crown": {
+    "md": [
+      "solo"
+    ],
+    "pl": [
+      1,
+      1
+    ],
+    "tg": [
+      "parkour",
+      "mythology",
+      "exploration",
+      "controller",
+      "difficult",
+      "colorful"
+    ],
+    "mood": [
+      "adrenaline",
+      "explore"
+    ],
+    "desc": {
+      "ru": "Метроидвания по «Принцу Персии»: воин Саргон, акробатика, сражения и большая карта в мифической Персии.",
+      "en": "A Prince of Persia metroidvania: the warrior Sargon, acrobatics, combat and a large map in mythical Persia."
+    },
+    "about": {
+      "ru": "Саргон ищет похищенного принца на проклятой горе Каф, где время течёт по-своему. Новые способности, связанные со временем, открывают ранее недоступные части карты. Бои быстрые и требуют реакции, а для тех, кто хочет меньшего стресса, есть гибкие настройки сложности и подсказки.",
+      "en": "Sargon searches for a kidnapped prince on the cursed Mount Qaf, where time behaves strangely. New time-based abilities open up previously unreachable parts of the map. Combat is fast and reflex-driven, and flexible difficulty and guidance options help if you want less stress."
+    },
+    "feats": {
+      "ru": [
+        "Акробатика и способности, связанные со временем",
+        "Большая карта с секретами",
+        "Гибкая настройка сложности"
+      ],
+      "en": [
+        "Acrobatics and time-based powers",
+        "A large map full of secrets",
+        "Flexible difficulty settings"
+      ]
+    }
+  },
+  "ravenswatch": {
+    "md": [
+      "solo",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "procedural",
+      "replayable",
+      "dark",
+      "fantasy",
+      "lobby4",
+      "coopfocused"
+    ],
+    "mood": [
+      "adrenaline",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Кооперативный рогалик по мотивам сказок и легенд: Красная Шапочка, Беовульф и другие герои против кошмаров.",
+      "en": "A co-op roguelike based on fairy tales and legends: Red Riding Hood, Beowulf and other heroes against nightmares."
+    },
+    "about": {
+      "ru": "Каждый герой — переосмысленный персонаж сказок со своим набором способностей. За отведённое время нужно подготовиться к схватке с боссом, а день и ночь меняют силы героев. В одиночку игра сложная, вчетвером по сети — тактичная и азартная.",
+      "en": "Every hero is a reimagined fairy-tale character with a unique kit. You have limited time to prepare for the boss fight, and the day-night cycle changes your powers. Solo it’s tough; with four players online it becomes tactical and thrilling."
+    },
+    "feats": {
+      "ru": [
+        "Герои из сказок и легенд",
+        "Смена дня и ночи влияет на силы",
+        "Кооператив до четырёх игроков по сети"
+      ],
+      "en": [
+        "Heroes from fairy tales and legends",
+        "Day and night change your powers",
+        "Online co-op for up to four players"
+      ]
+    }
+  },
+  "sonic-superstars": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "colorful",
+      "family",
+      "nostalgia",
+      "splitscreen",
+      "lobby4",
+      "controller"
+    ],
+    "mood": [
+      "adrenaline",
+      "nostalgia"
+    ],
+    "desc": {
+      "ru": "Новый двухмерный Соник в стиле классических частей: скорость, яркие зоны и кооператив до четырёх игроков.",
+      "en": "A new 2D Sonic in the style of the classic games: speed, colourful zones and co-op for up to four players."
+    },
+    "about": {
+      "ru": "Соник, Тейлз, Наклз и Эми путешествуют по новым зонам и собирают Изумруды Хаоса, которые дают особые способности. Сюжет можно пройти вчетвером за одним экраном, а в отдельном режиме сражений игроки соревнуются локально и по сети.",
+      "en": "Sonic, Tails, Knuckles and Amy travel through new zones collecting Chaos Emeralds that grant special powers. The story can be played by four on one screen, and a separate battle mode lets players compete locally and online."
+    },
+    "feats": {
+      "ru": [
+        "Классический двухмерный Соник",
+        "До четырёх игроков за одним экраном",
+        "Отдельный режим сражений"
+      ],
+      "en": [
+        "Classic 2D Sonic",
+        "Up to four players on one screen",
+        "A separate battle mode"
+      ]
+    }
+  },
+  "soulcalibur-vi": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "pvpfocused",
+      "fantasy",
+      "historical",
+      "storyrich",
+      "controller"
+    ],
+    "mood": [
+      "compete",
+      "story"
+    ],
+    "desc": {
+      "ru": "Трёхмерный файтинг на оружии: мечи, копья и посохи, свободное перемещение по арене и большой сюжетный режим.",
+      "en": "A 3D weapons-based fighter: swords, spears and staffs, free movement around the arena and a large story mode."
+    },
+    "about": {
+      "ru": "Шестая часть пересказывает события первой Soul Calibur и добавляет механику отражения ударов, которая упрощает вход для новичков. В режиме «Весы души» можно создать своего персонажа и пройти длинную историю. Драться с другом можно за одним экраном или по сети.",
+      "en": "The sixth game retells the events of the first Soul Calibur and adds a reversal mechanic that makes it easier for newcomers. In the Libra of Souls mode you create your own character and play a long story. Fight a friend on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Бои на оружии в трёхмерных аренах",
+        "Создание собственного бойца",
+        "Большой сюжетный режим"
+      ],
+      "en": [
+        "Weapon fights in 3D arenas",
+        "Create your own fighter",
+        "A big story mode"
+      ]
+    }
+  },
+  "scott-pilgrim-vs-the-world-the-game-complete-edition": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline",
+      "pvpLocal"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "pixelart",
+      "funny",
+      "soundtrack",
+      "nostalgia",
+      "lobby4",
+      "splitscreen"
+    ],
+    "mood": [
+      "laugh",
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Пиксельный битэмап по комиксу о Скотте Пилигриме: семь злых бывших, отличная музыка и до четырёх игроков.",
+      "en": "A pixel-art beat ’em up based on the Scott Pilgrim comics: seven evil exes, great music and up to four players."
+    },
+    "about": {
+      "ru": "Скотт и его друзья сражаются с семью злыми бывшими Рамоны в Торонто, полном отсылок к видеоиграм. Герои прокачиваются как в RPG, а саундтрек написала группа Anamanaguchi. Издание включает дополнения; играть можно вчетвером за одним экраном или по сети.",
+      "en": "Scott and his friends battle Ramona’s seven evil exes in a Toronto full of video game references. Characters level up like in an RPG, and the soundtrack is by Anamanaguchi. The edition includes the add-ons; four can play on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Саундтрек Anamanaguchi",
+        "Прокачка героев как в RPG",
+        "До четырёх игроков локально и по сети"
+      ],
+      "en": [
+        "Soundtrack by Anamanaguchi",
+        "RPG-style character levelling",
+        "Up to four players, local and online"
+      ]
+    }
+  },
+  "serious-sam-3-bfe": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      16
+    ],
+    "tg": [
+      "funny",
+      "wacky",
+      "lobbybig",
+      "mods",
+      "splitscreen",
+      "coopfocused"
+    ],
+    "mood": [
+      "adrenaline",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Шутер со Сэмом Стоуном: орды монстров на открытых египетских локациях и кооператив для большой компании.",
+      "en": "A shooter starring Sam Stone: monster hordes across open Egyptian levels and co-op for a big group."
+    },
+    "about": {
+      "ru": "Приквел первой Serious Sam: Сэм с огромным арсеналом встречает сотни врагов одновременно — от безголовых камикадзе до гигантских боссов. Кампанию можно проходить большой компанией по сети или на разделённом экране, а мастерская предлагает множество модов.",
+      "en": "A prequel to the first Serious Sam: Sam faces hundreds of enemies at once with a huge arsenal, from headless kamikazes to giant bosses. The campaign supports large online groups or split screen, and the Workshop offers plenty of mods."
+    },
+    "feats": {
+      "ru": [
+        "Сотни врагов одновременно",
+        "Кооператив для большой компании",
+        "Моды из мастерской Steam"
+      ],
+      "en": [
+        "Hundreds of enemies at once",
+        "Co-op for a big group",
+        "Steam Workshop mods"
+      ]
+    }
+  },
+  "sky-force-reloaded": {
+    "md": [
+      "solo",
+      "coopLocal"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "bullethell",
+      "easytolearn",
+      "controller",
+      "friendlier2",
+      "collect",
+      "splitscreen"
+    ],
+    "mood": [
+      "adrenaline",
+      "progress"
+    ],
+    "desc": {
+      "ru": "Вертикальный аркадный шутер с прокачкой самолёта: начинать легко, а на высоких сложностях становится жарко.",
+      "en": "A vertical arcade shooter with plane upgrades: easy to start, intense on higher difficulties."
+    },
+    "about": {
+      "ru": "Каждый уровень можно перепроходить, выполняя дополнительные задания и собирая звёзды на улучшения. Постепенно открываются новые самолёты, карты бонусов и уровни сложности. Вдвоём играют за одним экраном.",
+      "en": "Every stage can be replayed to complete extra objectives and collect stars for upgrades. New planes, bonus cards and difficulty levels unlock over time. Two players can share one screen."
+    },
+    "feats": {
+      "ru": [
+        "Прокачка самолёта между уровнями",
+        "Задания для перепрохождения",
+        "Кооператив вдвоём за одним экраном"
+      ],
+      "en": [
+        "Plane upgrades between stages",
+        "Objectives that reward replays",
+        "Two-player couch co-op"
+      ]
+    }
+  },
+  "slap-city": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "funny",
+      "wacky",
+      "pvpfocused",
+      "lobby4",
+      "splitscreen",
+      "controller"
+    ],
+    "mood": [
+      "laugh",
+      "compete"
+    ],
+    "desc": {
+      "ru": "Платформенный файтинг по образцу Super Smash Bros: персонажи из игр Ludosity и абсурдный юмор.",
+      "en": "A platform fighter modelled on Super Smash Bros, starring characters from Ludosity’s games, with absurd humour."
+    },
+    "about": {
+      "ru": "Бойцы выбивают друг друга с арены, а управление простое, но с большой глубиной для опытных игроков. Для одного есть отдельные режимы и бои с компьютером, но главное здесь — сражения вчетвером за одним экраном или по сети.",
+      "en": "Fighters knock each other off the stage, and the controls are simple yet deep enough for experienced players. There are single-player modes and CPU fights, but the heart of it is four-player battles on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Простое управление и глубина для опытных",
+        "Абсурдный юмор",
+        "Бои до четырёх игроков"
+      ],
+      "en": [
+        "Simple controls with depth for veterans",
+        "Absurd humour",
+        "Fights for up to four players"
+      ]
+    }
+  },
+  "spyro-reignited-trilogy": {
+    "md": [
+      "solo"
+    ],
+    "pl": [
+      1,
+      1
+    ],
+    "tg": [
+      "colorful",
+      "family",
+      "nostalgia",
+      "collect",
+      "cute",
+      "exploration"
+    ],
+    "mood": [
+      "relax",
+      "nostalgia",
+      "collect"
+    ],
+    "desc": {
+      "ru": "Три первые игры о дракончике Спайро, полностью переделанные: яркие миры, сбор сокровищ и спасение драконов.",
+      "en": "The first three Spyro games fully remade: colourful worlds, treasure collecting and dragon rescues."
+    },
+    "about": {
+      "ru": "В сборник вошли три игры: Spyro the Dragon, Year of the Dragon и вторая часть о злодее Рипто. Уровни повторяют оригинал, но графика и музыка обновлены. Сложность умеренная, поэтому сборник подходит и для детей, и для неторопливого прохождения с охотой за всеми секретами.",
+      "en": "The collection includes Spyro the Dragon, Ripto’s Rage! and Year of the Dragon. The levels match the originals, with updated graphics and music. The difficulty is moderate, so it suits kids and relaxed completionist playthroughs alike."
+    },
+    "feats": {
+      "ru": [
+        "Три игры в одном сборнике",
+        "Умеренная сложность",
+        "Много секретов и сокровищ"
+      ],
+      "en": [
+        "Three games in one collection",
+        "Moderate difficulty",
+        "Lots of secrets and treasure"
+      ]
+    }
+  },
+  "the-king-of-fighters-xv": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "pvpfocused",
+      "anime",
+      "difficult",
+      "controller"
+    ],
+    "mood": [
+      "compete"
+    ],
+    "desc": {
+      "ru": "Командный файтинг SNK: собираете тройку бойцов из большого состава и сражаетесь с соперником локально или в сети.",
+      "en": "SNK’s team fighter: pick a trio from a large roster and battle opponents locally or online."
+    },
+    "about": {
+      "ru": "Пятнадцатая часть серии вернула многих классических бойцов и добавила сюжетные финалы для команд. Бои строятся на тройках персонажей, поэтому важно подобрать удачное сочетание. Сетевой код с откатом задержки (rollback) делает онлайн-матчи стабильными.",
+      "en": "The fifteenth entry brings back many classic fighters and adds story endings for teams. Fights revolve around trios of characters, so picking a good combination matters. Rollback netcode keeps online matches stable."
+    },
+    "feats": {
+      "ru": [
+        "Бои командами по три бойца",
+        "Большой состав классических персонажей",
+        "Стабильный сетевой код"
+      ],
+      "en": [
+        "Three-on-three team fights",
+        "A large roster of classic characters",
+        "Stable netcode"
+      ]
+    }
+  },
+  "teenage-mutant-ninja-turtles-the-cowabunga-collection": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "nostalgia",
+      "pixelart",
+      "superhero",
+      "lobby4",
+      "splitscreen",
+      "collect"
+    ],
+    "mood": [
+      "nostalgia",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Сборник из 13 классических игр о черепашках-ниндзя: битэмапы, файтинги и аркады с игрой компанией.",
+      "en": "A collection of 13 classic Ninja Turtles games: beat ’em ups, fighters and arcade titles to play with friends."
+    },
+    "about": {
+      "ru": "В сборник вошли аркадные и консольные игры 1989–1993 годов, включая Turtles in Time. В нём есть перемотка, сохранения в любом месте и подсказки, а в ряде игр — сетевой режим. Лучше всего игры раскрываются вчетвером за одним экраном.",
+      "en": "The collection includes arcade and console games from 1989–1993, including Turtles in Time. It adds rewind, save anywhere and helpful tweaks, and several games support online play. They shine brightest with four players on one screen."
+    },
+    "feats": {
+      "ru": [
+        "13 классических игр в одном сборнике",
+        "Перемотка и сохранения в любом месте",
+        "До четырёх игроков, есть сетевой режим"
+      ],
+      "en": [
+        "13 classic games in one collection",
+        "Rewind and save anywhere",
+        "Up to four players, with online play"
+      ]
+    }
+  },
+  "the-jackbox-party-pack-10": {
+    "md": [
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      2,
+      8
+    ],
+    "tg": [
+      "funny",
+      "social",
+      "lobbybig",
+      "easytolearn",
+      "touch"
+    ],
+    "mood": [
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Десятый сборник пати-игр Jackbox: вместо геймпадов — телефоны гостей, нужен только один экземпляр игры.",
+      "en": "The tenth Jackbox party pack: guests use their phones instead of controllers, and only one copy of the game is needed."
+    },
+    "about": {
+      "ru": "В наборе пять игр: рисование, импровизация, викторины и игры на блеф. Игра идёт на большом экране, а участники подключаются через браузер телефона по коду комнаты. Для игры на расстоянии достаточно показывать экран в видеозвонке или стриме.",
+      "en": "The pack contains five games covering drawing, improv, trivia and bluffing. The game runs on a big screen while players join from their phone browsers with a room code. To play remotely, just share the screen on a video call or stream."
+    },
+    "feats": {
+      "ru": [
+        "Телефоны вместо геймпадов",
+        "Пять разных игр в наборе",
+        "Можно играть по видеосвязи"
+      ],
+      "en": [
+        "Phones instead of controllers",
+        "Five different games in the pack",
+        "Playable over a video call"
+      ]
+    }
+  },
+  "the-jackbox-party-pack-7": {
+    "md": [
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      2,
+      8
+    ],
+    "tg": [
+      "funny",
+      "social",
+      "lobbybig",
+      "easytolearn",
+      "touch"
+    ],
+    "mood": [
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Седьмой сборник пати-игр Jackbox: шутки, рисование и споры, а вместо геймпадов — телефоны участников.",
+      "en": "The seventh Jackbox party pack: jokes, drawing and debates, with players’ phones instead of controllers."
+    },
+    "about": {
+      "ru": "В набор вошли пять игр, в том числе продолжение популярной Quiplash, где побеждает самый смешной ответ. Участники подключаются с телефонов через браузер, а зрители могут голосовать. Играть можно в одной комнате или по видеосвязи.",
+      "en": "The pack includes five games, among them a new Quiplash, where the funniest answer wins. Players join from phone browsers, and an audience can vote. Play in the same room or over a video call."
+    },
+    "feats": {
+      "ru": [
+        "Quiplash 3 и ещё четыре игры",
+        "Телефоны вместо геймпадов",
+        "Зрители тоже участвуют"
+      ],
+      "en": [
+        "Quiplash 3 plus four more games",
+        "Phones instead of controllers",
+        "The audience gets to play too"
+      ]
+    }
+  },
+  "the-jackbox-party-pack-8": {
+    "md": [
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      2,
+      8
+    ],
+    "tg": [
+      "funny",
+      "social",
+      "lobbybig",
+      "easytolearn",
+      "touch"
+    ],
+    "mood": [
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Восьмой сборник пати-игр Jackbox: детектив, рисование и викторины для компании с телефонами.",
+      "en": "The eighth Jackbox party pack: a murder mystery, drawing and trivia for a group with phones."
+    },
+    "about": {
+      "ru": "Пять новых игр, от викторины с подвохом до совместного рисования и поиска убийцы среди игроков. Подключение — через браузер телефона по коду комнаты, отдельные геймпады не нужны. Подходит для вечеринки дома и для игры по видеосвязи.",
+      "en": "Five new games, from a tricky trivia show to collaborative drawing and finding the murderer among the players. Everyone joins from a phone browser with a room code, no extra controllers needed. Great for a party at home or over a video call."
+    },
+    "feats": {
+      "ru": [
+        "Пять новых пати-игр",
+        "Подключение с телефона по коду",
+        "Дома или по видеосвязи"
+      ],
+      "en": [
+        "Five new party games",
+        "Join from a phone with a code",
+        "At home or over a video call"
+      ]
+    }
+  },
+  "the-past-within": {
+    "md": [
+      "coopOnline"
+    ],
+    "pl": [
+      2,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "friendlier2",
+      "surreal",
+      "short",
+      "voicechat",
+      "coopfocused"
+    ],
+    "mood": [
+      "think"
+    ],
+    "desc": {
+      "ru": "Головоломка от Rusty Lake строго для двоих: один игрок в прошлом, другой в будущем, и решить загадки можно только вместе.",
+      "en": "A Rusty Lake puzzle game strictly for two: one player is in the past, the other in the future, and the riddles can only be solved together."
+    },
+    "about": {
+      "ru": "Каждый видит свою часть загадки и должен описывать её напарнику — без голосовой связи не обойтись. Атмосфера мрачная и странная, как во всех играх Rusty Lake. Проходится за один вечер; играть можно на разных устройствах.",
+      "en": "Each player sees their own part of the puzzle and has to describe it to their partner — voice chat is essential. The atmosphere is dark and strange, like every Rusty Lake game. It takes one evening, and you can play across different devices."
+    },
+    "feats": {
+      "ru": [
+        "Только для двоих: прошлое и будущее",
+        "Сюрреалистичная атмосфера Rusty Lake",
+        "Проходится за вечер"
+      ],
+      "en": [
+        "For two only: past and future",
+        "Rusty Lake’s surreal atmosphere",
+        "Done in one evening"
+      ]
+    }
+  },
+  "trine-2-complete-story": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      3
+    ],
+    "tg": [
+      "puzzles",
+      "physics",
+      "fantasy",
+      "colorful",
+      "photomode",
+      "coopfocused"
+    ],
+    "mood": [
+      "relax",
+      "think"
+    ],
+    "desc": {
+      "ru": "Сказочный платформер с физическими головоломками: волшебник, воин и воровка проходят уровни втроём или поодиночке.",
+      "en": "A fairy-tale platformer with physics puzzles: a wizard, a knight and a thief take on levels together or alone."
+    },
+    "about": {
+      "ru": "Волшебник создаёт предметы, воин крушит препятствия, воровка цепляется крюком — и почти каждую головоломку можно решить несколькими способами. Яркие сказочные уровни радуют глаз, а вместе до трёх игроков придумывают неожиданные решения. Издание включает дополнение.",
+      "en": "The wizard conjures objects, the knight smashes obstacles and the thief swings on her grappling hook, and nearly every puzzle has several solutions. The bright fairy-tale levels are a treat, and up to three players find surprising solutions together. The edition includes the expansion."
+    },
+    "feats": {
+      "ru": [
+        "Головоломки с несколькими решениями",
+        "Красивые сказочные уровни",
+        "Кооператив до трёх игроков"
+      ],
+      "en": [
+        "Puzzles with multiple solutions",
+        "Beautiful fairy-tale levels",
+        "Co-op for up to three players"
+      ]
+    }
+  },
+  "trine-enchanted-edition": {
+    "md": [
+      "solo",
+      "coopLocal",
+      "coopOnline"
+    ],
+    "pl": [
+      1,
+      3
+    ],
+    "tg": [
+      "puzzles",
+      "physics",
+      "fantasy",
+      "colorful",
+      "coopfocused"
+    ],
+    "mood": [
+      "relax",
+      "think"
+    ],
+    "desc": {
+      "ru": "Первая часть Trine на обновлённом движке: три героя, физические головоломки и кооператив до трёх игроков.",
+      "en": "The first Trine on an updated engine: three heroes, physics puzzles and co-op for up to three players."
+    },
+    "about": {
+      "ru": "Волшебная реликвия связала души волшебника, воина и воровки, и теперь им приходится действовать вместе. В издании Enchanted Edition обновлена графика и добавлен сетевой кооператив. Одному можно переключаться между героями, втроём каждый играет за своего.",
+      "en": "A magical relic has bound the souls of a wizard, a knight and a thief, so they must work together. The Enchanted Edition updates the graphics and adds online co-op. Solo you switch between heroes; with three players each takes one."
+    },
+    "feats": {
+      "ru": [
+        "Три героя с разными способностями",
+        "Физические головоломки",
+        "Кооператив до трёх игроков"
+      ],
+      "en": [
+        "Three heroes with different abilities",
+        "Physics puzzles",
+        "Co-op for up to three players"
+      ]
+    }
+  },
+  "we-were-here": {
+    "md": [
+      "coopOnline"
+    ],
+    "pl": [
+      2,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "friendlier2",
+      "voicechat",
+      "coopfocused",
+      "short"
+    ],
+    "mood": [
+      "think"
+    ],
+    "desc": {
+      "ru": "Бесплатная кооперативная головоломка для двоих: один заперт в замке, другой подсказывает по рации.",
+      "en": "A free co-op puzzle game for two: one player is trapped in a castle, the other guides them by walkie-talkie."
+    },
+    "about": {
+      "ru": "Один игрок видит загадку, второй — подсказку к ней, и единственная связь между ними — рация. Нужно описывать увиденное так, чтобы напарник понял. Игра бесплатная и проходится примерно за пару часов — хороший способ проверить, подходит ли вам серия.",
+      "en": "One player sees the puzzle, the other sees the clue, and the only link between them is a walkie-talkie. You have to describe what you see clearly enough for your partner. It’s free and takes about a couple of hours — a good way to see whether the series is for you."
+    },
+    "feats": {
+      "ru": [
+        "Бесплатная",
+        "Общение только по рации",
+        "Проходится за пару часов"
+      ],
+      "en": [
+        "Free to play",
+        "Communication by walkie-talkie only",
+        "Done in a couple of hours"
+      ]
+    }
+  },
+  "we-were-here-too": {
+    "md": [
+      "coopOnline"
+    ],
+    "pl": [
+      2,
+      2
+    ],
+    "tg": [
+      "puzzles",
+      "friendlier2",
+      "voicechat",
+      "coopfocused",
+      "short"
+    ],
+    "mood": [
+      "think"
+    ],
+    "desc": {
+      "ru": "Вторая часть серии кооперативных головоломок для двоих: снова замок, рация и загадки, которые решаются только вместе.",
+      "en": "The second game in the co-op puzzle series for two: another castle, a walkie-talkie and riddles you can only solve together."
+    },
+    "about": {
+      "ru": "Двое исследователей оказываются по разные стороны стен заснеженного замка. Головоломки сложнее, чем в первой части, и требуют точных описаний и терпения. Проходится за несколько часов; у каждого игрока должна быть своя копия игры.",
+      "en": "Two explorers end up on opposite sides of a snowy castle’s walls. The puzzles are harder than in the first game and demand precise descriptions and patience. It takes a few hours, and each player needs their own copy."
+    },
+    "feats": {
+      "ru": [
+        "Загадки сложнее, чем в первой части",
+        "Общение только по рации",
+        "Только для двоих по сети"
+      ],
+      "en": [
+        "Harder puzzles than the first game",
+        "Communication by walkie-talkie only",
+        "Two players online only"
+      ]
+    }
+  },
+  "windjammers-2": {
+    "md": [
+      "solo",
+      "pvpLocal",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      2
+    ],
+    "tg": [
+      "pvpfocused",
+      "nostalgia",
+      "easytolearn",
+      "handdrawn",
+      "colorful",
+      "splitscreen"
+    ],
+    "mood": [
+      "compete",
+      "laugh"
+    ],
+    "desc": {
+      "ru": "Продолжение аркадной классики про метание диска: быстрые дуэли один на один за одним экраном или в сети.",
+      "en": "A sequel to the arcade classic about disc throwing: fast one-on-one duels on one screen or online."
+    },
+    "about": {
+      "ru": "Задача простая — забросить диск в ворота соперника, но удары с подкруткой, броски в прыжке и суперудары превращают матч в дуэль на реакцию. Яркая рисованная графика и матчи на пару минут делают игру отличным выбором для вечера с другом за одним экраном или в сети.",
+      "en": "The goal is simple — get the disc into your opponent’s goal — but curve shots, jump throws and super moves turn every match into a reflex duel. Vivid hand-drawn art and two-minute matches make it a great pick for an evening with a friend on one screen or online."
+    },
+    "feats": {
+      "ru": [
+        "Матчи на пару минут",
+        "Простые правила, высокий темп",
+        "Дуэли вдвоём локально и по сети"
+      ],
+      "en": [
+        "Matches lasting a couple of minutes",
+        "Simple rules, high pace",
+        "Duels for two, local and online"
+      ]
+    }
+  },
+  "world-war-z": {
+    "md": [
+      "solo",
+      "coopOnline",
+      "pvpOnline"
+    ],
+    "pl": [
+      1,
+      4
+    ],
+    "tg": [
+      "zombie",
+      "coopfocused",
+      "lobby4",
+      "squad",
+      "crosplay"
+    ],
+    "mood": [
+      "adrenaline"
+    ],
+    "desc": {
+      "ru": "Кооперативный шутер про зомби-апокалипсис: отряд из четырёх человек против огромных орд в городах мира.",
+      "en": "A co-op zombie apocalypse shooter: a squad of four against massive hordes in cities around the world."
+    },
+    "about": {
+      "ru": "Игра по мотивам фильма «Война миров Z»: зомби лавиной карабкаются по стенам и друг на друга. Классы отличаются ролями, а оборонительные точки нужно укреплять перед наплывом. Проходить кампанию лучше вчетвером по сети, пустые места занимают боты.",
+      "en": "Based on the World War Z film: zombies pour over walls and climb on top of each other in huge waves. Classes have distinct roles, and defensive points must be fortified before each wave. The campaign is best played by four online, with bots filling empty slots."
+    },
+    "feats": {
+      "ru": [
+        "Огромные орды зомби на экране",
+        "Классы с разными ролями",
+        "Кооператив вчетвером, боты вместо недостающих"
+      ],
+      "en": [
+        "Massive zombie hordes on screen",
+        "Classes with different roles",
+        "Four-player co-op with bots filling in"
+      ]
+    }
+  }
+}

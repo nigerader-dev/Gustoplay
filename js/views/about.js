@@ -2,7 +2,7 @@
 import { t, tp, getLang } from '../i18n.js';
 import { icon } from '../icons.js';
 import { GAMES, STATS } from '../catalog/index.js';
-import { esc, adSlot, houseAd, cardsGrid } from './components.js';
+import { esc, houseAd, cardsGrid } from './components.js';
 import { GENRES, TAGS, MOODS } from '../taxonomy.js';
 import { SITE } from '../config.js';
 
@@ -26,26 +26,25 @@ const FAQ = {
 // Текст политики конфиденциальности — один источник и для «Как это работает», и для /privacy.
 const PRIVACY = {
   ru: [
-
-        ['Оператор сервиса', `Оператор сервиса — проект GustoPlay. Все вопросы, включая удаление ваших данных: ${SITE.email}.`],
-        ['Какие данные мы собираем', 'Подбор игр работает без регистрации: профиль вкуса (ответы квиза и отметки игр) хранится в localStorage вашего браузера. Если вы создаёте аккаунт, на сервере сохраняются e-mail, имя (если указали) и тот же профиль вкуса — только чтобы синхронизировать его между устройствами. Сервис не предназначен для пользователей младше 16 лет.'],
-        ['Обращения в поддержку', `Форма поддержки отправляет имя, e-mail для ответа, тему и текст обращения. Когда серверная доставка включена, обращение записывается в базу Cloudflare D1 и доступно только команде поддержки; хранится до удаления по вашему запросу. Когда доставка недоступна, открывается черновик письма в вашей почтовой программе — в этом случае сайт обращение не сохраняет. Удалить обращение или получить его копию: ${SITE.email}.`],
-        ['Пароль и вход через Google', 'Пароль хранится как необратимый хеш (PBKDF2-SHA256, 100 000 итераций) — восстановить его невозможно, только сбросить. При входе через Google мы получаем от Google только e-mail, имя и идентификатор аккаунта; пароль Google нам недоступен. Использование этих данных ограничено целью входа и синхронизации профиля и соответствует режиму Limited Use политики Google API Services User Data Policy (https://developers.google.com/terms/api-services-user-data-policy): мы не передаём их другим приложениям и не используем для рекламы.'],
-        ['Cookie и реклама', 'Для показа рекламы используется Рекламная сеть Яндекса, для статистики посещений — Яндекс Метрика (если подключена). Они могут устанавливать cookie и использовать идентификаторы устройства для персонализации объявлений; до вашего согласия рекламные скрипты не загружаются. Сам сайт cookie не устанавливает. Технические данные хранятся в localStorage браузера: gf.profile.v1 (профиль вкуса), gf.consent.v1 (ваш выбор по рекламным cookie), pn.token.v1 и pn.user.v1 (сессия входа — только если вы вошли). В sessionStorage — счётчик попыток формы поддержки gustoplay.support.attempt.v1 (сбрасывается при закрытии вкладки). Всё это можно очистить в настройках браузера.'],
-        ['Ваши права', `Вы можете в любой момент удалить профиль вкуса кнопкой «Сбросить всё» на странице «Мой вкус», выгрузить его в JSON, отозвать любую сессию или полностью удалить аккаунт на странице «Аккаунт» — вместе с ним удаляются все данные на сервере. Написать нам: ${SITE.email}.`],
-        ['Безопасность', 'Соединение защищено HTTPS/HSTS, формы — Cloudflare Turnstile, попытки входа ограничены по частоте. Сессии можно отзывать по одной на странице «Аккаунт».'],
-        ['Ссылки на магазины', 'Часть ссылок ведёт на сторонние магазины. Их политика конфиденциальности распространяется на действия на их стороне. Партнёрские метки (если включены) на стоимость для вас не влияют.']
-],
+    ['Кто отвечает за сайт', `Сайтом управляет проект GustoPlay. По любым вопросам, в том числе об удалении данных, пишите: ${SITE.email}.`],
+    ['Какие данные мы собираем', 'Подбор работает без регистрации: ваши ответы и отметки игр хранятся только в вашем браузере. Если вы создаёте аккаунт, на сервере сохраняются e-mail, имя (если вы его указали) и те же ответы и отметки — только чтобы переносить их между устройствами. Сайт не предназначен для детей младше 16 лет.'],
+    ['Обращения в поддержку', `Форма поддержки готовит письмо, которое вы отправляете из своей почты. Сайт сам текст обращения не хранит. Переписка с нами остаётся в почтовом ящике ${SITE.email}; удалить её можно по вашей просьбе.`],
+    ['Пароль и вход через Google', 'Пароль хранится в зашифрованном виде, который нельзя расшифровать обратно: его можно только сбросить. При входе через Google мы получаем лишь e-mail, имя и номер аккаунта Google — ваш пароль от Google нам недоступен. Эти данные используются только для входа и переноса профиля, не передаются другим приложениям и не используются для рекламы (в соответствии с правилами Google API Services User Data Policy, режим Limited Use).'],
+    ['Cookie и реклама', 'Рекламу показывает Рекламная сеть Яндекса, посещения может считать Яндекс Метрика. Яндекс может сохранять cookie, чтобы подбирать объявления. Пока вы не нажали «Согласен», их скрипты не загружаются. Сам сайт cookie не ставит: ответы, отметки, выбор по cookie и данные входа хранятся в памяти вашего браузера. Всё это можно удалить в настройках браузера.'],
+    ['Ваши права', `В любой момент вы можете удалить свои ответы и отметки кнопкой «Удалить мои данные» на странице «Мой вкус», сохранить их копию, выйти со всех устройств или удалить аккаунт на странице «Аккаунт» — вместе с ним удаляются все данные на сервере. Написать нам: ${SITE.email}.`],
+    ['Безопасность', 'Сайт работает только по защищённому соединению HTTPS, формы входа защищены от ботов, а число попыток входа ограничено. Если вы потеряли устройство, завершите его сеанс на странице «Аккаунт».'],
+    ['Ссылки на магазины', 'Ссылки «Купить» ведут в сторонние магазины, где действуют их собственные правила. Цена для вас от перехода с нашего сайта не меняется.'],
+  ],
   en: [
-['Operator', `The service is operated by the GustoPlay project. For everything, including deletion of your data: ${SITE.email}.`],
-['What data we collect', 'Matching works without an account: your taste profile (quiz answers and game marks) lives in your browser localStorage. If you create an account, the server stores your e-mail, name (if given) and that same taste profile — solely to sync it across devices. The service is not intended for users under 16.'],
-        ['Support requests', `The support form sends your name, reply-to e-mail, topic and message text. When server-side delivery is enabled, the request is written to a Cloudflare D1 database readable only by the support team and is kept until you ask us to delete it. When delivery is unavailable, a draft opens in your email app — in that case the site stores nothing. To delete a request or get a copy: ${SITE.email}.`],
-        ['Password and Google sign-in', 'Passwords are stored as irreversible hashes (PBKDF2-SHA256, 100 000 iterations) — they can be reset, never recovered. With Google sign-in we only receive your e-mail, name and account id; your Google password is never available to us. Use of that data is limited to sign-in and profile syncing and complies with the Limited Use requirements of the Google API Services User Data Policy (https://developers.google.com/terms/api-services-user-data-policy): we do not transfer it to other apps or use it for advertising.'],
-        ['Cookies and ads', 'Ads are served by the Yandex Advertising Network and visits may be counted by Yandex Metrica (if enabled); they may set cookies to personalise ads. Their scripts are not loaded until you give consent. The site itself sets no cookies. Technical data lives in your browser localStorage: gf.profile.v1 (taste profile), gf.consent.v1 (your ads-cookie choice), pn.token.v1 and pn.user.v1 (sign-in session — only if you are signed in). sessionStorage keeps the support-form attempt counter gustoplay.support.attempt.v1 (cleared when the tab closes). You can wipe all of it in your browser settings.'],
-        ['Your rights', `You can delete your taste profile at any time with "Reset everything" on the My taste page, export it as JSON, revoke any session, or delete the whole account on the Account page — all server data goes with it. Contact us: ${SITE.email}.`],
-        ['Security', 'Traffic is HTTPS/HSTS protected, forms are protected by Cloudflare Turnstile, and sign-in attempts are rate limited. Sessions can be revoked one by one on the Account page.'],
-        ['Store links', 'Some links lead to third-party stores governed by their own policies. Affiliate tags, if enabled, never change your price.'],
-],
+    ['Who runs the site', `The site is run by the GustoPlay project. For any questions, including deleting your data, write to: ${SITE.email}.`],
+    ['What data we collect', 'Matching works without an account: your answers and game marks are stored only in your browser. If you create an account, the server stores your e-mail, your name (if given) and the same answers and marks — only to move them between devices. The site is not intended for children under 16.'],
+    ['Support requests', `The support form prepares an e-mail that you send from your own mailbox. The site itself does not store your message. Our correspondence stays in the ${SITE.email} mailbox and can be deleted at your request.`],
+    ['Password and Google sign-in', 'Your password is stored in an encrypted form that cannot be reversed: it can only be reset. With Google sign-in we receive only your e-mail, name and Google account number — your Google password is never available to us. This data is used only for sign-in and moving your profile, is not shared with other apps and is not used for advertising (in line with the Google API Services User Data Policy, Limited Use).'],
+    ['Cookies and ads', 'Ads are served by the Yandex Advertising Network, and visits may be counted by Yandex Metrica. Yandex may set cookies to choose ads. Their scripts are not loaded until you click “Agree”. The site itself sets no cookies: answers, marks, your cookie choice and sign-in data are kept in your browser’s storage. You can delete all of it in your browser settings.'],
+    ['Your rights', `At any time you can delete your answers and marks with “Delete my data” on the My taste page, save a copy, sign out of all devices or delete your account on the Account page — all server data is deleted with it. Contact us: ${SITE.email}.`],
+    ['Security', 'The site works only over secure HTTPS, sign-in forms are protected from bots and sign-in attempts are limited. If you lose a device, end its session on the Account page.'],
+    ['Store links', '“Buy” links lead to third-party stores with their own rules. Your price doesn’t change when you come from our site.'],
+  ],
 };
 
 export function render(ctx) {
@@ -100,7 +99,6 @@ export function render(ctx) {
       </p>
     </div>
 
-    ${adSlot('home-top')}
     ${houseAd()}
 
     <div class="panel legal" id="privacy">

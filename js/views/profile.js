@@ -93,6 +93,7 @@ export function render() {
       <div class="panel-actions">
         ${FEATURES.exportProfile ? `<button type="button" class="btn btn-ghost" data-action="profile-export">${icon('download')} ${esc(t('profile.export'))}</button>` : ''}
         <button type="button" class="btn btn-ghost" data-action="profile-import">${icon('upload')} ${esc(t('profile.import'))}</button>
+        <input type="file" id="profile-import-file" accept=".json,application/json" hidden tabindex="-1" aria-label="${esc(t('profile.import'))}">
         <button type="button" class="btn btn-ghost btn-danger" data-action="profile-reset">${icon('trash')} ${esc(t('profile.reset'))}</button>
       </div>
     </div>
@@ -102,19 +103,33 @@ export function render() {
 const fieldOf = (key) => key.replace('q.', '');
 
 export function mount(root) {
-  root.querySelector('[data-action="profile-export"]')?.addEventListener('click', async () => {
-    const json = exportProfile();
+  // Копия профиля — обычным файлом: раньше выгрузка показывала сырой JSON в окне prompt,
+  // а загрузка просила вставить его обратно — технично и неудобно, особенно на телефоне.
+  root.querySelector('[data-action="profile-export"]')?.addEventListener('click', () => {
     try {
-      await navigator.clipboard.writeText(json);
-      toast(t('results.exported'));
+      const blob = new Blob([exportProfile()], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `gustoplay-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast(t('profile.exported'));
     } catch {
-      window.prompt(t('profile.export'), json);
+      toast(t('profile.importBroken'));
     }
   });
-  root.querySelector('[data-action="profile-import"]')?.addEventListener('click', () => {
-    const json = window.prompt(t('profile.importPrompt'));
-    if (!json) return;
-    const res = importProfile(json);
+  const fileInput = root.querySelector('#profile-import-file');
+  root.querySelector('[data-action="profile-import"]')?.addEventListener('click', () => fileInput?.click());
+  fileInput?.addEventListener('change', async () => {
+    const file = fileInput.files?.[0];
+    fileInput.value = '';
+    if (!file) return;
+    // защита от случайно выбранного большого файла: профиль весит считанные килобайты
+    if (file.size > 1024 * 1024) { toast(t('profile.importBroken')); return; }
+    const res = importProfile(await file.text());
     if (!res) {
       toast(t('profile.importBroken'));
       return;

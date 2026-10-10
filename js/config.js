@@ -35,7 +35,7 @@ export const SITE = {
    * мета-тега). Сборка вставит их в <head> всех страниц. Как получить — docs/OWNER-STEPS.md.
    */
   verification: {
-    yandex: '',   // Яндекс Вебмастер → «Мета-тег»: <meta name="yandex-verification" content="ВОТ_ЭТО">
+    yandex: 'd946870a0133f842',   // Яндекс (РСЯ/Вебмастер); тот же код отдаётся файлом /yandex_<код>.html — Яндекс → «Мета-тег»: <meta name="yandex-verification" content="ВОТ_ЭТО">
     google: '',   // Google Search Console → «Тег HTML»: <meta name="google-site-verification" content="ВОТ_ЭТО">
   },
   telegram: 'https://t.me/+K915edYs7C1iNTEy',
@@ -86,7 +86,7 @@ export const ADS = {
    * (AdSense там отключён с 12.2024) — пошагово: docs/OWNER-STEPS.md, раздел 1.
    * Включение: mode: 'rsya' и ID блоков вида 'R-A-1234567-1' в rsya.blocks.
    */
-  mode: 'mock',
+  mode: 'rsya',
   /** Согласие на cookie: без него реклама не грузится, показывается баннер. */
   consentRequired: true,
   /** Сколько рекламных блоков на страницу максимум (защита от «рекламной простыни»). */
@@ -99,12 +99,15 @@ export const ADS = {
 
   // Идентификаторы намеренно пусты: их нельзя подменять примерами или включать без согласования.
   rsya: {
-    clientId: '',   // необязательно: ID партнёра уже входит в ID блока (R-A-<партнёр>-<блок>)
+    clientId: 'R-A-20215187',   // ID партнёра (входит в ID блока)
+    // Выдан РСЯ 10.10.2026: один адаптивный блок. На каждой странице слот рекламы один,
+    // поэтому блок общий для всех мест; для раздельной статистики можно создать в РСЯ
+    // отдельные блоки и вписать их сюда.
     blocks: {
-      'home-top': '',
-      'results-inline': '',
-      'game-side': '',
-      'catalog-inline': '',
+      'home-top': 'R-A-20215187-1',
+      'results-inline': 'R-A-20215187-1',
+      'game-side': 'R-A-20215187-1',
+      'catalog-inline': 'R-A-20215187-1',
     },
   },
 
@@ -120,7 +123,17 @@ export const ADS = {
   },
 
   /** Пусто, пока нет одобренных рекламных партнёров и выданных ими записей. */
-  adsTxt: [],
+  // ads.txt выдан РСЯ (строки — дословно из кабинета партнёра, 10.10.2026)
+  adsTxt: [
+    'google.com, pub-5533854580432370, RESELLER, f08c47fec0942fa0',
+    'improvedigital.com, 2031, RESELLER',
+    'uis.mobfox.com, 165, RESELLER',
+    'hyperad.tech, 215, RESELLER',
+    'yandex.com, 332627387, DIRECT',
+    'betweendigital.com, 43554, RESELLER',
+    'Contextweb.com, 562899, RESELLER, 89ff185a4c4e857c',
+    'hyperad.tech, 150, RESELLER',
+  ],
 
   /** Своя реклама (например, свой Telegram-канал) — показывается, если сеть не подключена. */
   house: {

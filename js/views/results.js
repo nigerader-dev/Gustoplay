@@ -76,13 +76,16 @@ export function render() {
     ${result.relaxed ? `<div class="notice">${icon('alert')} ${esc(t('results.relaxed'))}</div>` : ''}
     ${tasteBlock}
     ${filtersBar}
-    ${adSlot('results-inline')}
-    ${cardsGrid(shown.map((x) => x.game), { whyBySlug: Object.fromEntries(result.list.map((x) => [x.game.slug, x.why])), marks: getProfile().marks })}
+    ${(() => {
+      // Реклама — в ленте после первых шести игр, а не вплотную к фильтрам и кнопкам:
+      // так она не провоцирует случайные клики (правила РСЯ)
+      const opts = { whyBySlug: Object.fromEntries(result.list.map((x) => [x.game.slug, x.why])), marks: getProfile().marks };
+      const games = shown.map((x) => x.game);
+      return `${cardsGrid(games.slice(0, 6), opts)}${adSlot('results-inline')}${games.length > 6 ? cardsGrid(games.slice(6), opts) : ''}`;
+    })()}
     <div class="center">
       ${more ? `<button type="button" class="btn btn-outline btn-lg" data-action="show-more" data-more="${more}">${esc(t('results.more'))} (+${more})</button>` : ''}
-      <button type="button" class="btn btn-ghost" data-action="reset-all">${esc(t('profile.reset'))}</button>
     </div>
-    ${adSlot('catalog-inline')}
   </section>`;
 }
 

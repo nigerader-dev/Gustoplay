@@ -169,7 +169,7 @@ check('есть гистограмма тегов', count('.bar-row') > 0);
 console.log('\n8b. Аккаунт (локальный режим без API)');
 await navigate('account');
 check('страница аккаунта открылась', text().includes('Аккаунт'));
-check('видно объяснение локального режима', text().includes('Сервер аккаунтов не подключён'));
+check('видно объяснение локального режима', text().includes('Вход в аккаунт сейчас недоступен'));
 
 console.log('\n8c. Аккаунт с подключённым API (формы входа, сброса пароля)');
 const config = await import('../js/config.js');

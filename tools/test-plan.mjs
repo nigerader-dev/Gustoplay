@@ -106,7 +106,7 @@ for (const [label, route, width] of [['каталог @1440', '/catalog', 1440],
 
 console.log('\n3. Отметки игр: «не понравилось» — палец вниз');
 await goto('/catalog');
-const marks = await page.$$eval('.game-card:first-child .mark', (els) => els.map((e) => ({
+const marks = await page.$$eval('#catalog-grid .game-card:first-child .mark', (els) => els.map((e) => ({
   status: e.dataset.status, path: e.querySelector('svg path')?.getAttribute('d') || '', label: e.textContent.trim(),
 })));
 const byStatus = Object.fromEntries(marks.map((m) => [m.status, m]));
@@ -118,7 +118,7 @@ check('«понравилось» — палец вверх (парная ико
 check('«играл» — геймпад, «хочу сыграть» — закладка',
   byStatus.played?.path === icon('controller').match(/d="([^"]+)"/)[1]
   && byStatus.wishlist?.path === icon('bookmark').match(/d="([^"]+)"/)[1]);
-const strokeKind = await page.$eval('.game-card:first-child .mark svg', (el) => ({
+const strokeKind = await page.$eval('#catalog-grid .game-card:first-child .mark svg', (el) => ({
   fill: el.getAttribute('fill'), stroke: el.getAttribute('stroke'), color: getComputedStyle(el).color,
 }));
 check('иконки контурные и наследуют цвет кнопки', strokeKind.fill === 'none' && Boolean(strokeKind.stroke), JSON.stringify(strokeKind));

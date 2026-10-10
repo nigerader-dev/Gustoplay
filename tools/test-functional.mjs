@@ -57,20 +57,21 @@ check('unknown difficulty and pace are omitted from meters, not shown as a fabri
   verifiedRecent.every((game) => meters(game) === ''));
 check('new Steam ratings visibly identify their source and snapshot date',
   verifiedRecent.every((game) => game.ratingSource?.ru?.includes('Steam') && game.ratingSource?.ru?.includes('27.09.2026')
-    && ratingPill(game).includes(game.ratingSource.ru)));
+    && ratingPill(game).includes('Steam') && ratingPill(game).includes('27.09.2026')));
 check('unverified cloud availability is not inferred for the new games',
   verifiedRecent.every((game) => !game.platforms.includes('cloud')));
 check('Switch 2 releases use a distinct, accurate platform filter',
   GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch2')
     && !GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch'));
-check('реклама остаётся mock без фиктивных сетевых ID и ads.txt',
-  config.ADS.mode === 'mock'
-    && config.ADS.rsya.clientId === ''
-    && Object.values(config.ADS.rsya.blocks).every((id) => id === '')
+check('РСЯ включена с выданным ID блока, AdSense не используется',
+  config.ADS.mode === 'rsya'
+    && Object.values(config.ADS.rsya.blocks).every((id) => /^R-A-\d+-\d+$/.test(id))
     && config.ADS.adsense.client === ''
     && Object.values(config.ADS.adsense.blocks).every((id) => id === '')
-    && config.ADS.adsense.autoAds === false
-    && config.ADS.adsTxt.length === 0);
+    && config.ADS.adsense.autoAds === false);
+check('ads.txt содержит прямую строку Яндекса из кабинета РСЯ',
+  config.ADS.adsTxt.includes('yandex.com, 332627387, DIRECT'));
+config.ADS.mode = 'mock';
 const mockSlot = adSlot('home-top');
 check('mock-слот явно помечен заглушкой и не содержит сетевых блоков',
   mockSlot.includes('ad-mock') && mockSlot.includes('Тестовая заглушка')
@@ -81,9 +82,9 @@ check('при mock-режиме приложение не загружает с�
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]'));
 config.ADS.mode = 'rsya';
 window.dispatchEvent(new window.Event('gf:rerender'));
-check('режим сети без выданных ID также не создаёт внешних запросов',
+check('без согласия на cookie скрипт РСЯ не загружается, виден баннер согласия',
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
-    && !window.document.querySelector('#consent'));
+    && Boolean(window.document.querySelector('#consent')));
 {
   // РСЯ с выданными ID: блоки заполняются на каждой странице SPA, а не только на первой
   const savedBlocks = { ...config.ADS.rsya.blocks };
@@ -105,6 +106,17 @@ check('режим сети без выданных ID также не созда
     `очередь: ${window.yaContextCb.length}`);
   check('РСЯ: id контейнеров уникальны между переходами',
     secondIds.every((id) => !firstIds.includes(id)), `${firstIds} → ${secondIds}`);
+  // Перерисовка той же страницы (фильтр, «Показать ещё», отметка) не должна заново
+  // запрашивать рекламу: правило РСЯ — не чаще раза в 30 секунд
+  const queueBefore = window.yaContextCb.length;
+  const nodeBefore = window.document.querySelector('[data-rsya]');
+  window.dispatchEvent(new window.Event('gf:rerender'));
+  await new Promise((r) => setTimeout(r, 30));
+  check('РСЯ: перерисовка той же страницы не перезапрашивает блок',
+    window.yaContextCb.length === queueBefore && window.document.querySelector('[data-rsya]') === nodeBefore,
+    `очередь ${queueBefore} → ${window.yaContextCb.length}`);
+  check('РСЯ: у блока сети нет собственной подписи рядом',
+    !nodeBefore?.closest('.ad-slot')?.querySelector('.ad-label'));
   config.ADS.rsya.blocks = savedBlocks;
   if (savedConsent === null) window.localStorage.removeItem('gf.consent.v1');
   else window.localStorage.setItem('gf.consent.v1', savedConsent);
@@ -956,7 +968,7 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   await navigate('support');
   check('форма корректно отображается на английском',
     window.document.querySelector('h1')?.textContent.includes('Contact support')
-      && window.document.querySelector('#support-submit')?.textContent.includes('Continue'));
+      && window.document.querySelector('#support-submit')?.textContent.includes('Prepare email'));
   check('согласие переведено на английский',
     (window.document.querySelector('#support-consent')?.closest('label')?.textContent || '').includes('processing of my data'));
   i18n.setLang('ru');
@@ -976,14 +988,14 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
   await wait(10);
   check('слишком быстрая отправка отклоняется клиентским антиспамом',
-    window.document.querySelector('#support-status')?.textContent.includes('через несколько секунд'));
+    window.document.querySelector('#support-status')?.textContent.includes('через пару секунд'));
   Date.now = () => startNow + 2500;
   form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
   await wait(35);
   Date.now = realDateNow;
   const fallback = window.document.querySelector('#support-mailto');
   const mailtoHref = fallback?.getAttribute('href') || '';
-  check('без настроенного API виден явный mailto fallback с черновиком',
+  check('форма поддержки готовит письмо-черновик (mailto)',
     !fallback?.hidden && mailtoHref.startsWith('mailto:')
       && decodeURIComponent(mailtoHref).includes('Подробное тестовое сообщение'));
   const allStorage = [...Object.values(window.localStorage), ...Object.values(window.sessionStorage)].join(' ');
@@ -994,7 +1006,7 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   await wait(10);
   Date.now = realDateNow;
   check('повторные попытки блокируются коротким session-side лимитом',
-    window.document.querySelector('#support-status')?.textContent.includes('Слишком много обращений'));
+    window.document.querySelector('#support-status')?.textContent.includes('уже подготовлено'));
   config.SITE.apiBase = previousApiBase;
 }
 
