@@ -58,6 +58,27 @@ if (siteUrlRaw || baseRaw || trailingSlashFlag) {
     try { SITE.base = normalizeBase(new URL(siteUrlRaw).pathname); } catch { SITE.base = ''; }
   }
 }
+/**
+ * modulepreload для всех статически импортируемых модулей приложения. Без него браузер
+ * узнаёт о модулях по цепочке import → import (3–4 последовательных запроса до первого
+ * рендера); с ним все ~40 файлов запрашиваются параллельно сразу из HTML.
+ */
+function modulePreloads() {
+  const seen = new Set();
+  const walk = (rel) => {
+    if (seen.has(rel)) return;
+    seen.add(rel);
+    const src = readFileSync(join(root, rel), 'utf8');
+    for (const m of src.matchAll(/^\s*(?:import|export)\b[^'"]*?from\s*['"](\.{1,2}\/[^'"]+)['"]/gm)) {
+      const next = join(dirname(rel), m[1]).replace(/\\/g, '/');
+      if (existsSync(join(root, next))) walk(next);
+    }
+  };
+  walk('js/app.js');
+  seen.delete('js/app.js'); // сам вход уже подключён <script type="module">
+  return [...seen].sort().map((rel) => `  <link rel="modulepreload" href="${basePath()}/${rel}">\n`).join('');
+}
+
 /** Мета-теги подтверждения прав на сайт: только безопасные символы кода */
 function verificationMeta() {
   const v = SITE.verification || {};
@@ -236,7 +257,7 @@ const shell = readFileSync(join(root, 'index.html'), 'utf8')
   .replace(/<meta property="og:url" content="[^"]*">/, `<meta property="og:url" content="${urlFor('/')}">`)
   .replace(/("url":\s*")[^"]*(")/, `$1${urlFor('/')}$2`)
   // Подтверждение прав в Яндекс Вебмастере и Google Search Console (SITE.verification)
-  .replace('</head>', `${verificationMeta()}</head>`);
+  .replace('</head>', `${verificationMeta()}${modulePreloads()}</head>`);
 
 writeFileSync(join(dist, 'index.html'), shell);
 

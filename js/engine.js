@@ -606,7 +606,7 @@ function explain(item, profile, weights) {
     out.push({ ru: `Настроение «${MOODS[id].ru}»`, en: `Mood: ${MOODS[id].en}` });
   }
   for (const id of (reasons.find((r) => r.type === 'genre')?.ids || []).slice(0, 2)) {
-    out.push({ ru: `Жанр «${GENRES[id].ru}» — как вы любите`, en: `${GENRES[id].en} — a genre you like` });
+    out.push({ ru: `Ваш жанр: «${GENRES[id].ru}»`, en: `${GENRES[id].en} — a genre you like` });
   }
   for (const id of (reasons.find((r) => r.type === 'tag')?.ids || []).slice(0, 3)) {
     out.push({ ru: TAGS[id].ru, en: TAGS[id].en });
@@ -626,7 +626,7 @@ function explain(item, profile, weights) {
   if (a.novelty === 'new' && game.y >= 2022) out.push({ ru: `Свежая игра (${game.y})`, en: `Recent release (${game.y})` });
   if (game.price === 'free') out.push({ ru: 'Бесплатная', en: 'Free to play' });
   if (game.price === 'subscription' && (a.price === 'free' || a.price === 'subscription')) out.push({ ru: 'Доступна по подписке (Game Pass / PS Plus)', en: 'Available on Game Pass / PS Plus' });
-  if (reasons.some((r) => r.type === 'wishlist')) out.push({ ru: 'Уже в вашем вишлисте', en: 'Already on your wishlist' });
+  if (reasons.some((r) => r.type === 'wishlist')) out.push({ ru: 'В вашем списке «Хочу сыграть»', en: 'On your “Want to play” list' });
   if (game.rating >= 88) out.push({ ru: `Рейтинг ${game.rating}/100`, en: `Rated ${game.rating}/100` });
 
   return out.slice(0, 4);

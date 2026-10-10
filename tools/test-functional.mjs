@@ -1026,6 +1026,19 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   jsonLdScript.remove();
 }
 
+{
+  console.log('\nSEO: разметка и заголовки страниц игр');
+  const gameView = await import('../js/views/game.js');
+  const ctx = { params: { slug: 'hades' } };
+  const ld = gameView.jsonLd(ctx);
+  check('JSON-LD игры без выдуманного aggregateRating', ld && !('aggregateRating' in ld));
+  check('url в JSON-LD — наша страница, магазин — в sameAs',
+    ld?.url?.endsWith('/game/hades') && (!ld.sameAs || ld.sameAs.includes('steampowered.com')), `${ld?.url} | ${ld?.sameAs}`);
+  check('заголовок страницы игры содержит название и «похожие игры»',
+    /^Hades: .*похожие игры — GustoPlay$/.test(gameView.title(ctx)), gameView.title(ctx));
+  check('og:image страницы игры — обложка по https', gameView.image(ctx).startsWith('https://'));
+}
+
 console.log(`\nПроверок: ${passed + failures.length} · ✅ ${passed} · ❌ ${failures.length}`);
 if (failures.length) {
   console.log(failures.map((f) => ` - ${f}`).join('\n'));
