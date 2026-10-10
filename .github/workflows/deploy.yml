@@ -62,6 +62,8 @@ jobs:
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      # токен зоны gustoplay.ru: очистка кэша после выкладки (у основного токена нет этого права)
+      CLOUDFLARE_ZONE_TOKEN: ${{ secrets.CLOUDFLARE_ZONE_TOKEN }}
 
     steps:
       - uses: actions/checkout@v5

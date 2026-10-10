@@ -36,7 +36,7 @@ export const SITE = {
    */
   verification: {
     yandex: 'd946870a0133f842',   // Яндекс (РСЯ/Вебмастер); тот же код отдаётся файлом /yandex_<код>.html — Яндекс → «Мета-тег»: <meta name="yandex-verification" content="ВОТ_ЭТО">
-    google: '',   // Google Search Console → «Тег HTML»: <meta name="google-site-verification" content="ВОТ_ЭТО">
+    google: 'euXIpT7T3ch85PNKAA3_g3cvmAAnhpKcZdNPB9smgWQ',   // Google Search Console (выдан Site Verification API) → «Тег HTML»: <meta name="google-site-verification" content="ВОТ_ЭТО">
   },
   telegram: 'https://t.me/+K915edYs7C1iNTEy',
   languages: ['ru', 'en'],

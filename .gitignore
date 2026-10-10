@@ -25,3 +25,6 @@ docs/qa-shots/
 # Сырые HTML страниц поиска HowLongToBeat — диагностика сбора, не для коммита
 tools/hltb-pages/
 .claude/
+
+# Ключ сервисного аккаунта Google (Search Console) — только локально
+google-sa.json
