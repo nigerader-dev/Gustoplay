@@ -54,7 +54,14 @@ const ROUTES = [
 function parseLocation() {
   const raw = currentPath();
   const [pathPart, queryPart = ''] = raw.split('?');
-  const segments = pathPart.split('/').filter(Boolean).map(decodeURIComponent);
+  // Битая percent-последовательность в адресе (/game/%E0%A4) роняла decodeURIComponent,
+  // и вместо страницы 404 оставался пустой экран без шапки
+  let segments;
+  try {
+    segments = pathPart.split('/').filter(Boolean).map(decodeURIComponent);
+  } catch {
+    return { notFound: true };
+  }
   const query = Object.fromEntries(new URLSearchParams(queryPart));
   for (const route of ROUTES) {
     if (route.path.length !== segments.length) continue;
@@ -310,7 +317,7 @@ function render(scroll = true) {
   // Возврат позиции для «Показать ещё»: разметка выше кнопки не меняется,
   // поэтому человек остаётся ровно там, где нажал. behavior: 'instant' — важно:
   // 'auto' подчиняется CSS `html { scroll-behavior: smooth }`, и страница
-  // уезжала бы к цели анимацией (в брмацией (в браузерном тесте это выглядело как прыжок).
+  // уезжала бы к цели анимацией (в браузерном тесте это выглядело как прыжок).
   if (restoreScrollY !== null) {
     const y = restoreScrollY;
     restoreScrollY = null;
@@ -608,7 +615,23 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-window.addEventListener('hashchange', () => render(true));
+/**
+ * В PATH-режиме старые hash-адреса (#/account?reset=… из письма сброса пароля,
+ * ссылки из <noscript>, закладки) не открывали нужную страницу: роутер читает
+ * pathname, и человек попадал на главную. Переводим их в обычный адрес.
+ */
+function migrateHashRoute() {
+  if (!PATH_MODE || !location.hash.startsWith('#/')) return false;
+  history.replaceState(null, '', link(location.hash.slice(1)));
+  return true;
+}
+
+window.addEventListener('hashchange', () => {
+  // В PATH-режиме обычные якоря (#main у «К основному содержимому») не должны
+  // перерисовывать страницу: раньше skip-ссылка сбрасывала прокрутку и фокус.
+  if (PATH_MODE && !migrateHashRoute()) return;
+  render(true);
+});
 window.addEventListener('gf:track', (event) => track(event.detail?.name, event.detail?.params || {}));
 window.addEventListener('gf:auth-changed', () => render(false));
 window.addEventListener('popstate', () => render(true));
@@ -668,6 +691,7 @@ document.addEventListener('click', (event) => {
   // аналитика: Plausible — сразу, Метрика — только после согласия на cookie
   initAnalytics({ consent: getConsent() });
 
+  migrateHashRoute();
   render(true);
 
   // Если сохранён токен — тихо проверяем сессию и подтягиваем актуальный профиль.
@@ -712,5 +736,7 @@ function registerServiceWorker() {
   // Путь с базой деплоя: при выкладке в подпапку (GitHub Pages) жёсткий '/sw.js'
   // давал 404 — офлайн-режим молча отключался. base() возвращает '' для корня.
   const scopePath = `${base()}/sw.js`.replace(/\/{2,}/g, '/');
-  navigator.serviceWorker.register(scopePath).catch(() => { /* офлайн — необязательная роскошь */ });
+  // updateViaCache: 'none' — проверка обновления sw.js и его импортов мимо HTTP-кэша,
+  // чтобы новый релиз подхватывался при первом же заходе, а не через сутки
+  navigator.serviceWorker.register(scopePath, { updateViaCache: 'none' }).catch(() => { /* офлайн — необязательная роскошь */ });
 }

@@ -67,6 +67,26 @@ const timeOk = (game, time) => {
   return true;
 };
 
+/**
+ * Текст для поиска по игре: собирается один раз на язык, а не на каждое нажатие
+ * клавиши для каждой из ~600 игр (join + toLowerCase описаний заметно тормозил ввод
+ * на слабых телефонах).
+ */
+const searchCache = new Map();
+function searchText(g) {
+  const lang = getLang();
+  const key = `${lang}:${g.slug}`;
+  let text = searchCache.get(key);
+  if (text === undefined) {
+    text = [
+      g.t, g.dev, String(g.y), g.desc?.[lang] || '',
+      ...g.genres.map((id) => tl(GENRES, id)), ...g.tags.map((id) => tl(TAGS, id)),
+    ].join(' ').toLowerCase();
+    searchCache.set(key, text);
+  }
+  return text;
+}
+
 /** Применение фильтров к каталогу */
 export function filterGames(filters) {
   const query = filters.q.trim().toLowerCase();
@@ -80,13 +100,7 @@ export function filterGames(filters) {
     if (filters.coopLocal && !g.modes.includes('coopLocal')) return false;
     if (!priceOk(g, filters.price)) return false;
     if (!timeOk(g, filters.time)) return false;
-    if (query) {
-      const haystack = [
-        g.t, g.dev, String(g.y), g.desc?.[getLang()] || '',
-        ...g.genres.map((id) => tl(GENRES, id)), ...g.tags.map((id) => tl(TAGS, id)),
-      ].join(' ').toLowerCase();
-      if (!haystack.includes(query)) return false;
-    }
+    if (query && !searchText(g).includes(query)) return false;
     return true;
   });
 }
@@ -241,6 +255,9 @@ export function mount(root) {
     input.addEventListener('input', () => {
       clearTimeout(timer);
       timer = setTimeout(() => {
+        // Поле уже убрано со страницы (человек перешёл по ссылке, пока шёл таймер):
+        // раньше ?q= приклеивался к адресу чужой страницы — /game/x?q=…
+        if (!input.isConnected) return;
         // фокус возвращаем, только если пользователь всё ещё печатает (а не ушёл на фильтры)
         searchFocusAt = document.activeElement === input ? Date.now() : 0;
         updateQuery({ q: input.value, page: FEATURES.pageSize });
@@ -267,7 +284,7 @@ export function updateQuery(patch, { keepScroll = false } = {}) {
   else navigate(next, { replace: true, keepScroll });
 }
 
-/** Общая точка для чипов-переключателей каталога (вызывается изapp.js) */
+/** Общая точка для чипов-переключателей каталога (вызывается из app.js) */
 export function toggleFilter(kind, id, current) {
   const map = { mode: 'mode', platform: 'platform', genre: 'genre', tag: 'tag', mood: 'mood' };
   if (map[kind]) {

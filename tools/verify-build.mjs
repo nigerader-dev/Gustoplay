@@ -17,7 +17,7 @@
  * Запуск: npm run verify:build   (после npm run build)
  */
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { resolve, dirname, join, relative } from 'node:path';
+import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { GAMES } from '../js/catalog/index.js';
 
@@ -48,7 +48,7 @@ function walk(dir, out = []) {
 
 const htmlFiles = walk(dist);
 const urlOf = (file) => {
-  const rel = relative(dist, file).replace(/index\.html$/, '');
+  const rel = relative(dist, file).split(sep).join('/').replace(/index\.html$/, '');
   return `/${rel}`.replace(/\/$/, '/') || '/';
 };
 

@@ -84,7 +84,7 @@ const freePort = () => new Promise((res, rej) => {
 const PORT = Number(args.port || await freePort());
 // --dir=dist — прогон по собранному сайту: ловит поломки, которые видны только
 // после сборки (минификация CSS/JS, пре-рендер страниц)
-const server = spawn('node', ['server.js', ...(args.dir ? [`--dir=${args.dir}`] : [])], {
+const server = spawn(process.execPath, ['server.js', ...(args.dir ? [`--dir=${args.dir}`] : [])], {
   cwd: root, env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore',
 });
 const BASE = `http://${args.host || '127.0.0.1'}:${PORT}`;

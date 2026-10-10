@@ -13,6 +13,7 @@
  *   • при 401 токен автоматически забывается.
  */
 import { SITE, AUTH } from './config.js';
+import { getLang } from './i18n.js';
 
 const TOKEN_KEY = 'pn.token.v1';
 const USER_KEY = 'pn.user.v1';
@@ -77,7 +78,12 @@ async function request(path, { method = 'GET', body, auth = true, timeout = 1200
     }
 
     const text = await response.text();
-    const data = text ? JSON.parse(text) : {};
+    // Прокси/CDN при сбое отдают HTML-страницу (502/504): раньше JSON.parse падал,
+    // и человек видел «Нет связи с сервером», хотя сервер ответил ошибкой.
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch {
+      if (response.ok) throw new ApiError('Сервер вернул некорректный ответ', response.status, 'bad_response');
+    }
     if (!response.ok) {
       throw new ApiError(data.error || `Ошибка ${response.status}`, response.status, data.code || '');
     }

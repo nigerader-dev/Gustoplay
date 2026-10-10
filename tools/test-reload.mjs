@@ -8,6 +8,7 @@ import { spawn } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync, appendFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import net from 'node:net';
 import { setTimeout as sleep } from 'node:timers/promises';
 
@@ -87,8 +88,8 @@ writeFileSync(join(dir, 'js', 'b.js'), 'console.log(1)');
 const procs = [];
 async function startServer(args) {
   const port = await freePort();
-  const proc = spawn('node', ['server.js', `--dir=${dir}`, ...args], {
-    cwd: new URL('..', import.meta.url).pathname,
+  const proc = spawn(process.execPath, ['server.js', `--dir=${dir}`, ...args], {
+    cwd: fileURLToPath(new URL('..', import.meta.url)),
     env: { ...process.env, PORT: String(port) },
     stdio: ['ignore', 'pipe', 'pipe'],
   });

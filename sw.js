@@ -3,7 +3,8 @@
  *
  * Стратегии:
  *   • HTML и данные — network-first: свежесть важнее, кэш используется только если сети нет;
- *   • статика (css/js/обложки) — cache-first: файлы не меняются без смены версии;
+ *   • код (css/js) — network-first с офлайн-откатом на кэш: имена без fingerprint;
+ *   • картинки и шрифты — cache-first;
  *   • оболочка кэшируется при установке, чтобы офлайн-режим не был пустым экраном.
  *
  * Версия кэша меняется при сборке (CACHE_VERSION подставляется build-static) —
@@ -45,7 +46,12 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-const isStatic = (url) => /\.(css|js|mjs|png|jpg|jpeg|svg|webp|woff2?|ico)$/i.test(url.pathname);
+// Код (css/js) — network-first: имена файлов без fingerprint, и cache-first отдавал
+// после релиза старые модули вперемешку со свежим HTML и новыми модулями (ошибки
+// импорта, «сайт не обновляется»). Сервер отвечает 304 по must-revalidate — это дёшево.
+const isCode = (url) => /\.(css|js|mjs)$/i.test(url.pathname);
+// Картинки и шрифты не меняются без смены имени — им cache-first
+const isStatic = (url) => /\.(png|jpg|jpeg|svg|webp|avif|woff2?|ico)$/i.test(url.pathname);
 const isHtml = (request) => request.mode === 'navigate' || (request.headers.get('accept') || '').includes('text/html');
 // API считаем и при выкладке в подпапку (<base>/api/...): иначе ответы сервера
 // попадали в кэш страниц и профиль «не обновлялся» до полной очистки кэша.
@@ -58,6 +64,22 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;   // чужие домены (Google, реклама) не трогаем
   if (isApi(url)) return;                            // API всегда идёт в сеть
+
+  // Код: сначала сеть (свежая версия), при обрыве — кэш
+  if (isCode(url)) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(STATIC_CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request).then((cached) => cached || Response.error())),
+    );
+    return;
+  }
 
   // Статика: сначала кэш, потом сеть с дозаписью в кэш
   if (isStatic(url)) {

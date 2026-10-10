@@ -328,7 +328,10 @@ export function trackImpressions(slugs = []) {
     const n = (typeof prev === 'number' ? prev : prev?.n || 0) + 1;
     impressions[s] = { n, ts: now };
   }
-  write({ ...p, impressions, history: [...slugs, ...(p.history || [])].slice(0, 200) });
+  // Показы — служебная статистика: на сервер уезжают вместе со следующей настоящей
+  // правкой. Раньше каждый просмотр выдачи вызывал PUT всего профиля (до 256 КБ)
+  // — лишняя нагрузка на D1 и трафик, растущие линейно с посещаемостью.
+  write({ ...p, impressions, history: [...slugs, ...(p.history || [])].slice(0, 200) }, { skipSync: true });
 }
 
 export function setMeta(patch) {
@@ -352,11 +355,28 @@ export function exportProfile() {
  * по более позднему прохождению квиза; настройки устройства (тема, язык) не трогаем.
  * `{ replace: true }` оставлен для явного «заменить всё».
  */
+const MARK_STATUSES = new Set(['played', 'liked', 'disliked', 'wishlist']);
+
+function sanitizeMarks(marks = {}) {
+  const valid = Object.entries(marks || {})
+    .filter(([slug, m]) => typeof slug === 'string' && slug.length <= 120
+      && m && typeof m === 'object' && MARK_STATUSES.has(m.status))
+    .map(([slug, m]) => [slug, { status: m.status, ts: Number(m.ts) || 0 }])
+    .sort((a, b) => b[1].ts - a[1].ts)
+    .slice(0, CONTENT.maxMarks);
+  return Object.fromEntries(valid);
+}
+
 export function importProfile(json, { replace = false } = {}) {
   const parsed = safeParse(json, null);
   if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return false;
   const before = read();
-  const next = replace ? mergeProfile(parsed) : mergeProfiles(before, parsed);
+  const merged = replace ? mergeProfile(parsed) : mergeProfiles(before, parsed);
+  // Файл импорта — чужие данные: отбрасываем отметки с неизвестным статусом и держим
+  // лимит CONTENT.maxMarks (оставляем самые свежие). Раньше импорт обходил лимит,
+  // профиль перерастал 256 КБ, и сервер навсегда отвечал 413 на синхронизацию.
+  const next = { ...merged, marks: sanitizeMarks(merged.marks) };
+  marksCapped = Object.keys(merged.marks || {}).length > Object.keys(next.marks).length;
   write(next);
   return {
     ok: true,

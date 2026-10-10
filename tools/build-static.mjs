@@ -328,7 +328,7 @@ writeFileSync(join(dist, 'ads.txt'), adsTxt);
 const headersSrc = join(root, '_headers');
 // Имена CSS/JS без fingerprint — immutable-кэш здесь оставлять нельзя:
 // старый релиз залипнет на edge и пользователи не увидят обновления.
-const fallbackHeaders = `/*\
+const fallbackHeaders = `/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()

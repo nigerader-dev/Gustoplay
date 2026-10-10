@@ -13,7 +13,7 @@
  */
 import http from 'node:http';
 import { createReadStream, statSync, existsSync, readFileSync, readdirSync } from 'node:fs';
-import { extname, join, normalize, resolve } from 'node:path';
+import { extname, join, normalize, resolve, sep } from 'node:path';
 import { createReloader, injectReload } from './tools/live-reload.mjs';
 
 const explicitDir = process.argv.find((a) => a.startsWith('--dir='))?.slice(6);
@@ -47,6 +47,11 @@ const MIME = {
   '.map': 'application/json; charset=utf-8',
 };
 
+const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+/** Путь внутри корня: сравнение по границе сегмента, иначе /site-old «входил» бы в /site */
+const insideRoot = (p) => p === root || p.startsWith(root.endsWith(sep) ? root : root + sep);
+
 function send(res, code, body, type = 'text/plain; charset=utf-8') {
   res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
   res.end(body);
@@ -69,18 +74,27 @@ function serveFile(res, file) {
 
 const server = http.createServer((req, res) => {
   if (reloader?.handle(req, res)) return;
-  const urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
-  let target = normalize(join(root, urlPath));
+  // Битая percent-последовательность (/%E0%A4%A) раньше роняла весь процесс URIError'ом
+  let urlPath;
+  try {
+    urlPath = decodeURIComponent(new URL(req.url, 'http://x').pathname);
+  } catch {
+    return send(res, 400, 'Bad request');
+  }
+  if (urlPath.includes('\0')) return send(res, 400, 'Bad request');
+  const target = normalize(join(root, urlPath));
 
   // защита от выхода за пределы корня
-  if (!target.startsWith(root)) return send(res, 403, 'Forbidden');
+  if (!insideRoot(target)) return send(res, 403, 'Forbidden');
 
   if (existsSync(target) && statSync(target).isDirectory()) {
     const idx = join(target, 'index.html');
     if (existsSync(idx)) return serveFile(res, idx);
     // простая листинг-страница (индексов нет — только для /docs)
-    const items = readdirSync(target).map((f) => `<li><a href="${join(urlPath, f)}">${f}</a></li>`).join('');
-    return send(res, 200, `<!doctype html><meta charset=utf-8><h1>${urlPath}</h1><ul>${items}</ul>`, MIME['.html']);
+    const prefix = urlPath.endsWith('/') ? urlPath : `${urlPath}/`;
+    const items = readdirSync(target)
+      .map((f) => `<li><a href="${escHtml(encodeURI(prefix + f))}">${escHtml(f)}</a></li>`).join('');
+    return send(res, 200, `<!doctype html><meta charset=utf-8><h1>${escHtml(urlPath)}</h1><ul>${items}</ul>`, MIME['.html']);
   }
 
   if (existsSync(target) && statSync(target).isFile()) return serveFile(res, target);
@@ -91,7 +105,7 @@ const server = http.createServer((req, res) => {
     const segments = urlPath.split('/').filter(Boolean);
     for (let i = 1; i < segments.length; i++) {
       const candidate = normalize(join(root, ...segments.slice(i)));
-      if (candidate.startsWith(root) && existsSync(candidate) && statSync(candidate).isFile()) return serveFile(res, candidate);
+      if (insideRoot(candidate) && existsSync(candidate) && statSync(candidate).isFile()) return serveFile(res, candidate);
     }
   }
 
