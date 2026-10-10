@@ -63,14 +63,15 @@ check('unverified cloud availability is not inferred for the new games',
 check('Switch 2 releases use a distinct, accurate platform filter',
   GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch2')
     && !GAMES.find((game) => game.slug === 'blue-prince')?.platforms.includes('switch'));
-check('реклама остаётся mock без фиктивных сетевых ID и ads.txt',
-  config.ADS.mode === 'mock'
-    && config.ADS.rsya.clientId === ''
-    && Object.values(config.ADS.rsya.blocks).every((id) => id === '')
+check('РСЯ включена с выданным ID блока, AdSense не используется',
+  config.ADS.mode === 'rsya'
+    && Object.values(config.ADS.rsya.blocks).every((id) => /^R-A-\d+-\d+$/.test(id))
     && config.ADS.adsense.client === ''
     && Object.values(config.ADS.adsense.blocks).every((id) => id === '')
-    && config.ADS.adsense.autoAds === false
-    && config.ADS.adsTxt.length === 0);
+    && config.ADS.adsense.autoAds === false);
+check('ads.txt содержит прямую строку Яндекса из кабинета РСЯ',
+  config.ADS.adsTxt.includes('yandex.com, 332627387, DIRECT'));
+config.ADS.mode = 'mock';
 const mockSlot = adSlot('home-top');
 check('mock-слот явно помечен заглушкой и не содержит сетевых блоков',
   mockSlot.includes('ad-mock') && mockSlot.includes('Тестовая заглушка')
@@ -81,9 +82,9 @@ check('при mock-режиме приложение не загружает с�
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]'));
 config.ADS.mode = 'rsya';
 window.dispatchEvent(new window.Event('gf:rerender'));
-check('режим сети без выданных ID также не создаёт внешних запросов',
+check('без согласия на cookie скрипт РСЯ не загружается, виден баннер согласия',
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
-    && !window.document.querySelector('#consent'));
+    && Boolean(window.document.querySelector('#consent')));
 {
   // РСЯ с выданными ID: блоки заполняются на каждой странице SPA, а не только на первой
   const savedBlocks = { ...config.ADS.rsya.blocks };

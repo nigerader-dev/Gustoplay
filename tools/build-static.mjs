@@ -417,12 +417,39 @@ const fallbackHeaders = `/*
 `;
 if (existsSync(headersSrc)) {
   cpSync(headersSrc, join(dist, '_headers'));
+  // файл подтверждения Яндекса хранится как .txt — отдаём его как HTML
+  const code = String(SITE.verification?.yandex || '').replace(/[^A-Za-z0-9_-]/g, '');
+  if (code) {
+    writeFileSync(join(dist, '_headers'), `${readFileSync(join(dist, '_headers'), 'utf8')}
+/yandex_${code}.html
+  Content-Type: text/html; charset=utf-8
+`);
+  }
 } else {
   console.warn('⚠️  В корне нет _headers — собран сайт без CSP/HSTS. Смотрите docs/SECURITY.md.');
   writeFileSync(join(dist, '_headers'), fallbackHeaders);
 }
 
-writeFileSync(join(dist, '_redirects'), `# SPA-фолбэк: любые неизвестные пути отдаём индексом (200, не 404 — так работают hash-ссылки)
+// Файл подтверждения прав Яндекса: /yandex_<код>.html с текстом «Verification: <код>».
+// Cloudflare Pages перенаправляет любой *.html на адрес без расширения (308), а проверка
+// Яндекса ждёт файл ровно по адресу .html. Поэтому содержимое лежит в .txt, а правило
+// _redirects отдаёт его по нужному адресу со статусом 200, без редиректа.
+const yandexCode = String(SITE.verification?.yandex || '').replace(/[^A-Za-z0-9_-]/g, '');
+let verificationRedirect = '';
+if (yandexCode) {
+  writeFileSync(join(dist, `yandex_${yandexCode}.txt`),
+    `<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>Verification: ${yandexCode}</body>
+</html>
+`);
+  verificationRedirect = `/yandex_${yandexCode}.html  /yandex_${yandexCode}.txt  200
+`;
+}
+
+writeFileSync(join(dist, '_redirects'), `${verificationRedirect}# SPA-фолбэк: любые неизвестные пути отдаём индексом (200, не 404 — так работают hash-ссылки)
 /*  /index.html  200
 `);
 
