@@ -967,6 +967,7 @@ select.input { cursor: pointer; }
 .ad-slot .ad-network, .ad-slot .ad-body { min-height: var(--ad-height, 90px); }
 /* --text-muted на фоне --bg-sunken даёт 4.24 — меньше порога 4.5 для мелкого
    текста (нашёл аудит Lighthouse). --text-soft даёт 6.02, вид почти тот же. */
+.ad-slot.ad-empty { display: none; }
 .ad-label { display: block; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-soft); margin-bottom: 10px; }
 .ad-mock .ad-body { display: grid; gap: 4px; padding: 26px 12px; border: 1px dashed var(--surface-border); border-radius: var(--radius); color: var(--text-soft); }
 .ad-mock strong { color: var(--text-soft); }

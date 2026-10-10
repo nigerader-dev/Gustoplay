@@ -8,7 +8,7 @@ import { icon } from './icons.js';
 import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, ANALYTICS, SITE, FEATURES } from './config.js';
-import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, resetProfile, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
+import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
 import { initAnalytics, track, trackPageview } from './analytics.js';
 import { esc, jsonForHtmlScript } from './views/components.js';
 
@@ -91,6 +91,8 @@ function parseLocation() {
 const app = document.getElementById('app');
 let currentCtx = null;
 let lastRouteName = null;
+/** Ключ страницы без query: фильтры, «Показать ещё» и отметки остаются той же страницей */
+let lastPageKey = null;
 
 function navItem(href, label, name, ctx, extraClass = '') {
   const active = ctx?.name === name ? ' active' : '';
@@ -308,7 +310,25 @@ function render(scroll = true) {
   // документ (шапка/подвал/плашка тоже): раньше ссылки шапки оставались hash-ссылками
   // и в PATH-режиме не работали вовсе.
   const page = `${header(ctx)}${storageWarning()}<main id="main" class="main">${html}</main>${footer()}${consentBanner()}`;
+  // Правило РСЯ: блок на экране не перезагружается чаще раза в 30 секунд. Страница
+  // перерисовывается целиком при каждой отметке, фильтре и «Показать ещё» — без этого
+  // каждое такое действие заново запрашивало бы рекламу (накрутка показов → бан).
+  // Поэтому уже показанные блоки той же страницы переносим в новую разметку как есть.
+  const pageKey = `${ctx.name}|${parsed.path || ''}`;
+  const keptAds = new Map();
+  if (pageKey === lastPageKey) {
+    app.querySelectorAll('aside.ad-slot[data-slot]').forEach((node) => {
+      if (node.querySelector('[data-ad-done]')) keptAds.set(node.dataset.slot, node);
+    });
+  }
   app.innerHTML = PATH_MODE ? page.replace(/href="#\/([^"]*)"/g, (_, rest) => `href="${link(rest)}"`) : page;
+  if (keptAds.size) {
+    app.querySelectorAll('aside.ad-slot[data-slot]').forEach((node) => {
+      const old = keptAds.get(node.dataset.slot);
+      if (old) { node.replaceWith(old); keptAds.delete(node.dataset.slot); }
+    });
+  }
+  lastPageKey = pageKey;
   setHead(titleText, description, view?.image?.(ctx) || '');
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
   injectJsonLd(ctx, view);
@@ -381,7 +401,11 @@ function renderAdBlocks() {
     window.yaContextCb.push(() => {
       // контейнер мог исчезнуть, если человек успел уйти на другую страницу
       if (!document.getElementById(node.id)) return;
-      try { window.Ya.Context.AdvManager.render({ blockId, renderTo: node.id, pageNumber }); } catch { /* блок не отрисован */ }
+      // Нет подходящей рекламы — сворачиваем слот, чтобы не оставалась пустая рамка
+      const collapse = () => node.closest('.ad-slot')?.classList.add('ad-empty');
+      try {
+        window.Ya.Context.AdvManager.render({ blockId, renderTo: node.id, pageNumber, altCallback: collapse, onError: collapse });
+      } catch { collapse(); }
     });
   });
   document.querySelectorAll('ins.adsbygoogle:not([data-ad-done])').forEach((node) => {
@@ -509,12 +533,6 @@ document.addEventListener('click', (event) => {
       render(false);
       break;
     }
-    case 'reset-all': {
-      if (!confirm(t('profile.reset.confirm'))) return;
-      resetProfile();
-      navigate('quiz');
-      break;
-    }
     case 'menu-toggle': {
       const panel = document.getElementById('main-nav');
       const willOpen = !panel?.classList.contains('open');
@@ -554,6 +572,8 @@ document.addEventListener('click', (event) => {
       const next = getLang() === 'ru' ? 'en' : 'ru';
       setLang(next);
       setMeta({ lang: next });
+      // атрибут lang у <html> — по нему экранные дикторы и поисковики выбирают язык
+      document.documentElement.lang = next;
       render(false);
       break;
     }

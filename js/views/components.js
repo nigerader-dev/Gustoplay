@@ -44,10 +44,29 @@ export const genreChips = (game, limit = 3, link = true) => game.genres.slice(0,
     : `<span class="chip chip-genre">${icon(GENRES[id]?.icon)} ${esc(tl(GENRES, id))}</span>`))
   .join('');
 
+/**
+ * Подсказка к рейтингу человеческим языком: «доля положительных отзывов игроков Steam
+ * на 27.09.2026» вместо служебного «Рекомендации игроков Steam, снимок 27.09.2026».
+ * Источник и дата сохраняются — это обязательство честности данных (docs/CONTENT.md).
+ */
+export function ratingSourceLabel(game) {
+  const lang = getLang();
+  const raw = game.ratingSource?.[lang] || game.ratingSource?.ru || '';
+  if (!raw) return t('game.rating');
+  const iso = /(\d{4})-(\d{2})-(\d{2})/.exec(raw);
+  const ru = /(\d{2}\.\d{2}\.\d{4})/.exec(raw);
+  const date = ru ? ru[1] : iso ? `${iso[3]}.${iso[2]}.${iso[1]}` : '';
+  if (/steam/i.test(raw)) {
+    return lang === 'ru'
+      ? `Рейтинг — доля положительных отзывов игроков Steam${date ? ` на ${date}` : ''}`
+      : `Rating — share of positive Steam player reviews${date ? ` as of ${date}` : ''}`;
+  }
+  return `${t('game.rating')}: ${raw}`;
+}
+
 export const ratingPill = (game) => {
   const cls = game.rating >= 90 ? 'rating-top' : game.rating >= 80 ? 'rating-good' : 'rating-mid';
-  const source = game.ratingSource?.[getLang()];
-  const label = source ? `${t('game.rating')}: ${source}` : t('game.rating');
+  const label = ratingSourceLabel(game);
   return `<span class="rating ${cls}" title="${esc(label)}" aria-label="${esc(`${label}, ${game.rating}`)}">${esc(game.rating)}</span>`;
 };
 
@@ -62,7 +81,8 @@ export const priceLabel = (game) => {
 
 export const lengthLabel = (game) => {
   const [a, b] = game.len;
-  if (a == null || b == null) return t('game.lengthUnknown');
+  // Неизвестную длительность не выводим совсем: «Данных нет» в карточке выглядит как сбой
+  if (a == null || b == null) return '';
   if (b >= 400) return `${a}+ ${t('common.hours')}`;
   return `${a}–${b} ${t('common.hours')}`;
 };
@@ -132,7 +152,7 @@ export function gameCard(game, opts = {}) {
       ${FEATURES.scoreDebug ? whyHtml : ''}
       <div class="card-foot">
         ${priceLabel(game)}
-        <span class="len">${icon('clock')} ${esc(lengthLabel(game))}</span>
+        ${lengthLabel(game) ? `<span class="len">${icon('clock')} ${esc(lengthLabel(game))}</span>` : ''}
       </div>
       ${markButtons(game.slug, mark)}
     </div>
@@ -247,8 +267,9 @@ export function adSlot(slotId) {
       data-ad-slot="${esc(adsense)}" data-ad-format="auto" data-full-width-responsive="true"></ins>`);
   }
   if (!parts.length) return '';
+  // Своей подписи «Реклама» у блоков сети нет: РСЯ маркирует объявления сама, а лишние
+  // надписи рядом с блоком правила сети считают привлечением внимания к рекламе.
   return `<aside class="ad-slot" data-slot="${slotId}" ${reserve}>
-    <span class="ad-label">${esc(t('ad.label'))}</span>
     ${parts.join('')}
   </aside>`;
 }

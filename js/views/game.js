@@ -7,7 +7,7 @@ import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
 import { publicUrl } from '../nav.js';
-import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
+import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, playersLabel, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
 import { mountPcfit, pcfitBlock } from './pcfit.js';
 
 /* ------------------------------------------------------------------ *
@@ -85,11 +85,11 @@ export function render(ctx) {
   const facts = [
     { label: t('game.year'), value: String(game.y) },
     { label: t('game.developer'), value: game.dev },
-    { label: t('game.players'), value: `${game.players[0]}–${game.players[1]}` },
+    { label: t('game.players'), value: playersLabel(game) },
     { label: t('game.length'), value: lengthLabel(game) },
     { label: t('game.price'), value: game.price === 'free' ? t('game.free') : tl(PRICE, game.price) },
-    { label: t('game.coopQ'), value: game.coopQ ? `${game.coopQ}/10` : '—' },
-  ];
+    { label: t('game.coopQ'), value: game.coopQ ? `${game.coopQ}/10` : '' },
+  ].filter((row) => row.value); // строки без данных не показываем вместо «Данных нет» и «—»
 
   return `
   <section class="section game-page">

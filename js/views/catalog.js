@@ -231,11 +231,12 @@ export function render(ctx) {
         </div>
 
         ${found.length
-          ? `<div class="grid" id="catalog-grid">${shown.map((g) => gameCard(g, { mark: getProfile().marks?.[g.slug]?.status || null })).join('')}</div>`
+          ? `<div class="grid" id="catalog-grid">${shown.slice(0, 6).map((g) => gameCard(g, { mark: getProfile().marks?.[g.slug]?.status || null })).join('')}</div>
+            ${adSlot('catalog-inline')}
+            ${shown.length > 6 ? `<div class="grid">${shown.slice(6).map((g) => gameCard(g, { mark: getProfile().marks?.[g.slug]?.status || null })).join('')}</div>` : ''}`
           : emptyState(t('results.empty'), t('catalog.reset'), `<button type="button" class="btn btn-primary" data-action="f-reset">${esc(t('catalog.reset'))}</button>`)}
 
         ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(tp('catalog.showMore', more))}</button></div>` : ''}
-        ${adSlot('catalog-inline')}
       </div>
     </div>
   </section>`;
