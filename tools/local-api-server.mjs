@@ -18,7 +18,7 @@
 import http from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
 import { createReadStream, existsSync, mkdirSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { extname, dirname, join, normalize, resolve } from 'node:path';
+import { extname, dirname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createReloader, injectReload } from './live-reload.mjs';
 
@@ -54,6 +54,18 @@ const DB = {
       all: () => ({ results: sqlite.prepare(sql).all(...params).map((r) => Object.assign({}, r)) }),
     };
     return self;
+  },
+  /** D1 batch(): все операторы одной транзакцией */
+  batch(statements) {
+    sqlite.exec('BEGIN');
+    try {
+      const out = statements.map((st) => st.run());
+      sqlite.exec('COMMIT');
+      return out;
+    } catch (error) {
+      sqlite.exec('ROLLBACK');
+      throw error;
+    }
   },
 };
 
@@ -104,6 +116,10 @@ const MIME = {
   '.md': 'text/markdown; charset=utf-8', '.map': 'application/json; charset=utf-8',
 };
 
+const escHtml = (v) => String(v).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+/** Путь внутри корня: сравнение по границе сегмента, иначе /site-old «входил» бы в /site */
+const insideRoot = (p) => p === siteRoot || p.startsWith(siteRoot.endsWith(sep) ? siteRoot : siteRoot + sep);
+
 const send = (res, code, body, type = 'text/plain; charset=utf-8') => {
   res.writeHead(code, { 'Content-Type': type, 'Cache-Control': 'no-store' });
   res.end(body);
@@ -125,7 +141,17 @@ const serveFile = (res, file) => {
 
 /* ---------------------------- сервер ---------------------------- */
 
-const server = http.createServer(async (req, res) => {
+const server = http.createServer((req, res) => {
+  // Любая ошибка обработчика (битый URL, сбой SQLite) раньше была необработанным
+  // rejection'ом и роняла весь процесс вместе с сайтом.
+  handle(req, res).catch((error) => {
+    console.error('request_error', error?.stack || String(error));
+    if (!res.headersSent) send(res, 500, 'Internal error');
+    else res.end();
+  });
+});
+
+async function handle(req, res) {
   if (reloader?.handle(req, res)) return;
   const url = new URL(req.url, `http://localhost:${port}`);
   const origin = req.headers.origin || `http://localhost:${port}`;
@@ -158,14 +184,19 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Статика сайта — как на хостинге.
-  let target = normalize(join(siteRoot, decodeURIComponent(url.pathname)));
-  if (!target.startsWith(siteRoot)) return send(res, 403, 'Forbidden');
+  let decoded;
+  try { decoded = decodeURIComponent(url.pathname); } catch { return send(res, 400, 'Bad request'); }
+  if (decoded.includes('\0')) return send(res, 400, 'Bad request');
+  const target = normalize(join(siteRoot, decoded));
+  if (!insideRoot(target)) return send(res, 403, 'Forbidden');
 
   if (existsSync(target) && statSync(target).isDirectory()) {
     const idx = join(target, 'index.html');
     if (existsSync(idx)) return serveFile(res, idx);
-    const items = readdirSync(target).map((f) => `<li><a href="${f}">${f}</a></li>`).join('');
-    return send(res, 200, `<!doctype html><meta charset=utf-8><h1>${url.pathname}</h1><ul>${items}</ul>`, MIME['.html']);
+    const prefix = decoded.endsWith('/') ? decoded : `${decoded}/`;
+    const items = readdirSync(target)
+      .map((f) => `<li><a href="${escHtml(encodeURI(prefix + f))}">${escHtml(f)}</a></li>`).join('');
+    return send(res, 200, `<!doctype html><meta charset=utf-8><h1>${escHtml(decoded)}</h1><ul>${items}</ul>`, MIME['.html']);
   }
   if (existsSync(target) && statSync(target).isFile()) return serveFile(res, target);
 
@@ -173,14 +204,14 @@ const server = http.createServer(async (req, res) => {
     const segments = url.pathname.split('/').filter(Boolean);
     for (let i = 1; i < segments.length; i++) {
       const candidate = normalize(join(siteRoot, ...segments.slice(i)));
-      if (candidate.startsWith(siteRoot) && existsSync(candidate) && statSync(candidate).isFile()) return serveFile(res, candidate);
+      if (insideRoot(candidate) && existsSync(candidate) && statSync(candidate).isFile()) return serveFile(res, candidate);
     }
   }
 
   const fallback = join(siteRoot, 'index.html');
   if (existsSync(fallback)) return serveFile(res, fallback);
   return send(res, 404, 'Not found');
-});
+}
 
 server.listen(port, host, () => {
   console.log(`GustoPlay (сайт + API аккаунтов) → http://${host}:${port}`);

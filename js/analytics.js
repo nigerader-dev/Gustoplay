@@ -34,11 +34,25 @@ export function initAnalytics({ consent = null } = {}) {
   return metrikaReady;
 }
 
+/**
+ * Метрика без inline-скрипта: CSP сайта (_headers) не разрешает 'unsafe-inline',
+ * и прежний сниппет через innerHTML браузер молча блокировал — счётчик не работал.
+ * Очередь ym() создаём прямо в модуле, а tag.js подключаем обычным <script src>.
+ */
 function loadMetrika() {
+  const counterId = Number(ANALYTICS.yandexMetrika);
+  if (!Number.isSafeInteger(counterId) || counterId <= 0) return;
   metrikaLoaded = true;
+  if (typeof globalThis.ym !== 'function') {
+    const ym = function ym(...args) { (ym.a = ym.a || []).push(args); };
+    ym.l = Date.now();
+    globalThis.ym = ym;
+  }
   const s = document.createElement('script');
-  s.innerHTML = `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${ANALYTICS.yandexMetrika},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:false});`;
+  s.async = true;
+  s.src = 'https://mc.yandex.ru/metrika/tag.js';
   document.head.append(s);
+  globalThis.ym(counterId, 'init', { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: false });
   metrikaReady = true;
 }
 

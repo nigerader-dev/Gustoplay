@@ -46,7 +46,7 @@ const check = (name, condition, extra = '') => {
   else { console.log(`  ❌ ${name}${extra ? ` — ${extra}` : ''}`); failures.push(name); }
 };
 
-const server = spawn('node', ['server.js'], { env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore' });
+const server = spawn(process.execPath, ['server.js'], { env: { ...process.env, PORT: String(PORT) }, stdio: 'ignore' });
 await new Promise((r) => setTimeout(r, 2200));
 const BASE = `http://127.0.0.1:${PORT}`;
 let browser;

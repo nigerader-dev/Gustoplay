@@ -2,7 +2,7 @@
  * GustoPlay API — Cloudflare Worker.
  *
  * Что умеет:
- *   • регистрация и вход по e-mail и паролю (PBKDF2-SHA256, 210 000 итераций, случайная соль);
+ *   • регистрация и вход по e-mail и паролю (PBKDF2-SHA256, 100 000 итераций — предел Workers, случайная соль);
  *   • вход через Google (проверка подписанного ID-токена по JWKS Google, без секретов на клиенте);
  *   • выдача сессионных токенов (хранятся в базе только в виде SHA-256 хеша);
  *   • синхронизация профиля вкуса (чтение/запись) с лимитом размера;
@@ -23,7 +23,10 @@
 /* ------------------------------- константы ------------------------------- */
 
 const SESSION_TTL_DAYS = 90;
-const PBKDF2_ITERATIONS = 210000;
+// Cloudflare Workers (workerd) отклоняют PBKDF2 с числом итераций выше 100 000:
+// при 210 000 регистрация, вход и сброс пароля в продакшене падали с 500.
+// Локальные тесты идут в Node, где лимита нет, поэтому ошибка не ловилась.
+const PBKDF2_ITERATIONS = 100000;
 const MAX_PROFILE_BYTES = 256 * 1024;      // 256 КБ на сериализованный профиль (UTF-8)
 const MAX_AUTH_BODY_BYTES = 16 * 1024;
 const MAX_PROFILE_REQUEST_BYTES = MAX_PROFILE_BYTES + 4096; // профиль + JSON-обёртка
@@ -433,7 +436,7 @@ async function handleGoogle(request, env, origin) {
   const googleProfile = await verifyGoogleToken(body.credential, env.GOOGLE_CLIENT_ID);
   if (!googleProfile) return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
 
-  let user = await env.DB.prepare('SELECT id, email, name, provider, provider_id FROM users WHERE email = ?')
+  let user = await env.DB.prepare('SELECT id, email, name, provider, provider_id, email_verified FROM users WHERE email = ?')
     .bind(googleProfile.email).first();
 
   if (!user) {
@@ -451,6 +454,7 @@ async function handleGoogle(request, env, origin) {
       return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
     }
     if (user.provider !== 'google' || !user.provider_id) {
+      const wasVerified = Number(user.email_verified) === 1;
       await env.DB.prepare(
         'UPDATE users SET provider = ?, provider_id = ?, email_verified = 1 WHERE id = ? AND (provider_id IS NULL OR provider_id = ?)',
       ).bind('google', googleProfile.providerId, user.id, googleProfile.providerId).run();
@@ -460,11 +464,23 @@ async function handleGoogle(request, env, origin) {
       if (!user || user.provider_id !== googleProfile.providerId) {
         return respond({ error: 'Не удалось проверить вход через Google' }, 401, origin, env);
       }
+      if (!wasVerified) {
+        // Pre-account takeover: кто угодно мог зарегистрировать чужой e-mail с паролем
+        // (адрес не подтверждается). Когда настоящий владелец входит через Google,
+        // пароль и сессии того, кто создал аккаунт, должны перестать работать.
+        // Владелец при желании задаст пароль заново через «Забыли пароль».
+        await env.DB.prepare('UPDATE users SET password_hash = NULL, password_salt = NULL WHERE id = ?')
+          .bind(user.id).run();
+        await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id).run();
+      }
     }
   }
 
   const token = await createSession(env, user.id, request);
-  return respond({ token, user }, 200, origin, env);
+  return respond({
+    token,
+    user: { id: user.id, email: user.email, name: user.name, provider: user.provider },
+  }, 200, origin, env);
 }
 
 async function handleProfileGet(request, env, origin, user) {
@@ -555,12 +571,17 @@ async function handleResetConfirm(request, env, origin) {
   const problem = passwordProblem(body.password, Number(env.MIN_PASSWORD_LENGTH || 10));
   if (problem) return respond({ error: problem }, 400, origin, env);
 
+  if (token.length > 256) return respond({ error: 'Ссылка устарела. Запросите новую.' }, 400, origin, env);
   const tokenHash = await sha256Hex(token);
+  // Токен «гасим» одним атомарным UPDATE ... RETURNING: раньше проверка и пометка used
+  // шли разными запросами, и два параллельных запроса с одной ссылкой проходили оба.
   const row = await env.DB.prepare(
-    'SELECT user_id, expires_at, used FROM reset_tokens WHERE token_hash = ?',
-  ).bind(tokenHash).first();
+    `UPDATE reset_tokens SET used = 1
+      WHERE token_hash = ? AND used = 0 AND expires_at > ?
+      RETURNING user_id`,
+  ).bind(tokenHash, new Date().toISOString()).first();
 
-  if (!row || row.used || row.expires_at < new Date().toISOString()) {
+  if (!row) {
     return respond({ error: 'Ссылка устарела. Запросите новую.' }, 400, origin, env);
   }
 
@@ -569,8 +590,6 @@ async function handleResetConfirm(request, env, origin) {
   await env.DB.prepare(
     'UPDATE users SET password_hash = ?, password_salt = ?, iterations = ? WHERE id = ?',
   ).bind(hash, salt, PBKDF2_ITERATIONS, row.user_id).run();
-
-  await env.DB.prepare('UPDATE reset_tokens SET used = 1 WHERE token_hash = ?').bind(tokenHash).run();
   // все старые сессии разлогиниваем: если аккаунт увели, сброс пароля его выкидывает
   await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(row.user_id).run();
 
@@ -629,13 +648,13 @@ export default {
     // ограничение методов и маршрутизация
     try {
       if (path === '/health') return respond({ ok: true, time: new Date().toISOString() }, 200, origin, env);
-      if (path === '/support' && request.method === 'POST') return handleSupport(request, env, origin);
+      if (path === '/support' && request.method === 'POST') return await handleSupport(request, env, origin);
 
-      if (path === '/auth/register' && request.method === 'POST') return handleRegister(request, env, origin);
-      if (path === '/auth/login' && request.method === 'POST') return handleLogin(request, env, origin);
-      if (path === '/auth/google' && request.method === 'POST') return handleGoogle(request, env, origin);
-      if (path === '/auth/reset-request' && request.method === 'POST') return handleResetRequest(request, env, origin);
-      if (path === '/auth/reset-confirm' && request.method === 'POST') return handleResetConfirm(request, env, origin);
+      if (path === '/auth/register' && request.method === 'POST') return await handleRegister(request, env, origin);
+      if (path === '/auth/login' && request.method === 'POST') return await handleLogin(request, env, origin);
+      if (path === '/auth/google' && request.method === 'POST') return await handleGoogle(request, env, origin);
+      if (path === '/auth/reset-request' && request.method === 'POST') return await handleResetRequest(request, env, origin);
+      if (path === '/auth/reset-confirm' && request.method === 'POST') return await handleResetConfirm(request, env, origin);
 
       // Маршруты, которых у нас нет, честно сообщаем как 404 —
       // но только те, что не относятся к защищённым (там сначала нужен вход).
@@ -658,8 +677,8 @@ export default {
         return respond({ user: { id: user.id, email: user.email, name: user.name, provider: user.provider } }, 200, origin, env);
       }
 
-      if (path === '/me/profile' && request.method === 'GET') return handleProfileGet(request, env, origin, user);
-      if (path === '/me/profile' && request.method === 'PUT') return handleProfilePut(request, env, origin, user);
+      if (path === '/me/profile' && request.method === 'GET') return await handleProfileGet(request, env, origin, user);
+      if (path === '/me/profile' && request.method === 'PUT') return await handleProfilePut(request, env, origin, user);
 
       if (path === '/me/sessions' && request.method === 'GET') {
         const rows = await env.DB.prepare(
@@ -679,9 +698,13 @@ export default {
       }
 
       if (path === '/me' && request.method === 'DELETE') {
-        await env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id).run();
-        await env.DB.prepare('DELETE FROM profiles WHERE user_id = ?').bind(user.id).run();
-        await env.DB.prepare('DELETE FROM users WHERE id = ?').bind(user.id).run();
+        // Одним batch-ом (одна транзакция D1): обрыв посередине не оставит «полуудалённый» аккаунт
+        await env.DB.batch([
+          env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id),
+          env.DB.prepare('DELETE FROM profiles WHERE user_id = ?').bind(user.id),
+          env.DB.prepare('DELETE FROM reset_tokens WHERE user_id = ?').bind(user.id),
+          env.DB.prepare('DELETE FROM users WHERE id = ?').bind(user.id),
+        ]);
         return respond({ ok: true }, 200, origin, env);
       }
 

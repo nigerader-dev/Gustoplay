@@ -158,7 +158,7 @@ const tmp = await mkdtemp(join(tmpdir(), 'gustoplay-sysreq-'));
 const out = join(tmp, 'sysreq.js');
 const review = join(tmp, 'review.txt');
 
-const run = spawn('node', [
+const run = spawn(process.execPath, [
   'tools/pull-system-requirements.mjs',
   `--limit=${Object.keys(GAMES).length}`,
   '--passes=3',

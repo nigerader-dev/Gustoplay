@@ -78,6 +78,18 @@ const DB = {
     };
     return self;
   },
+  /** D1 batch(): все операторы одной транзакцией */
+  batch(statements) {
+    db.exec('BEGIN');
+    try {
+      const out = statements.map((st) => st.run());
+      db.exec('COMMIT');
+      return out;
+    } catch (error) {
+      db.exec('ROLLBACK');
+      throw error;
+    }
+  },
 };
 
 /* ------------------------------------------------------------------ *
@@ -227,14 +239,15 @@ check('слишком большой auth JSON отклонён до обраб�
 const registered = await call('/auth/register', { method: 'POST', body: { email: 'Player@Example.com', password: PASSWORD, name: 'Игрок' } });
 check('регистрация проходит', registered.status === 201 && Boolean(registered.json.token), `status ${registered.status}`);
 check('e-mail нормализован в нижний регистр', registered.json?.user?.email === 'player@example.com');
-const token = registered.json?.token;
+let token = registered.json?.token;
 
 const duplicate = await call('/auth/register', { method: 'POST', body: { email: 'player@example.com', password: PASSWORD } });
 check('повторная регистрация даёт 409', duplicate.status === 409, duplicate.json?.error);
 
 const stored = db.prepare('SELECT password_hash, password_salt, iterations FROM users WHERE email = ?').get('player@example.com');
 check('пароль не хранится открытым текстом', stored.password_hash !== PASSWORD && !stored.password_hash.includes('Str0ng'));
-check('соль индивидуальна и итераций не меньше 210 000', stored.password_salt.length > 10 && stored.iterations >= 210000);
+// 100 000 — максимум PBKDF2, который принимает Cloudflare Workers (workerd); больше — 500 в проде
+check('соль индивидуальна, итераций 100 000 (предел Workers)', stored.password_salt.length > 10 && stored.iterations === 100000);
 const sessionRow = db.prepare('SELECT token_hash FROM sessions LIMIT 1').get();
 check('в базе лежит только хеш токена сессии', sessionRow.token_hash !== token && sessionRow.token_hash.length > 20);
 
@@ -335,8 +348,22 @@ const preservedLink = db.prepare('SELECT provider_id FROM users WHERE email = ?'
 check('повторная Google-привязка не заменяет другой subject',
   conflictingLink.status === 401 && preservedLink.provider_id === '5555555555');
 
-const passwordStillWorks = await call('/auth/login', { method: 'POST', body: { email: 'player@example.com', password: PASSWORD } });
-check('пароль продолжает работать после привязки', passwordStillWorks.status === 200);
+// Аккаунт с паролем был создан без подтверждения e-mail: его мог завести кто угодно.
+// Вход настоящего владельца через Google обязан отозвать такой пароль и все сессии.
+const passwordRevoked = await call('/auth/login', { method: 'POST', body: { email: 'player@example.com', password: PASSWORD } });
+check('пароль неподтверждённого аккаунта отозван после входа через Google', passwordRevoked.status === 401);
+const oldSession = await call('/me', { token });
+check('сессии, открытые до привязки Google, отозваны', oldSession.status === 401);
+check('ответ Google-входа не раскрывает provider_id', linked.json?.user && !('provider_id' in linked.json.user));
+token = linked.json?.token;
+
+// Пароль можно задать заново через сброс — после этого вход по паролю снова работает
+const relinkReset = await call('/auth/reset-request', { method: 'POST', ip: '203.0.113.90', body: { email: 'player@example.com' } });
+const relinkToken = /reset=([\w-]+)/.exec(sentMails.at(-1)?.html || relinkReset.json?.debugLink || '')?.[1] || '';
+const relinkConfirm = await call('/auth/reset-confirm', { method: 'POST', ip: '203.0.113.90', body: { token: relinkToken, password: PASSWORD } });
+const passwordAgain = await call('/auth/login', { method: 'POST', ip: '203.0.113.90', body: { email: 'player@example.com', password: PASSWORD } });
+check('после сброса пароль снова работает вместе с Google', relinkConfirm.status === 200 && passwordAgain.status === 200);
+token = passwordAgain.json?.token || token;
 
 /* ------------------------------------------------------------------ *
  * 5. Профиль вкуса

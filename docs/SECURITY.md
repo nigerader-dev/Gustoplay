@@ -8,7 +8,7 @@ D1, домен или правила Cloudflare сейчас развёрнут�
 
 | Область | Проверяемая реализация | Доказательство |
 |---|---|---|
-| Пароли | PBKDF2-SHA256, 210 000 итераций, случайная соль; минимум 10 символов и проверка простых паролей | `worker/index.js`; `npm run test:api` |
+| Пароли | PBKDF2-SHA256, 100 000 итераций (максимум, который поддерживает Cloudflare Workers), случайная соль; минимум 10 символов и проверка простых паролей | `worker/index.js`; `npm run test:api` |
 | Сессии и сброс пароля | Случайный bearer-токен; в D1 сохраняется только SHA-256; срок сессии 90 дней. Ссылка сброса одноразовая, 60 минут; после смены пароля сессии отзываются | `worker/index.js`, `worker/schema.sql`; API-тесты сессии и сброса |
 | Google ID-токен | Проверка RS256/JWKS, `iss`, точного `aud`, `azp` при наличии, `iat`/`exp`/`nbf`, `sub`, формата e-mail; `email_verified` обязателен. Неизвестный `kid` запускает однократное принудительное обновление JWKS; существующую Google-привязку нельзя заменить иным `sub` | `verifyGoogleToken()` и `handleGoogle()` в `worker/index.js`; synthetic-JWKS tests в `tools/test-api.mjs` |
 | Ограничение тела | JSON авторизации — до 16 КиБ; профиль — до 256 КиБ в UTF-8 плюс небольшой запас на JSON-обёртку. Повреждённый JSON → 400, превышение → 413 | `readJsonBody()` и `handleProfilePut()` в `worker/index.js`; тесты oversized, malformed и Unicode payload |

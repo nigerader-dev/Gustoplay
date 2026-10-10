@@ -42,6 +42,18 @@ const DB = {
     };
     return self;
   },
+  /** D1 batch(): все операторы одной транзакцией */
+  batch(statements) {
+    db.exec('BEGIN');
+    try {
+      const out = statements.map((st) => st.run());
+      db.exec('COMMIT');
+      return out;
+    } catch (error) {
+      db.exec('ROLLBACK');
+      throw error;
+    }
+  },
 };
 
 const env = {
