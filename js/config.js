@@ -162,7 +162,7 @@ export const AD_SLOTS = {
 export const ANALYTICS = {
   plausibleDomain: '',   // например 'gustoplay.ru'
   umamiScript: '',       // полный URL скрипта umami
-  yandexMetrika: '',     // пусто до отдельного согласования и выдачи реального счётчика
+  yandexMetrika: '113600618', // счётчик создан через API Метрики 11.10.2026; грузится только после согласия на cookie
 };
 
 export const FEATURES = {
