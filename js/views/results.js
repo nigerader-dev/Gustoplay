@@ -71,12 +71,12 @@ export function render() {
   <section class="section results">
     <header class="section-head">
       <h1>${esc(t('results.title'))}</h1>
-      <p>${answered ? esc(t('quiz.intro')) : esc(t('home.hero.lead'))}</p>
+      ${answered ? '' : `<p>${esc(t('home.hero.lead'))}</p>`}
     </header>
 
     ${result.relaxed ? `<div class="notice">${icon('alert')} ${esc(t('results.relaxed'))}</div>` : ''}
-    ${tasteBlock}
     ${filtersBar}
+    ${tasteBlock}
     ${apiReady() && !isLoggedIn() ? `<div class="save-prompt">
       <div><strong>${icon('heart')} ${esc(t('results.saveTitle'))}</strong><p>${esc(t('results.saveText'))}</p></div>
       <a class="btn btn-primary" href="#/account" data-action="nav">${esc(t('results.saveBtn'))}</a>
@@ -85,8 +85,7 @@ export function render() {
       // Реклама — в ленте после первых шести игр, а не вплотную к фильтрам и кнопкам:
       // так она не провоцирует случайные клики (правила РСЯ)
       const opts = { whyBySlug: Object.fromEntries(result.list.map((x) => [x.game.slug, x.why])), marks: getProfile().marks };
-      const games = shown.map((x) => x.game);
-      return `${cardsGrid(games.slice(0, 6), opts)}${adSlot('results-inline')}${games.length > 6 ? cardsGrid(games.slice(6), opts) : ''}`;
+      return cardsGrid(shown.map((x) => x.game), { ...opts, insertAfter: 8, insertHtml: adSlot('results-inline') });
     })()}
     <div class="center">
       ${more ? `<button type="button" class="btn btn-outline btn-lg" data-action="show-more" data-more="${more}">${esc(t('results.more'))} (+${more})</button>` : ''}

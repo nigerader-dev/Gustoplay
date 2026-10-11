@@ -137,8 +137,8 @@ for (const [slug, width] of [['persona-5-royal', 1440], ['persona-5-royal', 1024
       rowWidth: Math.round(details.getBoundingClientRect().width),
       heights: cards.map((c) => Math.round(c.getBoundingClientRect().height)),
       emptyCards: cards.filter((c) => c.innerText.replace(/\s+/g, ' ').trim().length < 20).length,
-      wideHasFeats: Boolean(wide?.querySelector('.feats-wide li')),
-      featsOutsideWide: [...document.querySelectorAll('.feats-wide')].filter((f) => !wide?.contains(f)).length,
+      headerFeats: document.querySelectorAll('.game-info .game-feats li').length,
+      featsDup: document.querySelectorAll('.feats-wide').length,
       sysreqInHeader: Boolean(sysreq) && !details.contains(sysreq),
       sysreqLevels: [...(sysreq?.querySelectorAll('.sysreq-level') || [])].map((x) => x.textContent.trim()),
       sysreqRows: sysreq ? sysreq.querySelectorAll('dt').length : 0,
@@ -151,12 +151,11 @@ for (const [slug, width] of [['persona-5-royal', 1440], ['persona-5-royal', 1024
     };
   });
   const expectCols = width >= 1080 ? 4 : (width >= 640 ? 2 : 1);
-  check(`@${width} ${slug}: ${expectCols} вертикальных карточек в ряд + широкая на всю строку`,
-    info.cardCount === 5 && info.narrowSameRow === Math.ceil(4 / expectCols) + 1
-    && info.widths[4] > info.widths[0] * (expectCols - 0.5),
+  check(`@${width} ${slug}: ${expectCols} карточек деталей в ряд, всего 4`,
+    info.cardCount === 4 && info.narrowSameRow === Math.ceil(4 / expectCols),
     `карточек ${info.cardCount}, рядов ${info.narrowSameRow}, ширины ${info.widths.join('/')} при строке ${info.rowWidth}`);
-  check(`@${width} ${slug}: «Особенности» внутри широкого блока, а не отдельно`,
-    info.wideHasFeats && info.featsOutsideWide === 0, `внутри: ${info.wideHasFeats}, снаружи: ${info.featsOutsideWide}`);
+  check(`@${width} ${slug}: «Особенности» в шапке игры, без дубля внизу`,
+    info.headerFeats > 0 && info.featsDup === 0, `в шапке: ${info.headerFeats}, дублей: ${info.featsDup}`);
   check(`@${width} ${slug}: пустых блоков нет`, info.emptyCards === 0, `пустых ${info.emptyCards} из ${info.cardCount}`);
   if (slug === 'persona-5-royal' && width >= 1024) {
     check(`@${width} ${slug}: требования к ПК на месте «Особенностей» — минимальные и рекомендуемые`,

@@ -7,7 +7,7 @@ import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
 import { publicUrl } from '../nav.js';
-import { adSlot, breadcrumbs, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, playersLabel, priceLabel, ratingPill, storeLinks, tagChips } from './components.js';
+import { adSlot, breadcrumbs, cardPrice, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, playersLabel, ratingPill, storeLinks, tagChips } from './components.js';
 import { mountPcfit, pcfitBlock } from './pcfit.js';
 
 /* ------------------------------------------------------------------ *
@@ -80,7 +80,7 @@ export function render(ctx) {
   const genreReasons = (reasons.find((r) => r.type === 'genre')?.ids || []).map((id) => tl(GENRES, id));
   const whyAll = [...new Set([...genreReasons, ...tagReasons, ...moodReasons])].slice(0, 8);
 
-  const similar = FEATURES.similar ? similarTo(game.slug, 6) : [];
+  const similar = FEATURES.similar ? similarTo(game.slug, 8) : [];
 
   const facts = [
     { label: t('game.year'), value: String(game.y) },
@@ -108,26 +108,31 @@ export function render(ctx) {
         <h1>${esc(game.t)}</h1>
         <div class="game-sub">
           <span>${esc(game.y)}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
-          <span class="dot-sep">•</span>${priceLabel(game)}
+          <span class="dot-sep">•</span>${cardPrice(game)}
         </div>
-        <p class="game-desc">${esc(aboutText)}</p>
-        ${sysreqBlock(game, lang)}
-        ${pcfitBlock(game)}
-
         <div class="badges">${game.modes.map((m) => `<span class="badge badge-mode">${icon(MODES[m].icon)} ${esc(tl(MODES, m))}</span>`).join('')}</div>
+        <p class="game-desc">${esc(aboutText)}</p>
+
+        <div class="game-actions">
+          ${markButtons(game.slug, mark)}
+          ${storeLinks(game)}
+        </div>
 
         ${FEATURES.scoreDebug && whyAll.length ? `<div class="why-box">
-          <strong>${esc(t('results.why'))}</strong>
-          <ul class="why">${whyAll.map((w) => `<li>${esc(w)}</li>`).join('')}</ul>
+          <strong>${icon('target')} ${esc(t('results.why'))}</strong>
+          <div class="why-chips">${whyAll.map((w) => `<span>${icon('check')} ${esc(w)}</span>`).join('')}</div>
         </div>` : ''}
-
-        ${markButtons(game.slug, mark)}
-        ${storeLinks(game)}
+        ${feats.length ? `<ul class="game-feats">${feats.map((f) => `<li>${icon('star')} ${esc(f)}</li>`).join('')}</ul>` : ''}
       </div>
 
       <aside class="game-side">
         ${adSlot('game-side')}
       </aside>
+    </div>
+
+    <div class="game-pc">
+      ${sysreqBlock(game, lang)}
+      ${game.sysreq ? pcfitBlock(game) : ''}
     </div>
 
     <div class="game-details">
@@ -152,12 +157,6 @@ export function render(ctx) {
         <h2>${esc(t('game.tags'))}</h2>
         <div class="chips-cloud small">${tagChips(game, 20)}</div>
         ${meters(game)}
-      </div>
-      <div class="detail-card detail-card-wide">
-        <h2>${esc(t('game.features'))}</h2>
-        ${feats.length
-          ? `<ul class="feats-wide">${feats.map((f) => `<li>${esc(f)}</li>`).join('')}</ul>`
-          : `<p class="muted">${esc(t('game.features.none'))}</p>`}
       </div>
     </div>
 

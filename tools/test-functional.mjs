@@ -422,16 +422,15 @@ check('отметка со страницы игры сохраняется', st
 // (жалоба «нижний блок уже верхних, внутри пусто»). «Особенности» переехали вниз,
 // а их прежнее место заняли требования к ПК.
 const detailCards = [...window.document.querySelectorAll('.game-details .detail-card')];
-check('страница игры: 4 колонки и одна широкая карточка под ними',
-  detailCards.length === 5 && detailCards.filter((c) => c.classList.contains('detail-card-wide')).length === 1,
-  `${detailCards.length} карточек`);
-check('широкая карточка идёт последней и растянута на всю строку',
-  detailCards[4]?.classList.contains('detail-card-wide'));
-check('«Особенности» живут в широкой карточке, старый блок удалён',
-  count('.game-feats') === 0 && count('.detail-card-wide .feats-wide') === 1,
-  `feats-wide: ${count('.detail-card-wide .feats-wide')}`);
-check('требования к ПК стоят на месте «Особенностей» (в шапке игры)',
-  count('.game-info .sysreq') === 1);
+// Раскладка после редизайна 10.2026: действия (отметки, магазин) — сразу под описанием,
+// «За что её любят» — в шапке игры, требования к ПК — отдельным блоком под ней,
+// детали — четыре карточки по высоте содержимого.
+check('страница игры: четыре карточки деталей', detailCards.length === 4, `${detailCards.length} карточек`);
+check('отметки и магазин — в шапке игры, над деталями',
+  count('.game-info .game-actions .marks') === 1);
+check('«За что её любят» — в шапке игры, без дубля внизу',
+  count('.game-info .game-feats') === 1 && count('.feats-wide') === 0);
+check('требования к ПК — отдельным блоком под шапкой', count('.game-pc .sysreq') === 1);
 check('без данных блок требований честно об этом говорит, а не выдумывает цифры',
   count('.sysreq-cols') === 0 ? count('.sysreq-none') === 1 : count('.sysreq-cols') === 1,
   `колонок: ${count('.sysreq-cols')}, пустых: ${count('.sysreq-none')}`);
@@ -689,10 +688,8 @@ console.log('\n11. i18n: все ключи из кода есть в ru и en');
   check('все иконки есть в SVG-наборе', badIcons.length === 0,
     `${usedIcons.size} имён${badIcons.length ? `, нет: ${badIcons.join(', ')}` : ''}`);
   const homeSrc = readFileSync(resolve(root, 'js/views/home.js'), 'utf8');
-  check('массивы иконок главной на месте',
-    homeSrc.includes("icon(['edit', 'target', 'star'][n - 1])")
-    && homeSrc.includes("[['pool', 'grid'], ['explain', 'search'], ['party', 'users'], ['privacy', 'lock']]")
-    && homeSrc.includes("'controller', 'gamepad', 'dice', 'gem'"));
+  check('главная: шаги «как это работает» и коллаж обложек на месте',
+    homeSrc.includes('class="step-num"') && homeSrc.includes('hero-collage'));
   // ссылки квиза на таксономию валидны
   const badRef = [
     ...quizDef.VIBE_TAGS.filter((id) => !taxonomy.TAGS[id]).map((id) => `VIBE:${id}`),

@@ -84,31 +84,21 @@ export function render(ctx) {
       </div>
     </div>
 
-    <div class="panel">
-      <h2 class="h-lg">${esc(t('about.missing.title'))}</h2>
-      <p>${esc(t('about.missing.text'))}</p>
-      <p class="muted">${(Object.keys(GENRES).length)} ${lang === 'ru' ? 'жанров' : 'genres'} · ${Object.keys(TAGS).length} ${lang === 'ru' ? 'тегов' : 'tags'} · ${Object.keys(MOODS).length} ${lang === 'ru' ? 'настроений' : 'moods'}</p>
-    </div>
-
-    <div class="panel">
-      <h2 class="h-lg">${icon('mail')} ${esc(t('about.support.title'))}</h2>
-      <p>${esc(t('about.support.text'))}</p>
+    <div class="panel about-contact">
+      <div>
+        <h2 class="h-lg">${esc(t('about.missing.title'))}</h2>
+        <p>${esc(t('about.missing.text'))} ${esc(t('about.support.text'))}</p>
+      </div>
       <p class="panel-actions">
-        <a class="btn btn-primary" href="#/support" data-action="nav">${esc(t('common.support'))}</a>
-        <a class="btn btn-outline btn-mail" href="mailto:${esc(SITE.email)}">${icon('mail')} ${esc(SITE.email)}</a>
+        <a class="btn btn-primary" href="#/support" data-action="nav">${icon('mail')} ${esc(t('common.support'))}</a>
+        <a class="btn btn-ghost" href="#/privacy" data-action="nav">${esc(t('about.privacy.title'))}</a>
+        <a class="btn btn-ghost" href="#/terms" data-action="nav">${esc(t('common.footer.terms'))}</a>
       </p>
     </div>
-
     ${houseAd()}
-
-    <div class="panel legal" id="privacy">
-      <h2 class="h-lg">${lang === 'ru' ? 'Политика конфиденциальности' : 'Privacy policy'}</h2>
-      ${PRIVACY[lang].map(([q, a]) => `<h2 class="h-base">${esc(q)}</h2><p>${esc(a)}</p>`).join('')}
-    </div>
-
     <section class="section">
       <header class="section-head"><h2>${lang === 'ru' ? 'Проверенные игры, с которых стоит начать' : 'Proven games to start with'}</h2></header>
-      ${cardsGrid([...GAMES].sort((a, b) => b.rating - a.rating).slice(0, 3))}
+      ${cardsGrid([...GAMES].sort((a, b) => b.rating - a.rating).slice(0, 4))}
     </section>
   </section>`;
 }

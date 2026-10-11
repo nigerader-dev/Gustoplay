@@ -80,10 +80,10 @@ export function render(ctx) {
     <div class="quiz-nav">
       <button type="button" class="btn btn-ghost" data-action="quiz-back">← ${esc(t('quiz.back'))}</button>
       <button type="button" class="btn btn-ghost" data-action="quiz-skip">${esc(t('quiz.skip'))}</button>
+      <span class="quiz-finish-now" id="quiz-finish-now" hidden>
+        <button type="button" class="btn btn-outline" data-action="quiz-finish-now">${esc(t('quiz.finishNow'))}</button>
+      </span>
       <button type="button" class="btn btn-primary" data-action="quiz-next" id="quiz-next-btn"></button>
-    </div>
-    <div class="quiz-finish-now" id="quiz-finish-now" hidden>
-      <button type="button" class="btn btn-link" data-action="quiz-finish-now">${esc(t('quiz.finishNow'))} →</button>
     </div>
   </section>`;
 }
