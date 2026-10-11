@@ -145,6 +145,11 @@ check('description есть у всех страниц', withoutDescription === 
 check('canonical есть у всех индексируемых страниц', withoutCanonical === 0, `без canonical: ${withoutCanonical}`);
 check('canonical точно соответствует адресу страницы', badCanonical.length === 0,
   badCanonical.length ? `расхождений: ${badCanonical.length} → ${badCanonical.slice(0, 3).join('; ')}` : `${siteUrl}${siteBase ? ` (база ${siteBase})` : ''}`);
+// Сторонние скрипты рекламы и аналитики подключает приложение в браузере. Если они
+// «запеклись» в HTML при пре-рендере, код РСЯ и Метрики загружается дважды.
+const bakedThirdParty = htmlFiles.filter((f) => /<script[^>]+src="https:\/\/(yandex\.ru\/ads|mc\.yandex\.ru\/metrika|pagead2\.googlesyndication)/.test(readFileSync(f, 'utf8')));
+check('в собранном HTML нет «запечённых» скриптов рекламы и аналитики', bakedThirdParty.length === 0,
+  bakedThirdParty.slice(0, 3).map((f) => relative(dist, f)).join(', '));
 check('у 404.html нет canonical', !fourOhFourCanonical, fourOhFourCanonical || 'canonical отсутствует ✓');
 check('нет страниц с пустым содержимым', emptyPages.length === 0, emptyPages.slice(0, 3).join(', '));
 check('старый бренд не упоминается', oldBrand.length === 0, oldBrand.slice(0, 3).join(', '));
