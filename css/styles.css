@@ -1627,3 +1627,22 @@ select.input { cursor: pointer; }
   .quiz-nav .quiz-finish-now { order: 5; width: 100%; margin: 4px 0 0; }
   .quiz-nav .quiz-finish-now .btn { width: 100%; }
 }
+
+/* ---------- Подборки (/top) и частые вопросы ---------- */
+.faq, .more-collections { margin-top: 40px; }
+.faq h2, .more-collections h2 { font-size: 1.35rem; margin-bottom: 14px; }
+.faq-item {
+  border: 1px solid var(--surface-border); border-radius: var(--radius-lg);
+  background: var(--bg-elevated); max-width: 820px;
+}
+.faq-item + .faq-item { margin-top: 10px; }
+.faq-item summary {
+  cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none;
+  display: flex; justify-content: space-between; gap: 12px; align-items: center;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after { content: '+'; color: var(--text-muted); font-size: 1.2rem; line-height: 1; }
+.faq-item[open] summary::after { content: '−'; }
+.faq-item p { padding: 0 18px 16px; color: var(--text-soft); line-height: 1.6; }
+.collections-list .quick { min-height: 56px; }
+.section .quick-picks + .center { margin-top: 14px; }

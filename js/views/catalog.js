@@ -7,8 +7,10 @@ import { adSlot, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionL
 import { getProfile } from '../store.js';
 import { icon } from '../icons.js';
 import { FEATURES } from '../config.js';
-import { currentPath, navigate } from '../nav.js';
+import { currentPath, navigate, publicUrl } from '../nav.js';
 import { LANDING_TEXTS } from './landing-texts.js';
+import { COLLECTIONS, collectionById, collectionLinks, collectionTitle, collectionMeta } from './collections.js';
+import { taxonomySeo } from './seo-titles.js';
 
 const POPULAR_TAGS = [
   'coopfocused', 'splitscreen', 'storyrich', 'openworld', 'difficult', 'cozy', 'short',
@@ -112,15 +114,26 @@ export function filterGames(filters) {
 /** Уникальный SEO-текст лендинга таксономии (/genre/:id, /mode/:id, /mood/:id).
  *  На страницах тегов и платформ уникального текста нет — там обычный каталог. */
 export const landingFor = (ctx) => {
+  if (ctx?.name === 'collection') {
+    const c = collectionById(ctx.params?.id);
+    return c ? { meta: c.meta, body: c.intro, related: c.related, faq: c.faq } : null;
+  }
   const key = ctx?.name && ctx?.params?.id ? `${ctx.name}:${ctx.params.id}` : '';
   return LANDING_TEXTS[key] || null;
 };
+
+/** Поисковый H1/заголовок вкладки страницы таксономии (только ru, en — шаблоны) */
+const seoFor = (ctx) => (getLang() === 'ru' && ctx?.params?.id ? taxonomySeo(ctx.name, ctx.params.id) : null);
 
 /** Словари для related-ссылок: каждая ведёт на реальную страницу таксономии */
 const RELATED_DICTS = { genre: GENRES, mode: MODES, mood: MOODS, tag: TAGS, platform: PLATFORMS };
 const relatedChips = (ids = []) => ids
   .map((ref) => {
     const [kind, id] = String(ref).split(':');
+    if (kind === 'top') {
+      const c = COLLECTIONS[id];
+      return c ? `<a class="chip" href="#/top/${encodeURIComponent(id)}" data-action="nav">${icon(c.icon)} ${esc(c.h1[getLang()] || c.h1.ru)}</a>` : '';
+    }
     const dict = RELATED_DICTS[kind];
     if (!dict || !dict[id]) return '';
     const icn = dict[id].icon ? `${icon(dict[id].icon)} ` : '';
@@ -134,7 +147,7 @@ export function render(ctx) {
   const shown = found.slice(0, filters.page);
   const more = Math.min(FEATURES.pageSize, Math.max(0, found.length - shown.length));
 
-  const presetTitle = ctx.preset?.heading;
+  const presetTitle = seoFor(ctx)?.h1 || ctx.preset?.heading;
   const heading = presetTitle || t('catalog.title');
   const subtitle = presetTitle
     ? tp('catalog.subtitle', found.length)
@@ -162,7 +175,13 @@ export function render(ctx) {
   // чипы пресетных разделов (/genre/rpg и т.п.) снять нельзя — рисуем их без крестика,
   // иначе крестик обещает то, чего не делает
   const presetKey = { mode: 'modes', platform: 'platforms', genre: 'genres', tag: 'tags', mood: 'moods' };
-  const isPresetChip = (c) => (ctx.preset?.[presetKey[c.kind]] || []).some((x) => String(x) === String(c.id));
+  const isPresetChip = (c) => {
+    // у подборок (/top/…) в пресете бывают и одиночные фильтры: цена, длительность, игроки
+    if (['price', 'time', 'players', 'coopLocal'].includes(c.kind)) return ctx.preset?.[c.kind] !== undefined;
+    return (ctx.preset?.[presetKey[c.kind]] || []).some((x) => String(x) === String(c.id));
+  };
+  const faq = landing?.faq?.[getLang()] || [];
+  const isCollection = ctx.name === 'collection';
   const chipHtml = (c) => {
     const icn = c.icn ? `${icon(c.icn)} ` : '';
     return isPresetChip(c)
@@ -237,6 +256,18 @@ export function render(ctx) {
         ${more ? `<div class="center"><button type="button" class="btn btn-outline" data-action="show-more" data-more="${more}">${esc(tp('catalog.showMore', more))}</button></div>` : ''}
       </div>
     </div>
+
+    ${faq.length ? `
+    <section class="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">${esc(t('top.faq'))}</h2>
+      ${faq.map(([q, a]) => `<details class="faq-item"><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}
+    </section>` : ''}
+
+    ${isCollection || ctx.name === 'catalog' ? `
+    <section class="more-collections" aria-labelledby="more-collections-title">
+      <h2 id="more-collections-title">${esc(t(isCollection ? 'top.more' : 'top.title'))}</h2>
+      <div class="quick-picks collections-list">${collectionLinks(undefined, { exclude: ctx.params?.id })}</div>
+    </section>` : ''}
   </section>`;
 }
 
@@ -330,13 +361,40 @@ const TITLE_TEMPLATES = {
   },
 };
 export const title = (ctx) => {
+  if (ctx?.name === 'collection') return `${collectionTitle(ctx.params.id)} — ${t('site.name')}`;
+  const seo = seoFor(ctx);
+  if (seo) return `${seo.title} — ${t('site.name')}`;
   const set = TITLE_TEMPLATES[getLang()] || TITLE_TEMPLATES.ru;
   const make = set[ctx?.name] || set.catalog;
   return `${ctx?.preset?.heading ? make(ctx.preset.heading) : set.catalog()} — ${t('site.name')}`;
 };
 export const description = (ctx) => {
   // На лендингах жанров/режимов/настроений — уникальное мета-описание вместо шаблонного
+  if (ctx?.name === 'collection') return collectionMeta(ctx.params.id);
   const landing = landingFor(ctx);
   if (landing) return landing.meta[getLang()] || landing.meta.ru;
   return `${ctx?.preset?.heading || t('catalog.title')}. ${tp('catalog.subtitle', GAMES.length)}`;
 };
+
+/**
+ * Разметка для поисковиков: страница-список с первыми играми выборки.
+ * Порядок — тот же, что видит человек (по оценке), без фильтров из адреса.
+ */
+export function jsonLd(ctx) {
+  if (!['collection', 'genre', 'mode', 'tag', 'platform', 'mood'].includes(ctx?.name)) return null;
+  const filters = parseFilters({}, ctx.preset || {});
+  const games = filterGames(filters).sort(SORTS.rating).slice(0, 10);
+  const path = `${ctx.name === 'collection' ? 'top' : ctx.name}/${ctx.params.id}`;
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: title(ctx).replace(/ — [^—]+$/, ''),
+    description: description(ctx),
+    url: publicUrl(path),
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: games.length,
+      itemListElement: games.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: publicUrl(`game/${g.slug}`), name: g.t })),
+    },
+  };
+}
