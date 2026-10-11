@@ -22,6 +22,7 @@ import * as gameView from './views/game.js';
 import * as party from './views/party.js';
 import * as profileView from './views/profile.js';
 import * as about from './views/about.js';
+import * as collections from './views/collections.js';
 import * as account from './views/account.js';
 import * as terms from './views/terms.js';
 import * as support from './views/support.js';
@@ -41,6 +42,8 @@ const ROUTES = [
   { path: ['tag', ':id'], view: catalog, name: 'tag', preset: (p) => ({ tags: [p.id], heading: tl(TAGS, p.id) }) },
   { path: ['mood', ':id'], view: catalog, name: 'mood', preset: (p) => ({ moods: [p.id], heading: tl(MOODS, p.id), icon: MOODS[p.id]?.icon }) },
   { path: ['platform', ':id'], view: catalog, name: 'platform', preset: (p) => ({ platforms: [p.id], heading: tl(PLATFORMS, p.id), icon: PLATFORMS[p.id]?.icon }) },
+  { path: ['podborki'], view: collections, name: 'collections' },
+  { path: ['top', ':id'], view: catalog, name: 'collection', preset: (p) => ({ ...collections.collectionById(p.id).filters, heading: collections.collectionHeading(p.id), icon: collections.collectionById(p.id).icon }) },
   { path: ['game', ':slug'], view: gameView, name: 'game' },
   { path: ['party'], view: party, name: 'party' },
   { path: ['profile'], view: profileView, name: 'profile' },
@@ -78,6 +81,7 @@ function parseLocation() {
     if (route.name === 'tag' && !TAGS[params.id]) return { notFound: true };
     if (route.name === 'mood' && !MOODS[params.id]) return { notFound: true };
     if (route.name === 'platform' && !PLATFORMS[params.id]) return { notFound: true };
+    if (route.name === 'collection' && !collections.collectionById(params.id)) return { notFound: true };
     if (route.name === 'game' && !byId(params.slug)) return { notFound: true };
     return { route, params, query, preset: route.preset ? route.preset(params) : null, name: route.name, path: segments.join('/') };
   }
@@ -130,7 +134,7 @@ function header(ctx) {
 
 function footer() {
   const lang = getLang();
-  const topTags = ['coopfocused', 'splitscreen', 'storyrich', 'openworld', 'difficult', 'cozy', 'steamdeck', 'gacha'];
+  const topCollections = ['koop-igry-na-pk', 'igry-na-dvoih-na-odnom-pk', 'besplatnye-igry-na-pk', 'igry-dlya-slabyh-pk', 'syuzhetnye-igry'];
   return `
   <footer class="footer">
     <div class="footer-inner">
@@ -153,8 +157,9 @@ function footer() {
         ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${encodeURIComponent(id)}" data-action="nav">${esc(tl(GENRES, id))}</a>`).join('')}
       </div>
       <div class="footer-col">
-        <h2 class="footer-head">${lang === 'ru' ? 'Подборки' : 'Collections'}</h2>
-        ${topTags.map((id) => `<a href="#/tag/${encodeURIComponent(id)}" data-action="nav">${esc(tl(TAGS, id))}</a>`).join('')}
+        <h2 class="footer-head">${esc(t('top.title'))}</h2>
+        ${topCollections.map((id) => `<a href="#/top/${id}" data-action="nav">${esc(collections.collectionHeading(id))}</a>`).join('')}
+        <a href="#/podborki" data-action="nav">${esc(t('home.quick.all'))}</a>
         <a href="#/privacy" data-action="nav">${esc(t('about.privacy.title'))}</a>
         <a href="#/terms" data-action="nav">${esc(t('common.footer.terms'))}</a>
         ${consentSettingsEnabled() ? `<button type="button" class="footer-link" data-action="consent-open">${esc(t('consent.change'))}</button>` : ''}
@@ -301,7 +306,7 @@ function render(scroll = true) {
   // мобильные панели не переживают смену страницы (шторка фильтров живёт
   // только на страницах каталога, где её состояние хранит модуль catalog)
   document.body.classList.remove('menu-open');
-  if (!['catalog', 'mode', 'genre', 'tag', 'mood', 'platform'].includes(ctx.name)) {
+  if (!['catalog', 'mode', 'genre', 'tag', 'mood', 'platform', 'collection'].includes(ctx.name)) {
     catalog.setFiltersOpen(false);
   }
 

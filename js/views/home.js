@@ -6,6 +6,7 @@ import { t, tl, tp, getLang } from '../i18n.js';
 import { adSlot, houseAd, cardsGrid, sectionTitle, esc, coverImage } from './components.js';
 import { markedGames, getProfile } from '../store.js';
 import { progress } from '../quiz.js';
+import { collectionLinks } from './collections.js';
 
 export function render() {
   const lang = getLang();
@@ -16,17 +17,13 @@ export function render() {
   // Коллаж из настоящих обложек — вместо абстрактных иконок: сразу видно, что сайт про игры
   const collage = [...GAMES].filter((g) => g.cover && g.coopQ >= 8).sort((a, b) => b.rating - a.rating).slice(0, 5);
 
-  // Быстрые подборки — это ещё и внутренняя перелинковка, полезная для SEO
+  // Быстрые подборки — готовые списки под частые запросы (/top/…): удобно человеку
+  // и главная внутренняя перелинковка для поиска
   const quickPicks = [
-    { icon: 'users', key: 'opt.players2', href: '#/party?players=2', label: t('opt.players2') },
-    { icon: 'usersPlus', key: 'opt.players3', href: '#/party?players=4', label: t('opt.players3') },
-    { icon: 'user', key: 'solo', href: '#/mode/solo', label: tl(MODES, 'solo') },
-    { icon: 'globe', key: 'coop', href: '#/mode/coopOnline', label: tl(MODES, 'coopOnline') },
-    { icon: 'trophy', key: 'pvp', href: '#/mode/pvpOnline', label: tl(MODES, 'pvpOnline') },
-    { icon: 'waves', key: 'relax', href: '#/mood/relax', label: tl(MOODS, 'relax') },
-    { icon: 'ghost', key: 'scare', href: '#/mood/scare', label: tl(MOODS, 'scare') },
-    { icon: 'star', key: 'scifi', href: '#/tag/scifi', label: tl(TAGS, 'scifi') },
+    'igry-na-dvoih-na-odnom-pk', 'igry-na-dvoih-po-seti', 'igry-dlya-kompanii-druzej', 'besplatnye-koop-igry',
+    'koop-dlya-slabyh-pk', 'igry-s-devushkoj', 'koop-horrory', 'korotkie-igry-na-vecher',
   ];
+
 
   // Блок «продолжить» показываем и без отметок: иначе человек, который прошёл подбор,
   // возвращался на главную и не видел ни своих результатов, ни возможности продолжить —
@@ -77,8 +74,9 @@ export function render() {
   <section class="section">
     ${sectionTitle(t('home.quick.title'), t('home.quick.text'))}
     <div class="quick-picks">
-      ${quickPicks.map((q) => `<a class="quick" href="${q.href}" data-action="nav"><span>${icon(q.icon)}</span>${esc(q.label)}</a>`).join('')}
+      ${collectionLinks(quickPicks)}
     </div>
+    <div class="center"><a class="btn btn-link" href="#/podborki" data-action="nav">${esc(t('home.quick.all'))} →</a></div>
   </section>
 
   <section class="section">

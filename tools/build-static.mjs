@@ -20,6 +20,7 @@ import postcss from 'postcss';
 
 import { GAMES } from '../js/catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from '../js/taxonomy.js';
+import { COLLECTIONS } from '../js/views/collections.js';
 import { SITE, ADS } from '../js/config.js';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -121,6 +122,8 @@ export const ROUTES = [
   { path: '/support', priority: '0.3', changefreq: 'yearly' },
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
+  { path: '/podborki', priority: '0.8', changefreq: 'weekly' },
+  ...Object.keys(COLLECTIONS).map((id) => ({ path: `/top/${id}`, priority: '0.8', changefreq: 'weekly' })),
   ...Object.keys(GENRES).map((id) => ({ path: `/genre/${id}`, priority: '0.7', changefreq: 'weekly' })),
   ...Object.keys(TAGS).map((id) => ({ path: `/tag/${id}`, priority: '0.6', changefreq: 'weekly' })),
   ...Object.keys(MODES).map((id) => ({ path: `/mode/${id}`, priority: '0.6', changefreq: 'weekly' })),

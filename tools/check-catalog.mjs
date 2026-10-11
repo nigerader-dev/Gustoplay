@@ -138,6 +138,40 @@ const unusedGenres = Object.keys(GENRES).filter((id) => !raw.some((g) => (g.gr |
 const unusedMoods = Object.keys(MOODS).filter((id) => !raw.some((g) => (g.mood || []).includes(id)));
 
 console.log(`Всего игр: ${GAMES.length}`);
+// Подборки /top/:id (js/views/collections.js): реальные фильтры, хватает игр, тексты уникальны
+const { COLLECTIONS } = await import('../js/views/collections.js');
+const { TAXONOMY_SEO_RU } = await import('../js/views/seo-titles.js');
+const { filterGames, parseFilters } = await import('../js/views/catalog.js');
+const FILTER_DICTS = { modes: MODES, platforms: PLATFORMS, genres: GENRES, tags: TAGS, moods: MOODS };
+const seenCollectionText = new Map();
+for (const [id, c] of Object.entries(COLLECTIONS)) {
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(id)) problems.push(`top:${id}: id — латиница через дефис`);
+  for (const [key, ids] of Object.entries(c.filters)) {
+    if (FILTER_DICTS[key]) for (const x of ids) if (!FILTER_DICTS[key][x]) problems.push(`top:${id}: неизвестный ${key} «${x}»`);
+  }
+  const count = filterGames(parseFilters({}, c.filters)).length;
+  if (count < 8) problems.push(`top:${id}: всего ${count} игр — подборка слишком тонкая`);
+  for (const lang of ['ru', 'en']) {
+    for (const field of ['h1', 'title', 'meta']) if (!c[field]?.[lang]?.trim()) problems.push(`top:${id}: нет ${field}.${lang}`);
+    if (c.meta?.[lang]?.length > 160) problems.push(`top:${id}: meta.${lang} длиннее 160 символов`);
+  }
+  if ((c.intro?.ru || []).length < 2) problems.push(`top:${id}: нужно минимум 2 абзаца intro.ru`);
+  if (/\d{2,}/.test((c.intro?.ru || []).join(' '))) problems.push(`top:${id}: числа в тексте устаревают — уберите`);
+  for (const p of c.intro?.ru || []) {
+    if (seenCollectionText.has(p)) problems.push(`top:${id}: абзац повторяет «${seenCollectionText.get(p)}»`);
+    seenCollectionText.set(p, id);
+  }
+  for (const ref of c.related || []) {
+    const [kind, refId] = ref.split(':');
+    const ok = kind === 'top' ? COLLECTIONS[refId] && refId !== id : LANDING_DICTS[kind]?.[refId];
+    if (!ok) problems.push(`top:${id}: related «${ref}» не существует`);
+  }
+}
+for (const key of Object.keys(TAXONOMY_SEO_RU)) {
+  const [kind, id] = key.split(':');
+  if (!LANDING_DICTS[kind]?.[id]) problems.push(`seo-titles: «${key}» — нет такой страницы`);
+}
+console.log(`Подборки: ${Object.keys(COLLECTIONS).length}, поисковых заголовков таксономии: ${Object.keys(TAXONOMY_SEO_RU).length}`);
 console.log(`Лендинги таксономии: ${landingKeys.length} текстов (${landingRequired.length} обязательных: ${Object.keys(GENRES).length} жанров, ${Object.keys(MODES).length} режимов, ${Object.keys(MOODS).length} настроений)`);
 console.log(`Покрытие: ${JSON.stringify({ coop: STATS.coop, pvp: STATS.pvp, solo: STATS.solo })}`);
 console.log('Режимы: ' + Object.entries(MODES).map(([id, m]) => `${m.ru} — ${GAMES.filter((g) => g.modes.includes(id)).length}`).join(' | '));
