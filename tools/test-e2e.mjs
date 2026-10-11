@@ -139,7 +139,7 @@ setField('password', PASSWORD);
 form.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
 await tick(400);
 
-check('после регистрации показан кабинет', text().includes('Вы вошли как'), text().slice(0, 40).replace(/\s+/g, ' '));
+check('после регистрации показан кабинет', Boolean(window.document.querySelector('.account-head [data-action="auth-logout"]')), text().slice(0, 40).replace(/\s+/g, ' '));
 check('токен сохранён в браузере', Boolean(window.localStorage.getItem('pn.token.v1')));
 check('пользователь появился в базе', db.prepare('SELECT COUNT(*) AS n FROM users WHERE email = ?').get(EMAIL).n === 1);
 check('в базе нет открытого пароля', !JSON.stringify(db.prepare('SELECT * FROM users').all()).includes(PASSWORD));
@@ -173,7 +173,7 @@ check('ответы квиза тоже синхронизированы', remot
 
 console.log('\n3. Выход и вход');
 await navigate('account');
-check('кабинет доступен по адресу /account', text().includes('Вы вошли как'));
+check('кабинет доступен по адресу /account', Boolean(window.document.querySelector('.account-head [data-action="auth-logout"]')));
 click('[data-action="auth-logout"]');
 await tick(200);
 check('выход очистил токен', !window.localStorage.getItem('pn.token.v1'));
@@ -204,7 +204,7 @@ fill2('email', EMAIL);
 fill2('password', PASSWORD);
 loginForm2.dispatchEvent(new window.Event('submit', { bubbles: true, cancelable: true }));
 await tick(400);
-check('вход с верным паролем проходит', text().includes('Вы вошли как'));
+check('вход с верным паролем проходит', Boolean(window.document.querySelector('.account-head [data-action="auth-logout"]')));
 check('профиль вкуса подтянулся из базы', JSON.parse(window.localStorage.getItem('gf.profile.v1')).marks?.[slug]?.status === 'liked');
 check('на сервере создана новая сессия', db.prepare('SELECT COUNT(*) AS n FROM sessions').get().n === 1);
 

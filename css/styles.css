@@ -992,6 +992,12 @@ select.input { cursor: pointer; }
   animation: view-in var(--dur-slow) var(--ease) both;
 }
 .consent p { margin: 4px 0 0; color: var(--text-soft); font-size: .9rem; }
+/* уведомление о cookie: компактная полоса, не закрывает пол-экрана на телефоне */
+.consent-notice { width: min(720px, calc(100% - 32px)); padding: 12px 16px; gap: 12px; flex-wrap: nowrap; }
+.consent-notice p { margin: 0; display: flex; gap: 8px; align-items: flex-start; font-size: .86rem; line-height: 1.45; }
+.consent-notice p svg { flex: none; margin-top: 2px; color: var(--accent); }
+.consent-notice .consent-actions { flex: none; }
+@media (max-width: 560px) { .consent.consent-notice { flex-direction: row; align-items: center; bottom: 10px; } .consent-notice p { font-size: .8rem; } }
 .consent-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* ------------------------------- подвал ----------------------------------- */
@@ -1314,6 +1320,57 @@ select.input { cursor: pointer; }
 .notice-warn span { display: flex; align-items: center; gap: 8px; }
 .notice-warn svg { flex: none; }
 .account-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); margin-top: 22px; }
+/* ---------- аккаунт: карточка профиля, статистика, устройства ---------- */
+.account-layout { display: grid; gap: 18px; max-width: 760px; margin: 22px auto 0; }
+.account-card {
+  background: var(--bg-elevated); border: 1px solid var(--surface-border);
+  border-radius: var(--radius-xl); padding: 24px; box-shadow: var(--shadow-sm);
+}
+.account-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.account-avatar {
+  width: 56px; height: 56px; border-radius: 50%; flex: none; display: grid; place-items: center;
+  background: linear-gradient(135deg, var(--accent), #8b5cf6); color: #fff; font-weight: 700; font-size: 1.2rem;
+}
+.account-who { flex: 1; min-width: 180px; }
+.account-who h2 { margin: 0; font-size: 1.25rem; }
+.account-who p { margin: 2px 0 0; font-size: .88rem; overflow-wrap: anywhere; }
+.account-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0 14px; }
+.account-stat {
+  display: grid; justify-items: center; gap: 2px; padding: 14px 8px; border-radius: var(--radius);
+  background: var(--bg-sunken); color: var(--text); text-decoration: none; text-align: center;
+  transition: background var(--dur-fast) var(--ease);
+}
+.account-stat:hover { background: var(--accent-soft); }
+.account-stat strong { font-size: 1.4rem; line-height: 1.1; }
+.account-stat span:last-child { font-size: .78rem; color: var(--text-soft); }
+.account-stat-icon { color: var(--accent); }
+.account-sync { display: flex; align-items: center; gap: 8px; margin: 0 0 16px; color: var(--text-soft); font-size: .9rem; }
+.account-sync svg { color: var(--accent); flex: none; }
+.account-foot { text-align: center; font-size: .82rem; margin: 0; }
+/* «Сохраните свой подбор» на странице результатов — для тех, кто не вошёл */
+.save-prompt {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  margin: 18px 0; padding: 16px 18px; border-radius: var(--radius-lg, 16px);
+  background: var(--accent-soft); border: 1px solid var(--surface-border);
+}
+.save-prompt strong { display: flex; align-items: center; gap: 8px; color: var(--accent); }
+.save-prompt p { margin: 4px 0 0; color: var(--text-soft); font-size: .9rem; }
+.session-device { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.session-current { font-size: .78rem; font-weight: 600; color: var(--accent); padding: 4px 10px; border-radius: var(--radius-full); background: var(--accent-soft); }
+.notice-success { display: flex; align-items: center; gap: 8px; background: var(--accent-soft); color: var(--accent); }
+/* вход: форма и «зачем аккаунт» рядом, на телефоне — друг под другом */
+.auth-layout { display: grid; gap: 22px; grid-template-columns: minmax(0, 460px) minmax(0, 300px); justify-content: center; align-items: start; margin-top: 22px; }
+.auth-layout .auth-card { margin: 0; }
+.auth-why { padding: 8px 4px; }
+.auth-why ul { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 12px; }
+.auth-why li { display: flex; gap: 10px; align-items: flex-start; color: var(--text-soft); font-size: .93rem; line-height: 1.45; }
+.auth-why li svg { color: var(--accent); flex: none; margin-top: 2px; }
+.auth-card .google-slot { margin-bottom: 0; min-height: 44px; }
+@media (max-width: 760px) {
+  .auth-layout { grid-template-columns: minmax(0, 1fr); }
+  .account-stats { grid-template-columns: repeat(2, 1fr); }
+  .account-card { padding: 18px; }
+}
 .sessions { display: grid; gap: 8px; }
 .session-row {
   display: flex; align-items: center; gap: 10px; justify-content: space-between;

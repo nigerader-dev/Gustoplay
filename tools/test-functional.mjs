@@ -81,10 +81,19 @@ await import('../js/app.js');
 check('при mock-режиме приложение не загружает скрипты рекламных сетей',
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]'));
 config.ADS.mode = 'rsya';
+// строгий режим (consentRequired: true): без «Согласен» скрипт сети не грузится
+config.ADS.consentRequired = true;
 window.dispatchEvent(new window.Event('gf:rerender'));
-check('без согласия на cookie скрипт РСЯ не загружается, виден баннер согласия',
+check('строгий режим: без согласия скрипт РСЯ не загружается, есть выбор «Только необходимые»',
   !window.document.querySelector('script[src*="yandex.ru/ads"], script[src*="googlesyndication.com"]')
-    && Boolean(window.document.querySelector('#consent')));
+    && Boolean(window.document.querySelector('#consent [data-action="consent-decline"]')));
+// режим уведомления (по умолчанию): реклама работает сразу, плашка — только «Понятно»
+config.ADS.consentRequired = false;
+window.dispatchEvent(new window.Event('gf:rerender'));
+check('режим уведомления: скрипт РСЯ грузится сразу, в плашке нет отказа',
+  Boolean(window.document.querySelector('script[src*="yandex.ru/ads/system/context.js"]'))
+    && Boolean(window.document.querySelector('#consent.consent-notice [data-action="consent-accept"]'))
+    && !window.document.querySelector('#consent [data-action="consent-decline"]'));
 {
   // РСЯ с выданными ID: блоки заполняются на каждой странице SPA, а не только на первой
   const savedBlocks = { ...config.ADS.rsya.blocks };
@@ -92,6 +101,8 @@ check('без согласия на cookie скрипт РСЯ не загруж
   config.ADS.rsya.blocks['home-top'] = 'R-A-000000-1';
   config.ADS.rsya.blocks['catalog-inline'] = 'R-A-000000-2';
   window.localStorage.setItem('gf.consent.v1', 'all');
+  nav.navigate('about'); // уходим со страницы с рекламой, чтобы следующий заход был новой страницей
+  await new Promise((r) => setTimeout(r, 30));
   window.yaContextCb = [];
   nav.navigate('');
   await new Promise((r) => setTimeout(r, 30));
