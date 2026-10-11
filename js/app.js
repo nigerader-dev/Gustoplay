@@ -115,7 +115,7 @@ function header(ctx) {
         ${navItem('#/catalog', icon('grid') + ' ' + esc(t('nav.catalog')), 'catalog', ctx)}
         ${navItem('#/party', icon('users') + ' ' + esc(t('nav.party')), 'party', ctx)}
         ${navItem('#/profile', icon('heart') + ' ' + esc(t('nav.profile')), 'profile', ctx)}
-        ${navItem('#/account', (isLoggedIn() ? icon('user') : icon('lock')) + ' ' + esc(t('nav.account')), 'account', ctx)}
+        ${navItem('#/account', isLoggedIn() ? `${icon('user')} ${esc(t('nav.account'))}` : `${icon('user')} ${esc(t('nav.account.login'))}`, 'account', ctx)}
         ${navItem('#/about', esc(t('nav.about')), 'about', ctx, ' nav-link-soft')}
       </nav>
       <div class="header-tools">
@@ -202,7 +202,26 @@ function storageWarning() {
   </div>`).join('');
 }
 
+/**
+ * Режим уведомления (ADS.consentRequired = false): реклама и Метрика работают сразу,
+ * а плашка просто сообщает о cookie с одной кнопкой «Понятно». Так поступает большинство
+ * русскоязычных сайтов с РСЯ: без отдельного согласия показов рекламы заметно больше.
+ */
+function cookieNotice() {
+  const networks = activeAdNetworks();
+  if (ADS.consentRequired || !(networks.rsya || networks.adsense || ANALYTICS.yandexMetrika)) return '';
+  if (getConsent()) return '';
+  return `
+  <div class="consent consent-notice" id="consent">
+    <p>${icon('cookie')} ${esc(t('consent.notice'))} <a href="#/privacy" data-action="nav">${esc(t('consent.policy'))}</a></p>
+    <div class="consent-actions">
+      <button type="button" class="btn btn-primary" data-action="consent-accept">${esc(t('consent.ok'))}</button>
+    </div>
+  </div>`;
+}
+
 function consentBanner() {
+  if (!ADS.consentRequired) return cookieNotice();
   if (!consentSettingsEnabled()) return '';
   if (getConsent() && !consentReopen) return '';
   return `

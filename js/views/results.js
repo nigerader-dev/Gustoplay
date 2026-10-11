@@ -8,6 +8,7 @@ import { navigate } from '../nav.js';
 import { progress } from '../quiz.js';
 import { FEATURES } from '../config.js';
 import { adSlot, cardsGrid, emptyState, esc } from './components.js';
+import { apiReady, isLoggedIn } from '../api.js';
 
 let limit = FEATURES.pageSize;
 
@@ -76,6 +77,10 @@ export function render() {
     ${result.relaxed ? `<div class="notice">${icon('alert')} ${esc(t('results.relaxed'))}</div>` : ''}
     ${tasteBlock}
     ${filtersBar}
+    ${apiReady() && !isLoggedIn() ? `<div class="save-prompt">
+      <div><strong>${icon('heart')} ${esc(t('results.saveTitle'))}</strong><p>${esc(t('results.saveText'))}</p></div>
+      <a class="btn btn-primary" href="#/account" data-action="nav">${esc(t('results.saveBtn'))}</a>
+    </div>` : ''}
     ${(() => {
       // Реклама — в ленте после первых шести игр, а не вплотную к фильтрам и кнопкам:
       // так она не провоцирует случайные клики (правила РСЯ)

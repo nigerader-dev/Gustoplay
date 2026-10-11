@@ -6,7 +6,7 @@ import { esc, emptyState } from './components.js';
 import { getProfile, adoptRemote, flushSync } from '../store.js';
 import {
   apiReady, apiBase, isLoggedIn, getUser, register, login, loginWithGoogle, logout,
-  me, pullProfile, pushProfile, listSessions, revokeSession, deleteAccount,
+  me, pullProfile, pushProfile, listSessions, revokeSession,
   requestPasswordReset, confirmPasswordReset,
   renderGoogleButton, renderTurnstile,
 } from '../api.js';
@@ -24,7 +24,7 @@ const state = {
 const T = {
   ru: {
     title: 'Аккаунт',
-    lead: 'Аккаунт нужен, чтобы ответы и отметки игр были доступны на всех ваших устройствах. Можно не регистрироваться — тогда всё хранится только в этом браузере.',
+    lead: 'Войдите, чтобы ваш подбор и отметки игр сохранялись в аккаунте и были доступны на любом устройстве.',
     loginTab: 'Вход',
     registerTab: 'Регистрация',
     email: 'E-mail',
@@ -34,13 +34,23 @@ const T = {
     registerBtn: 'Создать аккаунт',
     googleBtn: 'Продолжить с Google',
     or: 'или',
+    orEmail: 'или по e-mail',
     loggedAs: 'Вы вошли как',
     syncTitle: 'Ваши данные в аккаунте',
-    syncText: 'Ответы и отметки сохраняются в аккаунте автоматически и появляются на других устройствах после входа.',
+    syncText: 'Ответы и отметки сохраняются в аккаунте автоматически — войдите на любом устройстве, и всё будет на месте.',
+    viaGoogle: 'вход через Google',
+    viaEmail: 'вход по e-mail',
+    toResults: 'Мой подбор',
+    toProfile: 'Мой вкус',
+    since: 'вход',
+    thisDevice: 'Это устройство',
+    deleteHint: 'Чтобы удалить аккаунт и все данные, напишите нам:',
+    whyTitle: 'Зачем аккаунт',
+    why: ['Подбор и отметки не потеряются, даже если очистить браузер', 'Всё доступно и с телефона, и с компьютера', 'Вход через Google — в один клик'],
     pull: 'Загрузить из аккаунта',
     push: 'Сохранить в аккаунт сейчас',
     sessions: 'Устройства, где выполнен вход',
-    revoke: 'Выйти на этом устройстве',
+    revoke: 'Выйти',
     logout: 'Выйти',
     deleteAccount: 'Удалить аккаунт',
     deleteConfirm: 'Удалить аккаунт вместе со всеми сохранёнными ответами и отметками? Это нельзя отменить.',
@@ -69,7 +79,7 @@ const T = {
   },
   en: {
     title: 'Account',
-    lead: 'An account makes your answers and game marks available on all your devices. Signing up is optional — otherwise everything stays in this browser.',
+    lead: 'Sign in so your picks and game marks are saved to your account and available on any device.',
     loginTab: 'Sign in',
     registerTab: 'Sign up',
     email: 'E-mail',
@@ -79,13 +89,24 @@ const T = {
     registerBtn: 'Create account',
     googleBtn: 'Continue with Google',
     or: 'or',
+    orEmail: 'or with e-mail',
     loggedAs: 'Signed in as',
     syncTitle: 'Your data in the account',
-    syncText: 'Answers and marks are saved to your account automatically and appear on other devices after you sign in.',
+    syncText: 'Your answers and marks are saved to your account automatically — sign in on any device and they’re there.',
+    viaGoogle: 'Google sign-in',
+    viaEmail: 'e-mail sign-in',
+    toResults: 'My picks',
+    toProfile: 'My taste',
+    since: 'signed in',
+    thisDevice: 'This device',
+    deleteHint: 'To delete your account and all data, email us:',
+    whyTitle: 'Why an account',
+    why: ['Your picks and marks are kept even if you clear the browser', 'Available on both your phone and computer', 'Google sign-in in one click'],
+    browser: 'Browser',
     pull: 'Load from account',
     push: 'Save to account now',
     sessions: 'Devices you’re signed in on',
-    revoke: 'Sign out on that device',
+    revoke: 'Sign out',
     logout: 'Sign out',
     deleteAccount: 'Delete account',
     deleteConfirm: 'Delete the account with all saved answers and marks? This cannot be undone.',
@@ -135,14 +156,29 @@ export function render(ctx = {}) {
   return `<section class="section account">
     <header class="section-head">
       <h1>${esc(L.title)}</h1>
-      <p>${esc(L.lead)}</p>
+      ${isAuth ? '' : `<p>${esc(L.lead)}</p>`}
     </header>
 
     ${state.error ? `<div class="notice notice-error">${esc(state.error)}</div>` : ''}
-    ${state.notice ? `<div class="notice">${esc(state.notice)}</div>` : ''}
+    ${noticeHtml()}
 
     ${isAuth && state.mode !== 'reset' ? authBlock(user, L) : formBlock(L)}
   </section>`;
+}
+
+/**
+ * Сообщение об успехе («Вы вышли», «Пароль обновлён») — короткое и зелёное. Раньше оно
+ * висело жёлтой плашкой-предупреждением до перезагрузки страницы.
+ */
+let noticeShownAt = 0;
+let noticeText = '';
+function noticeHtml() {
+  if (state.notice && state.notice !== noticeText) { noticeText = state.notice; noticeShownAt = Date.now(); }
+  if (!state.notice || Date.now() - noticeShownAt > 6000) { state.notice = ''; return ''; }
+  setTimeout(() => {
+    if (Date.now() - noticeShownAt >= 6000) document.querySelector('.notice-success')?.remove();
+  }, 6100);
+  return `<div class="notice notice-success" role="status">${icon('check')} ${esc(state.notice)}</div>`;
 }
 
 function formBlock(L) {
@@ -187,8 +223,12 @@ function formBlock(L) {
     </div>`;
   }
 
+  const google = AUTH.googleClientId ? `<div id="google-button" class="google-slot"></div>
+      <div class="auth-divider"><span>${esc(L.orEmail)}</span></div>` : '';
   return `
+  <div class="auth-layout">
   <div class="auth-card">
+    ${google}
     <div class="tabs">
       <button type="button" class="tab ${isRegister ? '' : 'on'}" data-action="auth-tab" data-mode="login">${esc(L.loginTab)}</button>
       <button type="button" class="tab ${isRegister ? 'on' : ''}" data-action="auth-tab" data-mode="register">${esc(L.registerTab)}</button>
@@ -207,7 +247,7 @@ function formBlock(L) {
         <span>${esc(L.password)}</span>
         <input class="input" type="password" name="password" required
           minlength="${SECURITY.minPasswordLength}" autocomplete="${isRegister ? 'new-password' : 'current-password'}">
-        <small class="muted">${esc(L.passwordHint.replace('{n}', String(SECURITY.minPasswordLength)))}</small>
+        ${isRegister ? `<small class="muted">${esc(L.passwordHint.replace('{n}', String(SECURITY.minPasswordLength)))}</small>` : ''}
         ${SECURITY.passwordStrengthMeter && isRegister ? '<span class="pw-meter"><i></i></span>' : ''}
       </label>
       ${AUTH.turnstileSiteKey ? '<div id="turnstile-slot" class="turnstile-slot"></div>' : ''}
@@ -217,59 +257,79 @@ function formBlock(L) {
     </form>
 
     ${!isRegister ? `<p class="auth-aside"><button type="button" class="btn-link" data-action="auth-tab" data-mode="forgot">${esc(L.forgot)}</button></p>` : ''}
-
-    ${AUTH.googleClientId ? `<div class="auth-divider"><span>${esc(L.or)}</span></div>
-      <div id="google-button" class="google-slot"></div>` : ''}
+  </div>
+  <aside class="auth-why">
+    <h2 class="h-base">${esc(L.whyTitle)}</h2>
+    <ul>${L.why.map((w) => `<li>${icon('check')} ${esc(w)}</li>`).join('')}</ul>
+  </aside>
   </div>`;
 }
 
 function authBlock(user, L) {
-  const profile = getProfile();
-  const marks = Object.keys(profile.marks || {}).length;
+  const name = user?.name || (user?.email || '').split('@')[0] || '';
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase() || 'G';
+  const stats = [
+    ['liked', 'thumbsUp', t('mark.liked')],
+    ['played', 'controller', t('mark.played')],
+    ['wishlist', 'bookmark', t('mark.wishlist')],
+    ['disliked', 'thumbsDown', t('mark.disliked')],
+  ];
   return `
-  <div class="account-grid">
-    <div class="panel">
-      <h2 class="h-lg">${esc(L.loggedAs)}: ${esc(user?.name || user?.email || '')}</h2>
-      <p class="muted">${esc(user?.email || '')} · ${user?.provider === 'google' ? 'Google' : 'e-mail'}</p>
-      <div class="panel-actions">
+  <div class="account-layout">
+    <div class="account-card">
+      <div class="account-head">
+        <span class="account-avatar" aria-hidden="true">${esc(initials)}</span>
+        <div class="account-who">
+          <h2>${esc(name)}</h2>
+          <p class="muted">${esc(user?.email || '')} · ${esc(user?.provider === 'google' ? L.viaGoogle : L.viaEmail)}</p>
+        </div>
         <button type="button" class="btn btn-outline" data-action="auth-logout">${esc(L.logout)}</button>
-        <button type="button" class="btn btn-ghost btn-danger" data-action="auth-delete">${icon('trash')} ${esc(L.deleteAccount)}</button>
       </div>
-    </div>
-
-    <div class="panel">
-      <h2 class="h-lg">${esc(L.syncTitle)}</h2>
-      <p class="muted">${esc(L.syncText)}</p>
-      <p class="muted">${esc(t('profile.stats', {
-        liked: countMarks('liked'), played: countMarks('played'),
-        wishlist: countMarks('wishlist'), disliked: countMarks('disliked'),
-      }))} · ${marks}</p>
+      <div class="account-stats">
+        ${stats.map(([status, ic, label]) => `<a class="account-stat" href="#/profile" data-action="nav">
+          <span class="account-stat-icon">${icon(ic)}</span>
+          <strong>${countMarks(status)}</strong>
+          <span>${esc(label)}</span>
+        </a>`).join('')}
+      </div>
+      <p class="account-sync">${icon('check')} ${esc(L.syncText)}</p>
       <div class="panel-actions">
-        <button type="button" class="btn btn-outline" data-action="sync-pull" ${state.busy ? 'disabled' : ''}>${icon('download')} ${esc(L.pull)}</button>
-        <button type="button" class="btn btn-primary" data-action="sync-push" ${state.busy ? 'disabled' : ''}>${icon('upload')} ${esc(L.push)}</button>
+        <a class="btn btn-primary" href="#/results" data-action="nav">${esc(L.toResults)}</a>
+        <a class="btn btn-ghost" href="#/profile" data-action="nav">${esc(L.toProfile)}</a>
       </div>
     </div>
 
-    ${AUTH.sessionsList ? `<div class="panel">
-      <h2 class="h-lg">${esc(L.sessions)}</h2>
-      <div class="sessions" id="sessions-list">
-        ${state.sessions.length
-          ? state.sessions.map((item) => `<div class="session-row">
-              <span>${esc(item.device || 'Браузер')}</span>
-              <span class="muted">${esc(item.createdAt || '')}</span>
-              <button type="button" class="btn btn-ghost btn-sm" data-action="session-revoke" data-id="${esc(item.id)}">${esc(L.revoke)}</button>
-            </div>`).join('')
-          : `<p class="muted">${esc(state.sessionsLoaded ? t('account.noSessions') : t('common.loading'))}</p>`}
-      </div>
+    ${AUTH.sessionsList ? `<div class="account-card">
+      <h2 class="h-base">${esc(L.sessions)}</h2>
+      <div class="sessions" id="sessions-list">${sessionsHtml(L)}</div>
     </div>` : ''}
 
-    <div class="panel">
-      <h2 class="h-lg">${esc(t('about.privacy.title'))}</h2>
-      <p class="muted">${esc(t('about.privacy.text'))}</p>
-      <p class="muted">GustoPlay · ${esc(SITE.domain)}</p>
-    </div>
+    <p class="account-foot muted">${esc(L.deleteHint)} <a href="mailto:${esc(SITE.email)}">${esc(SITE.email)}</a></p>
   </div>`;
 }
+
+/** Дата входа человеческим языком: «11 октября 2026» вместо 2026-10-11 */
+function prettyDate(iso) {
+  const d = new Date(`${String(iso).slice(0, 10)}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return '';
+  return d.toLocaleDateString(getLang() === 'ru' ? 'ru-RU' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function sessionsHtml(L) {
+  if (!state.sessions.length) return `<p class="muted">${esc(state.sessionsLoaded ? t('account.noSessions') : t('common.loading'))}</p>`;
+  // текущее устройство — первым и без кнопки выхода: для него есть «Выйти» сверху
+  const items = [...state.sessions].sort((a, b) => Number(b.current) - Number(a.current));
+  return items.map((item) => `<div class="session-row">
+      <span class="session-device">${icon(/телефон|планшет|phone|tablet/i.test(item.device || '') ? 'smartphone' : 'monitor')} ${esc(deviceLabel(item.device, L))}</span>
+      <span class="muted">${esc(L.since)} ${esc(prettyDate(item.createdAt))}</span>
+      ${item.current
+        ? `<span class="session-current">${esc(L.thisDevice)}</span>`
+        : `<button type="button" class="btn btn-ghost btn-sm" data-action="session-revoke" data-id="${esc(item.id)}">${esc(L.revoke)}</button>`}
+    </div>`).join('');
+}
+
+const DEVICE_EN = { Телефон: 'Phone', Планшет: 'Tablet', Компьютер: 'Computer' };
+const deviceLabel = (device, L) => (getLang() === 'ru' ? device || L.browser : DEVICE_EN[device] || device || L.browser);
 
 const countMarks = (status) => Object.values(getProfile().marks || {}).filter((m) => m.status === status).length;
 
@@ -406,45 +466,6 @@ export function mount(root) {
     window.dispatchEvent(new CustomEvent('gf:rerender'));
   });
 
-  root.querySelector('[data-action="auth-delete"]')?.addEventListener('click', async () => {
-    if (!confirm(s().deleteConfirm)) return;
-    try {
-      await deleteAccount();
-      state.notice = 'Аккаунт удалён';
-      window.dispatchEvent(new CustomEvent('gf:rerender'));
-    } catch (error) { fail(error.message); }
-  });
-
-  root.querySelector('[data-action="sync-pull"]')?.addEventListener('click', async () => {
-    state.busy = true;
-    try {
-      const remote = await pullProfile();
-      if (remote) {
-        // слияние, а не замена: локальные отметки, которых нет на сервере, остаются,
-        // и объединённый профиль уходит обратно
-        const merged = adoptRemote(remote);
-        await pushProfile(merged).catch(() => {});
-        state.notice = `${s().synced} · ${getLang() === 'ru' ? 'загружено с сервера' : 'pulled from server'}`;
-      } else {
-        state.notice = getLang() === 'ru' ? 'На сервере пока нет профиля — отправьте свой' : 'No profile on the server yet — push yours';
-      }
-    } catch (error) { fail(error.message); } finally {
-      state.busy = false;
-      window.dispatchEvent(new CustomEvent('gf:rerender'));
-    }
-  });
-
-  root.querySelector('[data-action="sync-push"]')?.addEventListener('click', async () => {
-    state.busy = true;
-    try {
-      await pushProfile(getProfile());
-      state.notice = s().synced;
-    } catch (error) { fail(error.message); } finally {
-      state.busy = false;
-      window.dispatchEvent(new CustomEvent('gf:rerender'));
-    }
-  });
-
   // Отзыв сессий — делегированием: список подгружается асинхронно и заменяет кнопки,
   // прямые обработчики на них умирали бы вместе со старыми узлами (кнопки не работали).
   root.querySelector('#sessions-list')?.addEventListener('click', async (event) => {
@@ -464,12 +485,7 @@ export function mount(root) {
       state.sessions = items;
       state.sessionsLoaded = true;
       const list = app$('#sessions-list');
-      if (list && !items.length) list.innerHTML = `<p class="muted">${esc(t('account.noSessions'))}</p>`;
-      else if (list) list.innerHTML = items.map((item) => `<div class="session-row">
-        <span>${esc(item.device || 'Браузер')}</span>
-        <span class="muted">${esc(item.createdAt || '')}</span>
-        <button type="button" class="btn btn-ghost btn-sm" data-action="session-revoke" data-id="${esc(item.id)}">${esc(s().revoke)}</button>
-      </div>`).join('');
+      if (list) list.innerHTML = sessionsHtml(s());
     }).catch(() => { state.sessionsLoaded = true; });
   }
 }
