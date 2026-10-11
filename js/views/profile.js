@@ -27,7 +27,7 @@ export function render() {
     return `<div class="bar-row">
       <span class="bar-label">${esc(tl(TAGS, id))}</span>
       <span class="bar"><i style="width:${width}%"></i></span>
-      <span class="bar-value">${value.toFixed(1)}</span>
+
     </div>`;
   }).join('');
 
@@ -88,7 +88,7 @@ export function render() {
     </div>
 
     <div class="panel">
-      <h2 class="h-lg">${esc(t('about.privacy.title'))}</h2>
+      <h2 class="h-lg">${esc(t('profile.dataTitle'))}</h2>
       <p class="muted">${esc(t('about.privacy.text'))}</p>
       <div class="panel-actions">
         ${FEATURES.exportProfile ? `<button type="button" class="btn btn-ghost" data-action="profile-export">${icon('download')} ${esc(t('profile.export'))}</button>` : ''}

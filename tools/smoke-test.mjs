@@ -63,7 +63,9 @@ check('есть рекламный слот (заглушка)', count('.ad-slot
 const covers = window.document.querySelectorAll('img.cover-img');
 check('обложки игр с запасным SVG-фолбэком', covers.length > 0
   && [...covers].every((img) => String(img.dataset.fallback || '').startsWith('data:image/svg')));
-check('обложки ленивые и асинхронные', [...covers].every((img) => img.getAttribute('loading') === 'lazy' && img.getAttribute('decoding') === 'async'));
+// первые обложки коллажа на первом экране грузятся сразу, остальные — лениво
+check('обложки ленивые и асинхронные', [...covers].filter((img) => !img.closest('.hero-tile'))
+  .every((img) => img.getAttribute('loading') === 'lazy' && img.getAttribute('decoding') === 'async'));
 
 console.log('\n1b. Ссылки шапки (регресс: в PATH-режиме работают, а не уходят в hash)');
 {

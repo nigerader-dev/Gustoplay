@@ -127,8 +127,9 @@ export function gameCard(game, opts = {}) {
   const lang = getLang();
   const safeSlug = esc(String(game.slug));
   const gamePath = encodeURIComponent(String(game.slug));
+  // Причины подбора — короткий список с галочками; без них — описание в три строки
   const whyHtml = why.length
-    ? `<ul class="why">${why.slice(0, 4).map((w) => `<li>${esc(w[lang] ?? w.ru ?? '')}</li>`).join('')}</ul>`
+    ? `<ul class="why why-compact" aria-label="${esc(t('results.why'))}">${why.slice(0, 3).map((w) => `<li>${icon('check')}<span>${esc(w[lang] ?? w.ru ?? '')}</span></li>`).join('')}</ul>`
     : `<p class="card-desc">${esc(game.desc?.[lang] || '')}</p>`;
 
   return `
@@ -147,11 +148,10 @@ export function gameCard(game, opts = {}) {
       <div class="card-sub">
         <span>${esc(game.y)}</span><span class="dot-sep">•</span><span>${esc(game.dev)}</span>
       </div>
-      <div class="card-chips">${genreChips(game, 2)}${tagChips(game, 2)}</div>
-      ${FEATURES.scoreDebug && why.length ? `<div class="why-title">${esc(t('results.why'))}</div>` : ''}
+      <div class="card-chips">${genreChips(game, 1, false)}${tagChips(game, 2, false)}</div>
       ${FEATURES.scoreDebug ? whyHtml : ''}
       <div class="card-foot">
-        ${priceLabel(game)}
+        ${cardPrice(game)}
         ${lengthLabel(game) ? `<span class="len">${icon('clock')} ${esc(lengthLabel(game))}</span>` : ''}
       </div>
       ${markButtons(game.slug, mark)}
@@ -159,11 +159,25 @@ export function gameCard(game, opts = {}) {
   </article>`;
 }
 
-/** Сетка карточек */
-export const cardsGrid = (games, opts = {}) => `<div class="grid">${games.map((g) => gameCard(g, {
+/**
+ * Цена в карточке — одним коротким значением: «~400 ₽», «Бесплатно», «По подписке».
+ * Раньше рядом стояли и категория, и сумма («2500 ₽ и выше · ~2500 ₽») — дубль и шум.
+ */
+export function cardPrice(game) {
+  if (game.price === 'free') return `<span class="price price-free">${esc(t('game.free'))}</span>`;
+  if (game.priceRub) return `<span class="price">~${esc(game.priceRub)} ₽</span>`;
+  return `<span class="price">${esc(tl(PRICE, game.price))}</span>`;
+}
+
+/**
+ * Сетка карточек. opts.insertAfter + opts.insertHtml — вставка внутрь сетки (реклама):
+ * блок растягивается на всю строку, а grid-auto-flow: dense подтягивает следующие
+ * карточки в свободные ячейки — дыр в ряду не остаётся при любом числе колонок.
+ */
+export const cardsGrid = (games, opts = {}) => `<div class="grid"${opts.id ? ` id="${esc(opts.id)}"` : ''}>${games.map((g, i) => (opts.insertHtml && i === opts.insertAfter ? `<div class="grid-wide">${opts.insertHtml}</div>` : '') + gameCard(g, {
   why: opts.whyBySlug?.[g.slug] || [],
   mark: opts.marks?.[g.slug]?.status || null,
-})).join('')}</div>`;
+})).join('')}${opts.insertHtml && games.length <= (opts.insertAfter ?? 0) ? `<div class="grid-wide">${opts.insertHtml}</div>` : ''}</div>`;
 
 /* ------------------------------------------------------------------ *
  * Отметки игр («играл / понравилось / не понравилось / хочу»)

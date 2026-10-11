@@ -3,7 +3,7 @@ import { GAMES, STATS } from '../catalog/index.js';
 import { icon } from '../icons.js';
 import { GENRES, TAGS, MOODS, MODES, PLATFORMS } from '../taxonomy.js';
 import { t, tl, tp, getLang } from '../i18n.js';
-import { adSlot, houseAd, cardsGrid, sectionTitle, esc } from './components.js';
+import { adSlot, houseAd, cardsGrid, sectionTitle, esc, coverImage } from './components.js';
 import { markedGames, getProfile } from '../store.js';
 import { progress } from '../quiz.js';
 
@@ -12,7 +12,9 @@ export function render() {
   const liked = markedGames().length;
 
   // «Хиты недели»: топ по рейтингу с небольшим разбором
-  const top = [...GAMES].sort((a, b) => b.rating - a.rating).slice(0, 6);
+  const top = [...GAMES].sort((a, b) => b.rating - a.rating).slice(0, 8);
+  // Коллаж из настоящих обложек — вместо абстрактных иконок: сразу видно, что сайт про игры
+  const collage = [...GAMES].filter((g) => g.cover && g.coopQ >= 8).sort((a, b) => b.rating - a.rating).slice(0, 5);
 
   // Быстрые подборки — это ещё и внутренняя перелинковка, полезная для SEO
   const quickPicks = [
@@ -55,7 +57,7 @@ export function render() {
       <div class="hero-cta">
         <a class="btn btn-primary btn-lg" href="#/quiz" data-action="nav">${icon('sparkles')} ${esc(t('home.cta.start'))}</a>
         <a class="btn btn-outline btn-lg" href="#/party" data-action="nav">${icon('users')} ${esc(t('home.cta.company'))}</a>
-        <a class="btn btn-ghost btn-lg" href="#/catalog" data-action="nav">${esc(t('home.cta.catalog'))}</a>
+        <a class="btn btn-link hero-link" href="#/catalog" data-action="nav">${esc(t('home.cta.catalog'))} →</a>
       </div>
       ${continueBlock}
       <div class="hero-stats">
@@ -65,9 +67,8 @@ export function render() {
         <div><strong>${Object.keys(TAGS).length}</strong><span>${esc(tp('home.stats.filters', Object.keys(TAGS).length))}</span></div>
       </div>
     </div>
-    <div class="hero-art" aria-hidden="true">
-      ${['controller', 'gamepad', 'dice', 'gem'].map((e, i) => `<span class="float float-${i + 1}">${icon(e)}</span>`).join('')}
-      <div class="hero-orb"></div>
+    <div class="hero-collage" aria-hidden="true">
+      ${collage.map((g, i) => `<div class="hero-tile hero-tile-${i + 1}">${coverImage(g, 'cover-img').replace('loading="lazy"', i < 3 ? 'loading="eager"' : 'loading="lazy"')}</div>`).join('')}
     </div>
   </section>
 
@@ -82,25 +83,16 @@ export function render() {
 
   <section class="section">
     ${sectionTitle(t('home.how.title'))}
-    <div class="cols-3">
-      ${[1, 2, 3].map((n) => `<div class="col">
-        <div class="col-icon">${icon(['edit', 'target', 'star'][n - 1])}</div>
+    <div class="steps">
+      ${[1, 2, 3].map((n) => `<div class="step">
+        <div class="step-num">${n}</div>
         <h3>${esc(t(`home.how.${n}.title`))}</h3>
         <p>${esc(t(`home.how.${n}.text`))}</p>
       </div>`).join('')}
     </div>
   </section>
 
-  <section class="section">
-    ${sectionTitle(t('home.features.title'))}
-    <div class="cols-4">
-      ${[['pool', 'grid'], ['explain', 'search'], ['party', 'users'], ['privacy', 'lock']].map(([id, iconName]) => `<div class="col">
-        <div class="col-icon">${icon(iconName)}</div>
-        <h3>${esc(t(`home.feature.${id}.title`))}</h3>
-        <p>${esc(t(`home.feature.${id}.text`))}</p>
-      </div>`).join('')}
-    </div>
-  </section>
+
 
   <section class="section">
     ${sectionTitle(t('home.top.title'), t('home.top.text'))}

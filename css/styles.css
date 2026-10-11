@@ -1413,3 +1413,217 @@ select.input { cursor: pointer; }
   .float { animation: none; }
   .main > section, .main > aside, .consent { animation: none; }
 }
+
+/* ===================== редизайн карточки игры (10.2026) =====================
+   Карточка была перегружена: теги-ссылки высотой 44px в 3–4 строки, подпись
+   «ОТМЕТИТЬ:», цена дублем. Теперь: теги — тихие подписи в одну строку, причины —
+   три строки с галочками, отметки — ровный ряд из четырёх кнопок. */
+.grid { grid-auto-flow: row dense; }
+.grid-wide { grid-column: 1 / -1; }
+.grid-wide .ad-slot { margin: 4px 0; }
+.game-card .card-body { padding: 14px 16px 14px; gap: 10px; }
+.game-card .card-title { font-size: 1.02rem; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.game-card .card-chips { flex-wrap: nowrap; overflow: hidden; gap: 6px;
+  -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.game-card .card-chips .chip {
+  flex: none; padding: 3px 9px; font-size: .74rem; font-weight: 600; min-height: 0;
+  background: var(--bg-sunken); color: var(--text-soft); border: 0;
+}
+.game-card .card-chips .chip-genre { background: var(--accent-soft); color: var(--accent); }
+.game-card .card-chips .chip:hover { transform: none; }
+.game-card .card-chips .chip .icon { width: .95em; height: .95em; }
+.game-card .card-desc { font-size: .88rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.why-compact { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.why-compact li { display: flex; gap: 7px; align-items: flex-start; font-size: .85rem; line-height: 1.4; margin: 0; color: var(--text-soft); }
+.why-compact li svg { flex: none; width: 15px; height: 15px; margin-top: 2px; color: var(--accent); }
+.why-compact li span { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.game-card .card-foot { padding-top: 10px; border-top: 1px solid var(--surface-border); font-size: .85rem; }
+.game-card .price { font-weight: 700; }
+/* отметки: ровный ряд, подпись «Отметить» — только для экранных дикторов */
+.game-card .marks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 0; }
+.game-card .marks-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.game-card .mark { padding: 8px 4px; border-radius: 12px; min-width: 0; }
+@media (hover: none) {
+  .game-card .mark { flex-direction: column; gap: 2px; font-size: .64rem; line-height: 1.1; padding: 6px 2px; }
+}
+
+/* ===================== главная: коллаж обложек, шаги, быстрые подборки ===================== */
+.hero { grid-template-columns: minmax(0, 1.25fr) minmax(0, .9fr); gap: 40px; padding: 56px 0 40px; }
+.hero-collage { position: relative; height: 420px; }
+.hero-tile {
+  position: absolute; width: 46%; aspect-ratio: 2 / 3; border-radius: 18px; overflow: hidden;
+  box-shadow: 0 18px 40px rgba(20, 20, 60, .22); border: 3px solid var(--bg-elevated); background: var(--bg-sunken);
+  transition: transform var(--dur-slow) var(--ease);
+}
+.hero-tile .cover-img { width: 100%; height: 100%; object-fit: cover; }
+.hero-tile-1 { left: 27%; top: 4%; z-index: 3; transform: rotate(-2deg); }
+.hero-tile-2 { left: 0; top: 16%; z-index: 2; transform: rotate(-9deg) scale(.88); }
+.hero-tile-3 { right: 0; top: 16%; z-index: 2; transform: rotate(8deg) scale(.88); }
+.hero-tile-4 { left: 8%; top: 46%; z-index: 1; transform: rotate(-14deg) scale(.7); opacity: .9; }
+.hero-tile-5 { right: 6%; top: 48%; z-index: 1; transform: rotate(13deg) scale(.7); opacity: .9; }
+.hero-collage:hover .hero-tile-1 { transform: rotate(0) translateY(-6px); }
+.hero-link { align-self: center; font-weight: 600; text-decoration: none; }
+.hero-link:hover { text-decoration: underline; }
+.continue { margin-top: 4px; }
+/* «Как это работает» — три шага с номерами в одну линию */
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; counter-reset: step; }
+.step { position: relative; padding: 22px 22px 20px; border-radius: var(--radius-lg); background: var(--bg-elevated); border: 1px solid var(--surface-border); }
+.step h3 { font-size: 1.05rem; margin: 12px 0 6px; }
+.step p { margin: 0; color: var(--text-soft); font-size: .93rem; line-height: 1.5; }
+.step-num {
+  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--grad-accent, var(--accent)); color: #fff; font-weight: 700;
+}
+/* быстрые подборки: ровная сетка 4×2, на телефоне 2 колонки */
+.quick-picks { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.quick { padding: 12px 14px; }
+@media (max-width: 900px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-top: 36px; }
+  .hero-collage { height: 210px; order: -1; max-width: 420px; width: 100%; margin: 0 auto -6px; }
+  .hero-tile { width: 34%; }
+  .hero-tile-1 { left: 33%; top: 0; }
+  .hero-tile-2 { left: 4%; top: 10%; }
+  .hero-tile-3 { right: 4%; top: 10%; }
+  .hero-tile-4, .hero-tile-5 { display: none; }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .step { display: grid; grid-template-columns: 36px 1fr; column-gap: 14px; padding: 16px; }
+  .step h3 { margin: 6px 0 4px; }
+  .step p { grid-column: 2; }
+  .quick-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .quick { padding: 10px 12px; font-size: .9rem; gap: 8px; }
+  .quick span { width: 32px; height: 32px; border-radius: 10px; }
+}
+@media (max-width: 560px) {
+  .hero-cta .btn { width: 100%; justify-content: center; }
+  .hero-link { width: 100%; text-align: center; }
+}
+/* фон героя — мягкие пятна, растворяющиеся к краям: без видимого прямоугольника */
+.hero::before {
+  inset: -40px -80px -10px; border-radius: 0;
+  background: radial-gradient(60% 70% at 18% 30%, rgba(91, 91, 214, .1), transparent 70%);
+  background:
+    radial-gradient(60% 70% at 18% 30%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 82% 40%, color-mix(in srgb, #ec4899 10%, transparent), transparent 70%);
+}
+
+/* ===================== подбор: шапка без лишних рамок ===================== */
+.results .results-bar {
+  background: transparent; border: 0; box-shadow: none; padding: 0; margin: 4px 0 14px;
+  display: flex; justify-content: space-between; align-items: center; gap: 12px 20px; flex-wrap: wrap;
+}
+.results .results-count { display: flex; align-items: baseline; gap: 6px 12px; flex-wrap: wrap; }
+.results .results-count > span:not(.results-confidence) { display: none; }
+.results .results-count h2 { font-size: 1.15rem; }
+.results .results-confidence { margin-left: 0; }
+.results .taste-mini {
+  background: transparent; border: 0; padding: 0; margin: 0 0 14px; box-shadow: none;
+  display: flex; gap: 6px 22px; flex-wrap: wrap;
+}
+.results .taste-mini > div { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.results .taste-label { margin: 0; font-size: .8rem; text-transform: none; letter-spacing: 0; font-weight: 600; }
+.results .taste-mini .chips-cloud { margin: 0; gap: 6px; }
+.results .taste-mini .chip { min-height: 32px; padding: 4px 11px; font-size: .8rem; }
+.save-prompt { padding: 12px 16px; margin: 0 0 18px; }
+@media (hover: none) { .results .taste-mini .chip { min-height: 44px; } }
+/* фильтры каталога: компактные кнопки в боковой колонке (на тач-экранах — 44px) */
+@media (hover: hover) {
+  .filters .chip-btn, .catalog-filters .chip-btn { min-height: 34px; padding: 5px 11px; font-size: .8rem; }
+}
+
+/* ===================== страница игры: действия наверху, детали ниже ===================== */
+.game-hero { grid-template-columns: 300px minmax(0, 1fr) 300px; gap: 32px; }
+.game-info .badges { margin: 4px 0 14px; }
+.game-actions {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 18px;
+  margin: 18px 0; padding: 14px 16px; border-radius: var(--radius-lg, 16px);
+  background: var(--bg-elevated); border: 1px solid var(--surface-border); box-shadow: var(--shadow-sm);
+}
+.game-actions .marks { margin: 0; }
+.game-actions .stores { margin: 0; }
+.why-box { padding: 16px 18px; }
+.why-box strong { display: flex; align-items: center; gap: 8px; }
+.why-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.why-chips span {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: var(--radius-full);
+  background: var(--bg-elevated); color: var(--text); font-size: .84rem; font-weight: 550;
+}
+.why-chips svg { width: 14px; height: 14px; color: var(--accent); }
+.game-feats { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 8px; }
+.game-feats li { display: flex; gap: 10px; align-items: flex-start; color: var(--text-soft); font-size: .95rem; line-height: 1.45; }
+.game-feats svg { flex: none; width: 16px; height: 16px; margin-top: 3px; color: #f59e0b; }
+.game-pc { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; margin-top: 30px; align-items: start; }
+.game-pc > * { margin: 0; }
+.detail-card > .facts, .detail-card > .badges, .detail-card > .chips-cloud { flex: none; align-content: start; }
+@media (max-width: 1100px) {
+  .game-hero { grid-template-columns: 240px minmax(0, 1fr); }
+  .game-side { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+  .game-hero { grid-template-columns: minmax(0, 1fr); }
+  .game-cover { max-width: 260px; margin: 0 auto; }
+  .game-pc { grid-template-columns: minmax(0, 1fr); }
+  .game-actions { flex-direction: column; align-items: stretch; }
+  .game-actions .marks, .game-actions .stores { justify-content: center; }
+}
+/* без пустой третьей колонки: реклама — под описанием, во всю ширину информации */
+.game-hero { grid-template-columns: 300px minmax(0, 1fr); }
+.game-side { grid-column: 2; }
+.game-side:empty { display: none; }
+.game-details { align-items: start; }
+@media (hover: hover) { .detail-card a.chip { min-height: 32px; padding: 4px 11px; } }
+@media (max-width: 1100px) { .game-hero { grid-template-columns: 240px minmax(0, 1fr); } }
+@media (max-width: 760px) { .game-side { grid-column: 1; } }
+
+/* ===================== «На компанию»: один аккуратный блок фильтров ===================== */
+.party-form {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 0; align-items: stretch;
+  background: var(--bg-elevated); border: 1px solid var(--surface-border); border-radius: var(--radius-lg, 16px);
+  box-shadow: var(--shadow-sm); margin: 8px 0 18px;
+}
+.party-form .filter-group { background: none; border: 0; border-radius: 0; padding: 16px 20px; }
+.party-form .filter-group + .filter-group { border-left: 1px solid var(--surface-border); }
+.party-form .filter-group:last-child { display: flex; flex-direction: column; justify-content: center; }
+.party-form .filter-group:last-child .filter-title { display: none; }
+.party-summary {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 16px;
+  font-size: 1rem; color: var(--text); font-weight: 650;
+}
+.party-summary svg { color: var(--accent); }
+@media (max-width: 900px) {
+  .party-form { grid-template-columns: minmax(0, 1fr); }
+  .party-form .filter-group + .filter-group { border-left: 0; border-top: 1px solid var(--surface-border); }
+}
+/* «Мой вкус»: полоски без служебных чисел, карточки по высоте содержимого */
+.bar-row { grid-template-columns: minmax(120px, max-content) minmax(0, 1fr); }
+.profile-grid, .profile .cols-2 { align-items: start; }
+/* «Как это работает»: отступ между блоками, контакт одной плашкой */
+.about .panel { margin-top: 18px; }
+.about .cols-2 { align-items: stretch; }
+.about-contact { display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; }
+.about-contact > div { flex: 1 1 360px; }
+.about-contact p { margin: 0; color: var(--text-soft); }
+/* страницы-формы (вход, поддержка): заголовок по центру, над формой */
+.support-page > .section-head, .account > .section-head { text-align: center; }
+.support-page > .section-head p, .account > .section-head p { margin-inline: auto; max-width: 56ch; }
+/* (порядок важен: мобильная раскладка героя игры — после десктопных правил выше) */
+@media (max-width: 760px) {
+  .game-hero { grid-template-columns: minmax(0, 1fr); }
+  .game-cover { max-width: 240px; margin: 0 auto; }
+}
+/* пустые состояния и 404: кнопки по центру под текстом */
+.empty .panel-actions { justify-content: center; }
+.hero::before {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 15%, #000 80%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent), linear-gradient(180deg, transparent, #000 15%, #000 80%, transparent);
+  mask-composite: intersect;
+}
+/* квиз: «Показать игры сейчас» — в одном ряду с навигацией, перед «Дальше» */
+.quiz-nav .quiz-finish-now { margin-left: auto; margin-top: 0; display: inline-flex; }
+.quiz-nav .quiz-finish-now[hidden] { display: none; }
+.quiz-nav .quiz-finish-now:not([hidden]) + .btn-primary { margin-left: 0; }
+@media (max-width: 560px) {
+  .quiz-nav { flex-wrap: wrap; }
+  .quiz-nav .quiz-finish-now { order: 5; width: 100%; margin: 4px 0 0; }
+  .quiz-nav .quiz-finish-now .btn { width: 100%; }
+}

@@ -18,6 +18,8 @@ const hasPlausible = () => Boolean(ANALYTICS.plausibleDomain);
 
 /** Подключает счётчики: Plausible — сразу (без cookie), Метрику — только с согласием */
 export function initAnalytics({ consent = null } = {}) {
+  // при пре-рендере счётчики не ставим: тег попал бы в HTML и грузился дважды
+  if (globalThis.__GP_PRERENDER__) return false;
   if (hasPlausible() && !document.querySelector('script[data-pn-analytics="plausible"]')) {
     const script = document.createElement('script');
     script.defer = true;

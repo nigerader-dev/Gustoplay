@@ -401,6 +401,10 @@ let adScriptsLoaded = false;
  * (вместо прежнего setTimeout на 400 мс, который на медленной сети не успевал).
  */
 function ensureAdScripts() {
+  // При пре-рендере (сборка HTML) рекламу не подключаем: скрипт сети «запекался» в каждую
+  // страницу, и в браузере код РСЯ грузился дважды; очередь yaContextCb к тому же копила
+  // ссылки на DOM всех 780 страниц и роняла сборку по памяти.
+  if (globalThis.__GP_PRERENDER__) return;
   const networks = activeAdNetworks();
   if (!networks.rsya && !networks.adsense) return;
   if (ADS.consentRequired && getConsent() !== 'all') return;
