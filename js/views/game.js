@@ -1,5 +1,5 @@
 /** Страница игры: полная карточка, объяснение «почему вам подходит» и похожие игры. */
-import { byId } from '../catalog/index.js';
+import { byId, isSysreqLoaded, loadSysreq } from '../catalog/index.js';
 import { icon } from '../icons.js';
 import { GENRES, TAGS, MODES, PLATFORMS, PRICE, MOODS } from '../taxonomy.js';
 import { t, tl, getLang } from '../i18n.js';
@@ -7,7 +7,7 @@ import { similarTo, computeWeights, scoreGame } from '../engine.js';
 import { getProfile } from '../store.js';
 import { FEATURES } from '../config.js';
 import { publicUrl } from '../nav.js';
-import { adSlot, breadcrumbs, cardPrice, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, playersLabel, ratingPill, storeLinks, tagChips } from './components.js';
+import { adSlot, breadcrumbLd, breadcrumbs, cardPrice, cardsGrid, coverImage, esc, lengthLabel, markButtons, meters, playersLabel, ratingPill, storeLinks, tagChips } from './components.js';
 import { mountPcfit, pcfitBlock } from './pcfit.js';
 
 /* ------------------------------------------------------------------ *
@@ -52,6 +52,9 @@ export function sysreqBlock(game, lang) {
 }
 
 /** Обработчики страницы: блок проверки «подходит ли ваш ПК» */
+/** Перед рендером страницы игры нужны требования к ПК (ленивый файл): null — уже готово */
+export const prepare = () => (isSysreqLoaded() ? null : loadSysreq());
+
 export function mount(root) {
   mountPcfit(root);
 }
@@ -101,7 +104,7 @@ export function render(ctx) {
 
     <div class="game-hero">
       <div class="game-cover">
-        ${coverImage(game, 'cover-hero')}
+        ${coverImage(game, 'cover-hero').replace('loading="lazy"', 'loading="eager" fetchpriority="high"')}
         ${ratingPill(game)}
       </div>
       <div class="game-info">
@@ -194,7 +197,15 @@ export function jsonLd(ctx) {
   if (game.cover) data.image = game.cover;
   // страница в магазине — это «та же сущность в другом месте», а не адрес нашей страницы
   if (game.steamId) data.sameAs = `https://store.steampowered.com/app/${game.steamId}/`;
-  return data;
+  // те же крошки, что видны на странице: Главная → Каталог → жанр → игра
+  const crumbs = breadcrumbLd([
+    { name: t('nav.home'), url: publicUrl('') },
+    { name: t('nav.catalog'), url: publicUrl('catalog') },
+    { name: tl(GENRES, game.genres[0]), url: publicUrl(`genre/${game.genres[0]}`) },
+    { name: game.t },
+  ]);
+  delete data['@context'];
+  return { '@context': 'https://schema.org', '@graph': [data, crumbs] };
 }
 
 /** Обложка игры для превью ссылки (og:image) — только официальный арт по https */

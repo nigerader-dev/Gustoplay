@@ -102,6 +102,14 @@ export const meters = (game) => {
  * Обложка игры
  * ------------------------------------------------------------------ */
 
+/** Ширина обложки на экране (атрибут sizes): по ней браузер выбирает размер из srcset */
+const COVER_SIZES = {
+  'cover-img': '(max-width: 600px) 50vw, 300px',
+  'cover-hero': '(max-width: 900px) 260px, 360px',
+  'seed-img': '120px',
+  'mark-img': '80px',
+};
+
 export function coverImage(game, cls = 'cover-img') {
   const generated = coverDataUri(game);
   // Порядок источников обложки:
@@ -113,9 +121,17 @@ export function coverImage(game, cls = 'cover-img') {
   // раньше в этом случае показывался сломанный значок изображения.
   const shop = typeof game.cover === 'string' && /^https?:\/\//i.test(game.cover) ? game.cover : '';
   const local = `covers/${encodeURIComponent(String(game.slug))}.jpg`;
-  const src = FEATURES.realCovers ? local : (shop || generated);
+  // Арт Steam есть в двух размерах: 600×900 (~65 КБ) и _2x 1200×1800 (~220 КБ).
+  // Карточки на экране — 150–300 px, поэтому по умолчанию берём обычный размер,
+  // а _2x браузер возьмёт сам через srcset, если экрану он действительно нужен.
+  const shop1x = shop.replace(/_2x\.jpg$/, '.jpg');
+  const responsive = !FEATURES.realCovers && shop1x !== shop;
+  const src = FEATURES.realCovers ? local : (shop1x || generated);
   const fallback = FEATURES.realCovers ? (shop || generated) : generated;
-  return `<img class="${esc(cls)}" src="${esc(src)}" data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
+  const srcset = responsive
+    ? ` srcset="${esc(shop1x)} 600w, ${esc(shop)} 1200w" sizes="${COVER_SIZES[cls] || COVER_SIZES['cover-img']}"`
+    : '';
+  return `<img class="${esc(cls)}" src="${esc(src)}"${srcset} data-fallback="${esc(fallback)}" data-fallback2="${esc(generated)}" alt="${esc(game.t)}" loading="lazy" decoding="async" width="600" height="900">`;
 }
 
 /* ------------------------------------------------------------------ *
@@ -310,6 +326,26 @@ export const breadcrumbs = (items) => `<nav class="crumbs">${items
     ? `<span>${esc(i.label)}</span>`
     : `<a href="${esc(i.href)}" data-action="nav">${esc(i.label)}</a><span class="dot-sep">/</span>`))
   .join('')}</nav>`;
+
+/**
+ * Хлебные крошки для поисковиков (schema.org BreadcrumbList): items — [{ name, url }],
+ * у последнего пункта url можно не указывать (это текущая страница).
+ */
+export const breadcrumbLd = (items) => ({
+  '@type': 'BreadcrumbList',
+  itemListElement: items.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    ...(item.url ? { item: item.url } : {}),
+  })),
+});
+
+/** Вопросы и ответы страницы (schema.org FAQPage): faq — [[вопрос, ответ], …] */
+export const faqLd = (faq) => ({
+  '@type': 'FAQPage',
+  mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
+});
 
 export const emptyState = (title, text, cta = '', iconName = 'search') => `
   <div class="empty">

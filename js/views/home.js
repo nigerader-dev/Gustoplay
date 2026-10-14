@@ -65,7 +65,7 @@ export function render() {
       </div>
     </div>
     <div class="hero-collage" aria-hidden="true">
-      ${collage.map((g, i) => `<div class="hero-tile hero-tile-${i + 1}">${coverImage(g, 'cover-img').replace('loading="lazy"', i < 3 ? 'loading="eager"' : 'loading="lazy"')}</div>`).join('')}
+      ${collage.map((g, i) => `<div class="hero-tile hero-tile-${i + 1}">${coverImage(g, 'cover-img').replace('loading="lazy"', i < 3 ? `loading="eager"${i === 0 ? ' fetchpriority="high"' : ''}` : 'loading="lazy"')}</div>`).join('')}
     </div>
   </section>
 

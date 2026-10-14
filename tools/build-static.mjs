@@ -18,7 +18,7 @@ import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import postcss from 'postcss';
 
-import { GAMES } from '../js/catalog/index.js';
+import { GAMES, loadSysreq } from '../js/catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from '../js/taxonomy.js';
 import { COLLECTIONS } from '../js/views/collections.js';
 import { SITE, ADS } from '../js/config.js';
@@ -102,8 +102,13 @@ const basePath = () => normalizeBase(SITE.base);
 const urlFor = (path) => {
   const r = path === '/' ? '' : String(path).replace(/^\/+/, '').replace(/\/+$/, '');
   if (!r) return `${siteRoot()}/`;
+  // главная английской версии — папка en/index.html, адрес со слэшем
+  if (r === EN) return `${siteRoot()}/${EN}/`;
   return styleOn() ? `${siteRoot()}/${r}/` : `${siteRoot()}/${r}`;
 };
+/** Английская версия сайта живёт под /en/… (русская — в корне), см. js/nav.js */
+const EN = 'en';
+const enPath = (path) => (path === '/' ? `/${EN}` : `/${EN}${path}`);
 const today = new Date().toISOString().slice(0, 10);
 
 /* ------------------------------------------------------------------ *
@@ -123,6 +128,7 @@ export const ROUTES = [
   { path: '/privacy', priority: '0.3', changefreq: 'yearly' },
   { path: '/terms', priority: '0.3', changefreq: 'yearly' },
   { path: '/podborki', priority: '0.8', changefreq: 'weekly' },
+  { path: '/razdely', priority: '0.7', changefreq: 'weekly' },
   ...Object.keys(COLLECTIONS).map((id) => ({ path: `/top/${id}`, priority: '0.8', changefreq: 'weekly' })),
   ...Object.keys(GENRES).map((id) => ({ path: `/genre/${id}`, priority: '0.7', changefreq: 'weekly' })),
   ...Object.keys(TAGS).map((id) => ({ path: `/tag/${id}`, priority: '0.6', changefreq: 'weekly' })),
@@ -273,6 +279,14 @@ writeFileSync(join(dist, 'index.html'), noIndexAll
  * 3. Пре-рендер (jsdom) — готовый HTML для поисковиков
  * ------------------------------------------------------------------ */
 
+/** Модули, которые приложение грузит динамически (import()) только на части страниц */
+function lazyModulesFor(rawPath) {
+  const path = String(rawPath).replace(/^\/en(?=\/|$)/, '') || '/';
+  if (/^\/game\//.test(path)) return ['js/catalog/sysreq.js'];
+  if (/^\/(genre|mode|mood|tag|platform)\//.test(path)) return ['js/views/landing-texts.js'];
+  return [];
+}
+
 function absolutize(html, route) {
   const path = typeof route === 'string' ? route : route.path;
   const url = urlFor(path);
@@ -282,6 +296,14 @@ function absolutize(html, route) {
     .replaceAll('href="manifest.webmanifest"', `href="${basePath()}/manifest.webmanifest"`)
     .replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${url}">`)
     .replace(/<meta property="og:url"[^>]*>/, `<meta property="og:url" content="${url}">`);
+
+  // Ленивые модули, которые нужны именно этой странице: подсказываем браузеру заранее,
+  // иначе он узнает о них только после выполнения приложения
+  const lazy = lazyModulesFor(path);
+  if (lazy.length) {
+    const links = lazy.map((rel) => `  <link rel="modulepreload" href="${basePath()}/${rel}">\n`).join('');
+    out = out.replace('</head>', `${links}</head>`);
+  }
 
   // персональные страницы (результаты, профиль, аккаунт) закрываем от индексации
   if (route.noindex || noIndexAll) {
@@ -303,6 +325,7 @@ function absolutize(html, route) {
 function pageFile(path) {
   const rel = String(path).replace(/^\/+/, '').replace(/\/+$/, '');
   if (!rel) return join(dist, 'index.html');
+  if (rel === EN) return join(dist, EN, 'index.html');
   return styleOn() ? join(dist, rel, 'index.html') : join(dist, `${rel}.html`);
 }
 
@@ -326,19 +349,35 @@ if (!noPrerender) {
 
     // Пре-рендер = боевой сайт: заглушки рекламы и прочие dev-подсказки не попадают в HTML
     globalThis.__GP_PRERENDER__ = true;
+    // ленивые данные загружаем заранее: каждая страница рендерится синхронно и целиком
+    const { loadLandingTexts } = await import('../js/views/catalog.js');
+    await Promise.all([loadSysreq(), loadLandingTexts()]);
     await import('../js/app.js');
     const tick = () => new Promise((r) => setTimeout(r, 20));
 
-    for (const route of ROUTES) {
+    // Обе языковые версии: язык задаёт адрес (/en/…), а адреса ссылок строятся
+    // от текущего языка — поэтому сначала переключаем язык, затем идём по маршруту
+    const i18n = await import('../js/i18n.js');
+    const pages = [
+      ...ROUTES.map((route) => ({ route, lang: 'ru', src: route.path })),
+      ...ROUTES.map((route) => ({ route: { ...route, path: enPath(route.path) }, lang: EN, src: route.path })),
+    ];
+    for (const { route, lang, src } of pages) {
+      i18n.setLang(lang);
       // навигация через публичное API приложения (работает в PATH-режиме через History API)
-      window.dispatchEvent(new window.CustomEvent('gf:navigate', { detail: { path: route.path, replace: true } }));
+      window.dispatchEvent(new window.CustomEvent('gf:navigate', { detail: { path: src, replace: true } }));
       await tick();
-      const html = `<!DOCTYPE html>\n${window.document.documentElement.outerHTML}`;
+      // Класс анимации переходов не должен попасть в HTML: на первой загрузке
+      // контент обязан быть виден сразу, без opacity 0 (см. .nav-anim в CSS)
+      window.document.documentElement.classList.remove('nav-anim');
+      if (!window.document.documentElement.classList.length) window.document.documentElement.removeAttribute('class');
+      const html =`<!DOCTYPE html>\n${window.document.documentElement.outerHTML}`;
       const out = pageFile(route.path);
       mkdirSync(dirname(out), { recursive: true });
       writeFileSync(out, absolutize(html, route));
       prerendered += 1;
     }
+    i18n.setLang('ru');
     // Самопроверка: страница игры обязана содержать название игры, иначе пре-рендер «сломался»
     const probe = GAMES[0];
     const probeHtml = readFileSync(pageFile(`/game/${probe.slug}`), 'utf8');
@@ -356,9 +395,15 @@ if (!noPrerender) {
  * 4. SEO-файлы и конфиг хостинга
  * ------------------------------------------------------------------ */
 
+// Обе языковые версии + взаимные hreflang (как в <head> страниц): поисковик сразу
+// видит пары «русская ↔ английская», не дожидаясь обхода каждой страницы
+const alternates = (path) => [['ru', urlFor(path)], ['en', urlFor(enPath(path))], ['x-default', urlFor(path)]]
+  .map(([hl, href]) => `<xhtml:link rel="alternate" hreflang="${hl}" href="${href}"/>`).join('');
+const sitemapEntry = (r, loc) => `  <url><loc>${loc}</loc><lastmod>${today}</lastmod><changefreq>${r.changefreq}</changefreq><priority>${r.priority}</priority>${alternates(r.path)}</url>`;
+const indexable = ROUTES.filter((r) => !r.noindex);
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${ROUTES.filter((r) => !r.noindex).map((r) => `  <url><loc>${urlFor(r.path)}</loc><lastmod>${today}</lastmod><changefreq>${r.changefreq}</changefreq><priority>${r.priority}</priority></url>`).join('\n')}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${[...indexable.map((r) => sitemapEntry(r, urlFor(r.path))), ...indexable.map((r) => sitemapEntry(r, urlFor(enPath(r.path))))].join('\n')}
 </urlset>`;
 writeFileSync(join(dist, 'sitemap.xml'), sitemap);
 
@@ -380,6 +425,41 @@ Clean-param: q&page&sort&mode&platform&platforms&genre&tag&mood&players&price&ti
 # Sitemap
 Sitemap: ${siteRoot()}/sitemap.xml
 `);
+
+// llms.txt (llmstxt.org): краткая карта сайта для ИИ-поисковиков и ассистентов —
+// что это за сайт и какие страницы отвечают на частые вопросы. Только реальные адреса.
+{
+  const pick = (o) => (o && (o.ru || o.en)) || '';
+  const llms = `# ${SITE.name}
+
+> ${pick(SITE.tagline)}. Бесплатный сервис подбора видеоигр на русском языке: короткий квиз
+> о настроении, компании, платформе и бюджете выдаёт список игр с объяснением, почему каждая
+> подходит. Игр в каталоге: ${GAMES.length} — для ПК, консолей и телефонов, с требованиями к ПК,
+> режимами (кооп, PvP, за одним экраном), ценами в рублях и похожими играми.
+
+## Главное
+- [English version](${urlFor(enPath('/'))}): тот же сайт на английском, адреса /en/…
+- [Подбор игры по вкусу](${urlFor('/quiz')}): квиз на минуту, персональная выдача
+- [Каталог с фильтрами](${urlFor('/catalog')}): жанр, режим, число игроков, платформа, цена, длительность
+- [Во что поиграть компанией](${urlFor('/party')}): подбор под 2–5+ игроков
+- [Все жанры, режимы и теги](${urlFor('/razdely')})
+- [Как устроен подбор](${urlFor('/about')})
+
+## Подборки
+${Object.keys(COLLECTIONS).map((id) => `- [${pick(COLLECTIONS[id].h1)}](${urlFor(`/top/${id}`)}): ${pick(COLLECTIONS[id].meta)}`).join('\n')}
+
+## Жанры
+${Object.keys(GENRES).map((id) => `- [${pick(GENRES[id])}](${urlFor(`/genre/${id}`)})`).join('\n')}
+
+## Страницы игр
+Адрес страницы игры: ${urlFor('/game/<slug>')} — описание, особенности, требования к ПК,
+режимы и число игроков, ссылки на магазины и похожие игры. Полный список — в ${siteRoot()}/sitemap.xml.
+
+## Контакты
+- Почта: ${SITE.email}
+`;
+  writeFileSync(join(dist, 'llms.txt'), llms);
+}
 
 // RFC 9116 security contact. Use the existing public support address; do not add
 // a fabricated mailbox or claim an unconfigured security policy URL.
@@ -452,7 +532,15 @@ if (yandexCode) {
 `;
 }
 
-writeFileSync(join(dist, '_redirects'), `${verificationRedirect}# SPA-фолбэк: любые неизвестные пути отдаём индексом (200, не 404 — так работают hash-ссылки)
+writeFileSync(join(dist, '_redirects'), `${verificationRedirect}# Голые адреса разделов (/genre, /tag, …) — не страницы: ведём на оглавление разделов и подборок
+/genre  /razdely  301
+/tag  /razdely  301
+/mode  /razdely  301
+/mood  /razdely  301
+/platform  /razdely  301
+/top  /podborki  301
+/game  /catalog  301
+# SPA-фолбэк: любые неизвестные пути отдаём индексом (200, не 404 — так работают hash-ссылки)
 /*  /index.html  200
 `);
 

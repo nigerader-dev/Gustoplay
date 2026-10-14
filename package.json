@@ -15,6 +15,7 @@
     "deploy:check": "node tools/deploy-cloudflare.mjs --check",
     "deploy:purge": "node tools/deploy-cloudflare.mjs --purge",
     "indexnow": "node tools/indexnow.mjs",
+    "gsc": "node tools/gsc-report.mjs",
     "test": "node tools/smoke-test.mjs",
     "test:functional": "node tools/test-functional.mjs",
     "test:a11y": "node tools/check-a11y.mjs",

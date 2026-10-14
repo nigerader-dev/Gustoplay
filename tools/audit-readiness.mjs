@@ -4,7 +4,8 @@
  * not claim that external cover/store URLs are reachable (use check:covers/check:stores
  * from a network-enabled runner for that).
  */
-import { GAMES } from '../js/catalog/index.js';
+import { GAMES, loadSysreq } from '../js/catalog/index.js';
+await loadSysreq();
 
 const missing = (value) => !String(value ?? '').trim();
 const missingRuEn = (value) => missing(value?.ru) || missing(value?.en);

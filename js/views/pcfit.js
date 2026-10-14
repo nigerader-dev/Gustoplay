@@ -82,6 +82,10 @@ const field = (id, control) => `<label class="pcfit-field">
 </label>`;
 
 function form(pc) {
+  // В пре-рендер форма не попадает: сотни моделей процессоров и видеокарт — это шум
+  // для поисковика и лишние килобайты HTML. Браузер всё равно перерисовывает страницу
+  // при запуске приложения, и форма появляется уже там.
+  if (globalThis.__GP_PRERENDER__) return '<div class="pcfit-form" data-pcfit-form></div>';
   return `<div class="pcfit-form" data-pcfit-form>
     ${field('os', `<select data-pcfield="os">${objectOptions(OS_OPTIONS, pc.os, (o) => osLabel(o, getLang()))}</select>`)}
     ${field('cpu', `<select data-pcfield="cpu">${partOptions(CPUS, pc.cpu)}</select>`)}

@@ -1054,7 +1054,12 @@ console.log('\n15. Иконки вместо эмодзи в интерфейс�
   console.log('\nSEO: разметка и заголовки страниц игр');
   const gameView = await import('../js/views/game.js');
   const ctx = { params: { slug: 'hades' } };
-  const ld = gameView.jsonLd(ctx);
+  const graph = gameView.jsonLd(ctx)?.['@graph'] || [];
+  const ld = graph.find((n) => n['@type'] === 'VideoGame');
+  const crumbs = graph.find((n) => n['@type'] === 'BreadcrumbList');
+  check('JSON-LD игры: хлебные крошки Главная → Каталог → жанр → игра',
+    crumbs?.itemListElement?.length === 4 && crumbs.itemListElement[3].name === 'Hades' && !crumbs.itemListElement[3].item,
+    JSON.stringify(crumbs?.itemListElement?.map((i) => i.name)));
   check('JSON-LD игры без выдуманного aggregateRating', ld && !('aggregateRating' in ld));
   check('url в JSON-LD — наша страница, магазин — в sameAs',
     ld?.url?.endsWith('/game/hades') && (!ld.sameAs || ld.sameAs.includes('steampowered.com')), `${ld?.url} | ${ld?.sameAs}`);

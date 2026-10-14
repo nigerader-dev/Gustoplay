@@ -5,7 +5,7 @@
  */
 import { setLang, getLang, t, tl } from './i18n.js';
 import { icon } from './icons.js';
-import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
+import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base, pathLang } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, ANALYTICS, SITE, FEATURES } from './config.js';
 import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
@@ -23,6 +23,7 @@ import * as party from './views/party.js';
 import * as profileView from './views/profile.js';
 import * as about from './views/about.js';
 import * as collections from './views/collections.js';
+import * as sections from './views/sections.js';
 import * as account from './views/account.js';
 import * as terms from './views/terms.js';
 import * as support from './views/support.js';
@@ -43,6 +44,7 @@ const ROUTES = [
   { path: ['mood', ':id'], view: catalog, name: 'mood', preset: (p) => ({ moods: [p.id], heading: tl(MOODS, p.id), icon: MOODS[p.id]?.icon }) },
   { path: ['platform', ':id'], view: catalog, name: 'platform', preset: (p) => ({ platforms: [p.id], heading: tl(PLATFORMS, p.id), icon: PLATFORMS[p.id]?.icon }) },
   { path: ['podborki'], view: collections, name: 'collections' },
+  { path: ['razdely'], view: sections, name: 'sections' },
   { path: ['top', ':id'], view: catalog, name: 'collection', preset: (p) => ({ ...collections.collectionById(p.id).filters, heading: collections.collectionHeading(p.id), icon: collections.collectionById(p.id).icon }) },
   { path: ['game', ':slug'], view: gameView, name: 'game' },
   { path: ['party'], view: party, name: 'party' },
@@ -97,6 +99,8 @@ let currentCtx = null;
 let lastRouteName = null;
 /** Ключ страницы без query: фильтры, «Показать ещё» и отметки остаются той же страницей */
 let lastPageKey = null;
+/** Номер последнего вызова render(): отложенный рендер не перебивает более новый переход */
+let renderToken = 0;
 
 function navItem(href, label, name, ctx, extraClass = '') {
   const active = ctx?.name === name ? ' active' : '';
@@ -155,6 +159,7 @@ function footer() {
       <div class="footer-col">
         <h2 class="footer-head">${lang === 'ru' ? 'Жанры' : 'Genres'}</h2>
         ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${encodeURIComponent(id)}" data-action="nav">${esc(tl(GENRES, id))}</a>`).join('')}
+        <a href="#/razdely" data-action="nav">${esc(t('sections.all'))}</a>
       </div>
       <div class="footer-col">
         <h2 class="footer-head">${esc(t('top.title'))}</h2>
@@ -253,6 +258,8 @@ document.addEventListener('error', (event) => {
   const img = event.target;
   if (!img || img.tagName !== 'IMG') return;
   const step = img.dataset.fbStep || '0';
+  // srcset важнее src: без его снятия откат на запасную картинку не сработал бы
+  img.removeAttribute('srcset');
   if (step === '0' && img.dataset.fallback) {
     img.dataset.fbStep = '1';
     img.src = img.dataset.fallback;
@@ -267,6 +274,40 @@ document.addEventListener('error', (event) => {
 /* ------------------------------------------------------------------ *
  * Рендер страницы
  * ------------------------------------------------------------------ */
+
+/** Страницы, у которых нет индексируемых языковых версий (персональные и 404) */
+const NO_ALTERNATES = new Set(['results', 'profile', 'account', 'notfound']);
+
+/**
+ * hreflang: русская и английская версии страницы ссылаются друг на друга,
+ * x-default — русская (основная аудитория). og:locale — язык текущей версии.
+ */
+function setAlternates(ctx) {
+  document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((n) => n.remove());
+  const lang = getLang();
+  const locale = document.head.querySelector('meta[property="og:locale"]');
+  if (locale) locale.setAttribute('content', lang === 'en' ? 'en_US' : 'ru_RU');
+  if (!PATH_MODE || NO_ALTERNATES.has(ctx.name)) return;
+  const path = currentPath();
+  for (const [hreflang, l] of [['ru', 'ru'], ['en', 'en'], ['x-default', 'ru']]) {
+    const node = document.createElement('link');
+    node.rel = 'alternate';
+    node.hreflang = hreflang;
+    node.href = publicUrl(path, l);
+    document.head.append(node);
+  }
+}
+
+/** В PATH-режиме язык задаёт адрес (/en/… — английский): он главнее сохранённого выбора */
+function syncLangFromUrl() {
+  const urlLang = pathLang();
+  if (urlLang && urlLang !== getLang()) {
+    setLang(urlLang);
+    if (getProfile().meta?.lang !== urlLang) setMeta({ lang: urlLang });
+  }
+  // атрибут lang у <html> — по нему экранные дикторы и поисковики выбирают язык
+  document.documentElement.lang = getLang();
+}
 
 function setHead(titleText, description, image = '') {
   document.title = titleText;
@@ -299,6 +340,9 @@ function setHead(titleText, description, image = '') {
 let restoreScrollY = null;
 
 function render(scroll = true) {
+  // Анимация появления — только для переходов после первого рендера (см. .nav-anim в CSS)
+  if (lastPageKey !== null) document.documentElement.classList.add('nav-anim');
+  syncLangFromUrl();
   const parsed = parseLocation();
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
   currentCtx = ctx;
@@ -311,6 +355,16 @@ function render(scroll = true) {
   }
 
   const view = ctx.route?.view;
+  // Страница ждёт ленивые данные (требования к ПК, тексты лендингов): дорисуем, когда
+  // они придут. До этого остаётся текущая разметка — на первой загрузке это готовый
+  // пре-рендер, так что пользователь ничего не теряет.
+  const pending = view?.prepare?.(ctx);
+  if (pending) {
+    const token = ++renderToken;
+    pending.then(() => { if (token === renderToken) render(scroll); }, () => { /* нет сети — остаёмся на текущей разметке */ });
+    return;
+  }
+  renderToken += 1;
   let html = '';
   let titleText = t('site.name');
   let description = t('site.description');
@@ -354,6 +408,7 @@ function render(scroll = true) {
   }
   lastPageKey = pageKey;
   setHead(titleText, description, view?.image?.(ctx) || '');
+  setAlternates(ctx);
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
   injectJsonLd(ctx, view);
   view?.mount?.(app);
@@ -602,6 +657,8 @@ document.addEventListener('click', (event) => {
       setMeta({ lang: next });
       // атрибут lang у <html> — по нему экранные дикторы и поисковики выбирают язык
       document.documentElement.lang = next;
+      // У языков разные адреса: переходим на ту же страницу другой версии
+      if (PATH_MODE) history.pushState(null, '', link(currentPath(), next));
       render(false);
       break;
     }
@@ -748,12 +805,20 @@ document.addEventListener('click', (event) => {
   // в профиле. Это шаг к раздельным URL языков (без него EN-версию неошарить);
   // пока сайт один и тот же URL для ru/en, поэтому hreflang не излучается —
   // его некуда указывать (см. docs/SEO.md).
-  const urlLang = new URLSearchParams(window.location.search).get('lang');
-  const lang = (SITE.languages || []).includes(urlLang)
-    ? urlLang
-    : profile.meta?.lang || SITE.defaultLang || 'ru';
+  const params = new URLSearchParams(window.location.search);
+  const urlLang = params.get('lang');
+  // В PATH-режиме язык задаёт адрес; ?lang= — старый формат ссылок: переводим его
+  // в адрес нужной версии (/en/…), чтобы у страницы был один канонический URL
+  const lang = PATH_MODE
+    ? ((SITE.languages || []).includes(urlLang) ? urlLang : pathLang())
+    : ((SITE.languages || []).includes(urlLang) ? urlLang : profile.meta?.lang || SITE.defaultLang || 'ru');
   setLang(lang);
-  if (urlLang && profile.meta?.lang !== lang) setMeta({ lang });
+  if (profile.meta?.lang !== lang && (urlLang || PATH_MODE)) setMeta({ lang });
+  if (PATH_MODE && urlLang) {
+    params.delete('lang');
+    const rest = params.toString();
+    history.replaceState(null, '', link(`${currentPath().split('?')[0]}${rest ? `?${rest}` : ''}`, lang));
+  }
   document.documentElement.dataset.theme = profile.meta?.theme || 'light';
   document.documentElement.lang = lang;
 

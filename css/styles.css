@@ -195,10 +195,13 @@ button, input, select { font: inherit; color: inherit; }
 .center { text-align: center; margin: 28px 0; }
 .dot-sep { color: var(--text-muted); margin: 0 6px; }
 
-/* лёгкий переход между экранами: новый контент мягко «поднимается» */
+/* лёгкий переход между экранами: новый контент мягко «поднимается».
+   Только при переходах внутри сайта (класс .nav-anim app.js ставит после первого рендера):
+   на первой загрузке пре-рендеренный контент виден сразу. Раньше анимация с opacity 0
+   прятала его до выполнения всего JS, и LCP на мобильном доходил до 7 с. */
 @keyframes view-in { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
-.main > section, .main > aside { animation: view-in var(--dur-slow) var(--ease) both; }
-.main > aside { animation-delay: .05s; }
+.nav-anim .main > section, .nav-anim .main > aside { animation: view-in var(--dur-slow) var(--ease) both; }
+.nav-anim .main > aside { animation-delay: .05s; }
 
 /* ------------------------------- шапка ------------------------------------ */
 

@@ -14,6 +14,15 @@
  * Все внутренние переходы делаются через navigate(), чтобы приложение не зависело от режима.
  */
 import { SITE } from './config.js';
+import { getLang } from './i18n.js';
+
+/**
+ * Языковые версии в адресе: русская живёт в корне, английская — под /en/…
+ * (отдельные URL нужны поисковикам: иначе английскую версию нельзя проиндексировать
+ * и связать с русской через hreflang). Префикс — только в PATH-режиме.
+ */
+const PREFIXED_LANG = 'en';
+const prefixFor = (lang = getLang()) => (lang === PREFIXED_LANG ? PREFIXED_LANG : '');
 
 export const PATH_MODE = (() => {
   try {
@@ -55,10 +64,29 @@ export const siteOrigin = () => String(SITE.url || '').replace(/\/+$/, '');
  * publicUrl('quiz') → https://…/quiz (со слэшем, если включён стиль), publicUrl('') → https://…/
  * Query-строка и висячий слэш отбрасываются — sitemap и canonical всегда совпадают.
  */
-export function publicUrl(route = '') {
-  const r = String(route).split('?')[0].replace(/^\/+/, '').replace(/\/+$/, '');
-  if (!r) return `${siteOrigin()}/`;
-  return trailingSlash() ? `${siteOrigin()}/${r}/` : `${siteOrigin()}/${r}`;
+export function publicUrl(route = '', lang = getLang()) {
+  const r = stripLang(String(route).split('?')[0].replace(/^\/+/, '').replace(/\/+$/, ''));
+  const prefix = prefixFor(lang);
+  if (!r) return prefix ? `${siteOrigin()}/${prefix}/` : `${siteOrigin()}/`;
+  const p = prefix ? `${prefix}/${r}` : r;
+  return trailingSlash() ? `${siteOrigin()}/${p}/` : `${siteOrigin()}/${p}`;
+}
+
+/** Отрезает языковой префикс: 'en/game/x' → 'game/x', 'en' → '' */
+function stripLang(p) {
+  if (p === PREFIXED_LANG || p.startsWith(`${PREFIXED_LANG}?`)) return p.slice(PREFIXED_LANG.length);
+  if (p.startsWith(`${PREFIXED_LANG}/`)) return p.slice(PREFIXED_LANG.length + 1);
+  return p;
+}
+
+/** Язык из адреса страницы (PATH-режим): 'en' для /en/…, иначе 'ru'; в HASH-режиме — null */
+export function pathLang() {
+  if (!PATH_MODE) return null;
+  let pathname = location.pathname;
+  const b = base();
+  if (b && pathname.startsWith(b)) pathname = pathname.slice(b.length);
+  const first = pathname.replace(/^\/+/, '').split('/')[0];
+  return first === PREFIXED_LANG ? PREFIXED_LANG : SITE.defaultLang || 'ru';
 }
 
 /** Путь без базы и ведущего слэша; ведущие '#', '/' (и база) отрезаются */
@@ -69,17 +97,20 @@ export const clean = (path = '') => {
     if (p === b) p = '';
     else if (p.startsWith(`${b}/`)) p = p.slice(b.length + 1);
   }
-  return p;
+  return stripLang(p);
 };
 
 /** Ссылка для разметки: href="/game/x" (плюс база и слэш стиля) либо href="#/game/x" */
-export const link = (path) => {
+export const link = (path, lang = getLang()) => {
   const c = clean(path);
   if (!PATH_MODE) return `#/${c}`;
-  if (!trailingSlash()) return `${base()}/${c}`;
+  const prefix = prefixFor(lang);
+  // главная английской версии — /en/ (папка en/index.html в сборке)
+  const root = prefix ? `${base()}/${prefix}/` : `${base()}/`;
+  if (!trailingSlash()) return `${root}${c}`;
   const [p = '', q] = c.split('?');
   const withSlash = p && !p.endsWith('/') ? `${p}/` : p;
-  return q !== undefined ? `${base()}/${withSlash}?${q}` : `${base()}/${withSlash}`;
+  return q !== undefined ? `${root}${withSlash}?${q}` : `${root}${withSlash}`;
 };
 
 /** Текущий путь без базы и ведущего слэша (плюс query-строка) */
@@ -89,7 +120,7 @@ export const currentPath = () => {
   const b = base();
   if (b && (pathname === b || pathname === `${b}/`)) pathname = '/';
   else if (b && pathname.startsWith(`${b}/`)) pathname = pathname.slice(b.length);
-  return `${pathname.replace(/^\/+/, '')}${location.search}`;
+  return `${stripLang(pathname.replace(/^\/+/, ''))}${location.search}`;
 };
 
 /**
