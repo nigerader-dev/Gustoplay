@@ -36,7 +36,6 @@ import { PART_H } from './part-h.js';
 import { PART_I } from './part-i.js';
 import { STEAM_COVERS } from './steam-covers.js';
 import { STORE_LINKS } from './store-links.js';
-import { SYSREQ } from './sysreq.js';
 
 const slugify = (s) =>
   s
@@ -86,9 +85,9 @@ function normalize(g) {
     // полное описание и буллеты: появятся у всех игр; пока поле может отсутствовать
     about: g.about || null,
     feats: { ru: g.feats?.ru || [], en: g.feats?.en || [] },
-    // требования к ПК: собраны из Steam Store API (js/catalog/sysreq.js).
-    // null — магазин их не публикует; выдумывать значения нельзя, страница честно об этом скажет.
-    sysreq: g.req || SYSREQ[slug] || null,
+    // требования к ПК: собраны из Steam Store API (js/catalog/sysreq.js) и подгружаются
+    // лениво — loadSysreq() ниже. null — магазин их не публикует (или файл ещё не загружен).
+    sysreq: g.req || null,
     coopQ: g.coopQ ?? (modes.includes('coopOnline') || modes.includes('coopLocal') ? 6 : 0),
     // теги, которые генерируются автоматически (пригодятся для SEO-страниц и фильтров)
     allTags: [
@@ -114,6 +113,22 @@ export const GAMES = raw.map(normalize);
 export const BY_ID = new Map(GAMES.map((g) => [g.slug, g]));
 
 export const byId = (slug) => BY_ID.get(slug) || null;
+
+/**
+ * Требования к ПК — самый тяжёлый файл каталога (~40 КиБ после сжатия), а нужны они
+ * только на странице игры. Поэтому sysreq.js грузится по требованию и дописывается
+ * в объекты игр. Повторные вызовы возвращают тот же промис.
+ */
+let sysreqPromise = null;
+let sysreqReady = false;
+export const isSysreqLoaded = () => sysreqReady;
+export function loadSysreq() {
+  sysreqPromise ||= import('./sysreq.js').then(({ SYSREQ }) => {
+    for (const game of GAMES) if (!game.sysreq && SYSREQ[game.slug]) game.sysreq = SYSREQ[game.slug];
+    sysreqReady = true;
+  });
+  return sysreqPromise;
+}
 
 /** Проверка целостности данных — падает громко, если в каталоге опечатка */
 export function validate() {

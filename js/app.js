@@ -23,6 +23,7 @@ import * as party from './views/party.js';
 import * as profileView from './views/profile.js';
 import * as about from './views/about.js';
 import * as collections from './views/collections.js';
+import * as sections from './views/sections.js';
 import * as account from './views/account.js';
 import * as terms from './views/terms.js';
 import * as support from './views/support.js';
@@ -43,6 +44,7 @@ const ROUTES = [
   { path: ['mood', ':id'], view: catalog, name: 'mood', preset: (p) => ({ moods: [p.id], heading: tl(MOODS, p.id), icon: MOODS[p.id]?.icon }) },
   { path: ['platform', ':id'], view: catalog, name: 'platform', preset: (p) => ({ platforms: [p.id], heading: tl(PLATFORMS, p.id), icon: PLATFORMS[p.id]?.icon }) },
   { path: ['podborki'], view: collections, name: 'collections' },
+  { path: ['razdely'], view: sections, name: 'sections' },
   { path: ['top', ':id'], view: catalog, name: 'collection', preset: (p) => ({ ...collections.collectionById(p.id).filters, heading: collections.collectionHeading(p.id), icon: collections.collectionById(p.id).icon }) },
   { path: ['game', ':slug'], view: gameView, name: 'game' },
   { path: ['party'], view: party, name: 'party' },
@@ -97,6 +99,8 @@ let currentCtx = null;
 let lastRouteName = null;
 /** Ключ страницы без query: фильтры, «Показать ещё» и отметки остаются той же страницей */
 let lastPageKey = null;
+/** Номер последнего вызова render(): отложенный рендер не перебивает более новый переход */
+let renderToken = 0;
 
 function navItem(href, label, name, ctx, extraClass = '') {
   const active = ctx?.name === name ? ' active' : '';
@@ -155,6 +159,7 @@ function footer() {
       <div class="footer-col">
         <h2 class="footer-head">${lang === 'ru' ? 'Жанры' : 'Genres'}</h2>
         ${Object.keys(GENRES).slice(0, 8).map((id) => `<a href="#/genre/${encodeURIComponent(id)}" data-action="nav">${esc(tl(GENRES, id))}</a>`).join('')}
+        <a href="#/razdely" data-action="nav">${esc(t('sections.all'))}</a>
       </div>
       <div class="footer-col">
         <h2 class="footer-head">${esc(t('top.title'))}</h2>
@@ -253,6 +258,8 @@ document.addEventListener('error', (event) => {
   const img = event.target;
   if (!img || img.tagName !== 'IMG') return;
   const step = img.dataset.fbStep || '0';
+  // srcset важнее src: без его снятия откат на запасную картинку не сработал бы
+  img.removeAttribute('srcset');
   if (step === '0' && img.dataset.fallback) {
     img.dataset.fbStep = '1';
     img.src = img.dataset.fallback;
@@ -299,6 +306,8 @@ function setHead(titleText, description, image = '') {
 let restoreScrollY = null;
 
 function render(scroll = true) {
+  // Анимация появления — только для переходов после первого рендера (см. .nav-anim в CSS)
+  if (lastPageKey !== null) document.documentElement.classList.add('nav-anim');
   const parsed = parseLocation();
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
   currentCtx = ctx;
@@ -311,6 +320,16 @@ function render(scroll = true) {
   }
 
   const view = ctx.route?.view;
+  // Страница ждёт ленивые данные (требования к ПК, тексты лендингов): дорисуем, когда
+  // они придут. До этого остаётся текущая разметка — на первой загрузке это готовый
+  // пре-рендер, так что пользователь ничего не теряет.
+  const pending = view?.prepare?.(ctx);
+  if (pending) {
+    const token = ++renderToken;
+    pending.then(() => { if (token === renderToken) render(scroll); }, () => { /* нет сети — остаёмся на текущей разметке */ });
+    return;
+  }
+  renderToken += 1;
   let html = '';
   let titleText = t('site.name');
   let description = t('site.description');

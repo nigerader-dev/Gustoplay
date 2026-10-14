@@ -104,6 +104,16 @@ export const LANDING_TEXTS = {
         'Pick by format: a short evening match means the “under 20 hours” time filter, while long-term grinding means the “Grindy” tag. Players who want tactics without online stress will find solo games about building a deck — some of them even in co-op.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое карточные игры с колодостроением?', 'Колодостроение (deckbuilding) — механика, где по ходу игры вы собираете свою колоду: добавляете сильные карты, убираете слабые и выстраиваете комбинации. Колода — это и есть ваш персонаж.'],
+        ['Нужно ли платить за карты в карточных играх?', 'Зависит от игры. В одиночных и рогалик-карточных играх все карты открываются по ходу прохождения. В сетевых коллекционных карточных играх карты часто получают из наборов, в том числе платных.'],
+      ],
+      en: [
+        ['What are deckbuilding card games?', 'Deckbuilding is a mechanic where you build your deck as you play: add strong cards, cut weak ones and set up combos. The deck is effectively your character.'],
+        ['Do you have to pay for cards?', 'It depends. In single-player and roguelike card games all cards unlock through play. In online collectible card games cards often come from packs, including paid ones.'],
+      ],
+    },
     related: ['tag:deckbuilding', 'genre:roguelike', 'genre:boardgame'],
   },
 
@@ -164,6 +174,16 @@ export const LANDING_TEXTS = {
         'Choose by difficulty: some entries are deliberately demanding, and the cards say so honestly. Story length varies from compact adventures to long expeditions — the playtime on each card says which.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое метроидвания?', 'Метроидвания — обычно двухмерный экшен-платформер с одной большой связанной картой. Новые способности открывают ранее недоступные проходы, и мир исследуется возвращениями в знакомые места. Название — от серий Metroid и Castlevania.'],
+        ['Чем метроидвания отличается от обычного платформера?', 'Обычный платформер идёт уровнями от начала к концу, а метроидвания — это единый мир, где прогресс измеряется найденными умениями и открытыми путями, а не номером уровня.'],
+      ],
+      en: [
+        ['What is a metroidvania?', 'A metroidvania is a (usually 2D) action platformer set in one large interconnected map. New abilities open previously blocked paths, so you explore by returning to familiar places. The name comes from the Metroid and Castlevania series.'],
+        ['How is it different from a regular platformer?', 'A regular platformer moves level by level from start to finish; a metroidvania is one world where progress is measured by the abilities you find and the paths you unlock, not by a level number.'],
+      ],
+    },
     related: ['genre:platformer', 'tag:exploration', 'mood:explore'],
   },
 
@@ -179,6 +199,16 @@ export const LANDING_TEXTS = {
         'Major MOBAs are usually free-to-play, so filter by platform and online PvP instead. For similar tactics in shorter, calmer matches, try the tactics genre — its rounds are several times shorter.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое MOBA?', 'MOBA (multiplayer online battle arena) — командная сетевая игра, где две команды, обычно по пять человек, управляют героями с уникальными умениями и стараются разрушить базу противника на одной карте.'],
+        ['Сложно ли начать играть в MOBA?', 'Порог входа высокий: много героев, предметов и тактик. Помогают обучение, игры против ботов и выбор простых героев на старте.'],
+      ],
+      en: [
+        ['What is a MOBA?', 'A MOBA (multiplayer online battle arena) is a team-based online game where two teams, usually of five, control heroes with unique abilities and try to destroy the enemy base on a single map.'],
+        ['Is it hard to get into MOBAs?', 'The learning curve is steep: many heroes, items and tactics. Tutorials, games against bots and simple starter heroes help.'],
+      ],
+    },
     related: ['mode:pvpOnline', 'genre:tactics', 'mood:compete'],
   },
 
@@ -192,6 +222,16 @@ export const LANDING_TEXTS = {
       en: [
         'MMOs are worlds that never switch off: cities are populated by real people, the economy reacts to players, and the content is designed for months. Most games in the genre are long-term projects with subscriptions or free entry and in-game purchases.',
         'The social layer matters most here: the “Clans and guilds” tag marks games built around a steady group. If you want a big world without the commitment, look at open-world solo adventures instead.',
+      ],
+    },
+    faq: {
+      ru: [
+        ['Что такое MMO?', 'MMO (massively multiplayer online) — массовые онлайн-игры, где в одном постоянном мире одновременно играют тысячи людей. Мир живёт и без вас: есть экономика, гильдии, совместные рейды и события.'],
+        ['Можно ли играть в MMO одному?', 'Большую часть сюжета и прокачки во многих MMO можно пройти соло, но самый сложный контент — рейды, подземелья и PvP — обычно рассчитан на группу.'],
+      ],
+      en: [
+        ['What is an MMO?', 'An MMO (massively multiplayer online game) is a persistent online world shared by thousands of players at once. The world keeps going without you: it has an economy, guilds, group raids and events.'],
+        ['Can you play an MMO solo?', 'In many MMOs most of the story and levelling can be done alone, but the hardest content — raids, dungeons and PvP — is usually built for groups.'],
       ],
     },
     related: ['mode:mmo', 'tag:clan', 'tag:grind'],
@@ -284,6 +324,16 @@ export const LANDING_TEXTS = {
         'Many rhythm games are built around particular artists, which the descriptions usually make clear. To play without a gamepad, check the platform: part of the genre lives on phones and keyboards.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое ритм-игры?', 'Ритм-игры — игры, где действия нужно выполнять в такт музыке: нажимать кнопки, двигаться или атаковать под бит. Точность попадания в ритм напрямую влияет на результат.'],
+        ['Нужен ли музыкальный слух для ритм-игр?', 'Нет: большинство ритм-игр подсказывают такт визуально и имеют уровни сложности. Чувство ритма развивается по ходу игры.'],
+      ],
+      en: [
+        ['What are rhythm games?', 'Rhythm games ask you to act in time with the music: press buttons, move or attack on the beat. How precisely you hit the rhythm directly shapes your result.'],
+        ['Do you need a musical ear for rhythm games?', 'No: most rhythm games show the beat visually and offer difficulty levels. Your sense of rhythm improves as you play.'],
+      ],
+    },
     related: ['tag:soundtrack', 'mood:adrenaline', 'platform:mobile'],
   },
 
@@ -314,6 +364,16 @@ export const LANDING_TEXTS = {
         'Difficulty varies a lot, so check the meter on the card. For shared suffering, the genre has plenty of co-op titles online and on one couch; the modes mark which is which.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое рогалик?', 'Рогалик (roguelike) — игра, где каждый забег начинается заново: уровни генерируются случайно, а смерть персонажа обнуляет прогресс забега. Интерес — в том, что каждая попытка не похожа на предыдущую.'],
+        ['Чем roguelike отличается от roguelite?', 'В roguelite часть прогресса сохраняется между забегами — открываются новые предметы, персонажи или улучшения. В классическом roguelike после смерти вы начинаете с теми же условиями, что и в первый раз.'],
+      ],
+      en: [
+        ['What is a roguelike?', 'A roguelike is a game where every run starts fresh: levels are randomly generated and death wipes the run’s progress. The appeal is that no two attempts are alike.'],
+        ['Roguelike vs roguelite?', 'In a roguelite some progress carries over between runs — new items, characters or upgrades unlock. In a classic roguelike you start every run on the same terms as the first.'],
+      ],
+    },
     related: ['tag:permadeath', 'tag:endlessloop', 'mood:adrenaline'],
   },
 
@@ -329,6 +389,16 @@ export const LANDING_TEXTS = {
         'Many sandboxes are cooperative, and the genre doubles in company: shared construction and shared chaos. Tick the mode and player count you need; for quiet sessions add the “Relax” mood.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое игры-песочницы?', 'Песочница — игра без жёстко заданного пути: вам дают мир и инструменты, а цели вы ставите себе сами — строите, экспериментируете с физикой, исследуете. Сюжет, если он есть, необязателен.'],
+        ['Чем песочница отличается от игры с открытым миром?', 'Открытый мир — про свободу перемещения, но там обычно есть сюжет и задания. Песочница — про свободу действий: главное в ней то, что вы сами создаёте или меняете в мире.'],
+      ],
+      en: [
+        ['What are sandbox games?', 'A sandbox game has no fixed path: you get a world and tools and set your own goals — building, experimenting with physics, exploring. A story, if there is one, is optional.'],
+        ['Sandbox vs open world: what is the difference?', 'Open world is about freedom of movement, usually with a story and quests. Sandbox is about freedom of action: what matters is what you build or change in the world.'],
+      ],
+    },
     related: ['mood:create', 'genre:building', 'tag:physics'],
   },
 
@@ -342,6 +412,16 @@ export const LANDING_TEXTS = {
       en: [
         'A shooter is a genre of first- or third-person gunplay: aim, recoil and positioning matter more than sprinting. Half the genre is solo story campaigns, the other half is team-based online battles where your squad role counts.',
         'Split the choice by mode: “Single-player” keeps the campaigns, “Online PvP” the competitive maps. For playing with friends against bots there are co-op shooters — marked with “Online co-op”.',
+      ],
+    },
+    faq: {
+      ru: [
+        ['Что такое шутер?', 'Шутер — игра, в которой основное действие — стрельба. Бывают шутеры от первого лица (вид глазами героя) и от третьего лица (камера за спиной). Внутри жанра есть сюжетные кампании, кооперативные и соревновательные сетевые шутеры.'],
+        ['Чем шутер от первого лица отличается от шутера от третьего лица?', 'От первого лица вы видите мир глазами персонажа — это сильнее погружает и точнее для прицеливания. От третьего лица виден сам герой, проще следить за окружением и укрытиями.'],
+      ],
+      en: [
+        ['What is a shooter?', 'A shooter is a game where shooting is the core action. There are first-person shooters (seen through the hero’s eyes) and third-person shooters (camera behind the character). The genre covers story campaigns, co-op and competitive online shooters.'],
+        ['First-person or third-person: what is the difference?', 'First-person puts you behind the character’s eyes — more immersive and precise for aiming. Third-person shows the character, which makes it easier to read the surroundings and use cover.'],
       ],
     },
     related: ['mood:adrenaline', 'mode:pvpOnline', 'mode:coopOnline'],
@@ -389,6 +469,16 @@ export const LANDING_TEXTS = {
         'Stealth games are almost always solo and story-driven, so the “Feel the tension” mood fits best. In some of them you can finish the whole campaign touching no one — usually noted among the features.',
       ],
     },
+    faq: {
+      ru: [
+        ['Что такое стелс-игры?', 'Стелс — жанр, где главная задача — остаться незамеченным: прятаться в тени, изучать маршруты охраны, отвлекать противников и проходить уровни без прямого боя. Открытая схватка обычно опасна или означает провал.'],
+        ['Чем стелс отличается от экшена?', 'Экшен поощряет бой и скорость реакции, стелс — наблюдение и терпение. Во многих играх можно выбрать оба подхода, но чистый стелс наказывает за шум и поощряет прохождение без тревоги.'],
+      ],
+      en: [
+        ['What are stealth games?', 'Stealth is a genre where the main goal is to stay unseen: hide in shadows, learn guard routes, distract enemies and get through levels without open combat. A straight fight is usually dangerous or counts as failure.'],
+        ['How is stealth different from action?', 'Action rewards combat and quick reflexes; stealth rewards observation and patience. Many games allow both approaches, but pure stealth punishes noise and rewards finishing without raising the alarm.'],
+      ],
+    },
     related: ['mood:tense', 'mood:think', 'genre:action'],
   },
 
@@ -402,6 +492,16 @@ export const LANDING_TEXTS = {
       en: [
         'Strategy is a genre of big decisions: you command the economy, the army and science, and a match is a story you wrote yourself. Turn-based games give you time to think; real-time ones give tempo and pressure.',
         'Start with a subgenre: “4X” is about growing a civilisation, “Grand strategy” about centuries of history, “Real-time strategy” about speed. Some strategy games support hot-seat and co-op versus AI — the modes say so.',
+      ],
+    },
+    faq: {
+      ru: [
+        ['Что такое 4X-стратегии?', '4X — поджанр стратегий, названный по четырём действиям: explore, expand, exploit, exterminate — исследовать, расширяться, добывать ресурсы и уничтожать соперников. Обычно это долгие партии о развитии целой цивилизации или империи.'],
+        ['Чем пошаговые стратегии отличаются от стратегий в реальном времени?', 'В пошаговых стратегиях игроки ходят по очереди и время на раздумья не ограничено. В стратегиях в реальном времени (RTS) все действуют одновременно, и важна скорость решений.'],
+      ],
+      en: [
+        ['What are 4X strategy games?', '4X is a strategy subgenre named after four actions: explore, expand, exploit and exterminate. These are usually long games about growing a whole civilization or empire.'],
+        ['Turn-based vs real-time strategy: what is the difference?', 'In turn-based strategy players take turns with unlimited time to think. In real-time strategy (RTS) everyone acts at once, so the speed of your decisions matters.'],
       ],
     },
     related: ['tag:tbs', 'tag:x4', 'mode:coopLocal'],

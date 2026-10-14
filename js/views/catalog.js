@@ -3,12 +3,11 @@
 import { GAMES } from '../catalog/index.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS, PRICE } from '../taxonomy.js';
 import { t, tl, tp, getLang } from '../i18n.js';
-import { adSlot, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionList, platformOptionList, modeOptionList, tagOptions } from './components.js';
+import { adSlot, breadcrumbLd, faqLd, cardsGrid, gameCard, emptyState, esc, filterGroup, genreOptionList, platformOptionList, modeOptionList, tagOptions } from './components.js';
 import { getProfile } from '../store.js';
 import { icon } from '../icons.js';
 import { FEATURES } from '../config.js';
 import { currentPath, navigate, publicUrl } from '../nav.js';
-import { LANDING_TEXTS } from './landing-texts.js';
 import { COLLECTIONS, collectionById, collectionLinks, collectionTitle, collectionMeta } from './collections.js';
 import { taxonomySeo } from './seo-titles.js';
 
@@ -119,8 +118,22 @@ export const landingFor = (ctx) => {
     return c ? { meta: c.meta, body: c.intro, related: c.related, faq: c.faq } : null;
   }
   const key = ctx?.name && ctx?.params?.id ? `${ctx.name}:${ctx.params.id}` : '';
-  return LANDING_TEXTS[key] || null;
+  return LANDING_TEXTS?.[key] || null;
 };
+
+/**
+ * Тексты лендингов (~20 КиБ после сжатия) нужны только на страницах таксономии —
+ * грузим их по требованию, а не на каждой странице сайта.
+ */
+let LANDING_TEXTS = null;
+let landingPromise = null;
+export function loadLandingTexts() {
+  landingPromise ||= import('./landing-texts.js').then((m) => { LANDING_TEXTS = m.LANDING_TEXTS; });
+  return landingPromise;
+}
+const LANDING_ROUTES = ['genre', 'mode', 'mood', 'tag', 'platform'];
+/** Перед рендером страницы таксономии подгружаем её текст: null — ждать нечего */
+export const prepare = (ctx) => (LANDING_ROUTES.includes(ctx?.name) && !LANDING_TEXTS ? loadLandingTexts() : null);
 
 /** Поисковый H1/заголовок вкладки страницы таксономии (только ru, en — шаблоны) */
 const seoFor = (ctx) => (getLang() === 'ru' && ctx?.params?.id ? taxonomySeo(ctx.name, ctx.params.id) : null);
@@ -385,10 +398,13 @@ export function jsonLd(ctx) {
   const filters = parseFilters({}, ctx.preset || {});
   const games = filterGames(filters).sort(SORTS.rating).slice(0, 10);
   const path = `${ctx.name === 'collection' ? 'top' : ctx.name}/${ctx.params.id}`;
-  return {
-    '@context': 'https://schema.org',
+  const name = title(ctx).replace(/ — [^—]+$/, '');
+  const parent = ctx.name === 'collection'
+    ? { name: t('top.title'), url: publicUrl('podborki') }
+    : { name: t('nav.catalog'), url: publicUrl('catalog') };
+  const graph = [{
     '@type': 'CollectionPage',
-    name: title(ctx).replace(/ — [^—]+$/, ''),
+    name,
     description: description(ctx),
     url: publicUrl(path),
     mainEntity: {
@@ -396,5 +412,9 @@ export function jsonLd(ctx) {
       numberOfItems: games.length,
       itemListElement: games.map((g, i) => ({ '@type': 'ListItem', position: i + 1, url: publicUrl(`game/${g.slug}`), name: g.t })),
     },
-  };
+  }, breadcrumbLd([{ name: t('nav.home'), url: publicUrl('') }, parent, { name: seoFor(ctx)?.h1 || ctx.preset?.heading || name }])];
+  // FAQ страницы — тот же текст, что виден в блоке «Вопросы и ответы»
+  const faq = landingFor(ctx)?.faq?.[getLang()] || [];
+  if (faq.length) graph.push(faqLd(faq));
+  return { '@context': 'https://schema.org', '@graph': graph };
 }
