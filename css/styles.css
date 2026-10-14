@@ -997,8 +997,10 @@ select.input { cursor: pointer; }
 .consent p { margin: 4px 0 0; color: var(--text-soft); font-size: .9rem; }
 /* уведомление о cookie: компактная полоса, не закрывает пол-экрана на телефоне */
 .consent-notice { width: min(720px, calc(100% - 32px)); padding: 12px 16px; gap: 12px; flex-wrap: nowrap; }
-.consent-notice p { margin: 0; display: flex; gap: 8px; align-items: flex-start; font-size: .86rem; line-height: 1.45; }
-.consent-notice p svg { flex: none; margin-top: 2px; color: var(--accent); }
+/* обычный абзац, не flex: иначе текст и ссылка «Подробнее» становились отдельными
+   колонками, и на телефоне текст сжимался в узкий столбик на четверть экрана */
+.consent-notice p { margin: 0; font-size: .86rem; line-height: 1.45; flex: 1 1 auto; min-width: 0; }
+.consent-notice p svg { display: inline-block; vertical-align: -3px; margin-right: 6px; color: var(--accent); }
 .consent-notice .consent-actions { flex: none; }
 @media (max-width: 560px) { .consent.consent-notice { flex-direction: row; align-items: center; bottom: 10px; } .consent-notice p { font-size: .8rem; } }
 .consent-actions { display: flex; gap: 8px; flex-wrap: wrap; }

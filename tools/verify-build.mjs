@@ -238,8 +238,13 @@ check('английская версия: страница каждой игры
 {
   // hreflang: русская и английская версии ссылаются друг на друга
   const slug = GAMES[0].slug;
-  const ru = existsSync(resolve(dist, `game/${slug}.html`)) ? readFileSync(resolve(dist, `game/${slug}.html`), 'utf8') : '';
-  const en = existsSync(resolve(dist, `en/game/${slug}.html`)) ? readFileSync(resolve(dist, `en/game/${slug}.html`), 'utf8') : '';
+  // зеркало со слэшем в адресах (GitHub Pages) кладёт страницу папкой: game/<slug>/index.html
+  const read = (rel) => {
+    const file = resolve(dist, styleOn ? `${rel}/index.html` : `${rel}.html`);
+    return existsSync(file) ? readFileSync(file, 'utf8') : '';
+  };
+  const ru = read(`game/${slug}`);
+  const en = read(`en/game/${slug}`);
   const pair = (html) => ['ru', 'en', 'x-default'].every((hl) => html.includes(`hreflang="${hl}"`));
   check('hreflang ru/en/x-default на обеих версиях страницы игры', pair(ru) && pair(en), slug);
   check('английская страница: <html lang="en"> и canonical на /en/', /<html lang="en"/.test(en) && en.includes(`rel="canonical" href="${urlFor(`/en/game/${slug}`)}"`));

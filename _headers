@@ -21,9 +21,10 @@
 /js/*
   Cache-Control: public, max-age=0, must-revalidate
 
-# В будущем fingerprint-ассеты можно вынести в отдельное правило:
-# /assets/*.[a-f0-9]*
-#   Cache-Control: public, max-age=31536000, immutable
+# Версионированные ассеты (сборка кладёт JS/CSS в /assets/<хэш>/…, у каждого
+# релиза свой хэш) — содержимое по адресу никогда не меняется, кэшируем на год
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # HTML и манифест — всегда свежие
 /index.html

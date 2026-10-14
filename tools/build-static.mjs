@@ -555,6 +555,56 @@ const notFound = builtShell
   .replace(/<meta name="robots" content="[^"]*">/, '<meta name="robots" content="noindex, follow">');
 writeFileSync(join(dist, '404.html'), notFound);
 
+/* ------------------------------------------------------------------ *
+ * 5. Версионированные ассеты: /assets/<хэш>/js|css/…
+ *
+ * Cloudflare отдаёт /js/* с Cache-Control max-age=14400 (Browser Cache TTL зоны
+ * перекрывает max-age=0 из _headers). После релиза браузер брал свежий HTML и часть
+ * модулей из кэша — новые модули импортировали то, чего нет в старых, и приложение
+ * падало (на телефонах «сайт сломался»). Теперь каждая сборка кладёт JS и CSS в папку
+ * с хэшем содержимого и все страницы ссылаются на неё: модули разных релизов
+ * не смешиваются, а сами файлы можно кэшировать на год (immutable в _headers).
+ * Старые /js и /css остаются — для страниц, которые уже лежат в кэше браузеров.
+ * ------------------------------------------------------------------ */
+let assetsHash = '';
+{
+  const { createHash } = await import('node:crypto');
+  const hash = createHash('sha1');
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else files.push(full);
+    }
+  };
+  walk(join(dist, 'js'));
+  walk(join(dist, 'css'));
+  for (const file of files.sort()) hash.update(file.slice(dist.length)).update(readFileSync(file));
+  assetsHash = hash.digest('hex').slice(0, 10);
+  const assetsDir = join(dist, 'assets', assetsHash);
+  cpSync(join(dist, 'js'), join(assetsDir, 'js'), { recursive: true });
+  cpSync(join(dist, 'css'), join(assetsDir, 'css'), { recursive: true });
+
+  const b = basePath();
+  const htmlFiles = [];
+  const walkHtml = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) { if (entry.name !== 'assets') walkHtml(full); } else if (entry.name.endsWith('.html')) htmlFiles.push(full);
+    }
+  };
+  walkHtml(dist);
+  for (const file of htmlFiles) {
+    const html = readFileSync(file, 'utf8');
+    const out = html
+      .replaceAll(`"${b}/js/`, `"${b}/assets/${assetsHash}/js/`)
+      .replaceAll(`"${b}/css/`, `"${b}/assets/${assetsHash}/css/`);
+    if (out !== html) writeFileSync(file, out);
+  }
+  console.log(`   ассеты: /assets/${assetsHash}/ (${files.length} файлов, ${htmlFiles.length} страниц переписано)`);
+}
+
 console.log(`✅ Сборка готова: dist/`);
 console.log(`   страниц: ${ROUTES.length}, пре-рендер: ${prerendered ? `${prerendered} страниц` : 'выключен'}`);
 console.log(`   файлы: sitemap.xml, robots.txt, ads.txt, .well-known/security.txt, 404.html, _headers, _redirects`);
