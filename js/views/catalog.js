@@ -136,7 +136,12 @@ const LANDING_ROUTES = ['genre', 'mode', 'mood', 'tag', 'platform'];
 export const prepare = (ctx) => (LANDING_ROUTES.includes(ctx?.name) && !LANDING_TEXTS ? loadLandingTexts() : null);
 
 /** Поисковый H1/заголовок вкладки страницы таксономии (только ru, en — шаблоны) */
-const seoFor = (ctx) => (getLang() === 'ru' && ctx?.params?.id ? taxonomySeo(ctx.name, ctx.params.id) : null);
+const seoFor = (ctx) => {
+  if (!ctx?.params?.id) return null;
+  if (getLang() === 'ru') return taxonomySeo(ctx.name, ctx.params.id);
+  // английский H1 жанра — «Stealth games», а не одно слово «Stealth»
+  return ctx.name === 'genre' && ctx.preset?.heading ? { h1: `${ctx.preset.heading} games`, title: TITLE_TEMPLATES.en.genre(ctx.preset.heading) } : null;
+};
 
 /** Словари для related-ссылок: каждая ведёт на реальную страницу таксономии */
 const RELATED_DICTS = { genre: GENRES, mode: MODES, mood: MOODS, tag: TAGS, platform: PLATFORMS };
@@ -364,12 +369,13 @@ const TITLE_TEMPLATES = {
     platform: (h) => `Игры для платформы «${h}»`,
     catalog: () => 'Каталог игр с фильтрами',
   },
+  // Английская версия: заголовки под то, как ищут на английском («best stealth games»)
   en: {
-    genre: (h) => `${h} games`,
-    mode: (h) => `${h}: game list`,
-    mood: (h) => `Games for the mood: ${h}`,
-    tag: (h) => `${h}: game collection`,
-    platform: (h) => `Games on ${h}`,
+    genre: (h) => `Best ${h} games: top-rated picks to play`,
+    mode: (h) => `${h} games: the best picks with filters`,
+    mood: (h) => `Best games for the mood: ${h}`,
+    tag: (h) => `${h} games: list with ratings and filters`,
+    platform: (h) => `Best ${h} games: top-rated picks`,
     catalog: () => 'Game catalog with filters',
   },
 };

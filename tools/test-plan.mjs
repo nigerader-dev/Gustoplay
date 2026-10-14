@@ -297,6 +297,8 @@ async function pickPc(page, values) {
 
   // Выбор переживает перезагрузку — он же нужен на всех остальных играх
   await page.reload({ waitUntil: 'domcontentloaded' });
+  // форма ПК не входит в пре-рендер (сотни моделей) — её строит приложение после загрузки
+  await page.waitForSelector('[data-pcfield="cpu"]', { timeout: 15000 }).catch(() => {});
   const saved = await page.evaluate(() => ({
     cpu: document.querySelector('[data-pcfield="cpu"]')?.value,
     gpu: document.querySelector('[data-pcfield="gpu"]')?.value,

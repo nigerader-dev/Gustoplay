@@ -5,7 +5,7 @@
  */
 import { setLang, getLang, t, tl } from './i18n.js';
 import { icon } from './icons.js';
-import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base } from './nav.js';
+import { PATH_MODE, link, currentPath, navigate, isExternal, siteOrigin, publicUrl, base, pathLang } from './nav.js';
 import { GENRES, TAGS, MODES, MOODS, PLATFORMS } from './taxonomy.js';
 import { ADS, ANALYTICS, SITE, FEATURES } from './config.js';
 import { getProfile, setMeta, markGame, resetAdCounter, setConsent, getConsent, setSyncEnabled, isStorageBroken, getSyncError, isMarksCapped, marksLimit } from './store.js';
@@ -275,6 +275,40 @@ document.addEventListener('error', (event) => {
  * Рендер страницы
  * ------------------------------------------------------------------ */
 
+/** Страницы, у которых нет индексируемых языковых версий (персональные и 404) */
+const NO_ALTERNATES = new Set(['results', 'profile', 'account', 'notfound']);
+
+/**
+ * hreflang: русская и английская версии страницы ссылаются друг на друга,
+ * x-default — русская (основная аудитория). og:locale — язык текущей версии.
+ */
+function setAlternates(ctx) {
+  document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((n) => n.remove());
+  const lang = getLang();
+  const locale = document.head.querySelector('meta[property="og:locale"]');
+  if (locale) locale.setAttribute('content', lang === 'en' ? 'en_US' : 'ru_RU');
+  if (!PATH_MODE || NO_ALTERNATES.has(ctx.name)) return;
+  const path = currentPath();
+  for (const [hreflang, l] of [['ru', 'ru'], ['en', 'en'], ['x-default', 'ru']]) {
+    const node = document.createElement('link');
+    node.rel = 'alternate';
+    node.hreflang = hreflang;
+    node.href = publicUrl(path, l);
+    document.head.append(node);
+  }
+}
+
+/** В PATH-режиме язык задаёт адрес (/en/… — английский): он главнее сохранённого выбора */
+function syncLangFromUrl() {
+  const urlLang = pathLang();
+  if (urlLang && urlLang !== getLang()) {
+    setLang(urlLang);
+    if (getProfile().meta?.lang !== urlLang) setMeta({ lang: urlLang });
+  }
+  // атрибут lang у <html> — по нему экранные дикторы и поисковики выбирают язык
+  document.documentElement.lang = getLang();
+}
+
 function setHead(titleText, description, image = '') {
   document.title = titleText;
   const metaDesc = document.head.querySelector('meta[name="description"]') || document.createElement('meta');
@@ -308,6 +342,7 @@ let restoreScrollY = null;
 function render(scroll = true) {
   // Анимация появления — только для переходов после первого рендера (см. .nav-anim в CSS)
   if (lastPageKey !== null) document.documentElement.classList.add('nav-anim');
+  syncLangFromUrl();
   const parsed = parseLocation();
   const ctx = parsed.notFound ? { name: 'notfound', params: {}, query: {} } : parsed;
   currentCtx = ctx;
@@ -373,6 +408,7 @@ function render(scroll = true) {
   }
   lastPageKey = pageKey;
   setHead(titleText, description, view?.image?.(ctx) || '');
+  setAlternates(ctx);
   trackPageview(PATH_MODE ? link(parsed.path || '') : `/${parsed.path || ''}`, titleText);
   injectJsonLd(ctx, view);
   view?.mount?.(app);
@@ -621,6 +657,8 @@ document.addEventListener('click', (event) => {
       setMeta({ lang: next });
       // атрибут lang у <html> — по нему экранные дикторы и поисковики выбирают язык
       document.documentElement.lang = next;
+      // У языков разные адреса: переходим на ту же страницу другой версии
+      if (PATH_MODE) history.pushState(null, '', link(currentPath(), next));
       render(false);
       break;
     }
@@ -767,12 +805,20 @@ document.addEventListener('click', (event) => {
   // в профиле. Это шаг к раздельным URL языков (без него EN-версию неошарить);
   // пока сайт один и тот же URL для ru/en, поэтому hreflang не излучается —
   // его некуда указывать (см. docs/SEO.md).
-  const urlLang = new URLSearchParams(window.location.search).get('lang');
-  const lang = (SITE.languages || []).includes(urlLang)
-    ? urlLang
-    : profile.meta?.lang || SITE.defaultLang || 'ru';
+  const params = new URLSearchParams(window.location.search);
+  const urlLang = params.get('lang');
+  // В PATH-режиме язык задаёт адрес; ?lang= — старый формат ссылок: переводим его
+  // в адрес нужной версии (/en/…), чтобы у страницы был один канонический URL
+  const lang = PATH_MODE
+    ? ((SITE.languages || []).includes(urlLang) ? urlLang : pathLang())
+    : ((SITE.languages || []).includes(urlLang) ? urlLang : profile.meta?.lang || SITE.defaultLang || 'ru');
   setLang(lang);
-  if (urlLang && profile.meta?.lang !== lang) setMeta({ lang });
+  if (profile.meta?.lang !== lang && (urlLang || PATH_MODE)) setMeta({ lang });
+  if (PATH_MODE && urlLang) {
+    params.delete('lang');
+    const rest = params.toString();
+    history.replaceState(null, '', link(`${currentPath().split('?')[0]}${rest ? `?${rest}` : ''}`, lang));
+  }
   document.documentElement.dataset.theme = profile.meta?.theme || 'light';
   document.documentElement.lang = lang;
 

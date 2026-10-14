@@ -75,6 +75,8 @@ if (!siteBase && cfgUrl) {
 const urlFor = (path) => {
   const r = path === '/' ? '' : String(path).replace(/^\/+/, '').replace(/\/+$/, '');
   if (!r) return `${siteUrl}/`;
+  // главная английской версии — /en/ (папка en/index.html)
+  if (r === 'en') return `${siteUrl}/en/`;
   return styleOn ? `${siteUrl}/${r}/` : `${siteUrl}/${r}`;
 };
 /** Отрезает базовый путь (/mydev/quiz → /quiz) перед проверкой файлов */
@@ -191,7 +193,9 @@ check('robots.txt ведёт на свой sitemap', robotsTxt.includes(`Sitemap
 console.log('\n5. Страницы игр');
 // Match the route segment, not any path containing the substring "game/":
 // `/genre/boardgame/` is a genre page, not an extra game detail page.
-const gameFiles = htmlFiles.filter((f) => /[/\\]game[/\\]/.test(f));
+// Русская версия — в корне, английская повторяет тот же набор игр под /en/game/…
+const gameFiles = htmlFiles.filter((f) => /[/\\]game[/\\]/.test(f) && !/[/\\]en[/\\]game[/\\]/.test(f));
+const enGameFiles = htmlFiles.filter((f) => /[/\\]en[/\\]game[/\\]/.test(f));
 const sample = gameFiles.slice(0, 12);
 let withoutJsonLd = 0;
 let withoutTitle = 0;
@@ -229,6 +233,17 @@ check('страницы игр содержат JSON-LD', withoutJsonLd === 0, `
 check('страницы игр содержат заголовок и <h1>', withoutTitle === 0, `проверено ${sample.length}`);
 check('страницы игр в сборке совпадают с каталогом', gameFiles.length === GAMES.length,
   `${gameFiles.length} страниц игр / ${GAMES.length} записей`);
+check('английская версия: страница каждой игры под /en/game/', enGameFiles.length === GAMES.length,
+  `${enGameFiles.length} страниц / ${GAMES.length} записей`);
+{
+  // hreflang: русская и английская версии ссылаются друг на друга
+  const slug = GAMES[0].slug;
+  const ru = existsSync(resolve(dist, `game/${slug}.html`)) ? readFileSync(resolve(dist, `game/${slug}.html`), 'utf8') : '';
+  const en = existsSync(resolve(dist, `en/game/${slug}.html`)) ? readFileSync(resolve(dist, `en/game/${slug}.html`), 'utf8') : '';
+  const pair = (html) => ['ru', 'en', 'x-default'].every((hl) => html.includes(`hreflang="${hl}"`));
+  check('hreflang ru/en/x-default на обеих версиях страницы игры', pair(ru) && pair(en), slug);
+  check('английская страница: <html lang="en"> и canonical на /en/', /<html lang="en"/.test(en) && en.includes(`rel="canonical" href="${urlFor(`/en/game/${slug}`)}"`));
+}
 
 console.log('\n6. Заголовки безопасности и PWA');
 const headers = readFileSync(join(dist, '_headers'), 'utf8');
