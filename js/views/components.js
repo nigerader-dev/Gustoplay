@@ -67,7 +67,7 @@ export function ratingSourceLabel(game) {
 export const ratingPill = (game) => {
   const cls = game.rating >= 90 ? 'rating-top' : game.rating >= 80 ? 'rating-good' : 'rating-mid';
   const label = ratingSourceLabel(game);
-  return `<span class="rating ${cls}" title="${esc(label)}" aria-label="${esc(`${label}, ${game.rating}`)}">${esc(game.rating)}</span>`;
+  return `<span class="rating ${cls}" role="img" title="${esc(label)}" aria-label="${esc(`${label}, ${game.rating}`)}">${esc(game.rating)}</span>`;
 };
 
 export const priceLabel = (game) => {
